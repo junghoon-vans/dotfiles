@@ -1,9 +1,6 @@
 # Brewfile - Homebrew package manager configuration
 # Usage: brew bundle install
 
-# Taps
-tap "homebrew/bundle"
-
 # ========================================
 # Programming Languages & Tools
 # ========================================
@@ -63,5 +60,4 @@ brew "autojump"
 # Fonts (for terminal icons)
 # ========================================
 
-tap "homebrew/cask-fonts"
 cask "font-fira-code-nerd-font"

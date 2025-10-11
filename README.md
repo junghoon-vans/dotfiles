@@ -78,96 +78,28 @@ Comprehensive ignore patterns for:
 
 ## Installation
 
-### Quick Start (Recommended)
+### Automatic Setup (Recommended)
 
-1. **Install Homebrew packages** (includes all CLI tools, Go, Neovim, etc.):
-   ```bash
-   brew bundle install
-   ```
+The easiest way to set up everything at once:
 
-2. **Install Oh My Zsh**:
-   ```bash
-   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-   ```
+```bash
+# Clone this repository
+git clone https://github.com/junghoon-vans/dotfiles.git
+cd dotfiles
 
-3. **Install Rust** (optional):
-   ```bash
-   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-   ```
+# Run the setup script (installs everything)
+chmod +x setup.sh
+./setup.sh
+```
 
-### Manual Installation
-
-If you prefer manual installation:
-
-1. **Install Oh My Zsh**:
-   ```bash
-   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-   ```
-
-2. **Install modern CLI tools**:
-   ```bash
-   brew install bat eza ripgrep fd fzf autojump htop jq tldr
-   ```
-
-3. **Install development tools**:
-   ```bash
-   brew install neovim git gh lazygit
-   ```
-
-4. **Install Go and Go tools**:
-   ```bash
-   brew install go golangci-lint delve go-task
-   ```
-
-5. **Install Rust** (optional):
-   ```bash
-   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-   ```
-
-6. **Install Nerd Font for terminal icons**:
-   ```bash
-   brew install --cask font-fira-code-nerd-font
-   ```
-
-### Setup
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/junghoon-vans/dotfiles.git
-   ```
-
-2. Run the installation script:
-   ```bash
-   chmod +x install.sh
-   ./install.sh
-   ```
-
-   This will:
-   - Backup any existing dotfiles (adds `.backup` extension)
-   - Create symlinks from your home directory to the dotfiles
-
-3. Install Oh My Zsh plugins:
-   ```bash
-   # Autosuggestions
-   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-
-   # Syntax highlighting
-   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-
-   # Completions
-   git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions
-   ```
-
-4. Install Spaceship theme:
-   ```bash
-   git clone https://github.com/spaceship-prompt/spaceship-prompt.git ~/.oh-my-zsh/custom/themes/spaceship-prompt --depth=1
-   ln -s ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
-   ```
-
-5. Reload your shell:
-   ```bash
-   source ~/.zshrc
-   ```
+This will automatically install:
+- Homebrew (if not installed)
+- All packages from Brewfile
+- Oh My Zsh with plugins and Spaceship theme
+- LazyVim for Neovim
+- FZF configuration
+- Rust (optional, will ask during setup)
+- Creates symlinks for all dotfiles
 
 ## Customization
 
@@ -226,6 +158,7 @@ ZSH_THEME="your-theme-name"
 - `.zshrc` - Zsh shell configuration
 - `.gitconfig` - Git configuration
 - `.gitignore_global` - Global gitignore patterns
-- `Brewfile` - Homebrew package definitions for quick setup
-- `install.sh` - Installation script for creating symlinks
+- `Brewfile` - Homebrew package definitions
+- `setup.sh` - **Automated full setup script** (recommended)
+- `link.sh` - Symlink creation script (called by setup.sh)
 - `nvim/` - Custom Neovim configuration files for LazyVim

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Dotfiles Installation Script
-# This script creates symlinks from the home directory to dotfiles in ~/workspace/dotfiles
+# Dotfiles Link Script
+# This script creates symlinks from the home directory to dotfiles in this repository
 
 set -e
 
@@ -23,8 +23,6 @@ FILES=".zshrc .gitconfig .gitignore_global"
 # Neovim config files to symlink (relative to nvim directory)
 NVIM_FILES="lua/config/lazy.lua lua/config/options.lua"
 
-echo -e "${BOLD}${CYAN}Starting dotfiles installation...${NC}"
-echo ""
 
 # Function to create backup
 backup_file() {
@@ -82,20 +80,3 @@ done
 for nvim_file in $NVIM_FILES; do
     create_nvim_symlink "$nvim_file"
 done
-
-echo ""
-echo -e "${BOLD}${GREEN}✓ Dotfiles installation complete!${NC}"
-echo ""
-echo -e "${BOLD}Next steps:${NC}"
-echo "1. Install recommended Oh My Zsh plugins:"
-echo "   git clone https://github.com/zsh-users/zsh-autosuggestions \${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-echo "   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
-echo "   git clone https://github.com/zsh-users/zsh-completions \${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions"
-echo ""
-echo "2. Install Spaceship theme:"
-echo "   git clone https://github.com/spaceship-prompt/spaceship-prompt.git ~/.oh-my-zsh/custom/themes/spaceship-prompt --depth=1"
-echo "   ln -s ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
-echo ""
-echo "3. Reload your shell configuration:"
-echo "   source ~/.zshrc"
-echo ""
