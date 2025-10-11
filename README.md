@@ -74,12 +74,12 @@ Comprehensive ignore patterns for:
    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
    ```
 
-2. **Install modern CLI tools** (using Homebrew):
+2. **Install modern CLI tools**:
    ```bash
    brew install bat eza ripgrep fd fzf autojump
    ```
 
-3. **Install Neovim** (optional, for Git editor):
+3. **Install Neovim**:
    ```bash
    brew install neovim
    ```
