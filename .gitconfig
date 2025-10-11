@@ -1,0 +1,81 @@
+[user]
+	name = Junghoon Ban
+	email = junghoon.ban@gmail.com
+
+[core]
+	editor = nvim
+	excludesfile = ~/.gitignore_global
+	autocrlf = input
+
+[init]
+	defaultBranch = main
+
+[alias]
+	# Basic shortcuts
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+
+	# More complex commands
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	visual = log --graph --oneline --decorate --all
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+	# Show modified files in last commit
+	dl = "!git ll -1"
+
+	# Show a diff last commit
+	dlc = diff --cached HEAD^
+
+	# Find a file path in codebase
+	f = "!git ls-files | grep -i"
+
+	# Search/grep your entire codebase for a string
+	grep = grep -Ii
+
+	# List all aliases
+	la = "!git config -l | grep alias | cut -c 7-"
+
+[color]
+	ui = auto
+	branch = auto
+	diff = auto
+	status = auto
+
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+[pull]
+	rebase = false
+
+[push]
+	default = simple
+	followTags = true
+
+[fetch]
+	prune = true
+
+[diff]
+	tool = vimdiff
+
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+
+[help]
+	autocorrect = 1
