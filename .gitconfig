@@ -16,6 +16,8 @@
 	br = branch
 	ci = commit
 	st = status
+	amend = commit --amend --no-edit
+	reamend = commit --amend
 
 	# More complex commands
 	unstage = reset HEAD --
