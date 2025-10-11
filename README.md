@@ -98,6 +98,7 @@ This will automatically install:
 - Oh My Zsh with plugins and Spaceship theme
 - LazyVim for Neovim
 - FZF configuration
+- NVM and Node.js LTS
 - Rust (optional, will ask during setup)
 - Creates symlinks for all dotfiles
 
