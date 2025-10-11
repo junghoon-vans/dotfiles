@@ -1,6 +1,6 @@
 # Dotfiles
 
-Personal development environment configuration files for macOS, optimized for Go development and modern CLI tools.
+Personal development environment configuration files for macOS, optimized for Go and Rust development with modern CLI tools.
 
 ## Overview
 
@@ -56,6 +56,17 @@ This repository contains my personal dotfiles for:
   - `lintfix` = golangci-lint run --fix
 - **Custom function**: `gonew <project-name>` - Creates a new Go project with module initialization and hello world template
 
+### Rust Development
+- Cargo configuration via rustup
+- Rust-specific aliases:
+  - `cb` = cargo build
+  - `cr` = cargo run
+  - `ct` = cargo test
+  - `cc` = cargo check
+  - `cclippy` = cargo clippy (linting)
+  - `cfmt` = cargo fmt (formatting)
+  - `cupdate` = cargo update
+
 ### Global Gitignore
 Comprehensive ignore patterns for:
 - macOS system files (.DS_Store, etc.)
@@ -67,7 +78,26 @@ Comprehensive ignore patterns for:
 
 ## Installation
 
-### Prerequisites
+### Quick Start (Recommended)
+
+1. **Install Homebrew packages** (includes all CLI tools, Go, Neovim, etc.):
+   ```bash
+   brew bundle install
+   ```
+
+2. **Install Oh My Zsh**:
+   ```bash
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+   ```
+
+3. **Install Rust** (optional):
+   ```bash
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   ```
+
+### Manual Installation
+
+If you prefer manual installation:
 
 1. **Install Oh My Zsh**:
    ```bash
@@ -76,12 +106,27 @@ Comprehensive ignore patterns for:
 
 2. **Install modern CLI tools**:
    ```bash
-   brew install bat eza ripgrep fd fzf autojump
+   brew install bat eza ripgrep fd fzf autojump htop jq tldr
    ```
 
-3. **Install Neovim**:
+3. **Install development tools**:
    ```bash
-   brew install neovim
+   brew install neovim git gh lazygit
+   ```
+
+4. **Install Go and Go tools**:
+   ```bash
+   brew install go golangci-lint delve go-task
+   ```
+
+5. **Install Rust** (optional):
+   ```bash
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   ```
+
+6. **Install Nerd Font for terminal icons**:
+   ```bash
+   brew install --cask font-fira-code-nerd-font
    ```
 
 ### Setup
@@ -168,9 +213,19 @@ ZSH_THEME="your-theme-name"
 - `lint` - Run linter
 - `lintfix` - Run linter with auto-fix
 
+### Rust Development
+- `cb` - Cargo build
+- `cr` - Cargo run
+- `ct` - Cargo test
+- `cc` - Cargo check
+- `cclippy` - Run clippy linter
+- `cfmt` - Format code
+
 ## Files
 
 - `.zshrc` - Zsh shell configuration
 - `.gitconfig` - Git configuration
 - `.gitignore_global` - Global gitignore patterns
+- `Brewfile` - Homebrew package definitions for quick setup
 - `install.sh` - Installation script for creating symlinks
+- `nvim/` - Custom Neovim configuration files for LazyVim
