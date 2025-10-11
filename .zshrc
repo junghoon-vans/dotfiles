@@ -145,6 +145,11 @@ export GOROOT=/opt/homebrew/opt/go/libexec
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 
 # ========================================
+# Rust Configuration
+# ========================================
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+# ========================================
 # Modern CLI Tools Aliases
 # ========================================
 alias cat='bat'
@@ -194,6 +199,17 @@ alias lint='golangci-lint run'
 alias lintfix='golangci-lint run --fix'
 alias dlv='dlv debug'
 alias task='go-task'
+
+# ========================================
+# Rust Aliases
+# ========================================
+alias cb='cargo build'
+alias cr='cargo run'
+alias ct='cargo test'
+alias cc='cargo check'
+alias cclippy='cargo clippy'
+alias cfmt='cargo fmt'
+alias cupdate='cargo update'
 
 # ========================================
 # Custom Functions
