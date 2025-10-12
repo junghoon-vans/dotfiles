@@ -194,7 +194,24 @@ if [ -s "$HOME/.nvm/nvm.sh" ]; then
 fi
 
 # ========================================
-# 9. Install SDKMAN and Java
+# 9. Install Claude Code CLI
+# ========================================
+print_step "Installing Claude Code CLI..."
+
+if command -v node &> /dev/null; then
+    if command -v claude &> /dev/null; then
+        print_success "Claude Code already installed ($(claude --version 2>&1 || echo 'installed'))"
+    else
+        print_info "Installing Claude Code globally via npm..."
+        npm install -g @anthropic-ai/claude-code
+        print_success "Claude Code installed"
+    fi
+else
+    print_info "Skipping Claude Code installation (Node.js not available)"
+fi
+
+# ========================================
+# 10. Install SDKMAN and Java
 # ========================================
 print_step "Installing SDKMAN and Java..."
 
@@ -223,7 +240,7 @@ if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
 fi
 
 # ========================================
-# 10. Install Rust (Optional)
+# 11. Install Rust (Optional)
 # ========================================
 print_step "Installing Rust..."
 
@@ -243,7 +260,7 @@ else
 fi
 
 # ========================================
-# 11. Create Symlinks
+# 12. Create Symlinks
 # ========================================
 print_step "Creating symlinks for dotfiles..."
 
@@ -277,6 +294,9 @@ echo -e "  • Neovim with LazyVim"
 echo -e "  • Go development environment"
 if command -v node &> /dev/null; then
     echo -e "  • Node.js ($(node --version)) via NVM"
+fi
+if command -v claude &> /dev/null; then
+    echo -e "  • Claude Code CLI"
 fi
 if command -v java &> /dev/null; then
     echo -e "  • Java ($(java -version 2>&1 | head -n 1 | awk -F '"' '{print $2}')) via SDKMAN"
