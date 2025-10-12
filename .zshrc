@@ -150,6 +150,11 @@ export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 # ========================================
+# SDKMAN Configuration
+# ========================================
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# ========================================
 # Modern CLI Tools Aliases
 # ========================================
 alias cat='bat'

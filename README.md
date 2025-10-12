@@ -99,6 +99,7 @@ This will automatically install:
 - LazyVim for Neovim
 - FZF configuration
 - NVM and Node.js LTS
+- SDKMAN and Java 21
 - Rust (optional, will ask during setup)
 - Creates symlinks for all dotfiles
 

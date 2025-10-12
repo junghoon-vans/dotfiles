@@ -194,7 +194,36 @@ if [ -s "$HOME/.nvm/nvm.sh" ]; then
 fi
 
 # ========================================
-# 9. Install Rust (Optional)
+# 9. Install SDKMAN and Java
+# ========================================
+print_step "Installing SDKMAN and Java..."
+
+if [ -d "$HOME/.sdkman" ]; then
+    print_success "SDKMAN already installed"
+else
+    print_info "Installing SDKMAN..."
+    curl -s "https://get.sdkman.io" | bash
+
+    # Load SDKMAN immediately
+    export SDKMAN_DIR="$HOME/.sdkman"
+    [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+    print_success "SDKMAN installed"
+fi
+
+# Install Java 21 if SDKMAN is available
+if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
+    export SDKMAN_DIR="$HOME/.sdkman"
+    [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+    print_info "Installing Java 21..."
+    sdk install java 21-tem
+    sdk default java 21-tem
+    print_success "Java 21 installed ($(java -version 2>&1 | head -n 1))"
+fi
+
+# ========================================
+# 10. Install Rust (Optional)
 # ========================================
 print_step "Installing Rust..."
 
@@ -214,7 +243,7 @@ else
 fi
 
 # ========================================
-# 10. Create Symlinks
+# 11. Create Symlinks
 # ========================================
 print_step "Creating symlinks for dotfiles..."
 
@@ -248,6 +277,9 @@ echo -e "  • Neovim with LazyVim"
 echo -e "  • Go development environment"
 if command -v node &> /dev/null; then
     echo -e "  • Node.js ($(node --version)) via NVM"
+fi
+if command -v java &> /dev/null; then
+    echo -e "  • Java ($(java -version 2>&1 | head -n 1 | awk -F '"' '{print $2}')) via SDKMAN"
 fi
 if command -v rustc &> /dev/null; then
     echo -e "  • Rust development environment"
