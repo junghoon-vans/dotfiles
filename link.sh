@@ -23,7 +23,12 @@ FILES=".zshrc .gitconfig .gitignore_global"
 
 # Function to create backup
 backup_file() {
-    if [ -f "$1" ] || [ -L "$1" ]; then
+    if [ -L "$1" ]; then
+        # If it's a symlink, remove it (no backup needed for symlinks)
+        echo -e "${YELLOW}Removing existing symlink $1${NC}"
+        rm "$1"
+    elif [ -f "$1" ]; then
+        # If it's a real file, back it up
         echo -e "${YELLOW}Backing up existing $1 to $1.backup${NC}"
         mv "$1" "$1.backup"
     fi
@@ -55,8 +60,13 @@ create_config_symlink() {
         # Create directory structure if it doesn't exist
         mkdir -p "$target_dir"
 
-        # Backup existing file
-        if [ -f "$target" ] || [ -L "$target" ]; then
+        # Backup existing file or remove symlink
+        if [ -L "$target" ]; then
+            # If it's a symlink, remove it (no backup needed for symlinks)
+            echo -e "${YELLOW}Removing existing symlink $target${NC}"
+            rm "$target"
+        elif [ -f "$target" ]; then
+            # If it's a real file, back it up
             echo -e "${YELLOW}Backing up existing $target to $target.backup${NC}"
             mv "$target" "$target.backup"
         fi
