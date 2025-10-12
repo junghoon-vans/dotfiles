@@ -20,9 +20,6 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # List of files to symlink
 FILES=".zshrc .gitconfig .gitignore_global"
 
-# Neovim config files to symlink (relative to nvim directory)
-NVIM_FILES="lua/config/lazy.lua lua/config/options.lua"
-
 
 # Function to create backup
 backup_file() {
@@ -47,11 +44,11 @@ create_symlink() {
     fi
 }
 
-# Function to create neovim config symlink
-create_nvim_symlink() {
-    local nvim_file=$1
-    local source="$DOTFILES_DIR/nvim/$nvim_file"
-    local target="$HOME/.config/nvim/$nvim_file"
+# Function to create .config file symlink
+create_config_symlink() {
+    local config_file=$1
+    local source="$DOTFILES_DIR/.config/$config_file"
+    local target="$HOME/.config/$config_file"
     local target_dir=$(dirname "$target")
 
     if [ -f "$source" ]; then
@@ -65,9 +62,9 @@ create_nvim_symlink() {
         fi
 
         ln -sf "$source" "$target"
-        echo -e "${GREEN}✓${NC} Linked nvim/$nvim_file"
+        echo -e "${GREEN}✓${NC} Linked .config/$config_file"
     else
-        echo -e "${RED}✗${NC} nvim/$nvim_file not found in $DOTFILES_DIR"
+        echo -e "${RED}✗${NC} .config/$config_file not found in $DOTFILES_DIR"
     fi
 }
 
@@ -76,18 +73,13 @@ for file in $FILES; do
     create_symlink "$file"
 done
 
-# Create neovim config symlinks
-for nvim_file in $NVIM_FILES; do
-    create_nvim_symlink "$nvim_file"
-done
-
-# Create Karabiner config symlink
-if [ -f "$DOTFILES_DIR/karabiner/karabiner.json" ]; then
-    mkdir -p "$HOME/.config/karabiner"
-    if [ -f "$HOME/.config/karabiner/karabiner.json" ] || [ -L "$HOME/.config/karabiner/karabiner.json" ]; then
-        echo -e "${YELLOW}Backing up existing karabiner.json to karabiner.json.backup${NC}"
-        mv "$HOME/.config/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json.backup"
-    fi
-    ln -sf "$DOTFILES_DIR/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
-    echo -e "${GREEN}✓${NC} Linked karabiner.json"
+# Create .config symlinks (auto-discover all files in .config/)
+if [ -d "$DOTFILES_DIR/.config" ]; then
+    cd "$DOTFILES_DIR/.config"
+    find . -type f | while read config_file; do
+        # Remove leading './'
+        config_file="${config_file#./}"
+        create_config_symlink "$config_file"
+    done
+    cd "$DOTFILES_DIR"
 fi
