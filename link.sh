@@ -80,3 +80,14 @@ done
 for nvim_file in $NVIM_FILES; do
     create_nvim_symlink "$nvim_file"
 done
+
+# Create Karabiner config symlink
+if [ -f "$DOTFILES_DIR/karabiner/karabiner.json" ]; then
+    mkdir -p "$HOME/.config/karabiner"
+    if [ -f "$HOME/.config/karabiner/karabiner.json" ] || [ -L "$HOME/.config/karabiner/karabiner.json" ]; then
+        echo -e "${YELLOW}Backing up existing karabiner.json to karabiner.json.backup${NC}"
+        mv "$HOME/.config/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json.backup"
+    fi
+    ln -sf "$DOTFILES_DIR/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
+    echo -e "${GREEN}✓${NC} Linked karabiner.json"
+fi
