@@ -117,6 +117,15 @@ else
     print_success "zsh-completions installed"
 fi
 
+# zsh-hangul
+if [ -d "$ZSH_CUSTOM/plugins/zsh-hangul" ]; then
+    print_success "zsh-hangul already installed"
+else
+    print_info "Installing zsh-hangul..."
+    git clone https://github.com/gomjellie/zsh-hangul "$ZSH_CUSTOM/plugins/zsh-hangul"
+    print_success "zsh-hangul installed"
+fi
+
 # ========================================
 # 5. Install Spaceship Theme
 # ========================================
