@@ -211,9 +211,9 @@ else
 fi
 
 # ========================================
-# 10. Install SDKMAN and Java
+# 10. Install SDKMAN, Java, and Kotlin
 # ========================================
-print_step "Installing SDKMAN and Java..."
+print_step "Installing SDKMAN, Java, and Kotlin..."
 
 if [ -d "$HOME/.sdkman" ]; then
     print_success "SDKMAN already installed"
@@ -228,15 +228,29 @@ else
     print_success "SDKMAN installed"
 fi
 
-# Install Java 21 if SDKMAN is available
+# Install Java 21 and Kotlin if SDKMAN is available
 if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
     export SDKMAN_DIR="$HOME/.sdkman"
     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-    print_info "Installing Java 21..."
-    sdk install java 21-tem
-    sdk default java 21-tem
-    print_success "Java 21 installed ($(java -version 2>&1 | head -n 1))"
+    # Install Java 21
+    if command -v java &> /dev/null; then
+        print_success "Java already installed ($(java -version 2>&1 | head -n 1))"
+    else
+        print_info "Installing Java 21..."
+        sdk install java 21-tem
+        sdk default java 21-tem
+        print_success "Java 21 installed ($(java -version 2>&1 | head -n 1))"
+    fi
+
+    # Install Kotlin
+    if command -v kotlin &> /dev/null; then
+        print_success "Kotlin already installed ($(kotlin -version 2>&1 | head -n 1))"
+    else
+        print_info "Installing Kotlin..."
+        sdk install kotlin
+        print_success "Kotlin installed ($(kotlin -version 2>&1 | head -n 1))"
+    fi
 fi
 
 # ========================================
@@ -300,6 +314,9 @@ if command -v claude &> /dev/null; then
 fi
 if command -v java &> /dev/null; then
     echo -e "  • Java ($(java -version 2>&1 | head -n 1 | awk -F '"' '{print $2}')) via SDKMAN"
+fi
+if command -v kotlin &> /dev/null; then
+    echo -e "  • Kotlin ($(kotlin -version 2>&1 | awk '{print $3}')) via SDKMAN"
 fi
 if command -v rustc &> /dev/null; then
     echo -e "  • Rust development environment"
