@@ -118,3 +118,10 @@ temp/
 *.tmp
 *.bak
 *.cache
+
+# ========================================
+# Claude Code
+# ========================================
+
+# Project-specific personal settings (not for source control)
+**/.claude/settings.local.json
