@@ -218,28 +218,6 @@ alias cfmt='cargo fmt'
 alias cupdate='cargo update'
 
 # ========================================
-# Custom Functions
-# ========================================
-
-# Create a new Go project with module
-gonew() {
-  if [ -z "$1" ]; then
-    echo "Usage: gonew <project-name>"
-    return 1
-  fi
-  mkdir -p "$1" && cd "$1"
-  go mod init "$1"
-  echo 'package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello, World!")
-}' > main.go
-  echo "Created new Go project: $1"
-}
-
-# ========================================
 # Environment Variables
 # ========================================
 

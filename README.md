@@ -1,6 +1,22 @@
 # Dotfiles
 
-Personal development environment configuration files for macOS, optimized for Go and Rust development with modern CLI tools.
+Personal development environment configuration files for macOS, optimized for Go, Rust, Java, and Kotlin development with modern CLI tools.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+  - [Zsh Configuration](#zsh-configuration)
+  - [Git Configuration](#git-configuration)
+  - [Development Environments](#development-environments)
+  - [Modern CLI Tools](#modern-cli-tools)
+  - [Keyboard Customization](#keyboard-customization)
+  - [Claude Code](#claude-code)
+- [Installation](#installation)
+  - [Automatic Setup (Recommended)](#automatic-setup-recommended)
+- [What Gets Installed](#what-gets-installed)
+- [Customization](#customization)
+- [Useful Commands](#useful-commands)
 
 ## Overview
 
@@ -8,20 +24,20 @@ This repository contains my personal dotfiles for:
 - **Zsh** configuration with Oh My Zsh
 - **Git** configuration with useful aliases and color schemes
 - **Global gitignore** for common temporary and system files
+- **Neovim** with LazyVim
+- **Karabiner-Elements** keyboard customization
 
 ## Features
 
 ### Zsh Configuration
 - **Theme**: [Spaceship](https://github.com/spaceship-prompt/spaceship-prompt) - Minimalist, powerful and customizable prompt
-- **Plugins**: git, golang, docker, npm, node, nvm, vscode, brew, macos, sudo, web-search, jsontools, colored-man-pages, zsh-completions, zsh-autosuggestions, zsh-syntax-highlighting
-- **Modern CLI tools** with convenient aliases:
-  - `bat` instead of `cat` (syntax highlighting)
-  - `eza` instead of `ls` (better file listing with icons)
-  - `rg` (ripgrep) instead of `grep` (faster search)
-  - `fd` instead of `find` (faster file finding)
+- **Plugins**:
+  - git, golang, docker, npm, node, nvm, vscode, brew, macos, sudo
+  - web-search, jsontools, colored-man-pages
+  - zsh-completions, zsh-autosuggestions, zsh-syntax-highlighting
+  - zsh-hangul - Auto Korean/English switching for better terminal experience
 - **FZF** integration for fuzzy finding
 - **Autojump** for quick directory navigation
-- **NVM** for Node.js version management
 
 ### Git Configuration
 - User: Junghoon Ban (junghoon.ban@gmail.com)
@@ -36,36 +52,46 @@ This repository contains my personal dotfiles for:
   - `last` = log -1 HEAD
   - `visual` = graphical log view
   - `lg` = pretty formatted log with graph
-  - `f` = find files in codebase
-  - `la` = list all git aliases
 - **Enhanced colors** for better readability
 - **Merge/Diff tool**: vimdiff with diff3 conflict style
 
-### Go Development
-- Custom Go path configuration
-- Go-specific aliases:
-  - `gob` = go build
-  - `gor` = go run
-  - `got` = go test ./...
-  - `gomt` = go mod tidy
-  - `gomi` = go mod init
-  - `gofmt` = go fmt ./...
-  - `govet` = go vet ./...
-- Linting aliases:
-  - `lint` = golangci-lint run
-  - `lintfix` = golangci-lint run --fix
-- **Custom function**: `gonew <project-name>` - Creates a new Go project with module initialization and hello world template
+### Development Environments
 
-### Rust Development
+#### Go Development
+- Custom Go path configuration
+- Go-specific aliases: `gob`, `gor`, `got`, `gomt`, `gomi`, `gofmt`, `govet`
+- Linting: `lint`, `lintfix` (golangci-lint)
+- Debugging: `dlv` (delve debugger)
+- Task runner: `task` (go-task)
+
+#### Rust Development
 - Cargo configuration via rustup
-- Rust-specific aliases:
-  - `cb` = cargo build
-  - `cr` = cargo run
-  - `ct` = cargo test
-  - `cc` = cargo check
-  - `cclippy` = cargo clippy (linting)
-  - `cfmt` = cargo fmt (formatting)
-  - `cupdate` = cargo update
+- Rust-specific aliases: `cb`, `cr`, `ct`, `cc`, `cclippy`, `cfmt`, `cupdate`
+
+#### Java/Kotlin Development (via SDKMAN)
+- Java 21 (Temurin)
+- Kotlin (latest version)
+- Managed through SDKMAN for easy version switching
+
+#### Node.js Development
+- NVM for Node.js version management
+- Node.js LTS installed by default
+
+### Modern CLI Tools
+Aliases for enhanced command-line experience:
+- `cat` → `bat` (syntax highlighting)
+- `ls` → `eza` (better file listing with icons)
+- `grep` → `rg` (ripgrep - faster search)
+- `find` → `fd` (faster file finding)
+
+### Keyboard Customization
+**Karabiner-Elements** configuration for macOS:
+- `caps_lock + j/k/i/l` → Arrow keys (←↓↑→)
+- `caps_lock + u/o` → Home/End
+- `left_control + j/k/i/l` → Arrow keys (alternative mapping)
+
+### Claude Code
+- Claude Code CLI - Global installation via npm
 
 ### Global Gitignore
 Comprehensive ignore patterns for:
@@ -75,6 +101,7 @@ Comprehensive ignore patterns for:
 - Node.js dependencies
 - Environment files and secrets
 - Build and temporary files
+- Claude Code project settings (.claude/settings.local.json)
 
 ## Installation
 
@@ -84,24 +111,44 @@ The easiest way to set up everything at once:
 
 ```bash
 # Clone this repository
-git clone https://github.com/junghoon-vans/dotfiles.git
-cd dotfiles
+git clone https://github.com/junghoon-vans/dotfiles.git ~/workspace/dotfiles
+cd ~/workspace/dotfiles
 
 # Run the setup script (installs everything)
 chmod +x setup.sh
 ./setup.sh
 ```
 
-This will automatically install:
-- Homebrew (if not installed)
-- All packages from Brewfile
-- Oh My Zsh with plugins and Spaceship theme
-- LazyVim for Neovim
-- FZF configuration
-- NVM and Node.js LTS
-- SDKMAN and Java 21
-- Rust (optional, will ask during setup)
-- Creates symlinks for all dotfiles
+### What Gets Installed
+
+The `setup.sh` script will automatically install and configure:
+
+1. **Homebrew** (if not already installed)
+2. **Homebrew packages** from Brewfile:
+   - Modern CLI tools: neovim, git, gh, lazygit, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, autojump
+   - Fonts: FiraCode Nerd Font (for terminal icons)
+3. **Oh My Zsh** (shell framework)
+4. **Oh My Zsh plugins**:
+   - zsh-autosuggestions (command suggestions)
+   - zsh-syntax-highlighting (syntax highlighting)
+   - zsh-completions (additional completions)
+   - zsh-hangul (Korean/English auto-switching)
+5. **Spaceship theme** for Oh My Zsh
+6. **FZF** fuzzy finder configuration
+7. **LazyVim** for Neovim
+8. **NVM** and Node.js LTS
+9. **Claude Code CLI** (via npm)
+10. **SDKMAN**, Java 21, and Kotlin
+11. **Rust** (optional - will prompt during setup)
+12. **Symlinks** for all dotfiles
+
+After installation:
+```bash
+# Reload your shell configuration
+source ~/.zshrc
+
+# Or restart your terminal
+```
 
 ## Customization
 
@@ -116,7 +163,7 @@ Edit `.gitconfig` and update the user section:
 
 ### Add Custom Aliases
 
-You can add your own aliases in `~/.zshrc` or create separate files in `$ZSH_CUSTOM/` (e.g., `~/.oh-my-zsh/custom/aliases.zsh`).
+Add your own aliases in `~/.zshrc` or create separate files in `$ZSH_CUSTOM/` (e.g., `~/.oh-my-zsh/custom/aliases.zsh`).
 
 ### Modify Zsh Theme
 
@@ -124,6 +171,10 @@ The current theme is Spaceship. To change it, edit the `ZSH_THEME` variable in `
 ```bash
 ZSH_THEME="your-theme-name"
 ```
+
+### Customize Karabiner Mappings
+
+Edit `.config/karabiner/karabiner.json` to customize keyboard mappings. Changes are automatically synced via symlink.
 
 ## Useful Commands
 
@@ -142,7 +193,6 @@ ZSH_THEME="your-theme-name"
 - `glg` - git log with graph
 
 ### Go Development
-- `gonew myproject` - Create new Go project
 - `got` - Run all tests
 - `lint` - Run linter
 - `lintfix` - Run linter with auto-fix
@@ -154,13 +204,3 @@ ZSH_THEME="your-theme-name"
 - `cc` - Cargo check
 - `cclippy` - Run clippy linter
 - `cfmt` - Format code
-
-## Files
-
-- `.zshrc` - Zsh shell configuration
-- `.gitconfig` - Git configuration
-- `.gitignore_global` - Global gitignore patterns
-- `Brewfile` - Homebrew package definitions
-- `setup.sh` - **Automated full setup script** (recommended)
-- `link.sh` - Symlink creation script (called by setup.sh)
-- `nvim/` - Custom Neovim configuration files for LazyVim
