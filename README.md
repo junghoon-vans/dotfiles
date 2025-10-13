@@ -82,7 +82,6 @@ Aliases for enhanced command-line experience:
 - `cat` → `bat` (syntax highlighting)
 - `ls` → `eza` (better file listing with icons)
 - `grep` → `rg` (ripgrep - faster search)
-- `find` → `fd` (faster file finding)
 
 ### Keyboard Customization
 **Karabiner-Elements** configuration for macOS:
