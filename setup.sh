@@ -243,7 +243,7 @@ if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
     # Install Java 21
-    if command -v java &> /dev/null; then
+    if java -version 2>&1 | grep -q "version" && [ -d "$HOME/.sdkman/candidates/java/current" ]; then
         print_success "Java already installed ($(java -version 2>&1 | head -n 1))"
     else
         print_info "Installing Java 21..."
@@ -253,7 +253,7 @@ if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
     fi
 
     # Install Kotlin
-    if command -v kotlin &> /dev/null; then
+    if kotlin -version 2>&1 | grep -q "Kotlin" && [ -d "$HOME/.sdkman/candidates/kotlin/current" ]; then
         print_success "Kotlin already installed ($(kotlin -version 2>&1 | head -n 1))"
     else
         print_info "Installing Kotlin..."
