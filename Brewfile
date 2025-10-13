@@ -28,6 +28,9 @@ brew "go-task"         # Task runner
 # Container management
 cask "orbstack"        # Fast Docker Desktop alternative
 
+# Productivity
+cask "jordanbaird-ice" # Menu bar management
+
 # ========================================
 # Modern CLI Tools (Unix replacements)
 # ========================================
