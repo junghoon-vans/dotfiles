@@ -85,8 +85,6 @@ Aliases for enhanced command-line experience:
 
 ### Keyboard Customization
 **Karabiner-Elements** configuration for macOS:
-- `caps_lock + j/k/i/l` → Arrow keys (←↓↑→)
-- `caps_lock + u/o` → Home/End
 - `left_control + j/k/i/l` → Arrow keys (alternative mapping)
 
 ### Claude Code
