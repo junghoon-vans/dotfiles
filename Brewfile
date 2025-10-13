@@ -25,6 +25,9 @@ brew "golangci-lint"   # Go linter
 brew "delve"           # Go debugger
 brew "go-task"         # Task runner
 
+# Cloud tools
+brew "awscli"          # AWS command line interface
+
 # Container management
 cask "orbstack"        # Fast Docker Desktop alternative
 
