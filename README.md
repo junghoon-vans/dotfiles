@@ -155,12 +155,27 @@ source ~/.zshrc
 
 ### Update Git User Information
 
-Edit `.gitconfig` and update the user section:
-```ini
-[user]
-    name = Your Name
-    email = your.email@example.com
-```
+The `.gitconfig` file includes support for local overrides. This allows you to keep personal settings separate from the shared configuration.
+
+**Recommended approach:**
+1. Copy the example file:
+   ```bash
+   cp ~/workspace/dotfiles/.gitconfig.override.example ~/.gitconfig.override
+   ```
+
+2. Edit `~/.gitconfig.override` with your personal settings:
+   ```ini
+   [user]
+       name = Your Name
+       email = your.email@example.com
+   ```
+
+This approach has several advantages:
+- Your personal info is not tracked in git
+- You can override any setting from `.gitconfig`
+- You can use `includeIf` for directory-specific configs (e.g., different email for work projects)
+
+**Alternative:** You can still edit `.gitconfig` directly, but the local override method is more flexible and keeps your personal data private.
 
 ### Add Custom Aliases
 
