@@ -54,6 +54,7 @@ This repository contains my personal dotfiles for:
   - `lg` = pretty formatted log with graph
 - **Enhanced colors** for better readability
 - **Merge/Diff tool**: vimdiff with diff3 conflict style
+- **GitHub Actions**: `act` for running workflows locally
 
 ### Development Environments
 
@@ -122,7 +123,10 @@ The `setup.sh` script will automatically install and configure:
 
 1. **Homebrew** (if not already installed)
 2. **Homebrew packages** from Brewfile:
-   - Modern CLI tools: neovim, git, gh, lazygit, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, autojump
+   - Modern CLI tools: neovim, git, gh, lazygit, act, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, autojump
+   - Cloud tools: awscli
+   - Container management: OrbStack
+   - Productivity: Ice (menu bar management)
    - Fonts: FiraCode Nerd Font (for terminal icons)
 3. **Oh My Zsh** (shell framework)
 4. **Oh My Zsh plugins**:

@@ -19,6 +19,7 @@ brew "neovim"
 brew "git"
 brew "gh"              # GitHub CLI
 brew "lazygit"         # Terminal UI for git
+brew "act"             # Run GitHub Actions locally
 
 # Go development tools
 brew "golangci-lint"   # Go linter
