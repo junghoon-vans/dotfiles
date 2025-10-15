@@ -26,6 +26,10 @@ brew "golangci-lint"   # Go linter
 brew "delve"           # Go debugger
 brew "go-task"         # Task runner
 
+# Database clients
+brew "mysql-client"
+brew "libpq"
+
 # AI tools
 brew "gemini-cli"      # Google Gemini CLI
 brew "claude-squad"    # Anthropic Claude CLI
