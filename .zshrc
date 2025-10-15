@@ -217,6 +217,11 @@ alias cfmt='cargo fmt'
 alias cupdate='cargo update'
 
 # ========================================
+# Claude Squad Alias
+# ========================================
+alias cs='claude-squad'
+
+# ========================================
 # Environment Variables
 # ========================================
 
