@@ -93,3 +93,5 @@ if [ -d "$DOTFILES_DIR/.config" ]; then
     done
     cd "$DOTFILES_DIR"
 fi
+
+brew link --force libpq
