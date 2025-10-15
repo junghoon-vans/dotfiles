@@ -189,3 +189,10 @@ setopt SHARE_HISTORY
 # Editor
 export EDITOR=nvim
 export VISUAL=nvim
+
+# mysql-client
+export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+
+# libpq (PostgreSQL client)
+export PATH="/usr/local/opt/libpq/bin:$PATH"
