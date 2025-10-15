@@ -11,7 +11,6 @@ Personal development environment configuration files for macOS, optimized for Go
   - [Development Environments](#development-environments)
   - [Modern CLI Tools](#modern-cli-tools)
   - [Keyboard Customization](#keyboard-customization)
-  - [Claude Code](#claude-code)
 - [Installation](#installation)
   - [Automatic Setup (Recommended)](#automatic-setup-recommended)
 - [What Gets Installed](#what-gets-installed)
@@ -88,8 +87,10 @@ Aliases for enhanced command-line experience:
 **Karabiner-Elements** configuration for macOS:
 - `left_control + j/k/i/l` → Arrow keys (alternative mapping)
 
-### Claude Code
-- Claude Code CLI - Global installation via npm
+### AI Tools
+- Claude Code CLI
+- Cluade Squad
+- Gemini CLI
 
 ### Global Gitignore
 Comprehensive ignore patterns for:
@@ -124,6 +125,7 @@ The `setup.sh` script will automatically install and configure:
 1. **Homebrew** (if not already installed)
 2. **Homebrew packages** from Brewfile:
    - Modern CLI tools: neovim, git, gh, lazygit, act, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, autojump
+   - AI tools: gemini-cli, claude-squad
    - Cloud tools: awscli
    - Container management: OrbStack
    - Productivity: Ice (menu bar management)
