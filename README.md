@@ -59,14 +59,9 @@ This repository contains my personal dotfiles for:
 
 #### Go Development
 - Custom Go path configuration
-- Go-specific aliases: `gob`, `gor`, `got`, `gomt`, `gomi`, `gofmt`, `govet`
-- Linting: `lint`, `lintfix` (golangci-lint)
-- Debugging: `dlv` (delve debugger)
-- Task runner: `task` (go-task)
 
 #### Rust Development
 - Cargo configuration via rustup
-- Rust-specific aliases: `cb`, `cr`, `ct`, `cc`, `cclippy`, `cfmt`, `cupdate`
 
 #### Java/Kotlin Development (via SDKMAN)
 - Java 21 (Temurin)
@@ -201,24 +196,3 @@ Edit `.config/karabiner/karabiner.json` to customize keyboard mappings. Changes 
 - `...` - Go up two directories
 - `....` - Go up three directories
 - `j <directory>` - Jump to frequently used directory (autojump)
-
-### Git
-- `gs` - git status
-- `ga` - git add
-- `gc` - git commit
-- `gp` - git push
-- `gl` - git pull
-- `glg` - git log with graph
-
-### Go Development
-- `got` - Run all tests
-- `lint` - Run linter
-- `lintfix` - Run linter with auto-fix
-
-### Rust Development
-- `cb` - Cargo build
-- `cr` - Cargo run
-- `ct` - Cargo test
-- `cc` - Cargo check
-- `cclippy` - Run clippy linter
-- `cfmt` - Format code

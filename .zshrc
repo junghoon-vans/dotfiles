@@ -173,50 +173,6 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 
 # ========================================
-# Git Aliases
-# ========================================
-alias gs='git status'
-alias ga='git add'
-alias gc='git commit'
-alias gp='git push'
-alias gl='git pull'
-alias gco='git checkout'
-alias gb='git branch'
-alias gd='git diff'
-alias glg='git log --graph --oneline --decorate --all'
-
-# ========================================
-# Go Aliases
-# ========================================
-alias gob='go build'
-alias gor='go run'
-alias got='go test ./...'
-alias gomt='go mod tidy'
-alias gomi='go mod init'
-alias goget='go get'
-alias gofmt='go fmt ./...'
-alias govet='go vet ./...'
-
-# ========================================
-# Go Development Tools Aliases
-# ========================================
-alias lint='golangci-lint run'
-alias lintfix='golangci-lint run --fix'
-alias dlv='dlv debug'
-alias task='go-task'
-
-# ========================================
-# Rust Aliases
-# ========================================
-alias cb='cargo build'
-alias cr='cargo run'
-alias ct='cargo test'
-alias cc='cargo check'
-alias cclippy='cargo clippy'
-alias cfmt='cargo fmt'
-alias cupdate='cargo update'
-
-# ========================================
 # Claude Squad Alias
 # ========================================
 alias cs='claude-squad'
