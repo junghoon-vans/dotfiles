@@ -81,6 +81,7 @@ Aliases for enhanced command-line experience:
 ### Keyboard Customization
 **Karabiner-Elements** configuration for macOS:
 - `left_control + j/k/i/l` → Arrow keys (alternative mapping)
+- `caps_lock` → `left_control`
 
 ### AI Tools
 - Claude Code CLI
