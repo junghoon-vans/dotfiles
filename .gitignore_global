@@ -73,6 +73,9 @@ go.work.sum
 # Dependency directories
 vendor/
 
+# debug
+*__debug_bin*
+
 # ========================================
 # Node.js
 # ========================================
