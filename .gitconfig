@@ -59,12 +59,15 @@
 	untracked = cyan
 
 [pull]
-	rebase = false
+	rebase = true
 
 [push]
 	default = simple
 	followTags = true
 	autoSetupRemote = true
+
+[branch]
+    autoSetupMerge = simple
 
 [fetch]
 	prune = true
