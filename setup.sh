@@ -237,18 +237,35 @@ else
     print_success "SDKMAN installed"
 fi
 
-# Install Java 21 and Kotlin if SDKMAN is available
+# Install Java and Kotlin if SDKMAN is available
 if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
     export SDKMAN_DIR="$HOME/.sdkman"
     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
+    # Install Java 11
+    if [ -d "$HOME/.sdkman/candidates/java/11.0.25-tem" ]; then
+        print_success "Java 11 already installed"
+    else
+        print_info "Installing Java 11..."
+        echo "n" | sdk install java 11.0.28-tem
+        print_success "Java 11 installed"
+    fi
+
+    # Install Java 17
+    if [ -d "$HOME/.sdkman/candidates/java/17.0.13-tem" ]; then
+        print_success "Java 17 already installed"
+    else
+        print_info "Installing Java 17..."
+        echo "n" | sdk install java 17.0.13-tem
+        print_success "Java 17 installed"
+    fi
+
     # Install Java 21
-    if java -version 2>&1 | grep -q "version" && [ -d "$HOME/.sdkman/candidates/java/current" ]; then
-        print_success "Java already installed ($(java -version 2>&1 | head -n 1))"
+    if [ -d "$HOME/.sdkman/candidates/java/21-tem" ]; then
+        print_success "Java 21 already installed"
     else
         print_info "Installing Java 21..."
-        sdk install java 21-tem
-        sdk default java 21-tem
+        echo "y" | sdk install java 21-tem
         print_success "Java 21 installed ($(java -version 2>&1 | head -n 1))"
     fi
 

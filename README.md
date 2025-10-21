@@ -64,7 +64,7 @@ This repository contains my personal dotfiles for:
 - Cargo configuration via rustup
 
 #### Java/Kotlin Development (via SDKMAN)
-- Java 21 (Temurin)
+- Java 11, 17, 21 (Temurin)
 - Kotlin (latest version)
 - Managed through SDKMAN for easy version switching
 
@@ -138,7 +138,7 @@ The `setup.sh` script will automatically install and configure:
 7. **LazyVim** for Neovim
 8. **NVM** and Node.js LTS
 9. **Claude Code CLI** (via npm)
-10. **SDKMAN**, Java 21, and Kotlin
+10. **SDKMAN**, Java 11, 17, 21, and Kotlin
 11. **Rust** (optional - will prompt during setup)
 12. **Symlinks** for all dotfiles
 
