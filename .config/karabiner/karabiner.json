@@ -23,6 +23,33 @@
             ]
           },
           {
+            "description": "Change won sign(₩) to backtick(`) for Korean input",
+            "manipulators": [
+              {
+                "from": {
+                  "key_code": "grave_accent_and_tilde"
+                },
+                "to": [
+                  {
+                    "key_code": "grave_accent_and_tilde",
+                    "modifiers": ["left_option"]
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "input_source_if",
+                    "input_sources": [
+                      {
+                        "language": "ko"
+                      }
+                    ]
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
             "description": "Change left_control +jkil to arrow keys",
             "manipulators": [
               {

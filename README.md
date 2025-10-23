@@ -82,6 +82,7 @@ Aliases for enhanced command-line experience:
 **Karabiner-Elements** configuration for macOS:
 - `left_control + j/k/i/l` → Arrow keys (alternative mapping)
 - `caps_lock` → `left_control`
+- Korean input: Won sign(₩) → Backtick(`) - Inputs backtick instead of won sign when Korean input source is active
 
 ### AI Tools
 - Claude Code CLI
