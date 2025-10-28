@@ -14,10 +14,10 @@
         "arguments": ["-mode=stdio"]
       }
     },
-    "sui-move-analyzer": {
+    "move-analyzer": {
       "binary": {
-        "path": "/opt/homebrew/bin/sui",
-        "arguments": ["analyzer"]
+        "path": "~/.cargo/bin/move-analyzer",
+        "arguments": []
       }
     }
   },
@@ -28,7 +28,7 @@
       "tab_size": 4
     },
     "Move": {
-      "language_servers": ["sui-move-analyzer"],
+      "language_servers": ["move-analyzer"],
       "format_on_save": "on",
       "tab_size": 4
     },

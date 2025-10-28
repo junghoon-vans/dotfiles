@@ -8,6 +8,9 @@
 # Go programming language
 brew "go"
 
+# Sui programming language
+brew "sui"
+
 # ========================================
 # Development Tools
 # ========================================
