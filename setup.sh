@@ -71,7 +71,20 @@ else
 fi
 
 # ========================================
-# 3. Install Oh My Zsh
+# 3. Install Go Tools
+# ========================================
+print_step "Installing Go tools..."
+
+if command -v go &> /dev/null; then
+    print_info "Installing gnopls..."
+    go install github.com/gnoverse/gnopls@latest
+    print_success "gnopls installed"
+else
+    print_info "Go not found, skipping gnopls installation"
+fi
+
+# ========================================
+# 4. Install Oh My Zsh
 # ========================================
 print_step "Installing Oh My Zsh..."
 
@@ -84,7 +97,7 @@ else
 fi
 
 # ========================================
-# 4. Install Oh My Zsh Plugins
+# 5. Install Oh My Zsh Plugins
 # ========================================
 print_step "Installing Oh My Zsh plugins..."
 
@@ -127,7 +140,7 @@ else
 fi
 
 # ========================================
-# 5. Install Spaceship Theme
+# 6. Install Spaceship Theme
 # ========================================
 print_step "Installing Spaceship theme..."
 
@@ -141,7 +154,7 @@ else
 fi
 
 # ========================================
-# 6. Setup FZF
+# 7. Setup FZF
 # ========================================
 print_step "Setting up FZF..."
 
@@ -154,7 +167,7 @@ else
 fi
 
 # ========================================
-# 7. Install LazyVim
+# 8. Install LazyVim
 # ========================================
 print_step "Installing LazyVim..."
 
@@ -169,7 +182,7 @@ else
 fi
 
 # ========================================
-# 8. Install NVM and Node.js
+# 9. Install NVM and Node.js
 # ========================================
 print_step "Installing NVM and Node.js..."
 
@@ -203,7 +216,7 @@ if [ -s "$HOME/.nvm/nvm.sh" ]; then
 fi
 
 # ========================================
-# 9. Install Claude Code CLI
+# 10. Install Claude Code CLI
 # ========================================
 print_step "Installing Claude Code CLI..."
 
@@ -220,7 +233,7 @@ else
 fi
 
 # ========================================
-# 10. Install SDKMAN, Java, and Kotlin
+# 11. Install SDKMAN, Java, and Kotlin
 # ========================================
 print_step "Installing SDKMAN, Java, and Kotlin..."
 
@@ -280,7 +293,7 @@ if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
 fi
 
 # ========================================
-# 11. Install Rust (Optional)
+# 12. Install Rust (Optional)
 # ========================================
 print_step "Installing Rust..."
 
@@ -300,7 +313,7 @@ else
 fi
 
 # ========================================
-# 12. Create Symlinks
+# 13. Create Symlinks
 # ========================================
 print_step "Creating symlinks for dotfiles..."
 

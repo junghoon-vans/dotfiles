@@ -7,7 +7,26 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "lsp": {
+    "gnopls": {
+      "binary": {
+        "path": "/Users/junghoon/go/bin/gnopls",
+        "arguments": ["-mode=stdio"]
+      }
+    }
+  },
   "languages": {
+    "C++": {
+      "language_servers": ["gnopls"],
+      "format_on_save": "on",
+      "tab_size": 4
+    },
+    "SQL": {
+      "format_on_save": "off",
+      "prettier": {
+        "allowed": false
+      }
+    },
     "YAML": {
       "format_on_save": "off",
       "prettier": {
@@ -44,7 +63,9 @@
     "show": "auto"
   },
   "autosave": "on_focus_change",
-  "file_types": {},
+  "file_types": {
+    "C++": ["gno"]
+  },
   "base_keymap": "JetBrains",
   "icon_theme": "Catppuccin Macchiato",
   "ui_font_size": 16,
