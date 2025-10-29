@@ -80,6 +80,10 @@ if command -v go &> /dev/null; then
     go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
     print_success "golangci-lint installed"
 
+    print_info "Installing gofumpt..."
+    go install mvdan.cc/gofumpt@latest
+    print_success "gofumpt installed"
+
     print_info "Installing gnopls..."
     go install github.com/gnoverse/gnopls@latest
     print_success "gnopls installed"
