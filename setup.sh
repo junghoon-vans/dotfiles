@@ -84,6 +84,10 @@ if command -v go &> /dev/null; then
     go install mvdan.cc/gofumpt@latest
     print_success "gofumpt installed"
 
+    print_info "Installing gno..."
+    go install github.com/gnolang/gno/gnovm/cmd/gno@latest
+    print_success "gno installed"
+
     print_info "Installing gnopls..."
     go install github.com/gnoverse/gnopls@latest
     print_success "gnopls installed"
