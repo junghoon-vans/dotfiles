@@ -13,22 +13,11 @@
         "path": "~/go/bin/gnopls",
         "arguments": ["-mode=stdio"]
       }
-    },
-    "sui-move-analyzer": {
-      "binary": {
-        "path": "~/.cargo/bin/sui-move-analyzer",
-        "arguments": []
-      }
     }
   },
   "languages": {
     "C++": {
       "language_servers": ["gnopls"],
-      "format_on_save": "on",
-      "tab_size": 4
-    },
-    "Move": {
-      "language_servers": ["sui-move-analyzer"],
       "format_on_save": "on",
       "tab_size": 4
     },

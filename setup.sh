@@ -89,7 +89,7 @@ if command -v go &> /dev/null; then
     print_success "gno installed"
 
     print_info "Installing gnopls..."
-    go install github.com/gnoverse/gnopls@latest
+    go install github.com/gnoverse/gnopls@17a9aab6589fed9cef408dc6f8088768e1def6e8 # latest version is broken
     print_success "gnopls installed"
 else
     print_info "Go not found, skipping Go tools installation"
