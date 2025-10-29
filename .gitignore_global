@@ -126,5 +126,7 @@ temp/
 # Claude Code
 # ========================================
 
+**/CLAUDE.md
+
 # Project-specific personal settings (not for source control)
 **/.claude/settings.local.json
