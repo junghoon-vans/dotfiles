@@ -142,9 +142,11 @@ export NVM_DIR="$HOME/.nvm"
 # Go Configuration
 # ========================================
 export GOPATH=$HOME/go
-export GOROOT=/opt/homebrew/opt/go@1.24/libexec
 export PATH="/opt/homebrew/opt/go@1.24/bin:$PATH"
 export PATH="$PATH:$GOPATH/bin"
+
+# Gno Configuration
+export GNOPATH=$HOME/gno
 # ========================================
 # Rust Configuration
 # ========================================
