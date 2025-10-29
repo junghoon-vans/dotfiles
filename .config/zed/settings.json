@@ -16,8 +16,8 @@
     },
     "sui-move-analyzer": {
       "binary": {
-        "path": "/opt/homebrew/bin/sui",
-        "arguments": ["analyzer"]
+        "path": "~/.cargo/bin/sui-move-analyzer",
+        "arguments": []
       }
     }
   },

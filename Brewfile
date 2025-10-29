@@ -6,7 +6,7 @@
 # ========================================
 
 # Go programming language
-brew "go"
+brew "go@1.24"
 
 # Sui programming language
 brew "sui"
@@ -25,7 +25,6 @@ brew "lazygit"         # Terminal UI for git
 brew "act"             # Run GitHub Actions locally
 
 # Go development tools
-brew "golangci-lint"   # Go linter
 brew "delve"           # Go debugger
 brew "go-task"         # Task runner
 

@@ -76,11 +76,15 @@ fi
 print_step "Installing Go tools..."
 
 if command -v go &> /dev/null; then
+    print_info "Installing golangci-lint..."
+    go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+    print_success "golangci-lint installed"
+
     print_info "Installing gnopls..."
     go install github.com/gnoverse/gnopls@latest
     print_success "gnopls installed"
 else
-    print_info "Go not found, skipping gnopls installation"
+    print_info "Go not found, skipping Go tools installation"
 fi
 
 # ========================================
