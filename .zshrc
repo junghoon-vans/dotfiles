@@ -210,3 +210,5 @@ export PATH="/Users/junghoon/.antigravity/antigravity/bin:$PATH"
 
 . "$HOME/.local/bin/env"
 export PATH="$HOME/.local/bin:$PATH"
+
+export ANTHROPIC_MODEL="sonnet"
