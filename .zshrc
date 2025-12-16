@@ -207,3 +207,6 @@ export PATH="/usr/local/opt/libpq/bin:$PATH"
 # Added by Antigravity
 export PATH="/Users/junghoon/.antigravity/antigravity/bin:$PATH"
 
+
+. "$HOME/.local/bin/env"
+export PATH="$HOME/.local/bin:$PATH"
