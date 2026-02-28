@@ -124,8 +124,9 @@ The `setup.sh` script will automatically install and configure:
    - Modern CLI tools: neovim, git, gh, lazygit, act, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, autojump
    - Database clients: mysql-client, libpq
    - AI tools: gemini-cli, claude-squad
-   - Cloud tools: awscli
+  - Cloud tools: awscli, terraform, terraform-ls
    - Container management: OrbStack
+   - Terminal emulator: Ghostty
    - Productivity: Ice (menu bar management)
    - Fonts: FiraCode Nerd Font (for terminal icons)
 3. **Oh My Zsh** (shell framework)

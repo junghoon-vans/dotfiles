@@ -38,9 +38,14 @@ brew "claude-squad"    # Anthropic Claude CLI
 
 # Cloud tools
 brew "awscli"          # AWS command line interface
+brew "terraform"
+brew "terraform-ls"
 
 # Container management
 cask "orbstack"        # Fast Docker Desktop alternative
+
+# Terminal emulator
+cask "ghostty"         # Fast, modern terminal
 
 # Productivity
 cask "jordanbaird-ice" # Menu bar management
