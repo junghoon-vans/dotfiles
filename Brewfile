@@ -86,3 +86,4 @@ brew "autojump"
 # ========================================
 
 cask "font-fira-code-nerd-font"
+cask "font-d2coding"
