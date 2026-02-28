@@ -1,12 +1,12 @@
 font-family = "FiraCode Nerd Font"
 font-family = D2Coding
-font-size = 14
+font-size = 13
 font-thicken = true
 
 window-padding-x = 8
 window-padding-y = 8
 
-theme = catppuccin-mocha
+theme = "Catppuccin Mocha"
 cursor-style-blink = false
 copy-on-select = clipboard
 confirm-close-surface = false
