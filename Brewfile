@@ -23,6 +23,7 @@ brew "git"
 brew "gh"              # GitHub CLI
 brew "lazygit"         # Terminal UI for git
 brew "act"             # Run GitHub Actions locally
+brew "prek"            # pre-commit re-implemented in Rust
 
 # Go development tools
 brew "delve"           # Go debugger

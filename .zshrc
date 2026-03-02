@@ -166,6 +166,7 @@ alias ll='eza -alh --icons'
 alias la='eza -a --icons'
 alias lt='eza --tree --icons'
 alias grep='rg'
+alias pre-commit='prek'
 
 # ========================================
 # General Aliases

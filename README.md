@@ -121,10 +121,10 @@ The `setup.sh` script will automatically install and configure:
 
 1. **Homebrew** (if not already installed)
 2. **Homebrew packages** from Brewfile:
-   - Modern CLI tools: neovim, git, gh, lazygit, act, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, autojump
+   - Modern CLI tools: neovim, git, gh, lazygit, act, prek, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, autojump
    - Database clients: mysql-client, libpq
    - AI tools: gemini-cli, claude-squad
-  - Cloud tools: awscli, terraform, terraform-ls
+   - Cloud tools: awscli, terraform, terraform-ls
    - Container management: OrbStack
    - Terminal emulator: Ghostty
    - Productivity: Ice (menu bar management)
