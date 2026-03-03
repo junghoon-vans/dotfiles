@@ -8,6 +8,11 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   "lsp": {
+    "gopls": {
+      "binary": {
+        "path": "/Users/junghoon/go/bin/gopls"
+      }
+    },
     "gnopls": {
       "binary": {
         "path": "~/go/bin/gnopls",
@@ -16,6 +21,9 @@
     }
   },
   "languages": {
+    "Go": {
+      "language_servers": ["gopls"]
+    },
     "C++": {
       "language_servers": ["gnopls"],
       "format_on_save": "on",
