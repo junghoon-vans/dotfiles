@@ -228,20 +228,16 @@ if [ -s "$HOME/.nvm/nvm.sh" ]; then
 fi
 
 # ========================================
-# 10. Install Claude Code CLI
+# 10. Install Bun
 # ========================================
-print_step "Installing Claude Code CLI..."
+print_step "Installing Bun..."
 
-if command -v node &> /dev/null; then
-    if command -v claude &> /dev/null; then
-        print_success "Claude Code already installed ($(claude --version 2>&1 || echo 'installed'))"
-    else
-        print_info "Installing Claude Code globally via npm..."
-        npm install -g @anthropic-ai/claude-code
-        print_success "Claude Code installed"
-    fi
+if command -v bun &> /dev/null; then
+    print_success "Bun already installed ($(bun --version))"
 else
-    print_info "Skipping Claude Code installation (Node.js not available)"
+    print_info "Installing Bun..."
+    curl -fsSL https://bun.sh/install | bash
+    print_success "Bun installed"
 fi
 
 # ========================================

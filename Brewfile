@@ -34,11 +34,10 @@ brew "mysql-client"
 brew "libpq"
 
 # AI tools
-brew "gemini-cli"      # Google Gemini CLI
-brew "claude-squad"    # Anthropic Claude CLI
+brew "anomalyco/tap/opencode"
 
 # Cloud tools
-brew "awscli"          # AWS command line interface
+# awscli (Tier 3 - install manually if needed)
 brew "terraform"
 brew "terraform-ls"
 

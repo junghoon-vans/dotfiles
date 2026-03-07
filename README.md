@@ -85,9 +85,7 @@ Aliases for enhanced command-line experience:
 - Korean input: Won sign(₩) → Backtick(`) - Inputs backtick instead of won sign when Korean input source is active
 
 ### AI Tools
-- Claude Code CLI
-- Cluade Squad
-- Gemini CLI
+- OpenCode
 
 ### Global Gitignore
 Comprehensive ignore patterns for:
@@ -97,7 +95,6 @@ Comprehensive ignore patterns for:
 - Node.js dependencies
 - Environment files and secrets
 - Build and temporary files
-- Claude Code project settings (.claude/settings.local.json)
 
 ## Installation
 
@@ -123,7 +120,6 @@ The `setup.sh` script will automatically install and configure:
 2. **Homebrew packages** from Brewfile:
    - Modern CLI tools: neovim, git, gh, lazygit, act, prek, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, autojump
    - Database clients: mysql-client, libpq
-   - AI tools: gemini-cli, claude-squad
    - Cloud tools: awscli, terraform, terraform-ls
    - Container management: OrbStack
    - Terminal emulator: Ghostty
@@ -139,10 +135,9 @@ The `setup.sh` script will automatically install and configure:
 6. **FZF** fuzzy finder configuration
 7. **LazyVim** for Neovim
 8. **NVM** and Node.js LTS
-9. **Claude Code CLI** (via npm)
-10. **SDKMAN**, Java 11, 17, 21, and Kotlin
-11. **Rust** (optional - will prompt during setup)
-12. **Symlinks** for all dotfiles
+9. **SDKMAN**, Java 11, 17, 21, and Kotlin
+10. **Rust** (optional - will prompt during setup)
+11. **Symlinks** for all dotfiles
 
 After installation:
 ```bash
