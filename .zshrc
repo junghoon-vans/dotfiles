@@ -206,7 +206,7 @@ export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 export PATH="/usr/local/opt/libpq/bin:$PATH"
 
 # Added by Antigravity
-export PATH="/Users/junghoon/.antigravity/antigravity/bin:$PATH"
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 
 
 . "$HOME/.local/bin/env"
@@ -215,10 +215,14 @@ export PATH="$HOME/.local/bin:$PATH"
 export ANTHROPIC_MODEL="sonnet"
 
 # opencode
-export PATH=/Users/junghoon/.opencode/bin:$PATH
+export PATH="$HOME/.opencode/bin:$PATH"
 
 # bun completions
-[ -s "/Users/junghoon/.bun/_bun" ] && source "/Users/junghoon/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"

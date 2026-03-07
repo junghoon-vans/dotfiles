@@ -10,22 +10,28 @@
   "lsp": {
     "gopls": {
       "binary": {
-        "path": "/Users/junghoon/go/bin/gopls"
+        "path": "~/go/bin/gopls"
       }
     },
     "gnopls": {
       "binary": {
         "path": "~/go/bin/gnopls",
-        "arguments": ["-mode=stdio"]
+        "arguments": [
+          "-mode=stdio"
+        ]
       }
     }
   },
   "languages": {
     "Go": {
-      "language_servers": ["gopls"]
+      "language_servers": [
+        "gopls"
+      ]
     },
     "C++": {
-      "language_servers": ["gnopls"],
+      "language_servers": [
+        "gnopls"
+      ],
       "format_on_save": "on",
       "tab_size": 4
     },
@@ -72,7 +78,9 @@
   },
   "autosave": "on_focus_change",
   "file_types": {
-    "C++": ["gno"]
+    "C++": [
+      "gno"
+    ]
   },
   "base_keymap": "JetBrains",
   "icon_theme": "Catppuccin Macchiato",
