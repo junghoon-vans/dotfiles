@@ -216,3 +216,10 @@ export ANTHROPIC_MODEL="sonnet"
 
 # opencode
 export PATH=/Users/junghoon/.opencode/bin:$PATH
+
+# bun completions
+[ -s "/Users/junghoon/.bun/_bun" ] && source "/Users/junghoon/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
