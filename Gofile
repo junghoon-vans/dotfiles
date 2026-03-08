@@ -1,0 +1,15 @@
+# Gofile - Go global packages
+# Usage: Automatically installed by scripts/03-go.sh
+#
+# Format: one package path per line (go install compatible)
+# Comments and empty lines are ignored
+
+# Linting
+github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0
+
+# Formatting
+mvdan.cc/gofumpt@latest
+
+# Gno development
+github.com/gnolang/gno/gnovm/cmd/gno@latest
+github.com/gnoverse/gnopls@17a9aab6589fed9cef408dc6f8088768e1def6e8

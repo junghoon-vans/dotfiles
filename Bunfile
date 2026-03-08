@@ -1,0 +1,8 @@
+# Bunfile - Bun global packages
+# Usage: Automatically installed by scripts/08-bun.sh
+#
+# Format: one package name per line (npm package name)
+# Comments and empty lines are ignored
+
+# AI tools
+oh-my-opencode
