@@ -76,7 +76,6 @@ plugins=(
   docker
   npm
   node
-  nvm
   brew
   macos
   sudo
@@ -126,9 +125,9 @@ source $ZSH/oh-my-zsh.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # ========================================
-# Autojump Configuration
+# Zoxide Configuration (smart directory navigation)
 # ========================================
-[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
+command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
 # ========================================
 # NVM Configuration

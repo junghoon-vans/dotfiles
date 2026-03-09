@@ -76,8 +76,8 @@ brew "tldr"
 # Fuzzy finder
 brew "fzf"
 
-# Smart directory navigation
-brew "autojump"
+# Smart directory navigation (faster autojump alternative)
+brew "zoxide"
 
 # ========================================
 # Fonts (for terminal icons)
