@@ -31,6 +31,6 @@ fi
 # oh-my-opencode: run install step after global package is in place
 if command -v bunx &> /dev/null; then
     print_step "Setting up oh-my-opencode..."
-    bunx oh-my-opencode install --no-tui --claude=yes --openai=yes --gemini=no --copilot=no
+    bunx oh-my-opencode install --no-tui --claude=no --openai=yes --gemini=no --copilot=no
     print_success "oh-my-opencode configured"
 fi
