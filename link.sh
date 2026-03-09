@@ -23,14 +23,13 @@ FILES=".zshrc .gitconfig .gitignore_global"
 
 # Function to create backup
 backup_file() {
-    if [ -L "$1" ]; then
-        # If it's a symlink, remove it (no backup needed for symlinks)
-        echo -e "${YELLOW}Removing existing symlink $1${NC}"
-        rm "$1"
-    elif [ -f "$1" ]; then
-        # If it's a real file, back it up
-        echo -e "${YELLOW}Backing up existing $1 to $1.backup${NC}"
-        mv "$1" "$1.backup"
+    local target="$1"
+    if [ -L "$target" ]; then
+        rm "$target"
+    elif [ -f "$target" ]; then
+        local backup="${target}.backup.$(date +%Y%m%d-%H%M%S)"
+        echo -e "${YELLOW}Backing up $target → $backup${NC}"
+        mv "$target" "$backup"
     fi
 }
 
@@ -40,13 +39,19 @@ create_symlink() {
     local source="$DOTFILES_DIR/$file"
     local target="$HOME/$file"
 
-    if [ -f "$source" ]; then
-        backup_file "$target"
-        ln -sf "$source" "$target"
-        echo -e "${GREEN}✓${NC} Linked $file"
-    else
+    if [ ! -f "$source" ]; then
         echo -e "${RED}✗${NC} $file not found in $DOTFILES_DIR"
+        return
     fi
+
+    if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
+        echo -e "${GREEN}✓${NC} Already linked $file"
+        return
+    fi
+
+    backup_file "$target"
+    ln -sf "$source" "$target"
+    echo -e "${GREEN}✓${NC} Linked $file"
 }
 
 # Function to create .config file symlink
@@ -54,28 +59,23 @@ create_config_symlink() {
     local config_file=$1
     local source="$DOTFILES_DIR/.config/$config_file"
     local target="$HOME/.config/$config_file"
-    local target_dir=$(dirname "$target")
+    local target_dir
+    target_dir=$(dirname "$target")
 
-    if [ -f "$source" ]; then
-        # Create directory structure if it doesn't exist
-        mkdir -p "$target_dir"
-
-        # Backup existing file or remove symlink
-        if [ -L "$target" ]; then
-            # If it's a symlink, remove it (no backup needed for symlinks)
-            echo -e "${YELLOW}Removing existing symlink $target${NC}"
-            rm "$target"
-        elif [ -f "$target" ]; then
-            # If it's a real file, back it up
-            echo -e "${YELLOW}Backing up existing $target to $target.backup${NC}"
-            mv "$target" "$target.backup"
-        fi
-
-        ln -sf "$source" "$target"
-        echo -e "${GREEN}✓${NC} Linked .config/$config_file"
-    else
+    if [ ! -f "$source" ]; then
         echo -e "${RED}✗${NC} .config/$config_file not found in $DOTFILES_DIR"
+        return
     fi
+
+    if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
+        echo -e "${GREEN}✓${NC} Already linked .config/$config_file"
+        return
+    fi
+
+    mkdir -p "$target_dir"
+    backup_file "$target"
+    ln -sf "$source" "$target"
+    echo -e "${GREEN}✓${NC} Linked .config/$config_file"
 }
 
 # Create symlinks
