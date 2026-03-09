@@ -52,6 +52,7 @@ This repository contains my personal dotfiles for:
   - `visual` = graphical log view
   - `lg` = pretty formatted log with graph
 - **Enhanced colors** for better readability
+- **Delta** pager for syntax-highlighted, side-by-side diffs
 - **Merge/Diff tool**: vimdiff with diff3 conflict style
 - **GitHub Actions**: `act` for running workflows locally
 
@@ -119,7 +120,7 @@ The `setup.sh` script will automatically install and configure:
 
 1. **Homebrew** (if not already installed)
 2. **Homebrew packages** from Brewfile:
-   - Modern CLI tools: neovim, git, gh, lazygit, act, prek, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, zoxide
+   - Modern CLI tools: neovim, git, git-delta, gh, lazygit, act, prek, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, zoxide
    - Database clients: mysql-client, libpq
    - Cloud tools: awscli, grpcurl, terraform, terraform-ls
    - Container management: OrbStack
@@ -139,6 +140,7 @@ The `setup.sh` script will automatically install and configure:
 9. **SDKMAN**, Java 11, 17, 21, and Kotlin
 10. **Rust** (optional - will prompt during setup)
 11. **Symlinks** for all dotfiles
+12. **macOS defaults** (Finder, Dock, Keyboard, Screenshot)
 
 After installation:
 ```bash
@@ -177,6 +179,17 @@ This approach has several advantages:
 ### Add Custom Aliases
 
 Add your own aliases in `~/.zshrc` or create separate files in `$ZSH_CUSTOM/` (e.g., `~/.oh-my-zsh/custom/aliases.zsh`).
+
+### Machine-specific Overrides
+
+Create `~/.zshrc.local` for settings that shouldn't be tracked (work proxies, machine-specific paths, etc.):
+
+```bash
+# ~/.zshrc.local - not tracked in git
+export SOME_WORK_VAR=value
+```
+
+This file is automatically sourced at the end of `.zshrc` if it exists.
 
 ### Modify Zsh Theme
 
