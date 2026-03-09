@@ -100,10 +100,11 @@ brew link --force libpq > /dev/null 2>&1 || true
 
 # Create symlink for go@1.25 -> go
 if [ -d "/opt/homebrew/opt/go@1.25" ]; then
-    if [ -L "/opt/homebrew/opt/go" ]; then
-        echo -e "${YELLOW}Removing existing go symlink${NC}"
-        rm "/opt/homebrew/opt/go"
+    if [ -L "/opt/homebrew/opt/go" ] && [ "$(readlink "/opt/homebrew/opt/go")" = "/opt/homebrew/opt/go@1.25" ]; then
+        echo -e "${GREEN}✓${NC} Already linked go@1.25 -> go"
+    else
+        [ -L "/opt/homebrew/opt/go" ] && rm "/opt/homebrew/opt/go"
+        ln -sf "/opt/homebrew/opt/go@1.25" "/opt/homebrew/opt/go"
+        echo -e "${GREEN}✓${NC} Linked go@1.25 -> go"
     fi
-    ln -sf "/opt/homebrew/opt/go@1.25" "/opt/homebrew/opt/go"
-    echo -e "${GREEN}✓${NC} Linked go@1.25 -> go"
 fi
