@@ -128,6 +128,7 @@ source $ZSH/oh-my-zsh.sh
 # Zoxide Configuration (smart directory navigation)
 # ========================================
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
+alias j='z'  # muscle memory compatibility with autojump
 
 # ========================================
 # NVM Configuration
@@ -188,6 +189,7 @@ alias ....='cd ../../..'
 # ========================================
 
 # History settings
+HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=50000
 setopt SHARE_HISTORY
