@@ -181,11 +181,6 @@ alias ....='cd ../../..'
 alias cs='claude-squad'
 
 # ========================================
-# Antigravity Alias
-# ========================================
-alias code='agy'
-
-# ========================================
 # Environment Variables
 # ========================================
 
@@ -205,11 +200,6 @@ export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 # libpq (PostgreSQL client)
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
-# Added by Antigravity
-export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
-
-
-[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 export PATH="$HOME/.local/bin:$PATH"
 
 export ANTHROPIC_MODEL="sonnet"
