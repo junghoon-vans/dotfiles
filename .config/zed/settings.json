@@ -28,7 +28,7 @@
         "gopls"
       ]
     },
-    "C++": {
+    "Gno": {
       "language_servers": [
         "gnopls"
       ],
@@ -79,11 +79,6 @@
     "show": "auto"
   },
   "autosave": "on_focus_change",
-  "file_types": {
-    "C++": [
-      "gno"
-    ]
-  },
   "base_keymap": "JetBrains",
   "icon_theme": "Catppuccin Macchiato",
   "ui_font_size": 16,
