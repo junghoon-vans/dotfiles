@@ -7,13 +7,16 @@ print_step "Installing Go tools..."
 if command -v go &> /dev/null; then
     if [ -f "$DOTFILES_DIR/Gofile" ]; then
         print_info "Installing Go packages from Gofile..."
-        while IFS= read -r package || [[ -n "$package" ]]; do
-            [[ "$package" =~ ^[[:space:]]*# ]] && continue  # skip comments
-            [[ -z "${package// }" ]] && continue              # skip empty lines
-            print_info "Installing $package..."
-            if [[ "$package" == github.com/gnoverse/gnopls@* ]]; then
-                GOTOOLCHAIN=go1.24.10 go install "$package"
+        while IFS= read -r line || [[ -n "$line" ]]; do
+            [[ "$line" =~ ^[[:space:]]*# ]] && continue  # skip comments
+            [[ -z "${line// }" ]] && continue              # skip empty lines
+            package=$(awk '{print $1}' <<< "$line")
+            toolchain=$(grep -o 'GOTOOLCHAIN=[^ ]*' <<< "$line" | cut -d= -f2)
+            if [[ -n "$toolchain" ]]; then
+                print_info "Installing $package (GOTOOLCHAIN=$toolchain)..."
+                GOTOOLCHAIN="$toolchain" go install "$package"
             else
+                print_info "Installing $package..."
                 go install "$package"
             fi
             print_success "$package installed"

@@ -2,6 +2,7 @@
 # Usage: Automatically installed by scripts/03-go.sh
 #
 # Format: one package path per line (go install compatible)
+#        optionally append GOTOOLCHAIN=<version> to pin the toolchain
 # Comments and empty lines are ignored
 
 # Linting
@@ -12,4 +13,4 @@ mvdan.cc/gofumpt@latest
 
 # Gno development
 github.com/gnolang/gno/gnovm/cmd/gno@latest
-github.com/gnoverse/gnopls@latest
+github.com/gnoverse/gnopls@latest GOTOOLCHAIN=go1.24.10
