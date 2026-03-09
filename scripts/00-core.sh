@@ -4,7 +4,7 @@
 # Core: Common functions and colors
 # ========================================
 
-set -e
+set -euo pipefail
 
 # Colors for output
 CYAN='\033[1;36m'

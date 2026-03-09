@@ -3,7 +3,7 @@
 # Dotfiles Link Script
 # This script creates symlinks from the home directory to dotfiles in this repository
 
-set -e
+set -euo pipefail
 
 # Colors for output
 BLUE='\033[0;34m'

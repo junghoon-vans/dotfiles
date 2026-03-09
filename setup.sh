@@ -9,7 +9,7 @@
 #   ./setup.sh           # Run all steps
 #   ./setup.sh 01 03     # Run specific steps
 
-set -e
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export SCRIPTS_DIR="$SCRIPT_DIR/scripts"
