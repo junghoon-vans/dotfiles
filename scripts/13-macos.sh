@@ -79,8 +79,15 @@ defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 # ========================================
 print_info "Configuring screenshot..."
 
+# Save screenshots to ~/Pictures/Screenshots (keep Desktop clean)
+mkdir -p "$HOME/Pictures/Screenshots"
+defaults write com.apple.screencapture location -string "$HOME/Pictures/Screenshots"
+
 # Remove drop shadow from screenshots
 defaults write com.apple.screencapture disable-shadow -bool true
+
+# Reload screenshot config
+killall SystemUIServer 2>/dev/null || true
 
 # ========================================
 # Appearance
