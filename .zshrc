@@ -77,7 +77,6 @@ plugins=(
   npm
   node
   nvm
-  vscode
   brew
   macos
   sudo
