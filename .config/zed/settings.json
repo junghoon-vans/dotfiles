@@ -7,76 +7,68 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "edit_predictions": {
+    "provider": "copilot",
+  },
   "lsp": {
     "gopls": {
       "binary": {
-        "path": "~/go/bin/gopls"
-      }
+        "path": "~/go/bin/gopls",
+      },
     },
     "gnopls": {
       "binary": {
         "path": "~/go/bin/gnopls",
-        "arguments": [
-          "-mode=stdio"
-        ]
-      }
-    }
+        "arguments": ["-mode=stdio"],
+      },
+    },
   },
   "languages": {
     "Go": {
-      "language_servers": [
-        "gopls"
-      ]
+      "language_servers": ["gopls"],
     },
     "Gno": {
-      "language_servers": [
-        "gnopls"
-      ],
+      "language_servers": ["gnopls"],
       "format_on_save": "on",
-      "tab_size": 4
+      "tab_size": 4,
     },
     "SQL": {
       "format_on_save": "off",
       "prettier": {
-        "allowed": false
-      }
+        "allowed": false,
+      },
     },
     "YAML": {
       "format_on_save": "off",
       "prettier": {
-        "allowed": false
-      }
-    }
+        "allowed": false,
+      },
+    },
   },
   "on_last_window_closed": "quit_app",
   "when_closing_with_no_tabs": "keep_window_open",
   "agent": {
     "default_model": {
       "provider": "copilot_chat",
-      "model": "gpt-5-mini"
+      "model": "gpt-5-mini",
     },
-    "model_parameters": []
-  },
-  "features": {
-    "edit_prediction_provider": "copilot"
+    "model_parameters": [],
   },
   "disable_ai": false,
   "confirm_quit": true,
   "agent_servers": {
     "codex": {
       "favorite_config_option_values": {
-        "model": [
-          "gpt-5.4"
-        ]
-      }
-    }
+        "model": ["gpt-5.4"],
+      },
+    },
   },
   "telemetry": {
     "diagnostics": true,
-    "metrics": true
+    "metrics": true,
   },
   "minimap": {
-    "show": "auto"
+    "show": "auto",
   },
   "autosave": "on_focus_change",
   "base_keymap": "JetBrains",
@@ -86,6 +78,6 @@
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "Catppuccin Macchiato"
-  }
+    "dark": "Catppuccin Macchiato",
+  },
 }
