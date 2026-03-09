@@ -156,7 +156,7 @@ export GNOPATH=$HOME/gno
 # ========================================
 # SDKMAN Configuration
 # ========================================
-source "$HOME/.sdkman/bin/sdkman-init.sh"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # ========================================
 # Modern CLI Tools Aliases
