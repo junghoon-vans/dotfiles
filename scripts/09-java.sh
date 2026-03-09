@@ -16,11 +16,15 @@ else
     print_success "SDKMAN installed"
 fi
 
+java_installed() {
+    find "$HOME/.sdkman/candidates/java" -maxdepth 1 -name "$1*" -type d 2>/dev/null | grep -q .
+}
+
 if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
     export SDKMAN_DIR="$HOME/.sdkman"
     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-    if [ -d "$HOME/.sdkman/candidates/java/11.0.25-tem" ]; then
+    if java_installed "11"; then
         print_success "Java 11 already installed"
     else
         print_info "Installing Java 11..."
@@ -28,7 +32,7 @@ if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
         print_success "Java 11 installed"
     fi
 
-    if [ -d "$HOME/.sdkman/candidates/java/17.0.13-tem" ]; then
+    if java_installed "17"; then
         print_success "Java 17 already installed"
     else
         print_info "Installing Java 17..."
@@ -36,7 +40,7 @@ if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
         print_success "Java 17 installed"
     fi
 
-    if [ -d "$HOME/.sdkman/candidates/java/21-tem" ]; then
+    if java_installed "21"; then
         print_success "Java 21 already installed"
     else
         print_info "Installing Java 21..."
