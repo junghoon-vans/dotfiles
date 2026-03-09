@@ -27,19 +27,11 @@ run_scripts() {
 }
 
 if [ $# -eq 0 ]; then
-    run_scripts 00
-    run_scripts 01
-    run_scripts 02
-    run_scripts 03
-    run_scripts 04
-    run_scripts 05
-    run_scripts 06
-    run_scripts 07
-    run_scripts 08
-    run_scripts 09
-    run_scripts 10
-    run_scripts 11
-    run_scripts 12
+    for script in "$SCRIPT_DIR"/scripts/[0-9][0-9]-*.sh; do
+        [ -f "$script" ] || continue
+        prefix=$(basename "$script" | cut -c1-2)
+        run_scripts "$prefix"
+    done
 
     echo ""
     echo -e "\033[1;32m========================================\033[0m"
