@@ -142,7 +142,8 @@ export NVM_DIR="$HOME/.nvm"
 # Go Configuration
 # ========================================
 export GOPATH=$HOME/go
-export PATH="/opt/homebrew/opt/go@1.24/bin:$PATH"
+export PATH="/opt/homebrew/opt/go@1.25/bin:$PATH"
+export GOTOOLCHAIN="go1.25.6"
 export PATH="$PATH:$GOPATH/bin"
 
 # Gno Configuration

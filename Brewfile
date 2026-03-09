@@ -34,7 +34,7 @@ brew "mysql-client"
 brew "libpq"
 
 # AI tools
-brew "anomalyco/tap/opencode"
+brew "opencode"
 
 # Cloud tools
 # awscli (Tier 3 - install manually if needed)

@@ -11,7 +11,11 @@ if command -v go &> /dev/null; then
             [[ "$package" =~ ^[[:space:]]*# ]] && continue  # skip comments
             [[ -z "${package// }" ]] && continue              # skip empty lines
             print_info "Installing $package..."
-            go install "$package"
+            if [[ "$package" == github.com/gnoverse/gnopls@* ]]; then
+                GOTOOLCHAIN=go1.24.10 go install "$package"
+            else
+                go install "$package"
+            fi
             print_success "$package installed"
         done < "$DOTFILES_DIR/Gofile"
     else

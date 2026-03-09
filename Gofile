@@ -12,4 +12,4 @@ mvdan.cc/gofumpt@latest
 
 # Gno development
 github.com/gnolang/gno/gnovm/cmd/gno@latest
-github.com/gnoverse/gnopls@17a9aab6589fed9cef408dc6f8088768e1def6e8
+github.com/gnoverse/gnopls@latest
