@@ -3,7 +3,8 @@
   "agents": {
     "sisyphus": {
       "model": "anthropic/claude-sonnet-4-6",
-      "variant": "max"
+      "variant": "max",
+      "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind."
     },
     "hephaestus": {
       "model": "openai/gpt-5.3-codex",
