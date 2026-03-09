@@ -210,7 +210,7 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 
 
-. "$HOME/.local/bin/env"
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 export PATH="$HOME/.local/bin:$PATH"
 
 export ANTHROPIC_MODEL="sonnet"
