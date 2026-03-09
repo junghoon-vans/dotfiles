@@ -85,13 +85,10 @@ done
 
 # Create .config symlinks (auto-discover all files in .config/)
 if [ -d "$DOTFILES_DIR/.config" ]; then
-    cd "$DOTFILES_DIR/.config"
-    find . -type f | while read config_file; do
-        # Remove leading './'
-        config_file="${config_file#./}"
+    while IFS= read -r -d '' config_file; do
+        config_file="${config_file#"$DOTFILES_DIR/.config/"}"
         create_config_symlink "$config_file"
-    done
-    cd "$DOTFILES_DIR"
+    done < <(find "$DOTFILES_DIR/.config" -type f -print0)
 fi
 
 brew link --force libpq
