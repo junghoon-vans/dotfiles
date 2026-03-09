@@ -34,8 +34,9 @@ brew "libpq"
 brew "opencode"
 
 # Cloud tools
-# awscli (Tier 3 - install manually if needed)
+brew "awscli"          # AWS CLI
 brew "terraform"
+brew "grpcurl"         # gRPC command-line tool
 brew "terraform-ls"
 
 # Container management
