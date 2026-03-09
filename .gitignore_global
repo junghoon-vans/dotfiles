@@ -130,3 +130,13 @@ temp/
 
 # Project-specific personal settings (not for source control)
 **/.claude/settings.local.json
+
+# ========================================
+# Tool Auth / Secrets
+# ========================================
+
+# gh CLI auth tokens
+**/.config/gh/hosts.yml
+
+# GitHub Copilot auth tokens
+**/.config/github-copilot/apps.json
