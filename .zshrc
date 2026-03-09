@@ -204,7 +204,7 @@ export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
 # libpq (PostgreSQL client)
-export PATH="/usr/local/opt/libpq/bin:$PATH"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
 # Added by Antigravity
 export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
