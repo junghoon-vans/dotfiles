@@ -31,12 +31,12 @@ This repository contains my personal dotfiles for:
 ### Zsh Configuration
 - **Theme**: [Spaceship](https://github.com/spaceship-prompt/spaceship-prompt) - Minimalist, powerful and customizable prompt
 - **Plugins**:
-  - git, golang, docker, npm, node, nvm, vscode, brew, macos, sudo
+  - git, golang, docker, npm, node, brew, macos, sudo
   - web-search, jsontools, colored-man-pages
   - zsh-completions, zsh-autosuggestions, zsh-syntax-highlighting
   - zsh-hangul - Auto Korean/English switching for better terminal experience
 - **FZF** integration for fuzzy finding
-- **Autojump** for quick directory navigation
+- **Zoxide** for smart directory navigation
 
 ### Git Configuration
 - User: Junghoon Ban (junghoon.ban@gmail.com)
@@ -77,6 +77,7 @@ Aliases for enhanced command-line experience:
 - `cat` → `bat` (syntax highlighting)
 - `ls` → `eza` (better file listing with icons)
 - `grep` → `rg` (ripgrep - faster search)
+- `lg` → `lazygit` (terminal UI for git)
 
 ### Keyboard Customization
 **Karabiner-Elements** configuration for macOS:
@@ -118,9 +119,9 @@ The `setup.sh` script will automatically install and configure:
 
 1. **Homebrew** (if not already installed)
 2. **Homebrew packages** from Brewfile:
-   - Modern CLI tools: neovim, git, gh, lazygit, act, prek, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, autojump
+   - Modern CLI tools: neovim, git, gh, lazygit, act, prek, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, zoxide
    - Database clients: mysql-client, libpq
-   - Cloud tools: awscli, terraform, terraform-ls
+   - Cloud tools: awscli, grpcurl, terraform, terraform-ls
    - Container management: OrbStack
    - Terminal emulator: Ghostty
    - Productivity: Ice (menu bar management)
@@ -194,4 +195,4 @@ Edit `.config/karabiner/karabiner.json` to customize keyboard mappings. Changes 
 - `..` - Go up one directory
 - `...` - Go up two directories
 - `....` - Go up three directories
-- `j <directory>` - Jump to frequently used directory (autojump)
+- `z <directory>` - Jump to frequently used directory (zoxide)
