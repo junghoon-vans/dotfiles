@@ -11,7 +11,7 @@ if command -v go &> /dev/null; then
             [[ "$line" =~ ^[[:space:]]*# ]] && continue  # skip comments
             [[ -z "${line// }" ]] && continue              # skip empty lines
             package=$(awk '{print $1}' <<< "$line")
-            toolchain=$(grep -o 'GOTOOLCHAIN=[^ ]*' <<< "$line" | cut -d= -f2)
+            toolchain=$(grep -o 'GOTOOLCHAIN=[^ ]*' <<< "$line" | cut -d= -f2 || true)
             if [[ -n "$toolchain" ]]; then
                 print_info "Installing $package (GOTOOLCHAIN=$toolchain)..."
                 GOTOOLCHAIN="$toolchain" go install "$package"

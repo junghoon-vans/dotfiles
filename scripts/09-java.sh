@@ -22,7 +22,9 @@ java_installed() {
 
 if [ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
     export SDKMAN_DIR="$HOME/.sdkman"
+    set +u  # sdkman-init.sh uses ZSH_VERSION which is unbound in bash
     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+    set -u
 
     if java_installed "11"; then
         print_success "Java 11 already installed"
