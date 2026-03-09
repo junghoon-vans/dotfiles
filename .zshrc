@@ -134,8 +134,16 @@ source $ZSH/oh-my-zsh.sh
 # NVM Configuration
 # ========================================
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# Lazy-load NVM to avoid ~500ms shell startup penalty
+nvm() {
+  unset -f nvm node npm npx
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  nvm "$@"
+}
+node() { nvm; node "$@"; }
+npm()  { nvm; npm "$@"; }
+npx()  { nvm; npx "$@"; }
 
 # ========================================
 # Go Configuration
@@ -167,6 +175,7 @@ alias la='eza -a --icons'
 alias lt='eza --tree --icons'
 alias grep='rg'
 alias pre-commit='prek'
+alias lg='lazygit'
 
 # ========================================
 # General Aliases
@@ -180,9 +189,13 @@ alias ....='cd ../../..'
 # ========================================
 
 # History settings
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=50000
+SAVEHIST=50000
 setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt EXTENDED_HISTORY
 
 # Editor
 export EDITOR=nvim
@@ -208,3 +221,8 @@ export PATH="$HOME/.opencode/bin:$PATH"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# ========================================
+# Local Overrides (machine-specific)
+# ========================================
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
