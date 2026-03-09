@@ -39,6 +39,7 @@ if [ $# -eq 0 ]; then
     run_scripts 09
     run_scripts 10
     run_scripts 11
+    run_scripts 12
 
     echo ""
     echo -e "\033[1;32m========================================\033[0m"
@@ -48,7 +49,7 @@ if [ $# -eq 0 ]; then
     echo -e "\033[1;36mNext steps:\033[0m"
     echo -e "  1. Restart your terminal or run: \033[1;33msource ~/.zshrc\033[0m"
     echo -e "  2. Open Neovim to install plugins: \033[1;33mnvim\033[0m"
-    echo -e "  3. Configure your terminal font to a Nerd Font (e.g., FiraCode Nerd Font)"
+    echo -e "  3. Activate Gno support in Zed: \033[1;33mCmd+Shift+P → 'zed: install dev extension' → ~/.local/share/zed/dev-extensions/zed-gno\033[0m"
 else
     for arg in "$@"; do
         run_scripts "$arg"
