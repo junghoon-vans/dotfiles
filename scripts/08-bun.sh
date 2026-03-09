@@ -29,8 +29,8 @@ if [ -f "$DOTFILES_DIR/Bunfile" ]; then
 fi
 
 # oh-my-opencode: run install step after global package is in place
-if command -v oh-my-opencode &> /dev/null; then
+if command -v bunx &> /dev/null; then
     print_step "Setting up oh-my-opencode..."
-    oh-my-opencode install
+    bunx oh-my-opencode install --no-tui --claude=yes --openai=yes --gemini=no --copilot=no
     print_success "oh-my-opencode configured"
 fi
