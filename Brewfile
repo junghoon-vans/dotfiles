@@ -17,6 +17,7 @@ brew "neovim"
 
 # Version control
 brew "git"
+brew "git-delta"       # Syntax-highlighting pager for git diff/log
 brew "gh"              # GitHub CLI
 brew "lazygit"         # Terminal UI for git
 brew "act"             # Run GitHub Actions locally

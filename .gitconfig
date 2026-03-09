@@ -2,6 +2,7 @@
 	editor = nvim
 	excludesfile = ~/.gitignore_global
 	autocrlf = input
+	pager = delta
 
 [init]
 	defaultBranch = main
@@ -78,6 +79,14 @@
 [merge]
 	tool = vimdiff
 	conflictstyle = diff3
+
+[interactive]
+	singleKey = true
+
+[delta]
+	navigate = true
+	line-numbers = true
+	side-by-side = true
 
 [help]
 	autocorrect = 1
