@@ -23,13 +23,18 @@ FILES=".zshrc .gitconfig .gitignore_global"
 
 # Function to create backup
 backup_file() {
-    local target="$1"
+    local source="$1"
+    local target="$2"
     if [ -L "$target" ]; then
         rm "$target"
     elif [ -f "$target" ]; then
-        local backup="${target}.backup.$(date +%Y%m%d-%H%M%S)"
-        echo -e "${YELLOW}Backing up $target → $backup${NC}"
-        mv "$target" "$backup"
+        if diff -q "$source" "$target" > /dev/null 2>&1; then
+            rm "$target"  # identical content, silently re-link
+        else
+            local backup="${target}.backup.$(date +%Y%m%d-%H%M%S)"
+            echo -e "${YELLOW}Backing up $target → $backup${NC}"
+            mv "$target" "$backup"
+        fi
     fi
 }
 
@@ -49,7 +54,7 @@ create_symlink() {
         return
     fi
 
-    backup_file "$target"
+    backup_file "$source" "$target"
     ln -sf "$source" "$target"
     echo -e "${GREEN}✓${NC} Linked $file"
 }
@@ -73,7 +78,7 @@ create_config_symlink() {
     fi
 
     mkdir -p "$target_dir"
-    backup_file "$target"
+    backup_file "$source" "$target"
     ln -sf "$source" "$target"
     echo -e "${GREEN}✓${NC} Linked .config/$config_file"
 }
@@ -91,7 +96,7 @@ if [ -d "$DOTFILES_DIR/.config" ]; then
     done < <(find "$DOTFILES_DIR/.config" -type f -print0)
 fi
 
-brew link --force libpq
+brew link --force libpq > /dev/null 2>&1 || true
 
 # Create symlink for go@1.25 -> go
 if [ -d "/opt/homebrew/opt/go@1.25" ]; then
