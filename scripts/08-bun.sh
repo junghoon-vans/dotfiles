@@ -34,3 +34,9 @@ if command -v bunx &> /dev/null; then
     bunx oh-my-opencode install --no-tui --claude=no --openai=yes --gemini=no --copilot=no
     print_success "oh-my-opencode configured"
 fi
+
+if command -v marksman &> /dev/null; then
+    print_success "marksman already installed ($(marksman --version))"
+else
+    print_info "marksman is not installed. Run ./setup.sh 02 (brew bundle) or brew install marksman"
+fi

@@ -33,6 +33,7 @@ brew "libpq"
 
 # AI tools
 brew "opencode"
+brew "marksman"        # Markdown LSP server
 
 # Cloud tools
 brew "awscli"          # AWS CLI

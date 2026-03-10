@@ -68,5 +68,16 @@
     "writing": {
       "model": "opencode/glm-4.7-free"
     }
+  },
+  "lsp": {
+    "marksman": {
+      "command": [
+        "marksman",
+        "server"
+      ],
+      "extensions": [
+        ".md"
+      ]
+    }
   }
 }
