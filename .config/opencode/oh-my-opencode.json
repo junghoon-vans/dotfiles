@@ -69,6 +69,12 @@
       "model": "opencode/glm-4.7-free"
     }
   },
+  "skills": {
+    "enable": [
+      "git-master",
+      "playwright"
+    ]
+  },
   "lsp": {
     "marksman": {
       "command": [
