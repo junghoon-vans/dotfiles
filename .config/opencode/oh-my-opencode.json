@@ -70,16 +70,29 @@
     }
   },
   "skills": {
-    "enable": ["git-master", "playwright"]
+    "enable": [
+      "git-master",
+      "playwright"
+    ]
   },
   "lsp": {
     "marksman": {
-      "command": ["marksman", "server"],
-      "extensions": [".md"]
+      "command": [
+        "marksman",
+        "server"
+      ],
+      "extensions": [
+        ".md"
+      ]
     },
     "gnopls": {
-      "command": ["gnopls", "-mode=stdio"],
-      "extensions": [".gno"]
+      "command": [
+        "gnopls",
+        "-mode=stdio"
+      ],
+      "extensions": [
+        ".gno"
+      ]
     }
   }
 }
