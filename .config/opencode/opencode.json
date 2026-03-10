@@ -2,5 +2,25 @@
   "$schema": "https://opencode.ai/config.json",
   "plugin": [
     "oh-my-opencode"
-  ]
+  ],
+  "lsp": {
+    "marksman": {
+      "command": [
+        "marksman",
+        "server"
+      ],
+      "extensions": [
+        ".md"
+      ]
+    },
+    "gnopls": {
+      "command": [
+        "gnopls",
+        "-mode=stdio"
+      ],
+      "extensions": [
+        ".gno"
+      ]
+    }
+  }
 }
