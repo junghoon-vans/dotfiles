@@ -134,6 +134,12 @@ alias j='z'  # muscle memory compatibility with autojump
 # NVM Configuration
 # ========================================
 export NVM_DIR="$HOME/.nvm"
+# Ensure global CLIs that require Node (but are not invoked via `node`) can run.
+if [ -d "$NVM_DIR/versions/node" ]; then
+  _nvm_node_bin=$(ls -d "$NVM_DIR"/versions/node/v*/bin 2>/dev/null | sort -V | tail -n 1)
+  [ -n "$_nvm_node_bin" ] && export PATH="$_nvm_node_bin:$PATH"
+  unset _nvm_node_bin
+fi
 # Lazy-load NVM to avoid ~500ms shell startup penalty
 nvm() {
   unset -f nvm node npm npx
@@ -212,9 +218,6 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
 export ANTHROPIC_MODEL="sonnet"
-
-# opencode
-export PATH="$HOME/.opencode/bin:$PATH"
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
