@@ -182,6 +182,7 @@ alias lt='eza --tree --icons'
 alias grep='rg'
 alias pre-commit='prek'
 alias lg='lazygit'
+alias opencode='opencode 2>>$HOME/.cache/opencode/stderr.log'
 
 # ========================================
 # General Aliases
