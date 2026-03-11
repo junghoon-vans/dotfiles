@@ -29,6 +29,15 @@
       "extensions": [
         ""
       ]
+    },
+    "pyright": {
+      "command": [
+        "pyright-langserver",
+        "--stdio"
+      ],
+      "extensions": [
+        ".py"
+      ]
     }
   }
 }

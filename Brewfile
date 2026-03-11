@@ -37,6 +37,7 @@ brew "libpq"
 # AI tools
 brew "marksman"        # Markdown LSP server
 brew "bash-language-server" # Bash LSP server
+brew "pyright"         # Python LSP server
 
 # Cloud tools
 brew "awscli"          # AWS CLI
