@@ -21,6 +21,14 @@
       "extensions": [
         ".gno"
       ]
+    },
+    "ruby-lsp-extensionless": {
+      "command": [
+        "ruby-lsp"
+      ],
+      "extensions": [
+        ""
+      ]
     }
   }
 }

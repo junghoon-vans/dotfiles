@@ -73,6 +73,10 @@ This repository contains my personal dotfiles for:
 - NVM for Node.js version management
 - Node.js LTS installed by default
 
+#### Python Development
+- uv for Python installation and project/package management
+- Latest stable Python installed via `uv python install --default`
+
 ### Modern CLI Tools
 Aliases for enhanced command-line experience:
 - `cat` → `bat` (syntax highlighting)
@@ -138,10 +142,11 @@ The `setup.sh` script will automatically install and configure:
 6. **FZF** fuzzy finder configuration
 7. **LazyVim** for Neovim
 8. **NVM** and Node.js LTS
-9. **SDKMAN**, Java 11, 17, 21, and Kotlin
-10. **Rust** (optional - will prompt during setup)
-11. **Symlinks** for all dotfiles
-12. **macOS defaults** (Finder, Dock, Keyboard, Screenshot)
+9. **uv** and latest stable Python (`uv python install --default`)
+10. **SDKMAN**, Java 11, 17, 21, and Kotlin
+11. **Rust** (optional - will prompt during setup)
+12. **Symlinks** for all dotfiles
+13. **macOS defaults** (Finder, Dock, Keyboard, Screenshot)
 
 After installation:
 ```bash

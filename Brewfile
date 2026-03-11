@@ -8,6 +8,9 @@
 # Go programming language
 brew "go@1.25"
 
+# Python package and project manager
+brew "uv"
+
 # ========================================
 # Development Tools
 # ========================================
@@ -33,6 +36,7 @@ brew "libpq"
 
 # AI tools
 brew "marksman"        # Markdown LSP server
+brew "bash-language-server" # Bash LSP server
 
 # Cloud tools
 brew "awscli"          # AWS CLI
