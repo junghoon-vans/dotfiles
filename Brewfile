@@ -50,6 +50,7 @@ cask "orbstack"        # Fast Docker Desktop alternative
 
 # Terminal emulator
 cask "ghostty"         # Fast, modern terminal
+cask "cmux"            # Ghostty-based macOS terminal for AI agents
 
 # Productivity
 cask "jordanbaird-ice" # Menu bar management

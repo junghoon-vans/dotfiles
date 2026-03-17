@@ -129,7 +129,7 @@ The `setup.sh` script will automatically install and configure:
    - Database clients: mysql-client, libpq
    - Cloud tools: awscli, grpcurl, terraform, terraform-ls
    - Container management: OrbStack
-   - Terminal emulator: Ghostty
+   - Terminal emulators: Ghostty, cmux
    - Productivity: Ice (menu bar management)
    - Fonts: FiraCode Nerd Font (for terminal icons)
 3. **Oh My Zsh** (shell framework)
@@ -202,6 +202,18 @@ This file is automatically sourced at the end of `.zshrc` if it exists.
 The current theme is Spaceship. To change it, edit the `ZSH_THEME` variable in `.zshrc`:
 ```bash
 ZSH_THEME="your-theme-name"
+```
+
+### Ghostty and cmux
+
+`cmux` is installed through Homebrew alongside Ghostty. Its official docs say it uses Ghostty configuration, so this repo keeps the shared terminal config in `.config/ghostty/config`.
+
+When installed through Homebrew, the `cmux` CLI is linked automatically, so `cmux` works both inside and outside the app.
+
+If you install `cmux` manually from the DMG instead, use the documented symlink and adjust the target directory for your machine if needed:
+
+```bash
+sudo ln -sf "/Applications/cmux.app/Contents/Resources/bin/cmux" /usr/local/bin/cmux
 ```
 
 ### Customize Karabiner Mappings
