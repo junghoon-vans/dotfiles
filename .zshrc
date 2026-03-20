@@ -231,3 +231,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Local Overrides (machine-specific)
 # ========================================
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
+
+[[ ":$PATH:" != *":$HOME/.config/kaku/zsh/bin:"* ]] && export PATH="$HOME/.config/kaku/zsh/bin:$PATH" # Kaku PATH Integration
+[[ -f "$HOME/.config/kaku/zsh/kaku.zsh" ]] && source "$HOME/.config/kaku/zsh/kaku.zsh" # Kaku Shell Integration
