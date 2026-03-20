@@ -129,7 +129,7 @@ The `setup.sh` script will automatically install and configure:
    - Database clients: mysql-client, libpq
    - Cloud tools: awscli, grpcurl, terraform, terraform-ls
    - Container management: OrbStack
-   - Terminal emulators: Ghostty, cmux
+   - Terminal emulator: Kaku (`kakuku` cask from `tw93/tap`)
    - Productivity: Ice (menu bar management)
    - Fonts: FiraCode Nerd Font (for terminal icons)
 3. **Oh My Zsh** (shell framework)
@@ -204,17 +204,17 @@ The current theme is Spaceship. To change it, edit the `ZSH_THEME` variable in `
 ZSH_THEME="your-theme-name"
 ```
 
-### Ghostty and cmux
+### Kaku
 
-`cmux` is installed through Homebrew alongside Ghostty. Its official docs say it uses Ghostty configuration, so this repo keeps the shared terminal config in `.config/ghostty/config`.
-
-When installed through Homebrew, the `cmux` CLI is linked automatically, so `cmux` works both inside and outside the app.
-
-If you install `cmux` manually from the DMG instead, use the documented symlink and adjust the target directory for your machine if needed:
+Kaku is installed from `tw93/tap` via the `kakuku` cask:
 
 ```bash
-sudo ln -sf "/Applications/cmux.app/Contents/Resources/bin/cmux" /usr/local/bin/cmux
+brew install tw93/tap/kakuku
 ```
+
+Kaku uses a WezTerm-compatible Lua config at `~/.config/kaku/kaku.lua`, so this repo tracks the terminal config in `.config/kaku/kaku.lua`.
+
+After installing or updating Kaku, run `kaku init` once inside the app if you want its generated shell integration under `~/.config/kaku/zsh/`.
 
 ### Customize Karabiner Mappings
 

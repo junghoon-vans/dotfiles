@@ -11,6 +11,9 @@ brew "go@1.25"
 # Python package and project manager
 brew "uv"
 
+# Custom taps
+tap "tw93/tap"
+
 # ========================================
 # Development Tools
 # ========================================
@@ -49,8 +52,7 @@ brew "terraform-ls"
 cask "orbstack"        # Fast Docker Desktop alternative
 
 # Terminal emulator
-cask "ghostty"         # Fast, modern terminal
-cask "cmux"            # Ghostty-based macOS terminal for AI agents
+cask "kakuku"          # Kaku terminal from tw93/tap
 
 # Productivity
 cask "jordanbaird-ice" # Menu bar management

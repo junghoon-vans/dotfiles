@@ -11,7 +11,7 @@ App-specific configurations. Each subdirectory mirrors `~/.config/`.
 │   └── lua/config/
 ├── karabiner/              # Keyboard remapping
 ├── opencode/               # oh-my-opencode plugin config
-└── ghostty/                # Terminal
+└── kaku/                   # Terminal
 ```
 
 ## WHERE TO LOOK
@@ -21,9 +21,9 @@ App-specific configurations. Each subdirectory mirrors `~/.config/`.
 | Neovim | `nvim/init.lua` | Plugin manager (lazy.nvim) |
 | Karabiner | `karabiner.json` | Key remappings |
 | OpenCode | `opencode/oh-my-opencode.json` | Agent models |
-| Ghostty | `ghostty/config` | Terminal settings |
+| Kaku | `kaku/kaku.lua` | Terminal settings |
 
 ## CONVENTIONS
 - All paths use `$HOME` (not hardcoded usernames)
-- JSON/YAML for configs
+- JSON, YAML, and Lua for configs
 - OpenCode: dev schema, free models (big-pickle, glm-4.7-free)
