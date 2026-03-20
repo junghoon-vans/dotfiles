@@ -172,19 +172,6 @@ export GNOPATH=$HOME/gno
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # ========================================
-# Modern CLI Tools Aliases
-# ========================================
-alias cat='bat'
-alias ls='eza --icons'
-alias ll='eza -alh --icons'
-alias la='eza -a --icons'
-alias lt='eza --tree --icons'
-alias grep='rg'
-alias pre-commit='prek'
-alias lg='lazygit'
-alias opencode='opencode 2>>$HOME/.cache/opencode/stderr.log'
-
-# ========================================
 # General Aliases
 # ========================================
 alias ..='cd ..'
@@ -234,3 +221,17 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 [[ -d "$HOME/.config/kaku/zsh/bin" && ":$PATH:" != *":$HOME/.config/kaku/zsh/bin:"* ]] && export PATH="$HOME/.config/kaku/zsh/bin:$PATH" # Kaku PATH Integration
 [[ -f "$HOME/.config/kaku/zsh/kaku.zsh" ]] && source "$HOME/.config/kaku/zsh/kaku.zsh" # Kaku Shell Integration
+
+# ========================================
+# Modern CLI Tools Aliases
+# ========================================
+alias cat='bat'
+alias ls='eza --icons'
+alias l='eza --icons'
+alias ll='eza -alh --icons'
+alias la='eza -a --icons'
+alias lt='eza --tree --icons'
+alias grep='rg'
+alias pre-commit='prek'
+alias lg='lazygit'
+alias opencode='opencode 2>>$HOME/.cache/opencode/stderr.log'
