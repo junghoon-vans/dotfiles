@@ -129,7 +129,7 @@ The `setup.sh` script will automatically install and configure:
    - Database clients: mysql-client, libpq
    - Cloud tools: awscli, grpcurl, terraform, terraform-ls
    - Container management: OrbStack
-   - Terminal emulator: Kaku (`kakuku` cask from `tw93/tap`)
+- Terminal emulator: Kaku (`tw93/tap/kakuku` cask)
    - Productivity: Ice (menu bar management)
    - Fonts: FiraCode Nerd Font (for terminal icons)
 3. **Oh My Zsh** (shell framework)

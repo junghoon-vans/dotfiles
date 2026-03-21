@@ -52,7 +52,7 @@ brew "terraform-ls"
 cask "orbstack"        # Fast Docker Desktop alternative
 
 # Terminal emulator
-cask "kakuku"          # Kaku terminal from tw93/tap
+cask "tw93/tap/kakuku" # Kaku terminal from tw93/tap
 
 # Productivity
 cask "jordanbaird-ice" # Menu bar management
