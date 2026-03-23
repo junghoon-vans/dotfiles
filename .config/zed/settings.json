@@ -7,6 +7,18 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "context_servers": {
+    "mcp-server-brave-search": {
+      "enabled": true,
+      "remote": false,
+      "settings": {}
+    },
+    "mcp-server-github": {
+      "enabled": true,
+      "remote": false,
+      "settings": {}
+    }
+  },
   "edit_predictions": {
     "provider": "copilot",
   },
@@ -57,11 +69,14 @@
   "disable_ai": false,
   "confirm_quit": true,
   "agent_servers": {
-    "codex": {
+    "codex-acp": {
+      "type": "registry",
       "favorite_config_option_values": {
-        "model": ["gpt-5.4"],
-      },
-    },
+        "model": [
+          "gpt-5.4"
+        ]
+      }
+    }
   },
   "telemetry": {
     "diagnostics": true,
