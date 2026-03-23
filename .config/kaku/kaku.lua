@@ -48,10 +48,6 @@ else
   wezterm.log_error("Kaku: bundled defaults not found")
 end
 
-config.font = wezterm.font_with_fallback({
-  "FiraCode Nerd Font",
-  "D2Coding",
-})
 config.font_size = 15
 config.window_padding = {
   left = 8,
@@ -59,8 +55,8 @@ config.window_padding = {
   top = 8,
   bottom = 8,
 }
-config.color_scheme = "Catppuccin Mocha"
 config.cursor_blink_rate = 0
 config.window_close_confirmation = "NeverPrompt"
 
+config.tab_bar_at_bottom = true
 return config
