@@ -58,6 +58,7 @@ dotfiles/
 ## KEY DECISIONS
 - **NVM**: Lazy-loaded in .zshrc (not via OMZ plugin) — avoids ~500ms startup penalty
 - **zoxide**: Replaces autojump. `z` to jump, `j` aliased for muscle memory
+- **Shell aliases**: `.zshrc` is the source of truth for aliases like `ls`, `l`, `ll`, `la`, and `lt`; Kaku-generated shell files may be sourced first, but alias policy belongs in `.zshrc`
 - **delta**: git diff pager — syntax highlighting, side-by-side, line numbers
 - **prek**: Replaces pre-commit (Rust reimplementation, faster)
 - **go@1.25**: Pinned version via `go@1.25` formula + symlink to `/opt/homebrew/opt/go`
