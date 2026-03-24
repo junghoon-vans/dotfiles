@@ -3,7 +3,8 @@
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 for script in \
-    "$SCRIPTS_DIR/packages/go.sh" \
-    "$SCRIPTS_DIR/packages/bun.sh"; do
+    "$SETUP_DIR/apps/ohmyzsh.sh" \
+    "$SETUP_DIR/apps/opencode.sh" \
+    "$SETUP_DIR/apps/zed.sh"; do
     bash "$script"
 done

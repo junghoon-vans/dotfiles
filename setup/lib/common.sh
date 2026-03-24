@@ -9,7 +9,7 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 DOTFILES_DIR="${DOTFILES_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
-SCRIPTS_DIR="${SCRIPTS_DIR:-$DOTFILES_DIR/scripts}"
+SETUP_DIR="${SETUP_DIR:-$DOTFILES_DIR/setup}"
 
 print_step() {
     echo -e "\n${CYAN}==>${NC} ${GREEN}$1${NC}"

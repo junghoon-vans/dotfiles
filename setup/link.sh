@@ -5,11 +5,10 @@
 
 set -euo pipefail
 
-# Dotfiles directory (automatically detects script location)
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPTS_DIR="$DOTFILES_DIR/scripts"
+SETUP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd "$SETUP_DIR/.." && pwd)"
 
-source "$SCRIPTS_DIR/lib/common.sh"
+source "$SETUP_DIR/lib/common.sh"
 
 # List of files to symlink
 FILES=".zshrc .gitconfig .gitignore_global"
