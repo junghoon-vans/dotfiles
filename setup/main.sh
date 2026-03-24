@@ -8,112 +8,106 @@ export SETUP_DIR="$SCRIPT_DIR/setup"
 
 source "$SETUP_DIR/lib/common.sh"
 
-PHASE_ORDER=(
-  bootstrap
-  brew-packages
-  languages
-  tool-packages
-  links
-  apps
-  macos
-)
+command_entries() {
+  local path=""
 
-phase_script() {
-  case "$1" in
-    bootstrap)     printf '%s\n' "$SETUP_DIR/phases/10-bootstrap-homebrew.sh" ;;
-    brew-packages) printf '%s\n' "$SETUP_DIR/phases/20-install-brew-packages.sh" ;;
-    languages)     printf '%s\n' "$SETUP_DIR/phases/30-install-language-envs.sh" ;;
-    tool-packages) printf '%s\n' "$SETUP_DIR/phases/35-install-tool-packages.sh" ;;
-    links)         printf '%s\n' "$SETUP_DIR/phases/40-link-dotfiles.sh" ;;
-    apps)          printf '%s\n' "$SETUP_DIR/phases/50-setup-apps.sh" ;;
-    macos)         printf '%s\n' "$SETUP_DIR/phases/60-apply-macos.sh" ;;
-    *)             return 1 ;;
-  esac
+  for path in "$SETUP_DIR"/commands/*; do
+    [ -f "$path" ] || continue
+    basename "$path"
+  done | sort
 }
 
-normalize_phase() {
-  case "$1" in
-    bootstrap|brew-packages|languages|tool-packages|links|apps|macos) printf '%s\n' "$1" ;;
-    brew|packages) printf '%s\n' "brew-packages" ;;
-    lang) printf '%s\n' "languages" ;;
-    tools) printf '%s\n' "tool-packages" ;;
-    1|01) printf '%s\n' "bootstrap" ;;
-    2|02) printf '%s\n' "brew-packages" ;;
-    3|03) printf '%s\n' "languages" ;;
-    35) printf '%s\n' "tool-packages" ;;
-    4|04) printf '%s\n' "links" ;;
-    5|05) printf '%s\n' "apps" ;;
-    6|06) printf '%s\n' "macos" ;;
-    *) return 1 ;;
+command_name_from_entry() {
+  printf '%s\n' "$1" | sed -E 's/^[0-9]+-//'
+}
+
+command_script() {
+  local command_name="$1"
+  local entry=""
+  local entry_name=""
+
+  case "$command_name" in
+    *[!/a-z0-9-]*|*/*|'') return 1 ;;
   esac
+
+  for entry in "$SETUP_DIR"/commands/*; do
+    [ -f "$entry" ] || continue
+    entry_name="$(basename "$entry")"
+    if [ "$(command_name_from_entry "$entry_name")" = "$command_name" ]; then
+      printf '%s\n' "$entry"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+default_commands() {
+  local entry_name=""
+
+  while IFS= read -r entry_name; do
+    command_name_from_entry "$entry_name"
+  done < <(command_entries)
+}
+
+print_supported_commands() {
+  local command_name=""
+
+  while IFS= read -r command_name; do
+    printf '  %s\n' "$command_name"
+  done < <(default_commands)
 }
 
 print_help() {
   cat <<'EOF'
-Usage: ./setup.sh [phase...]
+Usage: ./setup.sh [command...]
 
-Supported phases:
-  bootstrap      Install Homebrew itself
-  brew-packages  Install Brewfile packages and brew-owned fixups
-  languages      Install language runtimes only
-  tool-packages  Install global CLI tools for language ecosystems
-  links          Symlink tracked dotfiles into $HOME
-  apps           Run app/bootstrap setup that depends on linked config
-  macos          Apply macOS defaults
-
-Short aliases:
-  brew, packages, lang, tools
-
-Numeric aliases:
-  01 bootstrap
-  02 brew-packages
-  03 languages
-  35 tool-packages
-  04 links
-  05 apps
-  06 macos
+Supported commands:
 EOF
+
+  print_supported_commands
 }
 
-run_phase() {
-  local phase="$1"
+run_command() {
+  local command_name="$1"
   local script
 
-  script="$(phase_script "$phase")"
+  script="$(command_script "$command_name")"
   [ -x "$script" ] || chmod +x "$script"
 
-  print_step "Running phase: $phase"
+  print_step "Running command: $command_name"
   bash "$script"
 }
 
 main() {
-  local selected_phases=()
-  local raw_phase=""
-  local phase=""
+  local selected_commands=()
+  local raw_command=""
 
   if [ $# -eq 0 ]; then
-    selected_phases=("${PHASE_ORDER[@]}")
+    while IFS= read -r raw_command; do
+      selected_commands+=("$raw_command")
+    done < <(default_commands)
   else
-    for raw_phase in "$@"; do
-      case "$raw_phase" in
+    for raw_command in "$@"; do
+      case "$raw_command" in
         -h|--help)
           print_help
           exit 0
           ;;
       esac
 
-      if ! phase="$(normalize_phase "$raw_phase")"; then
-        print_error "Unknown phase: $raw_phase"
+      if ! command_script "$raw_command" >/dev/null; then
+        print_error "Unknown command: $raw_command"
         print_help
         exit 1
       fi
 
-      selected_phases+=("$phase")
+      selected_commands+=("$raw_command")
     done
   fi
 
-  for phase in "${selected_phases[@]}"; do
-    run_phase "$phase"
+  for raw_command in "${selected_commands[@]}"; do
+    run_command "$raw_command"
   done
 
   echo ""
