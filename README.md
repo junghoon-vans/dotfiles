@@ -118,7 +118,7 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
-You can also run specific setup phases:
+You can also run specific setup commands:
 
 ```bash
 ./setup.sh bootstrap
@@ -128,7 +128,7 @@ You can also run specific setup phases:
 
 ### What Gets Installed
 
-The `setup.sh` script runs the following phases:
+The `setup.sh` script runs the following commands:
 
 1. **bootstrap**
    - Installs Homebrew if it is missing
@@ -218,13 +218,13 @@ This repo already tracks Neovim config in `.config/nvim`, so setup no longer boo
 
 `./setup.sh` remains the public entrypoint, but the implementation now lives under `setup/`:
 
-- `setup/main.sh` orchestrates phases
-- `setup/phases/` contains phase scripts
+- `setup/main.sh` orchestrates commands
+- `setup/commands/` contains ordered command files such as `10-bootstrap` and `40-links`
 - `setup/languages/` contains runtime installers
 - `setup/packages/` contains global CLI installers
 - `setup/apps/` contains app/bootstrap scripts
 
-There is no longer a root `./link.sh` command. Symlink creation is owned by `setup/link.sh` and invoked through the `links` phase.
+There is no longer a root `./link.sh` command. Symlink creation is owned by `setup/link.sh` and invoked through the `links` command.
 
 ### Kaku
 
