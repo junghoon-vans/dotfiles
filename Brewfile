@@ -1,8 +1,11 @@
 # Brewfile - Homebrew package manager configuration
 # Usage: brew bundle install
 
+# Custom taps
+tap "tw93/tap"
+
 # ========================================
-# Programming Languages & Tools
+# Language Runtimes & Bootstrap Tools
 # ========================================
 
 # Go programming language
@@ -11,50 +14,37 @@ brew "go@1.25"
 # Python package and project manager
 brew "uv"
 
-# Custom taps
-tap "tw93/tap"
-
 # ========================================
-# Development Tools
+# Core Development Tools
 # ========================================
 
-# Modern text editor
 brew "neovim"
 
-# Version control
 brew "git"
 brew "git-delta"       # Syntax-highlighting pager for git diff/log
 brew "gh"              # GitHub CLI
 brew "lazygit"         # Terminal UI for git
 brew "act"             # Run GitHub Actions locally
 brew "prek"            # pre-commit re-implemented in Rust
-
-# Go development tools
 brew "delve"           # Go debugger
 brew "go-task"         # Task runner
 
-# Database clients
-brew "mysql-client"
-brew "libpq"
-
-# AI tools
+# Language-Adjacent Tooling
 brew "marksman"        # Markdown LSP server
 brew "bash-language-server" # Bash LSP server
 brew "pyright"         # Python LSP server
+brew "terraform-ls"
 
-# Cloud tools
+# Infrastructure & Data Tools
 brew "awscli"          # AWS CLI
 brew "terraform"
 brew "grpcurl"         # gRPC command-line tool
-brew "terraform-ls"
+brew "mysql-client"
+brew "libpq"
 
-# Container management
+# GUI Apps
 cask "orbstack"        # Fast Docker Desktop alternative
-
-# Terminal emulator
 cask "tw93/tap/kakuku" # Kaku terminal from tw93/tap
-
-# Productivity
 cask "jordanbaird-ice" # Menu bar management
 
 # ========================================
