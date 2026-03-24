@@ -5,17 +5,11 @@
 
 set -euo pipefail
 
-# Colors for output
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-RED='\033[0;31m'
-BOLD='\033[1m'
-NC='\033[0m' # No Color
-
 # Dotfiles directory (automatically detects script location)
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPTS_DIR="$DOTFILES_DIR/scripts"
+
+source "$SCRIPTS_DIR/lib/common.sh"
 
 # List of files to symlink
 FILES=".zshrc .gitconfig .gitignore_global"
@@ -95,5 +89,3 @@ if [ -d "$DOTFILES_DIR/.config" ]; then
         create_config_symlink "$config_file"
     done < <(find "$DOTFILES_DIR/.config" -type f -print0)
 fi
-
-brew link --force libpq > /dev/null 2>&1 || true

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
+
+print_step "Installing Homebrew packages..."
+
+if [ ! -f "$DOTFILES_DIR/Brewfile" ]; then
+    print_error "Brewfile not found!"
+    exit 1
+fi
+
+(
+    cd "$DOTFILES_DIR"
+    brew bundle check || brew bundle install
+)
+print_success "Homebrew packages installed"
+
+if brew list libpq >/dev/null 2>&1; then
+    brew link --force libpq >/dev/null 2>&1 || true
+    print_success "libpq linked"
+fi
+
+if brew list fzf >/dev/null 2>&1; then
+    if [ -f "$HOME/.fzf.zsh" ]; then
+        print_success "FZF already configured"
+    else
+        print_info "Configuring FZF..."
+        "$(brew --prefix)/opt/fzf/install" --all --no-bash --no-fish
+        print_success "FZF configured"
+    fi
+fi
