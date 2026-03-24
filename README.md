@@ -122,7 +122,7 @@ You can also run specific setup phases:
 
 ```bash
 ./setup.sh bootstrap
-./setup.sh brew-packages languages
+./setup.sh brew-packages languages tool-packages
 ./setup.sh links apps
 ```
 
@@ -136,19 +136,22 @@ The `setup.sh` script runs the following phases:
    - Installs packages from `Brewfile`
    - Applies brew-owned post-install steps such as FZF setup and `libpq` linking
 3. **languages**
-   - Installs Go tools from `Gofile`
+   - Installs Go runtime support used by your shell and tools
    - Installs NVM and Node.js LTS
-   - Installs Bun and global Bun packages from `Bunfile`
+   - Installs Bun runtime
    - Installs SDKMAN, Java 11/17/21, and Kotlin
    - Installs Rust via rustup (optional prompt)
    - Installs latest stable Python via `uv python install --default`
-4. **links**
+4. **tool-packages**
+   - Installs global Go CLI tools from explicit shell installers
+   - Installs global Bun CLI tools from explicit shell installers
+5. **links**
    - Creates symlinks for tracked dotfiles and `.config/*`
-5. **apps**
+6. **apps**
    - Installs Oh My Zsh, plugins, and Spaceship fallback theme
    - Bootstraps `oh-my-opencode`
    - Sets up the Zed Gno dev extension
-6. **macos**
+7. **macos**
    - Applies macOS defaults for Finder, Dock, keyboard, screenshots, and appearance
 
 After installation:

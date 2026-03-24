@@ -21,8 +21,6 @@ dotfiles/
 ├── .gitconfig           # Git config (delta pager, aliases)
 ├── .gitignore_global    # Global Git ignore
 ├── Brewfile             # Homebrew packages
-├── Gofile               # Go global tools (go install)
-├── Bunfile              # Bun global packages
 ├── setup.sh             # Full setup script (runs explicit setup phases)
 ├── link.sh              # Symlink creator
 ├── scripts/
@@ -30,10 +28,12 @@ dotfiles/
 │   ├── phases/10-bootstrap-homebrew.sh   # Homebrew bootstrap
 │   ├── phases/20-install-brew-packages.sh# Brewfile install + brew-owned fixups
 │   ├── phases/30-install-language-envs.sh# Language runtime orchestration
+│   ├── phases/35-install-tool-packages.sh# Global CLI tool installation
 │   ├── phases/40-link-dotfiles.sh        # Symlink phase
 │   ├── phases/50-setup-apps.sh           # App/bootstrap phase
 │   ├── phases/60-apply-macos.sh          # macOS defaults phase
-│   ├── languages/*.sh                    # Go/Node/Bun/Java/Rust/Python installers
+│   ├── languages/*.sh                    # Go/Node/Bun/Java/Rust/Python runtime installers
+│   ├── packages/*.sh                     # Global Go/Bun CLI installers
 │   └── apps/*.sh                         # Oh My Zsh, OpenCode, Zed bootstrap
 └── README.md
 ```
@@ -44,9 +44,8 @@ dotfiles/
 | Shell config | `.zshrc` | Main entry point |
 | App configs | `.config/*/` | Per-app settings |
 | Install packages | `Brewfile` | Homebrew list |
-| Go tools | `Gofile` | `go install` packages, supports GOTOOLCHAIN= per line |
-| Bun packages | `Bunfile` | Global bun packages |
 | Setup automation | `setup.sh` | Full install script with explicit phases |
+| Global CLI tools | `scripts/packages/*.sh` | Explicit shell installers for Go/Bun tools |
 | Create symlinks | `link.sh` | Links to $HOME, backs up only if content differs |
 | macOS settings | `scripts/phases/60-apply-macos.sh` | System defaults (Finder, Dock, Keyboard, Screenshot) |
 
@@ -64,15 +63,15 @@ dotfiles/
 ## CONVENTIONS
 - All paths use `$HOME` instead of specific username
 - `.config/` mirrors `~/.config/`
-- setup.sh is phase-based (bootstrap → brew-packages → languages → links → apps → macos)
+- setup.sh is phase-based (bootstrap → brew-packages → languages → tool-packages → links → apps → macos)
 - link.sh backs up files only when content differs from dotfiles version
-- Gofile supports inline `GOTOOLCHAIN=<version>` metadata per package
+- Go and Bun global CLI tools are installed by explicit shell scripts under `scripts/packages/`
 
 ## COMMANDS
 ```bash
 ./setup.sh          # Full setup (Homebrew, tools, Zsh, macOS defaults, etc.)
 ./link.sh           # Create symlinks to $HOME
-./setup.sh languages # Run a specific phase
+./setup.sh languages tool-packages # Run specific phases
 brew bundle         # Install Brewfile packages
 ```
 
