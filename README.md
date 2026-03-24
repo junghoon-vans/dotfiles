@@ -118,35 +118,38 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
+You can also run specific setup phases:
+
+```bash
+./setup.sh bootstrap
+./setup.sh brew-packages languages
+./setup.sh links apps
+```
+
 ### What Gets Installed
 
-The `setup.sh` script will automatically install and configure:
+The `setup.sh` script runs the following phases:
 
-1. **Homebrew** (if not already installed)
-2. **Homebrew packages** from Brewfile:
-   - Modern CLI tools: neovim, git, git-delta, gh, lazygit, act, prek, bat, eza, ripgrep, fd, htop, jq, tldr, fzf, zoxide
-   - LSP tools: marksman (Markdown language server)
-   - Database clients: mysql-client, libpq
-   - Cloud tools: awscli, grpcurl, terraform, terraform-ls
-   - Container management: OrbStack
-- Terminal emulator: Kaku (`tw93/tap/kakuku` cask)
-   - Productivity: Ice (menu bar management)
-   - Fonts: FiraCode Nerd Font (for terminal icons)
-3. **Oh My Zsh** (shell framework)
-4. **Oh My Zsh plugins**:
-   - zsh-autosuggestions (command suggestions)
-   - zsh-syntax-highlighting (syntax highlighting)
-   - zsh-completions (additional completions)
-   - zsh-hangul (Korean/English auto-switching)
-5. **Prompt configuration**: Spaceship fallback for Oh My Zsh, with Kaku/Starship taking over when Kaku shell integration is present
-6. **FZF** fuzzy finder configuration
-7. **LazyVim** for Neovim
-8. **NVM** and Node.js LTS
-9. **uv** and latest stable Python (`uv python install --default`)
-10. **SDKMAN**, Java 11, 17, 21, and Kotlin
-11. **Rust** (optional - will prompt during setup)
-12. **Symlinks** for all dotfiles
-13. **macOS defaults** (Finder, Dock, Keyboard, Screenshot)
+1. **bootstrap**
+   - Installs Homebrew if it is missing
+2. **brew-packages**
+   - Installs packages from `Brewfile`
+   - Applies brew-owned post-install steps such as FZF setup and `libpq` linking
+3. **languages**
+   - Installs Go tools from `Gofile`
+   - Installs NVM and Node.js LTS
+   - Installs Bun and global Bun packages from `Bunfile`
+   - Installs SDKMAN, Java 11/17/21, and Kotlin
+   - Installs Rust via rustup (optional prompt)
+   - Installs latest stable Python via `uv python install --default`
+4. **links**
+   - Creates symlinks for tracked dotfiles and `.config/*`
+5. **apps**
+   - Installs Oh My Zsh, plugins, and Spaceship fallback theme
+   - Bootstraps `oh-my-opencode`
+   - Sets up the Zed Gno dev extension
+6. **macos**
+   - Applies macOS defaults for Finder, Dock, keyboard, screenshots, and appearance
 
 After installation:
 ```bash
@@ -203,6 +206,10 @@ By default, `.zshrc` falls back to Spaceship for plain Oh My Zsh setups, but dis
 ```bash
 ZSH_THEME="your-theme-name"
 ```
+
+### Neovim
+
+This repo already tracks Neovim config in `.config/nvim`, so setup no longer bootstraps a LazyVim starter into `~/.config/nvim`. The `links` phase is the source of truth for Neovim configuration on a new machine.
 
 ### Kaku
 

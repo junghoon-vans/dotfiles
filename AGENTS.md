@@ -23,23 +23,18 @@ dotfiles/
 ├── Brewfile             # Homebrew packages
 ├── Gofile               # Go global tools (go install)
 ├── Bunfile              # Bun global packages
-├── setup.sh             # Full setup script (runs scripts/NN-*.sh in order)
+├── setup.sh             # Full setup script (runs explicit setup phases)
 ├── link.sh              # Symlink creator
-├── scripts/             # Modular setup steps
-│   ├── 00-core.sh       # Common functions and colors
-│   ├── 01-brew.sh       # Homebrew install
-│   ├── 02-bundle.sh     # brew bundle
-│   ├── 03-go.sh         # Go tools from Gofile
-│   ├── 04-ohmyzsh.sh    # Oh My Zsh + plugins
-│   ├── 05-fzf.sh        # FZF setup
-│   ├── 06-nvim.sh       # LazyVim
-│   ├── 07-node.sh       # NVM + Node.js
-│   ├── 08-bun.sh        # Bun + Bunfile packages
-│   ├── 09-java.sh       # SDKMAN + Java + Kotlin
-│   ├── 10-rust.sh       # Rust via rustup
-│   ├── 11-links.sh      # Symlinks via link.sh
-│   ├── 12-zed.sh        # Zed extensions
-│   └── 13-macos.sh      # macOS defaults
+├── scripts/
+│   ├── lib/common.sh                     # Shared shell helpers and output
+│   ├── phases/10-bootstrap-homebrew.sh   # Homebrew bootstrap
+│   ├── phases/20-install-brew-packages.sh# Brewfile install + brew-owned fixups
+│   ├── phases/30-install-language-envs.sh# Language runtime orchestration
+│   ├── phases/40-link-dotfiles.sh        # Symlink phase
+│   ├── phases/50-setup-apps.sh           # App/bootstrap phase
+│   ├── phases/60-apply-macos.sh          # macOS defaults phase
+│   ├── languages/*.sh                    # Go/Node/Bun/Java/Rust/Python installers
+│   └── apps/*.sh                         # Oh My Zsh, OpenCode, Zed bootstrap
 └── README.md
 ```
 
@@ -51,9 +46,9 @@ dotfiles/
 | Install packages | `Brewfile` | Homebrew list |
 | Go tools | `Gofile` | `go install` packages, supports GOTOOLCHAIN= per line |
 | Bun packages | `Bunfile` | Global bun packages |
-| Setup automation | `setup.sh` | Full install script, auto-discovers scripts/NN-*.sh |
+| Setup automation | `setup.sh` | Full install script with explicit phases |
 | Create symlinks | `link.sh` | Links to $HOME, backs up only if content differs |
-| macOS settings | `scripts/13-macos.sh` | System defaults (Finder, Dock, Keyboard, Screenshot) |
+| macOS settings | `scripts/phases/60-apply-macos.sh` | System defaults (Finder, Dock, Keyboard, Screenshot) |
 
 ## KEY DECISIONS
 - **NVM**: Lazy-loaded in .zshrc (not via OMZ plugin) — avoids ~500ms startup penalty
@@ -69,7 +64,7 @@ dotfiles/
 ## CONVENTIONS
 - All paths use `$HOME` instead of specific username
 - `.config/` mirrors `~/.config/`
-- setup.sh is idempotent (checks if already installed before each step)
+- setup.sh is phase-based (bootstrap → brew-packages → languages → links → apps → macos)
 - link.sh backs up files only when content differs from dotfiles version
 - Gofile supports inline `GOTOOLCHAIN=<version>` metadata per package
 
@@ -77,13 +72,14 @@ dotfiles/
 ```bash
 ./setup.sh          # Full setup (Homebrew, tools, Zsh, macOS defaults, etc.)
 ./link.sh           # Create symlinks to $HOME
-./setup.sh 03       # Run a specific step only (e.g. Go tools)
+./setup.sh languages # Run a specific phase
 brew bundle         # Install Brewfile packages
 ```
 
 ## NOTES
 - Requires Homebrew
 - link.sh auto-discovers all `.config/*` files
+- `.config/nvim` is repo-owned and linked; setup no longer bootstraps LazyVim starter into `$HOME/.config/nvim`
 - opencode config uses dev schema for oh-my-opencode plugin
 - `set -euo pipefail` is active in all scripts — use `|| true` for optional commands
 - SDKMAN init sources with `set +u` guard (sdkman-init.sh uses ZSH_VERSION which is unbound in bash)
