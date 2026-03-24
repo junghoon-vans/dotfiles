@@ -12,6 +12,7 @@ PHASE_ORDER=(
   bootstrap
   brew-packages
   languages
+  tool-packages
   links
   apps
   macos
@@ -22,6 +23,7 @@ phase_script() {
     bootstrap)     printf '%s\n' "$SCRIPTS_DIR/phases/10-bootstrap-homebrew.sh" ;;
     brew-packages) printf '%s\n' "$SCRIPTS_DIR/phases/20-install-brew-packages.sh" ;;
     languages)     printf '%s\n' "$SCRIPTS_DIR/phases/30-install-language-envs.sh" ;;
+    tool-packages) printf '%s\n' "$SCRIPTS_DIR/phases/35-install-tool-packages.sh" ;;
     links)         printf '%s\n' "$SCRIPTS_DIR/phases/40-link-dotfiles.sh" ;;
     apps)          printf '%s\n' "$SCRIPTS_DIR/phases/50-setup-apps.sh" ;;
     macos)         printf '%s\n' "$SCRIPTS_DIR/phases/60-apply-macos.sh" ;;
@@ -31,12 +33,14 @@ phase_script() {
 
 normalize_phase() {
   case "$1" in
-    bootstrap|brew-packages|languages|links|apps|macos) printf '%s\n' "$1" ;;
+    bootstrap|brew-packages|languages|tool-packages|links|apps|macos) printf '%s\n' "$1" ;;
     brew|packages) printf '%s\n' "brew-packages" ;;
     lang) printf '%s\n' "languages" ;;
+    tools) printf '%s\n' "tool-packages" ;;
     1|01) printf '%s\n' "bootstrap" ;;
     2|02) printf '%s\n' "brew-packages" ;;
     3|03) printf '%s\n' "languages" ;;
+    35) printf '%s\n' "tool-packages" ;;
     4|04) printf '%s\n' "links" ;;
     5|05) printf '%s\n' "apps" ;;
     6|06) printf '%s\n' "macos" ;;
@@ -51,18 +55,20 @@ Usage: ./setup.sh [phase...]
 Supported phases:
   bootstrap      Install Homebrew itself
   brew-packages  Install Brewfile packages and brew-owned fixups
-  languages      Install language runtimes and ecosystem global tools
+  languages      Install language runtimes only
+  tool-packages  Install global CLI tools for language ecosystems
   links          Symlink tracked dotfiles into $HOME
   apps           Run app/bootstrap setup that depends on linked config
   macos          Apply macOS defaults
 
 Short aliases:
-  brew, packages, lang
+  brew, packages, lang, tools
 
 Numeric aliases:
   01 bootstrap
   02 brew-packages
   03 languages
+  35 tool-packages
   04 links
   05 apps
   06 macos
