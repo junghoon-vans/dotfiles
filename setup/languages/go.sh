@@ -18,5 +18,5 @@ fi
 if command -v go &> /dev/null; then
     print_success "Go already installed ($(go version))"
 else
-    print_info "Go not found. Install it through the brew-packages phase."
+    print_info "Go not found. Install it through the brew-packages command."
 fi

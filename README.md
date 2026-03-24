@@ -212,7 +212,7 @@ ZSH_THEME="your-theme-name"
 
 ### Neovim
 
-This repo already tracks Neovim config in `.config/nvim`, so setup no longer bootstraps a LazyVim starter into `~/.config/nvim`. The `links` phase is the source of truth for Neovim configuration on a new machine.
+This repo already tracks Neovim config in `.config/nvim`, so setup no longer bootstraps a LazyVim starter into `~/.config/nvim`. The `links` command is the source of truth for Neovim configuration on a new machine.
 
 ### Setup Internals
 
