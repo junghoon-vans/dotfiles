@@ -66,7 +66,7 @@ fi
 
 : > "$LOG_FILE"
 
-bash "$REPO_ROOT/setup/phases/35-install-tool-packages.sh" >/dev/null
+bash "$REPO_ROOT/setup/commands/35-tool-packages" >/dev/null
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'go install mvdan.cc/gofumpt@latest' "$LOG_FILE"
@@ -115,4 +115,4 @@ grep -q 'bun install -g opencode-ai' "$LOG_FILE"
 grep -q 'bunx oh-my-opencode install --no-tui --claude=no --openai=yes --gemini=no --copilot=no' "$LOG_FILE"
 
 [ ! -e "$REPO_ROOT/link.sh" ]
-grep -q 'setup/link.sh' "$REPO_ROOT/setup/phases/40-link-dotfiles.sh"
+grep -q 'setup/link.sh' "$REPO_ROOT/setup/commands/40-links"
