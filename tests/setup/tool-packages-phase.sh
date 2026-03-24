@@ -51,8 +51,8 @@ export PATH="$FAKE_BIN:$PATH"
 HELP_OUTPUT="$($REPO_ROOT/setup.sh --help)"
 printf '%s' "$HELP_OUTPUT" | grep -q 'tool-packages'
 
-bash "$REPO_ROOT/scripts/languages/go.sh" >/dev/null
-bash "$REPO_ROOT/scripts/languages/bun.sh" >/dev/null
+bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
+bash "$REPO_ROOT/setup/languages/bun.sh" >/dev/null
 
 if grep -q 'go install' "$LOG_FILE"; then
   printf 'languages/go.sh should not install Go tools\n' >&2
@@ -66,7 +66,7 @@ fi
 
 : > "$LOG_FILE"
 
-bash "$REPO_ROOT/scripts/phases/35-install-tool-packages.sh" >/dev/null
+bash "$REPO_ROOT/setup/phases/35-install-tool-packages.sh" >/dev/null
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'go install mvdan.cc/gofumpt@latest' "$LOG_FILE"
@@ -104,12 +104,15 @@ EOF
 
 chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx"
 
-PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/scripts/languages/go.sh" >/dev/null
-PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/scripts/packages/go.sh" >/dev/null
-PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/scripts/packages/bun.sh" >/dev/null
-PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/scripts/apps/opencode.sh" >/dev/null
+PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
+PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/packages/go.sh" >/dev/null
+PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/packages/bun.sh" >/dev/null
+PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/null
 
 grep -q 'go version' "$LOG_FILE"
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'bun install -g opencode-ai' "$LOG_FILE"
 grep -q 'bunx oh-my-opencode install --no-tui --claude=no --openai=yes --gemini=no --copilot=no' "$LOG_FILE"
+
+[ ! -e "$REPO_ROOT/link.sh" ]
+grep -q 'setup/link.sh' "$REPO_ROOT/setup/phases/40-link-dotfiles.sh"

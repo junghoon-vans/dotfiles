@@ -21,20 +21,21 @@ dotfiles/
 ├── .gitconfig           # Git config (delta pager, aliases)
 ├── .gitignore_global    # Global Git ignore
 ├── Brewfile             # Homebrew packages
-├── setup.sh             # Full setup script (runs explicit setup phases)
-├── link.sh              # Symlink creator
-├── scripts/
-│   ├── lib/common.sh                     # Shared shell helpers and output
-│   ├── phases/10-bootstrap-homebrew.sh   # Homebrew bootstrap
+├── setup.sh             # Public setup entrypoint (execs setup/main.sh)
+├── setup/
+│   ├── main.sh                          # Full setup orchestrator with explicit phases
+│   ├── link.sh                          # Symlink implementation
+│   ├── lib/common.sh                    # Shared shell helpers and output
+│   ├── phases/10-bootstrap-homebrew.sh  # Homebrew bootstrap
 │   ├── phases/20-install-brew-packages.sh# Brewfile install + brew-owned fixups
 │   ├── phases/30-install-language-envs.sh# Language runtime orchestration
 │   ├── phases/35-install-tool-packages.sh# Global CLI tool installation
-│   ├── phases/40-link-dotfiles.sh        # Symlink phase
-│   ├── phases/50-setup-apps.sh           # App/bootstrap phase
-│   ├── phases/60-apply-macos.sh          # macOS defaults phase
-│   ├── languages/*.sh                    # Go/Node/Bun/Java/Rust/Python runtime installers
-│   ├── packages/*.sh                     # Global Go/Bun CLI installers
-│   └── apps/*.sh                         # Oh My Zsh, OpenCode, Zed bootstrap
+│   ├── phases/40-link-dotfiles.sh       # Symlink phase
+│   ├── phases/50-setup-apps.sh          # App/bootstrap phase
+│   ├── phases/60-apply-macos.sh         # macOS defaults phase
+│   ├── languages/*.sh                   # Go/Node/Bun/Java/Rust/Python runtime installers
+│   ├── packages/*.sh                    # Global Go/Bun CLI installers
+│   └── apps/*.sh                        # Oh My Zsh, OpenCode, Zed bootstrap
 └── README.md
 ```
 
@@ -44,10 +45,10 @@ dotfiles/
 | Shell config | `.zshrc` | Main entry point |
 | App configs | `.config/*/` | Per-app settings |
 | Install packages | `Brewfile` | Homebrew list |
-| Setup automation | `setup.sh` | Full install script with explicit phases |
-| Global CLI tools | `scripts/packages/*.sh` | Explicit shell installers for Go/Bun tools |
-| Create symlinks | `link.sh` | Links to $HOME, backs up only if content differs |
-| macOS settings | `scripts/phases/60-apply-macos.sh` | System defaults (Finder, Dock, Keyboard, Screenshot) |
+| Setup automation | `setup.sh` / `setup/main.sh` | Public entrypoint + full phase orchestrator |
+| Global CLI tools | `setup/packages/*.sh` | Explicit shell installers for Go/Bun tools |
+| Create symlinks | `setup/link.sh` | Links to $HOME, backs up only if content differs |
+| macOS settings | `setup/phases/60-apply-macos.sh` | System defaults (Finder, Dock, Keyboard, Screenshot) |
 
 ## KEY DECISIONS
 - **NVM**: Lazy-loaded in .zshrc (not via OMZ plugin) — avoids ~500ms startup penalty
@@ -64,20 +65,19 @@ dotfiles/
 - All paths use `$HOME` instead of specific username
 - `.config/` mirrors `~/.config/`
 - setup.sh is phase-based (bootstrap → brew-packages → languages → tool-packages → links → apps → macos)
-- link.sh backs up files only when content differs from dotfiles version
-- Go and Bun global CLI tools are installed by explicit shell scripts under `scripts/packages/`
+- setup/link.sh backs up files only when content differs from dotfiles version
+- Go and Bun global CLI tools are installed by explicit shell scripts under `setup/packages/`
 
 ## COMMANDS
 ```bash
 ./setup.sh          # Full setup (Homebrew, tools, Zsh, macOS defaults, etc.)
-./link.sh           # Create symlinks to $HOME
 ./setup.sh languages tool-packages # Run specific phases
 brew bundle         # Install Brewfile packages
 ```
 
 ## NOTES
 - Requires Homebrew
-- link.sh auto-discovers all `.config/*` files
+- setup/link.sh auto-discovers all `.config/*` files
 - `.config/nvim` is repo-owned and linked; setup no longer bootstraps LazyVim starter into `$HOME/.config/nvim`
 - opencode config uses dev schema for oh-my-opencode plugin
 - `set -euo pipefail` is active in all scripts — use `|| true` for optional commands

@@ -214,6 +214,18 @@ ZSH_THEME="your-theme-name"
 
 This repo already tracks Neovim config in `.config/nvim`, so setup no longer bootstraps a LazyVim starter into `~/.config/nvim`. The `links` phase is the source of truth for Neovim configuration on a new machine.
 
+### Setup Internals
+
+`./setup.sh` remains the public entrypoint, but the implementation now lives under `setup/`:
+
+- `setup/main.sh` orchestrates phases
+- `setup/phases/` contains phase scripts
+- `setup/languages/` contains runtime installers
+- `setup/packages/` contains global CLI installers
+- `setup/apps/` contains app/bootstrap scripts
+
+There is no longer a root `./link.sh` command. Symlink creation is owned by `setup/link.sh` and invoked through the `links` phase.
+
 ### Kaku
 
 Kaku is installed from `tw93/tap` via the `kakuku` cask:
