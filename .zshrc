@@ -8,7 +8,13 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="spaceship"
+# Kaku's generated zsh integration initializes Starship, so disable the
+# Oh My Zsh theme only when both Kaku integration and Starship are available.
+if [[ -f "$HOME/.config/kaku/zsh/kaku.zsh" ]] && command -v starship &>/dev/null; then
+  ZSH_THEME=""
+else
+  ZSH_THEME="spaceship"
+fi
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
