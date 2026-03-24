@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  shell-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate shell syntax
+        shell: bash
+        run: |
+          bash -n \
+            setup.sh \
+            setup/main.sh \
+            setup/lib/common.sh \
+            setup/commands/* \
+            setup/languages/*.sh \
+            setup/packages/*.sh \
+            setup/apps/*.sh \
+            tests/setup/*.sh
+
+      - name: Check setup help
+        shell: bash
+        run: ./setup.sh --help
+
+      - name: Run setup smoke test
+        shell: bash
+        run: bash tests/setup/tool-packages-command.sh
