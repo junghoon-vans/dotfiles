@@ -21,23 +21,51 @@ command_name_from_entry() {
   printf '%s\n' "$1" | sed -E 's/^[0-9]+-//'
 }
 
+validate_command_entries() {
+  local entry_name=""
+  local command_name=""
+  local seen_names_file=""
+
+  seen_names_file="$(mktemp)"
+
+  while IFS= read -r entry_name; do
+    if ! printf '%s\n' "$entry_name" | grep -Eq '^[0-9][0-9]-[a-z0-9]+(-[a-z0-9]+)*$'; then
+      print_error "Invalid command filename: $entry_name"
+      print_error "Expected format: NN-command-name"
+      exit 1
+    fi
+
+    command_name="$(command_name_from_entry "$entry_name")"
+    if grep -Fxq "$command_name" "$seen_names_file"; then
+      print_error "Duplicate command name: $command_name"
+      exit 1
+    fi
+
+    printf '%s\n' "$command_name" >> "$seen_names_file"
+  done < <(command_entries)
+
+  rm -f "$seen_names_file"
+}
+
 command_script() {
   local command_name="$1"
   local entry=""
   local entry_name=""
 
   case "$command_name" in
-    *[!/a-z0-9-]*|*/*|'') return 1 ;;
+    ''|-*|*/*|*[!a-z0-9-]*) return 1 ;;
   esac
 
-  for entry in "$SETUP_DIR"/commands/*; do
-    [ -f "$entry" ] || continue
-    entry_name="$(basename "$entry")"
+  if ! printf '%s\n' "$command_name" | grep -Eq '^[a-z0-9]+(-[a-z0-9]+)*$'; then
+    return 1
+  fi
+
+  while IFS= read -r entry_name; do
     if [ "$(command_name_from_entry "$entry_name")" = "$command_name" ]; then
-      printf '%s\n' "$entry"
+      printf '%s\n' "$SETUP_DIR/commands/$entry_name"
       return 0
     fi
-  done
+  done < <(command_entries)
 
   return 1
 }
@@ -82,6 +110,8 @@ run_command() {
 main() {
   local selected_commands=()
   local raw_command=""
+
+  validate_command_entries
 
   if [ $# -eq 0 ]; then
     while IFS= read -r raw_command; do
