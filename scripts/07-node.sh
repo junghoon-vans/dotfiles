@@ -8,7 +8,7 @@ if [ -d "$HOME/.nvm" ]; then
     print_success "NVM already installed"
 else
     print_info "Installing NVM..."
-    local nvm_version
+    nvm_version=""
     nvm_version=$(curl -fsSL https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep '"tag_name"' | sed 's/.*"tag_name": "\(.*\)".*/\1/')
     curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${nvm_version}/install.sh" | bash
 
