@@ -86,5 +86,8 @@
       "git-master",
       "playwright"
     ]
+  },
+  "notification": {
+    "force_enable": true
   }
 }
