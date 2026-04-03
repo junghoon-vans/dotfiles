@@ -3,6 +3,12 @@
   "plugin": [
     "oh-my-opencode@latest"
   ],
+  "mcp": {
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/"
+    }
+  },
   "lsp": {
     "marksman": {
       "command": [

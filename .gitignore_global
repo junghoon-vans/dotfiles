@@ -127,9 +127,10 @@ temp/
 # ========================================
 
 **/CLAUDE.md
+.sisyphus/
 
 # Project-specific personal settings (not for source control)
-**/.claude/settings.local.json
+**/.claude/
 
 # ========================================
 # Tool Auth / Secrets
