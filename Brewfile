@@ -37,6 +37,7 @@ brew "terraform-ls"
 
 # Infrastructure & Data Tools
 brew "awscli"          # AWS CLI
+brew "helm"            # Kubernetes package manager
 brew "terraform"
 brew "grpcurl"         # gRPC command-line tool
 brew "mysql-client"
