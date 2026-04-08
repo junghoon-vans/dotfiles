@@ -130,7 +130,12 @@ temp/
 .sisyphus/
 
 # Project-specific personal settings (not for source control)
-**/.claude/
+**/.claude/*
+!**/.claude/skills/
+!**/.claude/skills/**
+
+# OMC runtime state
+**/.omc/
 
 # ========================================
 # Tool Auth / Secrets
