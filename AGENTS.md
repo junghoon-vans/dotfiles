@@ -14,7 +14,7 @@ dotfiles/
 │   ├── zed/settings.json
 │   ├── nvim/             # Neovim config (LazyVim)
 │   ├── karabiner/        # Keyboard remapping
-│   ├── opencode/         # oh-my-opencode config
+│   ├── opencode/         # openagent config
 │   ├── gh/config.yml     # GitHub CLI config (excludes hosts.yml - contains tokens)
 │   └── kaku/             # Terminal config
 ├── .zshrc               # Zsh shell config
@@ -73,6 +73,6 @@ brew bundle         # Install Brewfile packages
 - Requires Homebrew
 - setup/link.sh auto-discovers all `.config/*` files
 - `.config/nvim` is repo-owned and linked; setup no longer bootstraps LazyVim starter into `$HOME/.config/nvim`
-- opencode config uses dev schema for oh-my-opencode plugin
+- opencode config uses dev schema for openagent plugin
 - `set -euo pipefail` is active in all scripts — use `|| true` for optional commands
 - SDKMAN init sources with `set +u` guard (sdkman-init.sh uses ZSH_VERSION which is unbound in bash)

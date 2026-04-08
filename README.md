@@ -149,7 +149,7 @@ The `setup.sh` script runs the following commands:
    - Creates symlinks for tracked dotfiles and `.config/*`
 6. **apps**
    - Installs Oh My Zsh, plugins, and Spaceship fallback theme
-   - Bootstraps `oh-my-opencode`
+   - Bootstraps `oh-my-openagent`
    - Sets up the Zed Gno dev extension
 7. **macos**
    - Applies macOS defaults for Finder, Dock, keyboard, screenshots, and appearance
@@ -242,12 +242,12 @@ Kaku's shell integration under `~/.config/kaku/zsh/` and runtime state in `~/.co
 
 Shell alias ownership stays in `.zshrc`. Kaku may generate shell integration under `~/.config/kaku/zsh/`, but terminal aliases such as `ls`, `l`, `ll`, `la`, and `lt` should be defined or overridden in `.zshrc` after the Kaku source lines so generated defaults cannot override the repo's shell UX.
 
-### OpenCode / Oh My OpenCode
+### OpenCode / OpenAgent
 
-This repo tracks user-level OpenCode and oh-my-opencode config under `.config/opencode/`.
+This repo tracks user-level OpenCode and OpenAgent config under `.config/opencode/`.
 
-- `oh-my-opencode` terminal notifications are provided by the plugin's built-in notification hook on macOS.
-- The repo explicitly tracks that preference in `.config/opencode/oh-my-opencode.json` via `"notification": { "force_enable": true }`, so notification behavior syncs through dotfiles instead of relying on plugin defaults.
+- `oh-my-openagent` terminal notifications are provided by the plugin's built-in notification hook on macOS.
+- The repo explicitly tracks that preference in `.config/opencode/oh-my-openagent.json` via `"notification": { "force_enable": true }`, so notification behavior syncs through dotfiles instead of relying on plugin defaults.
 
 ### Customize Karabiner Mappings
 

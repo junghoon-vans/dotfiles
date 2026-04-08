@@ -10,7 +10,7 @@ App-specific configurations. Each subdirectory mirrors `~/.config/`.
 │   ├── init.lua
 │   └── lua/config/
 ├── karabiner/              # Keyboard remapping
-├── opencode/               # oh-my-opencode plugin config
+├── opencode/               # openagent plugin config
 └── kaku/                   # Terminal
 ```
 
@@ -20,10 +20,10 @@ App-specific configurations. Each subdirectory mirrors `~/.config/`.
 | Zed | `zed/settings.json` | Editor, LSP (gopls, gnopls), AI agent |
 | Neovim | `nvim/init.lua` | Plugin manager (lazy.nvim) |
 | Karabiner | `karabiner.json` | Key remappings |
-| OpenCode | `opencode/oh-my-opencode.json` | Agent models |
+| OpenCode | `opencode/oh-my-openagent.json` | Agent models |
 | Kaku | `kaku/kaku.lua` | Terminal settings |
 
 ## CONVENTIONS
 - All paths use `$HOME` (not hardcoded usernames)
 - JSON, YAML, and Lua for configs
-- OpenCode: dev schema, free models (big-pickle, glm-4.7-free)
+- OpenCode: dev schema; current tracked routing uses GPT/Codex models in `oh-my-openagent.json`
