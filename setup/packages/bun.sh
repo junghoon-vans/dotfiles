@@ -16,9 +16,9 @@ print_info "Installing opencode-ai..."
 bun install -g opencode-ai
 print_success "opencode-ai installed"
 
-print_info "Installing oh-my-opencode..."
-bun install -g oh-my-opencode
-print_success "oh-my-opencode installed"
+print_info "Installing oh-my-openagent..."
+bun install -g oh-my-openagent
+print_success "oh-my-openagent installed"
 
 print_info "Installing typescript..."
 bun install -g typescript

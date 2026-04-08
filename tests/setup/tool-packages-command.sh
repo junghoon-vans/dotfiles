@@ -73,7 +73,7 @@ grep -q 'go install mvdan.cc/gofumpt@latest' "$LOG_FILE"
 grep -q 'go install github.com/gnolang/gno/gnovm/cmd/gno@latest' "$LOG_FILE"
 grep -q 'go install github.com/gnoverse/gnopls@latest' "$LOG_FILE"
 grep -q 'bun install -g opencode-ai' "$LOG_FILE"
-grep -q 'bun install -g oh-my-opencode' "$LOG_FILE"
+grep -q 'bun install -g oh-my-openagent' "$LOG_FILE"
 grep -q 'bun install -g typescript' "$LOG_FILE"
 grep -q 'bun install -g typescript-language-server' "$LOG_FILE"
 
@@ -112,7 +112,7 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/nu
 grep -q 'go version' "$LOG_FILE"
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'bun install -g opencode-ai' "$LOG_FILE"
-grep -q 'bunx oh-my-opencode install --no-tui --claude=no --openai=yes --gemini=no --copilot=no' "$LOG_FILE"
+grep -q 'bunx oh-my-openagent install --no-tui --claude=no --openai=yes --gemini=no --copilot=no' "$LOG_FILE"
 
 [ ! -e "$REPO_ROOT/link.sh" ]
 grep -q 'setup/link.sh' "$REPO_ROOT/setup/commands/40-links"
