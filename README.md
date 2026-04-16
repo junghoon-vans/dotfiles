@@ -242,6 +242,12 @@ Kaku's shell integration under `~/.config/kaku/zsh/` and runtime state in `~/.co
 
 Shell alias ownership stays in `.zshrc`. Kaku may generate shell integration under `~/.config/kaku/zsh/`, but terminal aliases such as `ls`, `l`, `ll`, `la`, and `lt` should be defined or overridden in `.zshrc` after the Kaku source lines so generated defaults cannot override the repo's shell UX.
 
+### Ghostty / cmux
+
+This repo also tracks Ghostty-compatible terminal font settings in `.config/ghostty/config`.
+
+`cmux` reads Ghostty config for fonts and colors, so the tracked Ghostty config keeps `FiraCode Nerd Font Mono` as the primary font for terminal icons and adds `D2Coding` as the Hangul fallback to improve Korean rendering.
+
 ### OpenCode / OpenAgent
 
 This repo tracks user-level OpenCode and OpenAgent config under `.config/opencode/`.
