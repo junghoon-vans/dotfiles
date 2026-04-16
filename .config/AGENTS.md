@@ -11,7 +11,7 @@ App-specific configurations. Each subdirectory mirrors `~/.config/`.
 │   └── lua/config/
 ├── karabiner/              # Keyboard remapping
 ├── opencode/               # openagent plugin config
-└── kaku/                   # Terminal
+└── ghostty/                # Terminal font config for cmux
 ```
 
 ## WHERE TO LOOK
@@ -21,7 +21,7 @@ App-specific configurations. Each subdirectory mirrors `~/.config/`.
 | Neovim | `nvim/init.lua` | Plugin manager (lazy.nvim) |
 | Karabiner | `karabiner.json` | Key remappings |
 | OpenCode | `opencode/oh-my-openagent.json` | Agent models |
-| Kaku | `kaku/kaku.lua` | Terminal settings |
+| Ghostty | `ghostty/config` | Font and rendering settings used by cmux |
 
 ## CONVENTIONS
 - All paths use `$HOME` (not hardcoded usernames)
