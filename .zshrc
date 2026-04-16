@@ -8,13 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# Kaku's generated zsh integration initializes Starship, so disable the
-# Oh My Zsh theme only when both Kaku integration and Starship are available.
-if [[ -f "$HOME/.config/kaku/zsh/kaku.zsh" ]] && command -v starship &>/dev/null; then
-  ZSH_THEME=""
-else
-  ZSH_THEME="spaceship"
-fi
+ZSH_THEME="spaceship"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -224,9 +218,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Local Overrides (machine-specific)
 # ========================================
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
-
-[[ -d "$HOME/.config/kaku/zsh/bin" && ":$PATH:" != *":$HOME/.config/kaku/zsh/bin:"* ]] && export PATH="$HOME/.config/kaku/zsh/bin:$PATH" # Kaku PATH Integration
-[[ -f "$HOME/.config/kaku/zsh/kaku.zsh" ]] && source "$HOME/.config/kaku/zsh/kaku.zsh" # Kaku Shell Integration
 
 # ========================================
 # Modern CLI Tools Aliases

@@ -45,7 +45,6 @@ brew "libpq"
 
 # GUI Apps
 cask "orbstack"        # Fast Docker Desktop alternative
-cask "tw93/tap/kakuku" # Kaku terminal from tw93/tap
 cask "jordanbaird-ice" # Menu bar management
 
 # ========================================
