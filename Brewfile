@@ -2,6 +2,7 @@
 # Usage: brew bundle install
 
 # Custom taps
+tap "manaflow-ai/cmux"
 tap "tw93/tap"
 
 # ========================================
@@ -44,6 +45,7 @@ brew "mysql-client"
 brew "libpq"
 
 # GUI Apps
+cask "cmux"            # Terminal multiplexer app/CLI
 cask "orbstack"        # Fast Docker Desktop alternative
 cask "jordanbaird-ice" # Menu bar management
 
