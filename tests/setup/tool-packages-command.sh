@@ -40,6 +40,10 @@ if [ "\${1:-}" = "--prefix" ] && [ "\${2:-}" = "go@1.25" ]; then
   printf '%s\n' "$TMP_DIR/fake-go-prefix"
   exit 0
 fi
+if [ "\${1:-}" = "--prefix" ]; then
+  printf '%s\n' "$TMP_DIR/fake-homebrew"
+  exit 0
+fi
 printf 'brew %s\n' "\$*" >> "$LOG_FILE"
 EOF
 
@@ -114,5 +118,50 @@ grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.
 grep -q 'bun install -g opencode-ai' "$LOG_FILE"
 grep -q 'bunx oh-my-openagent install --no-tui --claude=no --openai=yes --gemini=no --copilot=no' "$LOG_FILE"
 
+BOOTSTRAP_HOME="$TMP_DIR/bootstrap-home"
+BOOTSTRAP_BIN="$TMP_DIR/bootstrap-bin"
+BOOTSTRAP_PREFIX="$TMP_DIR/fake-homebrew"
+BOOTSTRAP_LOG="$TMP_DIR/bootstrap.log"
+
+mkdir -p "$BOOTSTRAP_HOME" "$BOOTSTRAP_BIN" "$BOOTSTRAP_PREFIX/bin"
+
+cat > "$BOOTSTRAP_BIN/curl" <<'EOF'
+#!/bin/bash
+cat <<'SCRIPT'
+mkdir -p "$HOMEBREW_PREFIX/bin"
+cat > "$HOMEBREW_PREFIX/bin/brew" <<'BREWEOF'
+#!/bin/bash
+if [ "${1:-}" = "shellenv" ]; then
+  printf 'export PATH="%s/bin:$PATH"\n' "$HOMEBREW_PREFIX"
+  exit 0
+fi
+printf 'brew %s\n' "$*" >> "$BOOTSTRAP_LOG"
+BREWEOF
+chmod +x "$HOMEBREW_PREFIX/bin/brew"
+SCRIPT
+EOF
+
+cat > "$BOOTSTRAP_BIN/bash" <<'EOF'
+#!/bin/bash
+if [ "$1" = "-c" ]; then
+  shift
+  eval "$1"
+  exit $?
+fi
+exec /bin/bash "$@"
+EOF
+
+chmod +x "$BOOTSTRAP_BIN/curl" "$BOOTSTRAP_BIN/bash"
+
+env -i HOME="$BOOTSTRAP_HOME" PATH="$BOOTSTRAP_BIN:/usr/bin:/bin" HOMEBREW_PREFIX="$BOOTSTRAP_PREFIX" BOOTSTRAP_LOG="$BOOTSTRAP_LOG" bash "$REPO_ROOT/setup/commands/10-bootstrap" >/dev/null
+
+grep -q 'eval "$(brew shellenv)"' "$BOOTSTRAP_HOME/.zprofile"
+
 [ ! -e "$REPO_ROOT/link.sh" ]
 grep -q 'setup/link.sh' "$REPO_ROOT/setup/commands/40-links"
+grep -q 'eval "$(brew shellenv)"' "$REPO_ROOT/setup/commands/10-bootstrap"
+grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/.zshrc"
+if grep -q 'kaku' "$REPO_ROOT/.zshrc"; then
+  printf '.zshrc should not reference kaku\n' >&2
+  exit 1
+fi

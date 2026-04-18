@@ -7,12 +7,13 @@ print_step "Installing Go tool packages..."
 if command -v brew &> /dev/null; then
     go_prefix="$(brew --prefix go@1.25 2>/dev/null || true)"
     if [ -n "$go_prefix" ] && [ -d "$go_prefix/bin" ]; then
-        export PATH="$go_prefix/bin:$PATH"
+        prepend_path_if_dir "$go_prefix/bin"
     fi
-elif [ -d "/opt/homebrew/opt/go@1.25/bin" ]; then
-    export PATH="/opt/homebrew/opt/go@1.25/bin:$PATH"
-elif [ -d "/usr/local/opt/go@1.25/bin" ]; then
-    export PATH="/usr/local/opt/go@1.25/bin:$PATH"
+else
+    homebrew_prefix="$(detect_homebrew_prefix)"
+    if [ -n "$homebrew_prefix" ]; then
+        prepend_path_if_dir "$homebrew_prefix/opt/go@1.25/bin"
+    fi
 fi
 
 if ! command -v go &> /dev/null; then
