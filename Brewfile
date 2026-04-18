@@ -20,6 +20,7 @@ brew "uv"
 # ========================================
 
 brew "neovim"
+brew "mole"
 
 brew "git"
 brew "git-delta"       # Syntax-highlighting pager for git diff/log
