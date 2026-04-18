@@ -51,7 +51,7 @@ dotfiles/
 - **delta**: git diff pager — syntax highlighting, side-by-side, line numbers
 - **prek**: Replaces pre-commit (Rust reimplementation, faster)
 - **go@1.25**: Pinned version via `go@1.25` formula + symlink to `/opt/homebrew/opt/go`
-- **gnopls**: Built with `GOTOOLCHAIN=go1.24.10` (build constraint), runtime uses go@1.25
+- **gnopls**: Built with the active `go@1.25` toolchain
 - **gh/hosts.yml**: NOT tracked (OAuth tokens) — gitignored via `.gitignore_global`
 - **github-copilot/apps.json**: NOT tracked (OAuth tokens) — gitignored
 

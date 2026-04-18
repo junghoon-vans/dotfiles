@@ -33,6 +33,6 @@ print_info "Installing github.com/gnolang/gno/gnovm/cmd/gno@latest..."
 go install github.com/gnolang/gno/gnovm/cmd/gno@latest
 print_success "gno installed"
 
-print_info "Installing github.com/gnoverse/gnopls@latest with GOTOOLCHAIN=go1.24.10..."
-GOTOOLCHAIN=go1.24.10 go install github.com/gnoverse/gnopls@latest
+print_info "Installing github.com/gnoverse/gnopls@latest..."
+go install github.com/gnoverse/gnopls@latest
 print_success "gnopls installed"
