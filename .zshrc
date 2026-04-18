@@ -88,6 +88,14 @@ plugins=(
   zsh-hangul
 )
 
+if command -v brew >/dev/null 2>&1; then
+  export HOMEBREW_PREFIX="$(brew --prefix)"
+elif [[ -d "/opt/homebrew" ]]; then
+  export HOMEBREW_PREFIX="/opt/homebrew"
+elif [[ -d "/usr/local/Homebrew" || -x "/usr/local/bin/brew" ]]; then
+  export HOMEBREW_PREFIX="/usr/local"
+fi
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -155,7 +163,7 @@ npx()  { nvm; npx "$@"; }
 # Go Configuration
 # ========================================
 export GOPATH=$HOME/go
-export PATH="/opt/homebrew/opt/go@1.25/bin:$PATH"
+[[ -n "${HOMEBREW_PREFIX:-}" && -d "$HOMEBREW_PREFIX/opt/go@1.25/bin" ]] && export PATH="$HOMEBREW_PREFIX/opt/go@1.25/bin:$PATH"
 export GOTOOLCHAIN="go1.25.6"
 export PATH="$PATH:$GOPATH/bin"
 
@@ -197,11 +205,11 @@ export EDITOR=nvim
 export VISUAL=nvim
 
 # mysql-client
-export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"
-export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+[[ -n "${HOMEBREW_PREFIX:-}" && -d "$HOMEBREW_PREFIX/opt/mysql-client/lib/pkgconfig" ]] && export PKG_CONFIG_PATH="$HOMEBREW_PREFIX/opt/mysql-client/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+[[ -n "${HOMEBREW_PREFIX:-}" && -d "$HOMEBREW_PREFIX/opt/mysql-client/bin" ]] && export PATH="$HOMEBREW_PREFIX/opt/mysql-client/bin:$PATH"
 
 # libpq (PostgreSQL client)
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+[[ -n "${HOMEBREW_PREFIX:-}" && -d "$HOMEBREW_PREFIX/opt/libpq/bin" ]] && export PATH="$HOMEBREW_PREFIX/opt/libpq/bin:$PATH"
 
 export PATH="$HOME/.local/bin:$PATH"
 
