@@ -2,6 +2,8 @@
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
+PROTOBUF_SETUP_SCRIPT="$SETUP_DIR/packages/protobuf.sh"
+
 print_step "Installing Homebrew packages..."
 
 if [ ! -f "$DOTFILES_DIR/Brewfile" ]; then
@@ -14,6 +16,12 @@ fi
     brew bundle check || brew bundle install
 )
 print_success "Homebrew packages installed"
+
+if [ ! -x "$PROTOBUF_SETUP_SCRIPT" ]; then
+    chmod +x "$PROTOBUF_SETUP_SCRIPT"
+fi
+
+bash "$PROTOBUF_SETUP_SCRIPT"
 
 if brew list libpq >/dev/null 2>&1; then
     brew link --force libpq >/dev/null 2>&1 || true
