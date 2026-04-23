@@ -42,6 +42,7 @@ brew "awscli"          # AWS CLI
 brew "helm"            # Kubernetes package manager
 brew "terraform"
 brew "grpcurl"         # gRPC command-line tool
+brew "protobuf"        # Protocol Buffers compiler/tooling
 brew "mysql-client"
 brew "libpq"
 
