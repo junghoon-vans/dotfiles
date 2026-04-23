@@ -7,7 +7,18 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "cli_default_open_behavior": "new_window",
+  "project_panel": {
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
   "git_panel": {
+    "dock": "left",
     "tree_view": true
   },
   "context_servers": {
@@ -63,6 +74,7 @@
   "on_last_window_closed": "quit_app",
   "when_closing_with_no_tabs": "keep_window_open",
   "agent": {
+    "dock": "right",
     "default_model": {
       "provider": "copilot_chat",
       "model": "gpt-5-mini",
