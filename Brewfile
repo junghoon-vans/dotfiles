@@ -49,6 +49,7 @@ brew "libpq"
 cask "cmux"            # Terminal multiplexer app/CLI
 cask "orbstack"        # Fast Docker Desktop alternative
 cask "jordanbaird-ice" # Menu bar management
+cask "hop"             # HWP document viewer/editor
 
 # ========================================
 # Modern CLI Tools (Unix replacements)
