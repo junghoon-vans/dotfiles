@@ -134,7 +134,6 @@ The `setup.sh` script runs the following commands:
    - Installs Homebrew if it is missing
 2. **brew-packages**
    - Installs packages from `Brewfile`
-   - Installs repo-owned `protobuf@34.0` from `Formula/protobuf@34.0.rb` and links `protoc` to that version
    - Applies brew-owned post-install steps such as FZF setup and `libpq` linking
 3. **languages**
    - Installs Go runtime support used by your shell and tools
