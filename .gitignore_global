@@ -126,7 +126,6 @@ temp/
 # Claude Code
 # ========================================
 
-**/CLAUDE.md
 .sisyphus/
 
 # Project-specific personal settings (not for source control)
