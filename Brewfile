@@ -46,6 +46,7 @@ brew "mysql-client"
 brew "libpq"
 
 # GUI Apps
+cask "warp"            # Rust-based terminal
 cask "cmux"            # Terminal multiplexer app/CLI
 cask "orbstack"        # Fast Docker Desktop alternative
 cask "jordanbaird-ice" # Menu bar management
