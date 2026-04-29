@@ -64,6 +64,9 @@ brew "eza"
 # Better grep (fast search)
 brew "ripgrep"
 
+# Structural code search and rewrite CLI (`sg`)
+brew "ast-grep"
+
 # Better find
 brew "fd"
 
