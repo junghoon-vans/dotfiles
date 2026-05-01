@@ -230,6 +230,8 @@ There is no longer a root `./link.sh` command. Symlink creation is owned by `set
 
 This repo tracks user-level OpenCode and OpenAgent config under `.config/opencode/`.
 
+- OpenCode LSP mappings are tracked in `.config/opencode/opencode.json` for Bash, Go, Gno, Java, Kotlin, Markdown, Python, Rust, Terraform, TypeScript/JavaScript, and YAML.
+- The matching language servers and harness tools are installed by `Brewfile`, including `gopls`, `gnopls`, `rust-analyzer`, `jdtls`, `kotlin-language-server`, `pyright`, `terraform-ls`, `yaml-language-server`, `biome`, `ruff`, `cargo-nextest`, `shellcheck`, `shfmt`, and `yamlfmt`.
 - `oh-my-openagent` terminal notifications are provided by the plugin's built-in notification hook on macOS.
 - The repo explicitly tracks that preference in `.config/opencode/oh-my-openagent.json` via `"notification": { "force_enable": true }`, so notification behavior syncs through dotfiles instead of relying on plugin defaults.
 - Agent routing is tuned for quality, speed, and cost: high-impact agents/categories use GPT-5.5, while search, review, writing, and quick paths use GPT-5.4.
