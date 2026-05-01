@@ -21,6 +21,7 @@ brew "uv"
 
 brew "neovim"
 brew "mole"
+brew "hugo"            # Fast static site generator
 
 brew "git"
 brew "git-delta"       # Syntax-highlighting pager for git diff/log
