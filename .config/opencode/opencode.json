@@ -122,6 +122,16 @@
         ".js",
         ".jsx"
       ]
+    },
+    "yaml-ls": {
+      "command": [
+        "yaml-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ]
     }
   }
 }
