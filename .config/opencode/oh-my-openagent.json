@@ -90,7 +90,10 @@
   "skills": {
     "enable": [
       "git-master",
-      "playwright"
+      "playwright",
+      "review-work",
+      "ai-slop-remover",
+      "frontend-ui-ux"
     ]
   },
   "notification": {
