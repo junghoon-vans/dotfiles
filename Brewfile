@@ -41,6 +41,12 @@ brew "bash-language-server" # Bash LSP server
 brew "pyright"         # Python LSP server
 brew "terraform-ls"    # Terraform LSP server
 brew "biome"           # JS/TS/JSON/CSS formatter, linter, and LSP helper
+brew "yaml-language-server" # YAML LSP server
+brew "ruff"            # Python formatter and linter
+brew "cargo-nextest"   # Rust test runner
+brew "shellcheck"      # Shell script static analysis
+brew "shfmt"           # Shell script formatter
+brew "yamlfmt"         # YAML formatter
 
 # Infrastructure & Data Tools
 brew "awscli"          # AWS CLI
