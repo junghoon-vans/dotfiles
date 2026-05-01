@@ -1,7 +1,0 @@
-# cmux reads Ghostty-compatible font/render settings from here.
-# Keep the Nerd Font primary for icons and prefer D2Coding for Hangul.
-copy-on-select = clipboard
-font-family = ""
-font-family = "FiraCode Nerd Font Mono"
-font-family = "D2Coding"
-font-family = "Apple Color Emoji"

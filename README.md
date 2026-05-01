@@ -226,12 +226,6 @@ This repo already tracks Neovim config in `.config/nvim`, so setup no longer boo
 
 There is no longer a root `./link.sh` command. Symlink creation is owned by `setup/link.sh` and invoked through the `links` command.
 
-### Ghostty / cmux
-
-This repo also tracks Ghostty-compatible terminal font settings in `.config/ghostty/config`.
-
-`cmux` reads Ghostty config for fonts and colors, so the tracked Ghostty config keeps `FiraCode Nerd Font Mono` as the primary font for terminal icons and adds `D2Coding` as the Hangul fallback to improve Korean rendering.
-
 ### OpenCode / OpenAgent
 
 This repo tracks user-level OpenCode and OpenAgent config under `.config/opencode/`.

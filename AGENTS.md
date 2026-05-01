@@ -10,13 +10,12 @@ macOS dotfiles management repository. Symlinks config files to $HOME, automated 
 ## STRUCTURE
 ```
 dotfiles/
-├── .config/              # App configs (zed, nvim, karabiner, opencode, ghostty, gh)
+├── .config/              # App configs (zed, nvim, karabiner, opencode, gh)
 │   ├── zed/settings.json
 │   ├── nvim/             # Neovim config (LazyVim)
 │   ├── karabiner/        # Keyboard remapping
 │   ├── opencode/         # openagent config
-│   ├── gh/config.yml     # GitHub CLI config (excludes hosts.yml - contains tokens)
-│   └── ghostty/          # Terminal font config for cmux
+│   └── gh/config.yml     # GitHub CLI config (excludes hosts.yml - contains tokens)
 ├── .zshrc               # Zsh shell config
 ├── .gitconfig           # Git config (delta pager, aliases)
 ├── .gitignore_global    # Global Git ignore
