@@ -232,6 +232,21 @@ This repo tracks user-level OpenCode and OpenAgent config under `.config/opencod
 
 - OpenCode LSP mappings are tracked in `.config/opencode/opencode.json` for Bash, Go, Gno, Java, Kotlin, Markdown, Python, Rust, Terraform, TypeScript/JavaScript, and YAML.
 - The matching language servers and harness tools are installed by `Brewfile`, including `gopls`, `gnopls`, `rust-analyzer`, `jdtls`, `kotlin-language-server`, `pyright`, `terraform-ls`, `yaml-language-server`, `biome`, `ruff`, `cargo-nextest`, `shellcheck`, `shfmt`, and `yamlfmt`.
+
+| Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
+| --- | --- | --- | --- | --- | --- |
+| Bash / Zsh | macOS shell | `bash-language-server` | `shfmt` | `shellcheck` | - |
+| Go | `go@1.25` | `gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
+| Gno | `gno` | `gnopls` | - | `gnopls` diagnostics | `gno test` |
+| Java | SDKMAN Java 11/17/21 | `jdtls` | - | `jdtls` diagnostics | project build tool |
+| Kotlin | SDKMAN Kotlin | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
+| Markdown | - | `marksman` | - | `marksman` diagnostics | - |
+| Python | `uv` | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
+| Rust | `rustup` | `rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
+| Terraform | `terraform` | `terraform-ls` | `terraform fmt` | `terraform validate` | - |
+| TypeScript / JavaScript / JSON / CSS | NVM Node.js LTS, Bun | `typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
+| YAML | - | `yaml-language-server` | `yamlfmt` | YAML LSP diagnostics | - |
+
 - `oh-my-openagent` terminal notifications are provided by the plugin's built-in notification hook on macOS.
 - The repo explicitly tracks that preference in `.config/opencode/oh-my-openagent.json` via `"notification": { "force_enable": true }`, so notification behavior syncs through dotfiles instead of relying on plugin defaults.
 - Agent routing is tuned for quality, speed, and cost: high-impact agents/categories use GPT-5.5, while search, review, writing, and quick paths use GPT-5.4.
