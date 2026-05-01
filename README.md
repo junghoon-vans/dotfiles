@@ -238,6 +238,10 @@ This repo tracks user-level OpenCode and OpenAgent config under `.config/opencod
 
 - `oh-my-openagent` terminal notifications are provided by the plugin's built-in notification hook on macOS.
 - The repo explicitly tracks that preference in `.config/opencode/oh-my-openagent.json` via `"notification": { "force_enable": true }`, so notification behavior syncs through dotfiles instead of relying on plugin defaults.
+- Agent routing is tuned for quality, speed, and cost: high-impact agents/categories use GPT-5.5, while search, review, writing, and quick paths use GPT-5.4.
+- Runtime fallback is enabled, and core GPT-5.5 agents (`sisyphus`, `hephaestus`, `oracle`) fall back to GPT-5.4 for rate-limit or provider failures.
+- Browser automation is pinned to the Playwright provider, and built-in workflow skills (`git-master`, `playwright`, `review-work`, `ai-slop-remover`, `frontend-ui-ux`) are enabled globally.
+- OpenCode MCPs include GitHub, Atlassian, and Context7. Context7 uses the public remote endpoint without committing API keys; set `CONTEXT7_API_KEY` separately if higher rate limits are needed.
 
 ### Customize Karabiner Mappings
 

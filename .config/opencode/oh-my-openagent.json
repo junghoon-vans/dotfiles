@@ -1,18 +1,40 @@
 {
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/dev/assets/oh-my-opencode.schema.json",
+  "runtime_fallback": true,
+  "browser_automation_engine": {
+    "provider": "playwright"
+  },
   "agents": {
     "sisyphus": {
       "model": "openai/gpt-5.5",
+      "fallback_models": [
+        {
+          "model": "openai/gpt-5.4",
+          "variant": "high"
+        }
+      ],
       "variant": "high",
       "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind."
     },
     "hephaestus": {
       "model": "openai/gpt-5.5",
+      "fallback_models": [
+        {
+          "model": "openai/gpt-5.4",
+          "variant": "high"
+        }
+      ],
       "variant": "high",
       "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind."
     },
     "oracle": {
       "model": "openai/gpt-5.5",
+      "fallback_models": [
+        {
+          "model": "openai/gpt-5.4",
+          "variant": "high"
+        }
+      ],
       "variant": "xhigh"
     },
     "librarian": {
