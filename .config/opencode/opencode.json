@@ -21,6 +21,26 @@
     }
   },
   "lsp": {
+    "bash": {
+      "command": [
+        "bash-language-server",
+        "start"
+      ],
+      "extensions": [
+        ".sh",
+        ".bash",
+        ".zsh",
+        ".ksh"
+      ]
+    },
+    "gopls": {
+      "command": [
+        "gopls"
+      ],
+      "extensions": [
+        ".go"
+      ]
+    },
     "marksman": {
       "command": [
         "marksman",
@@ -39,6 +59,23 @@
         ".gno"
       ]
     },
+    "jdtls": {
+      "command": [
+        "jdtls"
+      ],
+      "extensions": [
+        ".java"
+      ]
+    },
+    "kotlin-ls": {
+      "command": [
+        "kotlin-language-server"
+      ],
+      "extensions": [
+        ".kt",
+        ".kts"
+      ]
+    },
     "ruby-lsp-extensionless": {
       "command": [
         "ruby-lsp"
@@ -54,6 +91,24 @@
       ],
       "extensions": [
         ".py"
+      ]
+    },
+    "rust": {
+      "command": [
+        "rust-analyzer"
+      ],
+      "extensions": [
+        ".rs"
+      ]
+    },
+    "terraform": {
+      "command": [
+        "terraform-ls",
+        "serve"
+      ],
+      "extensions": [
+        ".tf",
+        ".tfvars"
       ]
     },
     "typescript-language-server": {
