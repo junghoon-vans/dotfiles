@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Install NVM and the latest Node.js LTS runtime.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 

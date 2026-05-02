@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Install the Bun JavaScript runtime.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 

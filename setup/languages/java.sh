@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Install SDKMAN, Java 11/17/21, and Kotlin.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
