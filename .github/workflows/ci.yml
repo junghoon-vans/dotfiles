@@ -27,7 +27,6 @@ jobs:
             setup/lib/common.sh \
             setup/commands/* \
             setup/languages/*.sh \
-            setup/packages/*.sh \
             setup/apps/*.sh \
             setup/check.sh \
             setup/doctor.sh \
@@ -42,7 +41,6 @@ jobs:
             setup/lib/common.sh \
             setup/commands/* \
             setup/languages/*.sh \
-            setup/packages/*.sh \
             setup/apps/*.sh \
             setup/check.sh \
             setup/doctor.sh \
