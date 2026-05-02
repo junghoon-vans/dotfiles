@@ -355,6 +355,8 @@ if grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/55-karabiner"; then
   exit 1
 fi
 grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/.zshrc"
+grep -q 'cask "brave-browser"' "$REPO_ROOT/Brewfile"
+grep -q 'PLAYWRIGHT_MCP_EXECUTABLE_PATH' "$REPO_ROOT/.zshrc"
 if grep -q 'kaku' "$REPO_ROOT/.zshrc"; then
   printf '.zshrc should not reference kaku\n' >&2
   exit 1

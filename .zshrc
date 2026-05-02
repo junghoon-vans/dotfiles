@@ -215,6 +215,11 @@ export PATH="$HOME/.local/bin:$PATH"
 
 export ANTHROPIC_MODEL="sonnet"
 
+# Playwright MCP browser
+_brave_browser_path="/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+[[ -x "$_brave_browser_path" ]] && export PLAYWRIGHT_MCP_EXECUTABLE_PATH="$_brave_browser_path"
+unset _brave_browser_path
+
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
