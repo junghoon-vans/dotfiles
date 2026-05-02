@@ -20,9 +20,8 @@ dotfiles/
 │   ├── link.sh           # Symlink implementation
 │   ├── lib/common.sh     # Shared shell helpers, output, and prompts
 │   ├── commands/*        # Default setup commands with ordered filenames
-│   ├── languages/*.sh    # Go/Node/Bun/Java/Rust/Python runtime installers
-│   ├── packages/*.sh     # Global Go/Bun CLI installers
-│   └── apps/*.sh         # Oh My Zsh, OpenCode, Zed bootstrap
+│   ├── languages/*.sh    # Runtime and language-specific tooling installers
+│   └── apps/*.sh         # App/bootstrap helpers used by setup commands
 └── tests/setup/          # Setup harness regression tests
 ```
 
@@ -36,7 +35,6 @@ dotfiles/
 | Setup automation | `setup.sh` / `setup/main.sh` | Public entrypoint + filename-driven orchestrator |
 | Setup docs | `docs/setup.md` | Command flow, flags, utility commands |
 | Tooling docs | `docs/tool-matrix.md` | LSP, formatter, linter, harness coverage |
-| Global CLI tools | `setup/packages/*.sh` | Explicit shell installers for Go/Bun tools |
 | Create symlinks | `setup/link.sh` | Links to `$HOME`, backs up only if content differs |
 | Karabiner setup | `setup/commands/55-karabiner` | Karabiner-Elements install and key remapping config |
 | macOS settings | `setup/commands/60-macos` | Finder, Dock, screenshot, and appearance defaults |
@@ -61,10 +59,11 @@ dotfiles/
 
 - All paths use `$HOME` instead of specific usernames.
 - `.config/` mirrors `~/.config/` except repo-local knowledge files such as `.config/AGENTS.md`.
-- `setup.sh` flow is `bootstrap → brew-packages → languages → tool-packages → links → apps → karabiner → macos`.
-- Language runtime commands (`go`, `node`, `bun`, `java`, `rust`, `python`) are explicit options; `languages` is the default umbrella command.
+- `setup.sh` flow is `bootstrap → brew-packages → languages → links → apps → opencode → karabiner → macos`.
+- Language commands (`go`, `node`, `bun`, `java`, `rust`, `python`, `gno`, `typescript`) are explicit options; `languages` is the default umbrella command.
+- `--skip` accepts default, utility, and language command names; utility commands are explicit-only and are not selected by full setup.
 - `setup/link.sh` backs up files only when content differs from the dotfiles version.
-- Go and Bun global CLI tools are installed by explicit shell scripts under `setup/packages/`.
+- Language-specific LSPs, formatters, linters, and related CLIs are installed by their language commands.
 - `set -euo pipefail` is active in all shell scripts; use `|| true` only for intentional optional commands.
 
 ## COMMANDS
@@ -74,7 +73,7 @@ dotfiles/
 ./setup.sh --yes                   # Full non-interactive setup
 ./setup.sh --dry-run               # Preview selected commands
 ./setup.sh --skip karabiner --yes  # Full setup except Karabiner key remapping setup
-./setup.sh languages tool-packages # Run specific default commands
+./setup.sh languages opencode      # Run specific default commands
 ./setup.sh check                   # Run repository checks
 ./setup.sh doctor                  # Inspect host setup state
 brew bundle --file Brewfile        # Install Brewfile packages

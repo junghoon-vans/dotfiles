@@ -15,16 +15,16 @@ OpenCode and OpenAgent config lives under `.config/opencode/`.
 | --- | --- | --- | --- | --- | --- |
 | Bash / Zsh | macOS shell | `bash-language-server` | `shfmt` | `shellcheck` | `bash -n` |
 | Go | `./setup.sh go` (`go@1.25`) | `gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
-| Gno | `gno` | `gnopls` | - | `gnopls` diagnostics | `gno test` |
-| Java | SDKMAN Java 11/17/21 | `jdtls` | - | `jdtls` diagnostics | project build tool |
-| Kotlin | SDKMAN Kotlin | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
+| Gno | `./setup.sh gno` (`gno`) | `gnopls` | - | `gnopls` diagnostics | `gno test` |
+| Java | `./setup.sh java` (SDKMAN Java 11/17/21) | `jdtls` | - | `jdtls` diagnostics | project build tool |
+| Kotlin | `./setup.sh java` (SDKMAN Kotlin) | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
 | Markdown | - | `marksman` | - | `marksman` diagnostics | - |
 | Python | `./setup.sh python` (`uv` + Python) | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
-| Rust | `rustup` | `rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
+| Rust | `./setup.sh rust` (`rustup`) | `rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
 | Terraform | `terraform` | `terraform-ls` | `terraform fmt` | `terraform validate` | - |
-| TypeScript / JavaScript | NVM Node.js LTS, Bun | `typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
-| JSON / JSONC | NVM Node.js LTS, Bun | `biome` | `biome` | `biome` | - |
-| CSS | NVM Node.js LTS, Bun | not mapped | `biome` | `biome` | - |
+| TypeScript / JavaScript | `./setup.sh typescript` | `typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
+| JSON / JSONC | `./setup.sh typescript` | `biome` | `biome` | `biome` | - |
+| CSS | `./setup.sh typescript` | not mapped | `biome` | `biome` | - |
 | YAML | - | `yaml-language-server` | `yamlfmt` | YAML LSP diagnostics | - |
 
 ## Repository Checks
