@@ -87,6 +87,40 @@ if [ "$ACTUAL_LANGUAGE_ORDER" != "$EXPECTED_LANGUAGE_ORDER" ]; then
   exit 1
 fi
 
+LANGUAGE_PROMPT_SETUP_DIR="$TMP_DIR/language-prompt-setup"
+LANGUAGE_PROMPT_LOG="$TMP_DIR/language-prompt.log"
+mkdir -p "$LANGUAGE_PROMPT_SETUP_DIR/languages"
+for language_name in $EXPECTED_LANGUAGE_ORDER; do
+  cat > "$LANGUAGE_PROMPT_SETUP_DIR/languages/$language_name.sh" <<'EOF'
+#!/bin/bash
+printf '%s\n' "$(basename "$0")" >> "$LANGUAGE_PROMPT_LOG"
+EOF
+  chmod +x "$LANGUAGE_PROMPT_SETUP_DIR/languages/$language_name.sh"
+done
+
+LANGUAGE_PROMPT_OUTPUT="$(SETUP_DIR="$LANGUAGE_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 LANGUAGE_PROMPT_LOG="$LANGUAGE_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/30-languages")"
+printf '%s' "$LANGUAGE_PROMPT_OUTPUT" | grep -q "Run language command 'go'? \[Y/n\] yes (--yes)"
+printf '%s' "$LANGUAGE_PROMPT_OUTPUT" | grep -q "Run language command 'xml'? \[Y/n\] yes (--yes)"
+EXPECTED_LANGUAGE_RUNS="$(printf '%s\n' $EXPECTED_LANGUAGE_ORDER | sed 's/$/.sh/')"
+ACTUAL_LANGUAGE_RUNS="$(cat "$LANGUAGE_PROMPT_LOG")"
+if [ "$ACTUAL_LANGUAGE_RUNS" != "$EXPECTED_LANGUAGE_RUNS" ]; then
+  printf 'languages umbrella run order changed: expected "%s", got "%s"\n' "$EXPECTED_LANGUAGE_RUNS" "$ACTUAL_LANGUAGE_RUNS" >&2
+  exit 1
+fi
+
+: > "$LANGUAGE_PROMPT_LOG"
+LANGUAGE_SKIP_PROMPT_OUTPUT="$(SETUP_DIR="$LANGUAGE_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 SETUP_SKIP_COMMANDS=' gno typescript ' LANGUAGE_PROMPT_LOG="$LANGUAGE_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/30-languages")"
+printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping language command: gno'
+printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping language command: typescript'
+if printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q "Run language command 'gno'?"; then
+  printf 'skipped language command should not prompt: gno\n' >&2
+  exit 1
+fi
+if grep -q '^gno.sh$\|^typescript.sh$' "$LANGUAGE_PROMPT_LOG"; then
+  printf 'skipped language commands should not run\n' >&2
+  exit 1
+fi
+
 python3 - "$REPO_ROOT/.config/opencode/opencode.json" <<'PY'
 import json
 import sys

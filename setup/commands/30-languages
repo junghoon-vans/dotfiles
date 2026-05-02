@@ -11,5 +11,10 @@ for language_name in go node bun java xml rust python gno typescript; do
             ;;
     esac
 
+    if ! confirm "Run language command '$language_name'?" "yes"; then
+        print_info "Skipped language command: $language_name"
+        continue
+    fi
+
     bash "$SETUP_DIR/languages/$language_name.sh"
 done

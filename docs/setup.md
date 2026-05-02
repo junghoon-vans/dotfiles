@@ -14,7 +14,7 @@
 ```
 
 `--skip` accepts default commands, utility commands, and language commands, but utility commands are never selected unless passed explicitly.
-Interactive runs print each command description before asking for Y/n confirmation, so you can see what the step installs or changes before approving it.
+Interactive runs print each command description before asking for Y/n confirmation, so you can see what the step installs or changes before approving it. The `languages` command also asks before each language subcommand.
 
 ## Default Commands
 
