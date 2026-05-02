@@ -13,7 +13,7 @@
 ./setup.sh --skip karabiner # Exclude one command from a full setup
 ```
 
-`--skip` accepts both default commands and utility commands, but utility commands are never selected unless passed explicitly.
+`--skip` accepts default commands, utility commands, and language commands, but utility commands are never selected unless passed explicitly.
 Interactive runs print each command description before asking for Y/n confirmation, so you can see what the step installs or changes before approving it.
 
 ## Default Commands
@@ -22,10 +22,10 @@ Interactive runs print each command description before asking for Y/n confirmati
 | --- | --- |
 | `bootstrap` | Installs Homebrew if it is missing. |
 | `brew-packages` | Installs common `Brewfile` dependencies and brew-owned post-install steps. |
-| `languages` | Installs all language runtimes by running `go`, `node`, `bun`, `java`, `rust`, and `python`. |
-| `tool-packages` | Installs global Go and Bun CLI tools from explicit scripts. |
+| `languages` | Installs all language runtimes and language-specific tools by running `go`, `node`, `bun`, `java`, `rust`, `python`, `gno`, and `typescript`. |
 | `links` | Creates symlinks from this repo into `$HOME`. |
-| `apps` | Installs Oh My Zsh, OpenCode/OpenAgent, and Zed Gno extension support. |
+| `apps` | Installs Oh My Zsh and Zed Gno extension support. |
+| `opencode` | Installs OpenCode and bootstraps oh-my-openagent. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
 | `macos` | Applies keyboard, Finder, Dock, screenshot, appearance, and related defaults. |
 
@@ -38,23 +38,28 @@ Interactive runs print each command description before asking for Y/n confirmati
 
 ## Language Commands
 
-Language runtime commands are explicit options as well as the building blocks of `languages`:
+Language commands are explicit options as well as the building blocks of `languages`:
 
 | Command | Purpose |
 | --- | --- |
-| `go` | Installs `go@1.25` with Homebrew and activates it on `PATH`. |
+| `go` | Installs Go, `gopls`, `golangci-lint`, and `gofumpt`. |
 | `node` | Installs NVM and Node.js LTS. |
 | `bun` | Installs the Bun runtime. |
-| `java` | Installs SDKMAN, Java 11/17/21, and Kotlin. |
-| `rust` | Installs Rust with rustup. |
-| `python` | Installs `uv` with Homebrew and installs the latest stable Python through `uv`. |
+| `java` | Installs SDKMAN, Java 11/17/21, Kotlin, `jdtls`, and `kotlin-language-server`. |
+| `rust` | Installs Rust with rustup, `rust-analyzer`, and `cargo-nextest`. |
+| `python` | Installs `uv`, Python, `pyright`, and `ruff`. |
+| `gno` | Installs `gno` and `gnopls` using Go. |
+| `typescript` | Installs TypeScript, TypeScript LSP, and Biome. |
 
 Examples:
 
 ```bash
 ./setup.sh go python
+./setup.sh go gno bun typescript
 ./setup.sh --skip rust --yes
 ```
+
+`gno` expects Go to be available, and `typescript` expects Bun to be available. Run the prerequisite language commands first on a clean host, or use `languages` to install the full ordered set.
 
 ## Symlink Behavior
 

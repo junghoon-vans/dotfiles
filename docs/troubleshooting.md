@@ -27,7 +27,7 @@ Use dry-run mode before applying setup commands:
 ```bash
 ./setup.sh --dry-run
 ./setup.sh --dry-run --skip karabiner
-./setup.sh --dry-run languages tool-packages
+./setup.sh --dry-run languages opencode
 ```
 
 ## Avoid Karabiner or macOS Defaults

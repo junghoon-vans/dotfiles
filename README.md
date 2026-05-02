@@ -42,10 +42,10 @@ Default commands run in filename order from `setup/commands/`:
 
 1. `bootstrap` - install Homebrew if needed
 2. `brew-packages` - install common `Brewfile` packages and brew-owned post-install steps
-3. `languages` - install all language runtimes (`go`, `node`, `bun`, `java`, `rust`, `python`)
-4. `tool-packages` - install global Go and Bun CLI tools
-5. `links` - create symlinks for dotfiles and `.config/*`
-6. `apps` - install Oh My Zsh, OpenCode/OpenAgent, and Zed Gno extension support
+3. `languages` - install all language runtimes and language-specific tools
+4. `links` - create symlinks for dotfiles and `.config/*`
+5. `apps` - install Oh My Zsh and Zed Gno extension support
+6. `opencode` - install OpenCode and bootstrap OpenAgent
 7. `karabiner` - install Karabiner-Elements for key remapping
 8. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
 
@@ -68,7 +68,7 @@ Utility commands are explicit only and are not part of full setup:
 ```bash
 ./setup.sh --help
 ./setup.sh go python
-./setup.sh languages tool-packages
+./setup.sh languages opencode
 ./setup.sh links apps
 ./setup.sh check
 ./setup.sh doctor
