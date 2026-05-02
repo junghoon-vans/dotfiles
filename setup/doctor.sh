@@ -12,6 +12,17 @@ source "$SETUP_DIR/lib/common.sh"
 
 missing=0
 
+warn_command() {
+    local command_name="$1"
+    local hint="$2"
+
+    if command -v "$command_name" >/dev/null 2>&1; then
+        print_success "$command_name found"
+    else
+        print_info "$command_name missing — $hint"
+    fi
+}
+
 require_command() {
     local command_name="$1"
     local hint="$2"
@@ -54,9 +65,9 @@ fi
 
 require_command git "install Git or run ./setup.sh bootstrap"
 require_command bash "install Bash"
-require_command python3 "install Python 3"
-require_command ruby "install Ruby for Brewfile syntax checks"
-require_command brew "install Homebrew or run ./setup.sh bootstrap"
+warn_command python3 "run ./setup.sh python before Python-based checks"
+warn_command ruby "install Ruby before Brewfile syntax checks"
+warn_command brew "run ./setup.sh bootstrap before brew-managed setup"
 
 if command -v brew >/dev/null 2>&1; then
     print_info "Checking Brewfile package state..."
@@ -81,7 +92,10 @@ for command_name in ruff biome; do
     if command -v "$command_name" >/dev/null 2>&1; then
         print_success "$command_name found"
     else
-        print_info "$command_name missing; run the related language command"
+        case "$command_name" in
+            ruff) print_info "$command_name missing; run ./setup.sh python" ;;
+            biome) print_info "$command_name missing; run ./setup.sh typescript" ;;
+        esac
     fi
 done
 

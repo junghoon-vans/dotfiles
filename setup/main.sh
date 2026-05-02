@@ -141,6 +141,10 @@ print_supported_commands() {
   while IFS= read -r command_name; do
     print_command_entry "$command_name"
   done < <(language_commands)
+
+  printf '\nNotes:\n'
+  printf '  %-14s %s\n' 'gno' 'Requires Go; run ./setup.sh go first on a clean host.'
+  printf '  %-14s %s\n' 'typescript' 'Requires Bun; run ./setup.sh bun first on a clean host.'
 }
 
 print_help() {
@@ -214,6 +218,34 @@ selected_commands_are_utilities() {
   done
 
   return 0
+}
+
+selected_commands_affect_shell() {
+  local command_name=""
+
+  for command_name in "$@"; do
+    case "$command_name" in
+      bootstrap|brew-packages|languages|links|apps|opencode|go|node|bun|java|rust|python|gno|typescript)
+        return 0
+        ;;
+    esac
+  done
+
+  return 1
+}
+
+selected_commands_affect_zed_gno() {
+  local command_name=""
+
+  for command_name in "$@"; do
+    case "$command_name" in
+      apps)
+        return 0
+        ;;
+    esac
+  done
+
+  return 1
 }
 
 print_selected_commands() {
@@ -317,11 +349,18 @@ main() {
       filtered_commands+=("$raw_command")
     done
 
-    selected_commands=("${filtered_commands[@]}")
+    selected_commands=()
+    if [ ${#filtered_commands[@]} -gt 0 ]; then
+      selected_commands=("${filtered_commands[@]}")
+    fi
   fi
 
   if [ ${#selected_commands[@]} -eq 0 ]; then
-    print_error "No setup commands selected"
+    if [ ${#skipped_commands[@]} -gt 0 ]; then
+      print_error "All selected commands were skipped: ${skipped_commands[*]}"
+    else
+      print_error "No setup commands selected"
+    fi
     exit 1
   fi
 
@@ -348,9 +387,17 @@ main() {
   echo -e "\033[1;32m  Setup Complete! 🎉\033[0m"
   echo -e "\033[1;32m========================================\033[0m"
   echo ""
-  echo -e "\033[1;36mNext steps:\033[0m"
-  echo -e "  1. Restart your terminal or run: \033[1;33msource ~/.zshrc\033[0m"
-  echo -e "  2. Activate Gno support in Zed if needed: \033[1;33mCmd+Shift+P → 'zed: install dev extension' → ~/.local/share/zed/dev-extensions/zed-gno\033[0m"
+  if selected_commands_affect_shell "${selected_commands[@]}" || selected_commands_affect_zed_gno "${selected_commands[@]}"; then
+    local next_step_number=1
+    echo -e "\033[1;36mNext steps:\033[0m"
+    if selected_commands_affect_shell "${selected_commands[@]}"; then
+      echo -e "  $next_step_number. Restart your terminal or run: \033[1;33msource ~/.zshrc\033[0m"
+      next_step_number=$((next_step_number + 1))
+    fi
+    if selected_commands_affect_zed_gno "${selected_commands[@]}"; then
+      echo -e "  $next_step_number. Activate Gno support in Zed if needed: \033[1;33mCmd+Shift+P → 'zed: install dev extension' → ~/.local/share/zed/dev-extensions/zed-gno\033[0m"
+    fi
+  fi
 }
 
 main "$@"
