@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Install Go, Node.js, Bun, Java/Kotlin, Rust, and Python support.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 

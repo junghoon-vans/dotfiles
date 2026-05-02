@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Install global Go and Bun CLI tools used by the development harness.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
