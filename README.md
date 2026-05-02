@@ -1,280 +1,80 @@
 # Dotfiles
 
-Personal development environment configuration files for macOS, optimized for Go, Rust, Java, and Kotlin development with modern CLI tools.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-  - [Zsh Configuration](#zsh-configuration)
-  - [Git Configuration](#git-configuration)
-  - [Development Environments](#development-environments)
-  - [Modern CLI Tools](#modern-cli-tools)
-  - [Keyboard Customization](#keyboard-customization)
-- [Installation](#installation)
-  - [Automatic Setup (Recommended)](#automatic-setup-recommended)
-- [What Gets Installed](#what-gets-installed)
-- [Customization](#customization)
-- [Useful Commands](#useful-commands)
+Personal macOS dotfiles optimized for Go, Rust, Java, Kotlin, Python, Node.js, and modern CLI tooling.
 
 ## Overview
 
-This repository contains my personal dotfiles for:
-- **Zsh** configuration with Oh My Zsh
-- **Git** configuration with useful aliases and color schemes
-- **Global gitignore** for common temporary and system files
-- **Neovim** with LazyVim
-- **Karabiner-Elements** keyboard customization
+This repository manages:
 
-## Features
+- Zsh and Oh My Zsh configuration
+- Git, Delta, and global ignore configuration
+- Neovim, Zed, Karabiner-Elements, GitHub CLI, and OpenCode config under `.config/`
+- Homebrew packages through `Brewfile`
+- A command-based setup harness under `setup/`
 
-### Zsh Configuration
-- **Prompt**: Uses the [Spaceship](https://github.com/spaceship-prompt/spaceship-prompt) Oh My Zsh theme by default
-- **Plugins**:
-  - git, golang, docker, npm, node, brew, macos, sudo
-  - web-search, jsontools, colored-man-pages
-  - zsh-completions, zsh-autosuggestions, zsh-syntax-highlighting
-  - zsh-hangul - Auto Korean/English switching for better terminal experience
-- **FZF** integration for fuzzy finding
-- **Zoxide** for smart directory navigation
-
-### Git Configuration
-- User: Junghoon Ban (junghoon.ban@gmail.com)
-- Default editor: `nvim`
-- Default branch: `main`
-- **Useful aliases**:
-  - `co` = checkout
-  - `br` = branch
-  - `ci` = commit
-  - `st` = status
-  - `unstage` = reset HEAD --
-  - `last` = log -1 HEAD
-  - `visual` = graphical log view
-  - `lg` = pretty formatted log with graph
-- **Enhanced colors** for better readability
-- **Delta** pager for syntax-highlighted, side-by-side diffs
-- **Merge/Diff tool**: vimdiff with diff3 conflict style
-- **GitHub Actions**: `act` for running workflows locally
-
-### Development Environments
-
-#### Go Development
-- Custom Go path configuration
-
-#### Rust Development
-- Cargo configuration via rustup
-
-#### Java/Kotlin Development (via SDKMAN)
-- Java 11, 17, 21 (Temurin)
-- Kotlin (latest version)
-- Managed through SDKMAN for easy version switching
-
-#### Node.js Development
-- NVM for Node.js version management
-- Node.js LTS installed by default
-
-#### Python Development
-- uv for Python installation and project/package management
-- Latest stable Python installed via `uv python install --default`
-
-### Modern CLI Tools
-Aliases for enhanced command-line experience:
-- `cat` → `bat` (syntax highlighting)
-- `ls` → `eza` (better file listing with icons)
-- `grep` → `rg` (ripgrep - faster search)
-- `lg` → `lazygit` (terminal UI for git)
-
-### Keyboard Customization
-**Karabiner-Elements** configuration for macOS:
-- `left_control + j/k/i/l` → Arrow keys (alternative mapping)
-- `caps_lock` → `left_control`
-- Korean input: Won sign(₩) → Backtick(`) - Inputs backtick instead of won sign when Korean input source is active
-
-### AI Tools
-- OpenCode
-
-### Global Gitignore
-Comprehensive ignore patterns for:
-- macOS system files (.DS_Store, etc.)
-- IDEs (VSCode, JetBrains, Vim, Sublime)
-- Go build artifacts
-- Node.js dependencies
-- Environment files and secrets
-- Build and temporary files
-
-## Installation
-
-### Automatic Setup (Recommended)
-
-The easiest way to set up everything at once:
+## Quick Start
 
 ```bash
-# Clone this repository
 git clone https://github.com/junghoon-vans/dotfiles.git ~/workspace/dotfiles
 cd ~/workspace/dotfiles
-
-# Run the setup script (installs everything)
-chmod +x setup.sh
 ./setup.sh
 ```
 
-You can also run specific setup commands:
+For non-interactive setup:
 
 ```bash
-./setup.sh bootstrap
-./setup.sh brew-packages languages tool-packages
-./setup.sh links apps
+./setup.sh --yes
+./setup.sh --skip keyboard --yes
+./setup.sh --skip macos --yes
 ```
 
-Setup supports both interactive and non-interactive runs:
+Preview what would run without changing the machine:
 
 ```bash
-./setup.sh --yes                    # Run full setup and answer yes to prompts
-./setup.sh --no-input               # Run full setup using each prompt's default answer
-./setup.sh --dry-run                # Print selected commands without running them
-./setup.sh --skip macos --yes       # Run full setup except macOS defaults
-./setup.sh --skip keyboard --yes    # Run full setup except keyboard defaults
-./setup.sh --yes languages apps     # Run selected commands non-interactively
+./setup.sh --dry-run
+./setup.sh --dry-run --skip keyboard
 ```
 
-### What Gets Installed
+## Setup Commands
 
-The `setup.sh` script runs the following commands:
+Default commands run in filename order from `setup/commands/`:
 
-1. **bootstrap**
-   - Installs Homebrew if it is missing
-2. **brew-packages**
-   - Installs packages from `Brewfile`
-   - Applies brew-owned post-install steps such as FZF setup and `libpq` linking
-3. **languages**
-   - Installs Go runtime support used by your shell and tools
-   - Installs NVM and Node.js LTS
-   - Installs Bun runtime
-   - Installs SDKMAN, Java 11/17/21, and Kotlin
-   - Installs Rust via rustup (optional prompt)
-   - Installs latest stable Python via `uv python install --default`
-4. **tool-packages**
-   - Installs global Go CLI tools from explicit shell installers
-   - Installs global Bun CLI tools from explicit shell installers
-5. **links**
-   - Creates symlinks for tracked dotfiles and `.config/*`
-6. **apps**
-   - Installs Oh My Zsh, plugins, and Spaceship fallback theme
-   - Bootstraps `oh-my-openagent`
-   - Sets up the Zed Gno dev extension
-7. **keyboard**
-   - Applies keyboard defaults such as key repeat and automatic text substitution settings
-8. **macos**
-   - Applies macOS defaults for Finder, Dock, screenshots, and appearance
+1. `bootstrap` - install Homebrew if needed
+2. `brew-packages` - install `Brewfile` packages and brew-owned post-install steps
+3. `languages` - install Go, Node.js, Bun, SDKMAN Java/Kotlin, Rust, and Python support
+4. `tool-packages` - install global Go and Bun CLI tools
+5. `links` - create symlinks for dotfiles and `.config/*`
+6. `apps` - install Oh My Zsh, OpenCode/OpenAgent, and Zed Gno extension support
+7. `keyboard` - apply keyboard defaults
+8. `macos` - apply Finder, Dock, screenshot, and appearance defaults
 
-After installation:
-```bash
-# Reload your shell configuration
-source ~/.zshrc
-
-# Or restart your terminal
-```
-
-## Customization
-
-### Update Git User Information
-
-The `.gitconfig` file includes support for local overrides. This allows you to keep personal settings separate from the shared configuration.
-
-**Recommended approach:**
-1. Copy the example file:
-   ```bash
-   cp ~/workspace/dotfiles/.gitconfig.override.example ~/.gitconfig.override
-   ```
-
-2. Edit `~/.gitconfig.override` with your personal settings:
-   ```ini
-   [user]
-       name = Your Name
-       email = your.email@example.com
-   ```
-
-This approach has several advantages:
-- Your personal info is not tracked in git
-- You can override any setting from `.gitconfig`
-- You can use `includeIf` for directory-specific configs (e.g., different email for work projects)
-
-**Alternative:** You can still edit `.gitconfig` directly, but the local override method is more flexible and keeps your personal data private.
-
-### Add Custom Aliases
-
-Add your own aliases in `~/.zshrc` or create separate files in `$ZSH_CUSTOM/` (e.g., `~/.oh-my-zsh/custom/aliases.zsh`).
-
-### Machine-specific Overrides
-
-Create `~/.zshrc.local` for settings that shouldn't be tracked (work proxies, machine-specific paths, etc.):
+Utility commands are explicit only and are not part of full setup:
 
 ```bash
-# ~/.zshrc.local - not tracked in git
-export SOME_WORK_VAR=value
+./setup.sh doctor    # Inspect host prerequisites and symlink state
+./setup.sh check     # Run repository validation checks
 ```
 
-This file is automatically sourced at the end of `.zshrc` if it exists.
+## Documentation
 
-### Modify Zsh Prompt
-
-By default, `.zshrc` uses the Spaceship Oh My Zsh theme. To change the prompt behavior, edit the `ZSH_THEME` setting in `.zshrc`:
-```bash
-ZSH_THEME="your-theme-name"
-```
-
-### Neovim
-
-This repo already tracks Neovim config in `.config/nvim`, so setup no longer bootstraps a LazyVim starter into `~/.config/nvim`. The `links` command is the source of truth for Neovim configuration on a new machine.
-
-### Setup Internals
-
-`./setup.sh` remains the public entrypoint, but the implementation now lives under `setup/`:
-
-- `setup/main.sh` orchestrates commands
-- `setup/commands/` contains ordered command files such as `10-bootstrap` and `40-links`
-- `setup/languages/` contains runtime installers
-- `setup/packages/` contains global CLI installers
-- `setup/apps/` contains app/bootstrap scripts
-
-There is no longer a root `./link.sh` command. Symlink creation is owned by `setup/link.sh` and invoked through the `links` command.
-
-### OpenCode / OpenAgent
-
-This repo tracks user-level OpenCode and OpenAgent config under `.config/opencode/`.
-
-- OpenCode LSP mappings are tracked in `.config/opencode/opencode.json` for Bash, Go, Gno, Java, Kotlin, Markdown, Python, Rust, Terraform, TypeScript/JavaScript, and YAML.
-- The matching language servers and harness tools are installed by `Brewfile`, including `gopls`, `gnopls`, `rust-analyzer`, `jdtls`, `kotlin-language-server`, `pyright`, `terraform-ls`, `yaml-language-server`, `biome`, `ruff`, `cargo-nextest`, `shellcheck`, `shfmt`, and `yamlfmt`.
-
-| Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
-| --- | --- | --- | --- | --- | --- |
-| Bash / Zsh | macOS shell | `bash-language-server` | `shfmt` | `shellcheck` | - |
-| Go | `go@1.25` | `gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
-| Gno | `gno` | `gnopls` | - | `gnopls` diagnostics | `gno test` |
-| Java | SDKMAN Java 11/17/21 | `jdtls` | - | `jdtls` diagnostics | project build tool |
-| Kotlin | SDKMAN Kotlin | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
-| Markdown | - | `marksman` | - | `marksman` diagnostics | - |
-| Python | `uv` | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
-| Rust | `rustup` | `rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
-| Terraform | `terraform` | `terraform-ls` | `terraform fmt` | `terraform validate` | - |
-| TypeScript / JavaScript / JSON / CSS | NVM Node.js LTS, Bun | `typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
-| YAML | - | `yaml-language-server` | `yamlfmt` | YAML LSP diagnostics | - |
-
-- `oh-my-openagent` terminal notifications are provided by the plugin's built-in notification hook on macOS.
-- The repo explicitly tracks that preference in `.config/opencode/oh-my-openagent.json` via `"notification": { "force_enable": true }`, so notification behavior syncs through dotfiles instead of relying on plugin defaults.
-- Agent routing is tuned for quality, speed, and cost: high-impact agents/categories use GPT-5.5, while search, review, writing, and quick paths use GPT-5.4.
-- Runtime fallback is enabled, and core GPT-5.5 agents (`sisyphus`, `hephaestus`, `oracle`) fall back to GPT-5.4 for rate-limit or provider failures.
-- Browser automation is pinned to the Playwright provider, and built-in workflow skills (`git-master`, `playwright`, `review-work`, `ai-slop-remover`, `frontend-ui-ux`) are enabled globally.
-- OpenCode MCPs include GitHub, Atlassian, and Context7. Context7 uses the public remote endpoint without committing API keys; set `CONTEXT7_API_KEY` separately if higher rate limits are needed.
-
-### Customize Karabiner Mappings
-
-Edit `.config/karabiner/karabiner.json` to customize keyboard mappings. Changes are automatically synced via symlink.
+- [Setup guide](docs/setup.md)
+- [Tool matrix](docs/tool-matrix.md)
+- [Local overrides](docs/local-overrides.md)
+- [Troubleshooting](docs/troubleshooting.md)
 
 ## Useful Commands
 
-### Navigation
-- `..` - Go up one directory
-- `...` - Go up two directories
-- `....` - Go up three directories
-- `z <directory>` - Jump to frequently used directory (zoxide)
+```bash
+./setup.sh --help
+./setup.sh languages tool-packages
+./setup.sh links apps
+./setup.sh check
+./setup.sh doctor
+brew bundle --file Brewfile
+```
+
+After setup, reload the shell:
+
+```bash
+source ~/.zshrc
+```
