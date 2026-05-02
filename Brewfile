@@ -17,6 +17,7 @@ brew "git-delta"       # Syntax-highlighting pager for git diff/log
 brew "gh"              # GitHub CLI
 brew "lazygit"         # Terminal UI for git
 brew "act"             # Run GitHub Actions locally
+brew "actionlint"      # GitHub Actions workflow linter
 brew "prek"            # pre-commit re-implemented in Rust
 brew "delve"           # Go debugger
 brew "go-task"         # Task runner
