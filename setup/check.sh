@@ -19,7 +19,6 @@ bash -n \
     "$SETUP_DIR/lib/common.sh" \
     "$SETUP_DIR"/commands/* \
     "$SETUP_DIR"/languages/*.sh \
-    "$SETUP_DIR"/packages/*.sh \
     "$SETUP_DIR"/apps/*.sh \
     "$SETUP_DIR/check.sh" \
     "$SETUP_DIR/doctor.sh" \
@@ -33,7 +32,6 @@ if command -v shellcheck >/dev/null 2>&1; then
         "$SETUP_DIR/lib/common.sh" \
         "$SETUP_DIR"/commands/* \
         "$SETUP_DIR"/languages/*.sh \
-        "$SETUP_DIR"/packages/*.sh \
         "$SETUP_DIR"/apps/*.sh \
         "$SETUP_DIR/check.sh" \
         "$SETUP_DIR/doctor.sh" \
@@ -72,6 +70,6 @@ if command -v git >/dev/null 2>&1 && git -C "$DOTFILES_DIR" rev-parse --is-insid
 fi
 
 print_info "Running setup regression test..."
-bash "$DOTFILES_DIR/tests/setup/tool-packages-command.sh"
+bash "$DOTFILES_DIR/tests/setup/setup-command-regression.sh"
 
 print_success "Repository checks passed"
