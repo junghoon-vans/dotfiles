@@ -69,6 +69,6 @@ jobs:
         shell: bash
         run: |
           ./setup.sh --dry-run
-          ./setup.sh --dry-run --skip keyboard
+          ./setup.sh --dry-run --skip karabiner
           ./setup.sh --dry-run --skip macos
           ./setup.sh --dry-run check doctor

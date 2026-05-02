@@ -54,6 +54,8 @@ export PATH="$FAKE_BIN:$PATH"
 
 HELP_OUTPUT="$("$REPO_ROOT/setup.sh" --help)"
 printf '%s' "$HELP_OUTPUT" | grep -q 'tool-packages'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install global Go and Bun CLI tools'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--yes'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--no-input'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--dry-run'
@@ -62,22 +64,23 @@ printf '%s' "$HELP_OUTPUT" | grep -q -- '--skip COMMAND'
 DRY_RUN_OUTPUT="$("$REPO_ROOT/setup.sh" --dry-run --skip macos)"
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Selected setup commands'
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'languages'
-printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  keyboard$'
+printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  karabiner[[:space:]]\+Install Karabiner-Elements'
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Skipping command: macos'
-if printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  macos$'; then
+if printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  macos[[:space:]]'; then
   printf 'dry-run selected commands should not include skipped macos command\n' >&2
   exit 1
 fi
 
-KEYBOARD_SKIP_OUTPUT="$("$REPO_ROOT/setup.sh" --dry-run --skip keyboard)"
-printf '%s' "$KEYBOARD_SKIP_OUTPUT" | grep -q 'Skipping command: keyboard'
-if printf '%s' "$KEYBOARD_SKIP_OUTPUT" | grep -q '^  keyboard$'; then
-  printf 'dry-run selected commands should not include skipped keyboard command\n' >&2
+KARABINER_SKIP_OUTPUT="$("$REPO_ROOT/setup.sh" --dry-run --skip karabiner)"
+printf '%s' "$KARABINER_SKIP_OUTPUT" | grep -q 'Skipping command: karabiner'
+if printf '%s' "$KARABINER_SKIP_OUTPUT" | grep -q '^  karabiner[[:space:]]'; then
+  printf 'dry-run selected commands should not include skipped karabiner command\n' >&2
   exit 1
 fi
 
 NO_INPUT_OUTPUT="$("$REPO_ROOT/setup.sh" --no-input --dry-run bootstrap)"
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'bootstrap'
+printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'Install Homebrew if it is missing'
 
 bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
 bash "$REPO_ROOT/setup/languages/bun.sh" >/dev/null
@@ -186,9 +189,10 @@ grep -q 'eval "$(brew shellenv)"' "$BOOTSTRAP_HOME/.zprofile"
 grep -q 'setup/link.sh' "$REPO_ROOT/setup/commands/40-links"
 # shellcheck disable=SC2016
 grep -q 'eval "$(brew shellenv)"' "$REPO_ROOT/setup/commands/10-bootstrap"
-grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/55-keyboard"
-if grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/60-macos"; then
-  printf 'macos command should not apply keyboard defaults\n' >&2
+grep -q 'karabiner-elements' "$REPO_ROOT/setup/commands/55-karabiner"
+grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/60-macos"
+if grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/55-karabiner"; then
+  printf 'karabiner command should not apply macOS keyboard defaults\n' >&2
   exit 1
 fi
 grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/.zshrc"
