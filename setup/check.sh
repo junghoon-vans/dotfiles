@@ -40,6 +40,13 @@ else
     print_info "shellcheck not found; skipping shellcheck"
 fi
 
+if command -v actionlint >/dev/null 2>&1; then
+    print_info "Running actionlint..."
+    actionlint
+else
+    print_info "actionlint not found; skipping actionlint"
+fi
+
 print_info "Validating JSON config..."
 python3 -m json.tool "$DOTFILES_DIR/.config/opencode/opencode.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/.config/opencode/oh-my-openagent.json" >/dev/null
