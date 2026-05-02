@@ -33,6 +33,17 @@
         ".ksh"
       ]
     },
+    "biome": {
+      "command": [
+        "biome",
+        "lsp-proxy",
+        "--stdio"
+      ],
+      "extensions": [
+        ".json",
+        ".jsonc"
+      ]
+    },
     "gopls": {
       "command": [
         "gopls"
@@ -74,14 +85,6 @@
       "extensions": [
         ".kt",
         ".kts"
-      ]
-    },
-    "ruby-lsp-extensionless": {
-      "command": [
-        "ruby-lsp"
-      ],
-      "extensions": [
-        ""
       ]
     },
     "pyright": {
