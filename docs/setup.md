@@ -35,6 +35,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | --- | --- |
 | `doctor` | Checks required host tools, Brewfile package state, harness tools, and core symlink targets. |
 | `check` | Runs repository validation: shell syntax, optional shellcheck, JSON parsing, Brewfile syntax, whitespace checks, and setup smoke tests. |
+| `clean-backups` | Removes managed `*.backup.YYYYMMDD-HHMMSS` files created by `links` when the current target is linked to this repo. |
 
 ## Language Commands
 
@@ -64,5 +65,7 @@ Examples:
 ## Symlink Behavior
 
 `setup/link.sh` creates symlinks for root dotfiles and tracked `.config/*` files. Existing files are backed up only when their content differs from the repo version.
+
+Use `./setup.sh clean-backups` to remove old managed backup files after confirming the linked dotfiles are working. The cleanup only removes backups for targets that currently symlink back to this repository.
 
 `.config/AGENTS.md` is intentionally skipped because it is repo-local agent knowledge, not user app configuration.

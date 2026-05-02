@@ -60,6 +60,7 @@ HELP_OUTPUT="$($SETUP_SH --help)"
 printf '%s' "$HELP_OUTPUT" | grep -q 'opencode'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install OpenCode and bootstrap oh-my-openagent'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Remove managed dotfile backup files created by the link command'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Language commands:'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go, gopls, and Go formatter/linter tools'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install TypeScript, TypeScript LSP, and Biome'
@@ -191,6 +192,18 @@ printf '%s' "$DOCTOR_OUTPUT" | grep -q 'brew missing — run ./setup.sh bootstra
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'ruff missing; run ./setup.sh python'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'biome missing; run ./setup.sh typescript'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'Doctor completed'
+
+CLEAN_HOME="$TMP_DIR/clean-home"
+mkdir -p "$CLEAN_HOME/.config/zed"
+ln -s "$REPO_ROOT/.zshrc" "$CLEAN_HOME/.zshrc"
+ln -s "$REPO_ROOT/.config/zed/settings.json" "$CLEAN_HOME/.config/zed/settings.json"
+printf 'old zshrc\n' > "$CLEAN_HOME/.zshrc.backup.20260101-010101"
+printf 'old zed settings\n' > "$CLEAN_HOME/.config/zed/settings.json.backup.20260101-010101"
+printf 'keep unrelated\n' > "$CLEAN_HOME/.config/zed/settings.json.backup.not-managed"
+HOME="$CLEAN_HOME" SETUP_YES=1 SETUP_NO_INPUT=1 bash "$REPO_ROOT/setup/clean-backups.sh" >/dev/null
+[ ! -e "$CLEAN_HOME/.zshrc.backup.20260101-010101" ]
+[ ! -e "$CLEAN_HOME/.config/zed/settings.json.backup.20260101-010101" ]
+[ -e "$CLEAN_HOME/.config/zed/settings.json.backup.not-managed" ]
 
 bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
 bash "$REPO_ROOT/setup/languages/bun.sh" >/dev/null

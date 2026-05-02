@@ -16,6 +16,7 @@ dotfiles/
 ├── setup/
 │   ├── main.sh           # Command orchestrator with flags and utility commands
 │   ├── check.sh          # Repository validation utility command
+│   ├── clean-backups.sh  # Managed dotfile backup cleanup utility command
 │   ├── doctor.sh         # Host prerequisite inspection utility command
 │   ├── link.sh           # Symlink implementation
 │   ├── lib/common.sh     # Shared shell helpers, output, and prompts
@@ -51,7 +52,7 @@ dotfiles/
 - **gnopls**: Built with the active `go@1.25` toolchain.
 - **Biome LSP**: Explicitly mapped to JSON/JSONC only, avoiding overlap with TypeScript LSP and leaving CSS to Biome formatter/linter coverage.
 - **Karabiner setup**: Separate from broader macOS defaults so `--skip karabiner` can exclude key remapping setup.
-- **Utility commands**: `check` and `doctor` are explicit-only commands, not part of full setup.
+- **Utility commands**: `check`, `doctor`, and `clean-backups` are explicit-only commands, not part of full setup.
 - **Repo-local AGENTS files**: `.config/AGENTS.md` is skipped by `setup/link.sh` and should not be linked into `$HOME/.config`.
 - **Secrets**: `gh/hosts.yml` and GitHub Copilot generated token files are never tracked.
 
@@ -63,6 +64,7 @@ dotfiles/
 - Language commands (`go`, `node`, `bun`, `java`, `rust`, `python`, `gno`, `typescript`) are explicit options; `languages` is the default umbrella command.
 - `--skip` accepts default, utility, and language command names; utility commands are explicit-only and are not selected by full setup.
 - `setup/link.sh` backs up files only when content differs from the dotfiles version.
+- `clean-backups` removes only managed `*.backup.YYYYMMDD-HHMMSS` files whose current target symlinks back to this repo.
 - Language-specific LSPs, formatters, linters, and related CLIs are installed by their language commands.
 - `set -euo pipefail` is active in all shell scripts; use `|| true` only for intentional optional commands.
 
@@ -76,6 +78,7 @@ dotfiles/
 ./setup.sh languages opencode      # Run specific default commands
 ./setup.sh check                   # Run repository checks
 ./setup.sh doctor                  # Inspect host setup state
+./setup.sh clean-backups           # Remove managed dotfile backups
 brew bundle --file Brewfile        # Install Brewfile packages
 ```
 
