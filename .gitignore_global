@@ -136,6 +136,9 @@ temp/
 # OMC runtime state
 **/.omc/
 
+# Playwright MCP runtime state
+.playwright-mcp/
+
 # ========================================
 # Tool Auth / Secrets
 # ========================================
