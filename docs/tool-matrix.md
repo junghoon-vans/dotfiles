@@ -27,6 +27,7 @@ OpenCode and OpenAgent config lives under `.config/opencode/`.
 | JSON / JSONC | `./setup.sh typescript` | `biome` | `biome` | `biome` | - |
 | CSS | `./setup.sh typescript` | not mapped | `biome` | `biome` | - |
 | YAML | - | `yaml-language-server` | `yamlfmt` | YAML LSP diagnostics | - |
+| GitHub Actions | `act` | `yaml-language-server` | `yamlfmt` | `actionlint` | `act` |
 
 ## Repository Checks
 
@@ -36,7 +37,7 @@ Run the same local checks used by CI with:
 ./setup.sh check
 ```
 
-`check` validates shell syntax, optionally runs `shellcheck`, parses tracked strict JSON config, performs a lightweight Zed JSONC sanity check, checks `Brewfile` syntax, runs `git diff --check`, and executes the setup smoke test.
+`check` validates shell syntax, optionally runs `shellcheck` and `actionlint`, parses tracked strict JSON config, performs a lightweight Zed JSONC sanity check, checks `Brewfile` syntax, runs `git diff --check`, and executes the setup smoke test.
 
 ## Biome LSP Scope
 

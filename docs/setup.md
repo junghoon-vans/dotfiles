@@ -34,7 +34,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | Command | Purpose |
 | --- | --- |
 | `doctor` | Checks required host tools, Brewfile package state, harness tools, and core symlink targets. |
-| `check` | Runs repository validation: shell syntax, optional shellcheck, JSON parsing, Brewfile syntax, whitespace checks, and setup smoke tests. |
+| `check` | Runs repository validation: shell syntax, optional shellcheck and actionlint, JSON parsing, Brewfile syntax, whitespace checks, and setup smoke tests. |
 | `clean-backups` | Removes managed `*.backup.YYYYMMDD-HHMMSS` files created by `links` when the current target is linked to this repo. |
 
 ## Language Commands
