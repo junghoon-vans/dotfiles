@@ -1,12 +1,12 @@
 #!/bin/bash
-# Description: Run all language runtime commands: go, node, bun, java, rust, and python.
+# Description: Run all language commands: go, node, bun, java, rust, python, gno, and typescript.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
-for language_name in go node bun java rust python; do
+for language_name in go node bun java rust python gno typescript; do
     case "${SETUP_SKIP_COMMANDS:-}" in
         *" $language_name "*)
-            print_info "Skipping language runtime: $language_name"
+            print_info "Skipping language command: $language_name"
             continue
             ;;
     esac

@@ -23,7 +23,7 @@ utility_commands() {
 }
 
 language_commands() {
-  printf '%s\n' go node bun java rust python
+  printf '%s\n' go node bun java rust python gno typescript
 }
 
 command_name_from_entry() {
@@ -73,7 +73,7 @@ command_script() {
       printf '%s\n' "$SETUP_DIR/$command_name.sh"
       return 0
       ;;
-    go|node|bun|java|rust|python)
+    go|node|bun|java|rust|python|gno|typescript)
       printf '%s\n' "$SETUP_DIR/languages/$command_name.sh"
       return 0
       ;;
