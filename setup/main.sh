@@ -180,6 +180,29 @@ contains_command() {
   return 1
 }
 
+is_utility_command() {
+  local needle="$1"
+  local command_name=""
+
+  while IFS= read -r command_name; do
+    [ "$command_name" != "$needle" ] || return 0
+  done < <(utility_commands)
+
+  return 1
+}
+
+selected_commands_are_utilities() {
+  local command_name=""
+
+  for command_name in "$@"; do
+    if ! is_utility_command "$command_name"; then
+      return 1
+    fi
+  done
+
+  return 0
+}
+
 print_selected_commands() {
   local command_name=""
 
@@ -302,6 +325,12 @@ main() {
 
   echo ""
   echo -e "\033[1;32m========================================\033[0m"
+  if selected_commands_are_utilities "${selected_commands[@]}"; then
+    echo -e "\033[1;32m  Command Complete! ✓\033[0m"
+    echo -e "\033[1;32m========================================\033[0m"
+    return 0
+  fi
+
   echo -e "\033[1;32m  Setup Complete! 🎉\033[0m"
   echo -e "\033[1;32m========================================\033[0m"
   echo ""
