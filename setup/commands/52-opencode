@@ -1,0 +1,7 @@
+#!/bin/bash
+# Description: Install OpenCode and bootstrap oh-my-openagent.
+
+# shellcheck source=setup/lib/common.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
+
+bash "$SETUP_DIR/apps/opencode.sh"
