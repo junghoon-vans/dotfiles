@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Install uv with Homebrew and install the latest stable Python.
+# Description: Install uv, Python, pyright, and ruff.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
@@ -10,12 +10,14 @@ if ! command -v brew &> /dev/null; then
     exit 1
 fi
 
-if brew list uv >/dev/null 2>&1; then
-    print_success "uv already installed"
-else
-    brew install uv
-    print_success "uv installed"
-fi
+for formula in uv pyright ruff; do
+    if brew list "$formula" >/dev/null 2>&1; then
+        print_success "$formula already installed"
+    else
+        brew install "$formula"
+        print_success "$formula installed"
+    fi
+done
 
 export PATH="$HOME/.local/bin:$PATH"
 

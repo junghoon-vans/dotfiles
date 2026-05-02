@@ -1,9 +1,22 @@
 #!/bin/bash
-# Description: Install SDKMAN, Java 11/17/21, and Kotlin.
+# Description: Install SDKMAN, Java/Kotlin, and JVM language servers.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 print_step "Installing SDKMAN, Java, and Kotlin..."
+
+if command -v brew >/dev/null 2>&1; then
+    for formula in jdtls kotlin-language-server; do
+        if brew list "$formula" >/dev/null 2>&1; then
+            print_success "$formula already installed"
+        else
+            brew install "$formula"
+            print_success "$formula installed"
+        fi
+    done
+else
+    print_info "Homebrew not found, skipping JVM language server installation"
+fi
 
 if [ -d "$HOME/.sdkman" ]; then
     print_success "SDKMAN already installed"

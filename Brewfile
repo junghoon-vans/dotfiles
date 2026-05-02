@@ -22,18 +22,10 @@ brew "delve"           # Go debugger
 brew "go-task"         # Task runner
 
 # Language-Adjacent Tooling
-brew "gopls"           # Go LSP server
-brew "rust-analyzer"   # Rust LSP server
-brew "jdtls"           # Java LSP server
-brew "kotlin-language-server" # Kotlin LSP server
 brew "marksman"        # Markdown LSP server
 brew "bash-language-server" # Bash LSP server
-brew "pyright"         # Python LSP server
 brew "terraform-ls"    # Terraform LSP server
-brew "biome"           # JS/TS/JSON/CSS formatter, linter, and LSP helper
 brew "yaml-language-server" # YAML LSP server
-brew "ruff"            # Python formatter and linter
-brew "cargo-nextest"   # Rust test runner
 brew "shellcheck"      # Shell script static analysis
 brew "shfmt"           # Shell script formatter
 brew "yamlfmt"         # YAML formatter

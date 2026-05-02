@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Install go@1.25 with Homebrew and activate it on PATH.
+# Description: Install Go, gopls, and Go formatter/linter tools.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
@@ -10,12 +10,14 @@ if ! command -v brew &> /dev/null; then
     exit 1
 fi
 
-if brew list go@1.25 >/dev/null 2>&1; then
-    print_success "go@1.25 already installed"
-else
-    brew install go@1.25
-    print_success "go@1.25 installed"
-fi
+for formula in go@1.25 gopls; do
+    if brew list "$formula" >/dev/null 2>&1; then
+        print_success "$formula already installed"
+    else
+        brew install "$formula"
+        print_success "$formula installed"
+    fi
+done
 
 go_prefix="$(brew --prefix go@1.25 2>/dev/null || true)"
 if [ -n "$go_prefix" ] && [ -d "$go_prefix/bin" ]; then
@@ -28,3 +30,11 @@ else
     print_error "go command not found after go@1.25 install"
     exit 1
 fi
+
+print_info "Installing github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0..."
+go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0
+print_success "golangci-lint installed"
+
+print_info "Installing mvdan.cc/gofumpt@latest..."
+go install mvdan.cc/gofumpt@latest
+print_success "gofumpt installed"
