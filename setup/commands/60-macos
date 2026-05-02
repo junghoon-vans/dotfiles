@@ -1,9 +1,20 @@
 #!/bin/bash
+# Description: Apply keyboard, Finder, Dock, screenshot, appearance, and macOS defaults.
 
 # shellcheck source=setup/lib/common.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 print_step "Applying macOS defaults..."
+
+print_info "Configuring keyboard defaults..."
+
+defaults write NSGlobalDomain KeyRepeat -int 2
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 
 print_info "Configuring Dock..."
 

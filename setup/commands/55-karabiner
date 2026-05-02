@@ -1,0 +1,26 @@
+#!/bin/bash
+# Description: Install Karabiner-Elements and use the linked key remapping config.
+
+# shellcheck source=setup/lib/common.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
+
+print_step "Setting up Karabiner-Elements..."
+
+if ! command -v brew >/dev/null 2>&1; then
+    print_error "Homebrew is required to install Karabiner-Elements"
+    exit 1
+fi
+
+if brew list --cask karabiner-elements >/dev/null 2>&1; then
+    print_success "Karabiner-Elements already installed"
+else
+    brew install --cask karabiner-elements
+    print_success "Karabiner-Elements installed"
+fi
+
+if [ -L "$HOME/.config/karabiner/karabiner.json" ]; then
+    print_success "Karabiner config is linked"
+else
+    print_info "Karabiner config is managed by the links command"
+    print_info "Run './setup.sh links' if $HOME/.config/karabiner/karabiner.json is not linked yet"
+fi
