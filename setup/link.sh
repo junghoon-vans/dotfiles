@@ -24,7 +24,8 @@ backup_file() {
         if diff -q "$source" "$target" > /dev/null 2>&1; then
             rm "$target"  # identical content, silently re-link
         else
-            local backup="${target}.backup.$(date +%Y%m%d-%H%M%S)"
+            local backup
+            backup="${target}.backup.$(date +%Y%m%d-%H%M%S)"
             echo -e "${YELLOW}Backing up $target → $backup${NC}"
             mv "$target" "$backup"
         fi
@@ -85,6 +86,10 @@ done
 if [ -d "$DOTFILES_DIR/.config" ]; then
     while IFS= read -r -d '' config_file; do
         config_file="${config_file#"$DOTFILES_DIR/.config/"}"
+        if [ "$config_file" = "AGENTS.md" ]; then
+            print_info "Skipping repo knowledge file .config/$config_file"
+            continue
+        fi
         create_config_symlink "$config_file"
     done < <(find "$DOTFILES_DIR/.config" -type f -print0)
 fi

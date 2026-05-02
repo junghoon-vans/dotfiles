@@ -10,7 +10,7 @@ if [ ! -f "$DOTFILES_DIR/Brewfile" ]; then
 fi
 
 (
-    cd "$DOTFILES_DIR"
+    cd "$DOTFILES_DIR" || exit
     brew bundle check || brew bundle install
 )
 print_success "Homebrew packages installed"
