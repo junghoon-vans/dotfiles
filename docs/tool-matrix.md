@@ -8,6 +8,7 @@ OpenCode and OpenAgent config lives under `.config/opencode/`.
 - `oh-my-openagent.json` tracks model routing, fallbacks, skills, and notification preferences.
 - `tui.json` tracks terminal UI preferences.
 - MCP endpoints include GitHub, Atlassian, and Context7. API keys and OAuth host files are not tracked.
+- OpenAgent uses Playwright MCP for browser automation. Brave is Brewfile-managed and selected through `PLAYWRIGHT_MCP_EXECUTABLE_PATH` in `.zshrc` when installed.
 
 ## Language and Harness Coverage
 
