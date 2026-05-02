@@ -89,17 +89,44 @@ default_commands() {
   done < <(command_entries)
 }
 
+command_description() {
+  local command_name="$1"
+  local script=""
+  local line=""
+
+  if ! script="$(command_script "$command_name")"; then
+    printf '%s\n' "No description available."
+    return 0
+  fi
+
+  while IFS= read -r line; do
+    case "$line" in
+      \#\ Description:*)
+        printf '%s\n' "${line#\# Description: }"
+        return 0
+        ;;
+    esac
+  done < "$script"
+
+  printf '%s\n' "No description available."
+}
+
+print_command_entry() {
+  local command_name="$1"
+  printf '  %-14s %s\n' "$command_name" "$(command_description "$command_name")"
+}
+
 print_supported_commands() {
   local command_name=""
 
   printf 'Default commands:\n'
   while IFS= read -r command_name; do
-    printf '  %s\n' "$command_name"
+    print_command_entry "$command_name"
   done < <(default_commands)
 
   printf '\nUtility commands:\n'
   while IFS= read -r command_name; do
-    printf '  %s\n' "$command_name"
+    print_command_entry "$command_name"
   done < <(utility_commands)
 }
 
@@ -127,10 +154,11 @@ run_command() {
   script="$(command_script "$command_name")"
 
   if [ "${SETUP_DRY_RUN:-0}" = "1" ]; then
-    print_info "Would run command: $command_name"
+    print_info "Would run command: $command_name - $(command_description "$command_name")"
     return 0
   fi
 
+  print_info "$command_name: $(command_description "$command_name")"
   if ! confirm "Run setup command '$command_name'?" "yes"; then
     print_info "Skipped command: $command_name"
     return 0
@@ -156,7 +184,7 @@ print_selected_commands() {
   local command_name=""
 
   for command_name in "$@"; do
-    printf '  %s\n' "$command_name"
+    print_command_entry "$command_name"
   done
 }
 

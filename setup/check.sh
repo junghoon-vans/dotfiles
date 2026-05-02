@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Run repository validation and setup smoke checks.
 
 set -euo pipefail
 

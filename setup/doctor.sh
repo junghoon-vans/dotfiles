@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Inspect host prerequisites, Brewfile state, harness tools, and symlinks.
 
 set -euo pipefail
 
