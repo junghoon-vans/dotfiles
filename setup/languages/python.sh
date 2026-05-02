@@ -1,12 +1,20 @@
 #!/bin/bash
+# Description: Install uv with Homebrew and install the latest stable Python.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 print_step "Installing Python (latest stable) via uv..."
 
-if ! command -v uv &> /dev/null; then
-    print_info "uv is not installed. Run ./setup.sh brew-packages or brew install uv"
-    exit 0
+if ! command -v brew &> /dev/null; then
+    print_error "Homebrew is required to install uv"
+    exit 1
+fi
+
+if brew list uv >/dev/null 2>&1; then
+    print_success "uv already installed"
+else
+    brew install uv
+    print_success "uv installed"
 fi
 
 export PATH="$HOME/.local/bin:$PATH"

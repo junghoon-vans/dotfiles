@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Install Brewfile packages and brew-managed post-install setup.
+# Description: Install common Brewfile packages and brew-managed post-install setup.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 

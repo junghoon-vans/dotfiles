@@ -5,16 +5,6 @@
 tap "tw93/tap"
 
 # ========================================
-# Language Runtimes & Bootstrap Tools
-# ========================================
-
-# Go programming language
-brew "go@1.25"
-
-# Python package and project manager
-brew "uv"
-
-# ========================================
 # Core Development Tools
 # ========================================
 
