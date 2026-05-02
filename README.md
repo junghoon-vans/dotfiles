@@ -126,6 +126,17 @@ You can also run specific setup commands:
 ./setup.sh links apps
 ```
 
+Setup supports both interactive and non-interactive runs:
+
+```bash
+./setup.sh --yes                    # Run full setup and answer yes to prompts
+./setup.sh --no-input               # Run full setup using each prompt's default answer
+./setup.sh --dry-run                # Print selected commands without running them
+./setup.sh --skip macos --yes       # Run full setup except macOS defaults
+./setup.sh --skip keyboard --yes    # Run full setup except keyboard defaults
+./setup.sh --yes languages apps     # Run selected commands non-interactively
+```
+
 ### What Gets Installed
 
 The `setup.sh` script runs the following commands:
@@ -151,8 +162,10 @@ The `setup.sh` script runs the following commands:
    - Installs Oh My Zsh, plugins, and Spaceship fallback theme
    - Bootstraps `oh-my-openagent`
    - Sets up the Zed Gno dev extension
-7. **macos**
-   - Applies macOS defaults for Finder, Dock, keyboard, screenshots, and appearance
+7. **keyboard**
+   - Applies keyboard defaults such as key repeat and automatic text substitution settings
+8. **macos**
+   - Applies macOS defaults for Finder, Dock, screenshots, and appearance
 
 After installation:
 ```bash
