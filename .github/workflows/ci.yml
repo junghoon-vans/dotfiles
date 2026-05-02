@@ -18,6 +18,12 @@ jobs:
         shell: bash
         run: sudo apt-get update && sudo apt-get install -y shellcheck
 
+      - name: Install actionlint
+        shell: bash
+        run: |
+          go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.7
+          printf '%s\n' "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
       - name: Validate shell syntax
         shell: bash
         run: |
@@ -45,6 +51,10 @@ jobs:
             setup/check.sh \
             setup/doctor.sh \
             tests/setup/*.sh
+
+      - name: Run actionlint
+        shell: bash
+        run: actionlint
 
       - name: Validate config files
         shell: bash
