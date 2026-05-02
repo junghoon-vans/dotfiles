@@ -14,6 +14,10 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Install shellcheck
+        shell: bash
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
       - name: Validate shell syntax
         shell: bash
         run: |
@@ -25,12 +29,46 @@ jobs:
             setup/languages/*.sh \
             setup/packages/*.sh \
             setup/apps/*.sh \
+            setup/check.sh \
+            setup/doctor.sh \
             tests/setup/*.sh
+
+      - name: Run shellcheck
+        shell: bash
+        run: |
+          shellcheck -x -S warning \
+            setup.sh \
+            setup/main.sh \
+            setup/lib/common.sh \
+            setup/commands/* \
+            setup/languages/*.sh \
+            setup/packages/*.sh \
+            setup/apps/*.sh \
+            setup/check.sh \
+            setup/doctor.sh \
+            tests/setup/*.sh
+
+      - name: Validate config files
+        shell: bash
+        run: |
+          python3 -m json.tool .config/opencode/opencode.json >/dev/null
+          python3 -m json.tool .config/opencode/oh-my-openagent.json >/dev/null
+          python3 -m json.tool .config/opencode/tui.json >/dev/null
+          python3 -m json.tool .config/karabiner/karabiner.json >/dev/null
+          ruby -c Brewfile >/dev/null
 
       - name: Check setup help
         shell: bash
         run: ./setup.sh --help
 
-      - name: Run setup smoke test
+      - name: Run repository check command
         shell: bash
-        run: bash tests/setup/tool-packages-command.sh
+        run: ./setup.sh --yes check
+
+      - name: Run setup dry-run checks
+        shell: bash
+        run: |
+          ./setup.sh --dry-run
+          ./setup.sh --dry-run --skip keyboard
+          ./setup.sh --dry-run --skip macos
+          ./setup.sh --dry-run check doctor
