@@ -14,12 +14,12 @@ OpenCode and OpenAgent config lives under `.config/opencode/`.
 | Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
 | --- | --- | --- | --- | --- | --- |
 | Bash / Zsh | macOS shell | `bash-language-server` | `shfmt` | `shellcheck` | `bash -n` |
-| Go | `go@1.25` | `gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
+| Go | `./setup.sh go` (`go@1.25`) | `gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
 | Gno | `gno` | `gnopls` | - | `gnopls` diagnostics | `gno test` |
 | Java | SDKMAN Java 11/17/21 | `jdtls` | - | `jdtls` diagnostics | project build tool |
 | Kotlin | SDKMAN Kotlin | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
 | Markdown | - | `marksman` | - | `marksman` diagnostics | - |
-| Python | `uv` | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
+| Python | `./setup.sh python` (`uv` + Python) | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
 | Rust | `rustup` | `rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
 | Terraform | `terraform` | `terraform-ls` | `terraform fmt` | `terraform validate` | - |
 | TypeScript / JavaScript | NVM Node.js LTS, Bun | `typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |

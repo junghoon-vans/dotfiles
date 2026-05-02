@@ -41,8 +41,8 @@ Preview what would run without changing the machine:
 Default commands run in filename order from `setup/commands/`:
 
 1. `bootstrap` - install Homebrew if needed
-2. `brew-packages` - install `Brewfile` packages and brew-owned post-install steps
-3. `languages` - install Go, Node.js, Bun, SDKMAN Java/Kotlin, Rust, and Python support
+2. `brew-packages` - install common `Brewfile` packages and brew-owned post-install steps
+3. `languages` - install all language runtimes (`go`, `node`, `bun`, `java`, `rust`, `python`)
 4. `tool-packages` - install global Go and Bun CLI tools
 5. `links` - create symlinks for dotfiles and `.config/*`
 6. `apps` - install Oh My Zsh, OpenCode/OpenAgent, and Zed Gno extension support
@@ -67,6 +67,7 @@ Utility commands are explicit only and are not part of full setup:
 
 ```bash
 ./setup.sh --help
+./setup.sh go python
 ./setup.sh languages tool-packages
 ./setup.sh links apps
 ./setup.sh check

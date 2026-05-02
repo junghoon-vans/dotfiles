@@ -62,6 +62,7 @@ dotfiles/
 - All paths use `$HOME` instead of specific usernames.
 - `.config/` mirrors `~/.config/` except repo-local knowledge files such as `.config/AGENTS.md`.
 - `setup.sh` flow is `bootstrap → brew-packages → languages → tool-packages → links → apps → karabiner → macos`.
+- Language runtime commands (`go`, `node`, `bun`, `java`, `rust`, `python`) are explicit options; `languages` is the default umbrella command.
 - `setup/link.sh` backs up files only when content differs from the dotfiles version.
 - Go and Bun global CLI tools are installed by explicit shell scripts under `setup/packages/`.
 - `set -euo pipefail` is active in all shell scripts; use `|| true` only for intentional optional commands.

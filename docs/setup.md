@@ -21,8 +21,8 @@ Interactive runs print each command description before asking for Y/n confirmati
 | Command | Purpose |
 | --- | --- |
 | `bootstrap` | Installs Homebrew if it is missing. |
-| `brew-packages` | Installs `Brewfile` dependencies and brew-owned post-install steps. |
-| `languages` | Installs Go, Node.js, Bun, SDKMAN Java/Kotlin, Rust, and Python support. |
+| `brew-packages` | Installs common `Brewfile` dependencies and brew-owned post-install steps. |
+| `languages` | Installs all language runtimes by running `go`, `node`, `bun`, `java`, `rust`, and `python`. |
 | `tool-packages` | Installs global Go and Bun CLI tools from explicit scripts. |
 | `links` | Creates symlinks from this repo into `$HOME`. |
 | `apps` | Installs Oh My Zsh, OpenCode/OpenAgent, and Zed Gno extension support. |
@@ -35,6 +35,26 @@ Interactive runs print each command description before asking for Y/n confirmati
 | --- | --- |
 | `doctor` | Checks required host tools, Brewfile package state, harness tools, and core symlink targets. |
 | `check` | Runs repository validation: shell syntax, optional shellcheck, JSON parsing, Brewfile syntax, whitespace checks, and setup smoke tests. |
+
+## Language Commands
+
+Language runtime commands are explicit options as well as the building blocks of `languages`:
+
+| Command | Purpose |
+| --- | --- |
+| `go` | Installs `go@1.25` with Homebrew and activates it on `PATH`. |
+| `node` | Installs NVM and Node.js LTS. |
+| `bun` | Installs the Bun runtime. |
+| `java` | Installs SDKMAN, Java 11/17/21, and Kotlin. |
+| `rust` | Installs Rust with rustup. |
+| `python` | Installs `uv` with Homebrew and installs the latest stable Python through `uv`. |
+
+Examples:
+
+```bash
+./setup.sh go python
+./setup.sh --skip rust --yes
+```
 
 ## Symlink Behavior
 
