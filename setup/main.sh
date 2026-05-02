@@ -18,6 +18,10 @@ command_entries() {
   done | sort
 }
 
+utility_commands() {
+  printf '%s\n' check doctor
+}
+
 command_name_from_entry() {
   printf '%s\n' "$1" | sed -E 's/^[0-9]+-//'
 }
@@ -60,6 +64,13 @@ command_script() {
     return 1
   fi
 
+  case "$command_name" in
+    check|doctor)
+      printf '%s\n' "$SETUP_DIR/$command_name.sh"
+      return 0
+      ;;
+  esac
+
   while IFS= read -r entry_name; do
     if [ "$(command_name_from_entry "$entry_name")" = "$command_name" ]; then
       printf '%s\n' "$SETUP_DIR/commands/$entry_name"
@@ -81,9 +92,15 @@ default_commands() {
 print_supported_commands() {
   local command_name=""
 
+  printf 'Default commands:\n'
   while IFS= read -r command_name; do
     printf '  %s\n' "$command_name"
   done < <(default_commands)
+
+  printf '\nUtility commands:\n'
+  while IFS= read -r command_name; do
+    printf '  %s\n' "$command_name"
+  done < <(utility_commands)
 }
 
 print_help() {
@@ -118,8 +135,6 @@ run_command() {
     print_info "Skipped command: $command_name"
     return 0
   fi
-
-  [ -x "$script" ] || chmod +x "$script"
 
   print_step "Running command: $command_name"
   bash "$script"
