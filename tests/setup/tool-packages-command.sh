@@ -36,6 +36,9 @@ EOF
 
 cat > "$FAKE_BIN/brew" <<EOF
 #!/bin/bash
+if [ "\${1:-}" = "list" ]; then
+  exit 0
+fi
 if [ "\${1:-}" = "--prefix" ] && [ "\${2:-}" = "go@1.25" ]; then
   printf '%s\n' "$TMP_DIR/fake-go-prefix"
   exit 0
@@ -56,6 +59,9 @@ HELP_OUTPUT="$("$REPO_ROOT/setup.sh" --help)"
 printf '%s' "$HELP_OUTPUT" | grep -q 'tool-packages'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install global Go and Bun CLI tools'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Language commands:'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install go@1.25 with Homebrew'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install uv with Homebrew'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--yes'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--no-input'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--dry-run'
@@ -81,6 +87,10 @@ fi
 NO_INPUT_OUTPUT="$("$REPO_ROOT/setup.sh" --no-input --dry-run bootstrap)"
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'bootstrap'
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'Install Homebrew if it is missing'
+
+GO_DRY_RUN_OUTPUT="$("$REPO_ROOT/setup.sh" --dry-run go python)"
+printf '%s' "$GO_DRY_RUN_OUTPUT" | grep -q '^  go[[:space:]]\+Install go@1.25'
+printf '%s' "$GO_DRY_RUN_OUTPUT" | grep -q '^  python[[:space:]]\+Install uv with Homebrew'
 
 bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
 bash "$REPO_ROOT/setup/languages/bun.sh" >/dev/null
@@ -120,6 +130,22 @@ if [ "\${1:-}" = "version" ]; then
 fi
 EOF
 
+cat > "$FAKE_BIN/brew" <<EOF
+#!/bin/bash
+if [ "\${1:-}" = "list" ]; then
+  exit 0
+fi
+if [ "\${1:-}" = "--prefix" ] && [ "\${2:-}" = "go@1.25" ]; then
+  printf '%s\n' "$TMP_DIR/fake-go-prefix"
+  exit 0
+fi
+if [ "\${1:-}" = "--prefix" ]; then
+  printf '%s\n' "$TMP_DIR/fake-homebrew"
+  exit 0
+fi
+printf 'brew %s\n' "\$*" >> "$LOG_FILE"
+EOF
+
 cat > "$FAKE_HOME/.bun/bin/bun" <<EOF
 #!/bin/bash
 printf 'bun %s\n' "\$*" >> "$LOG_FILE"
@@ -133,7 +159,7 @@ cat > "$FAKE_HOME/.bun/bin/bunx" <<EOF
 printf 'bunx %s\n' "\$*" >> "$LOG_FILE"
 EOF
 
-chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx"
+chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_BIN/brew"
 
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/packages/go.sh" >/dev/null
@@ -189,6 +215,7 @@ grep -q 'eval "$(brew shellenv)"' "$BOOTSTRAP_HOME/.zprofile"
 grep -q 'setup/link.sh' "$REPO_ROOT/setup/commands/40-links"
 # shellcheck disable=SC2016
 grep -q 'eval "$(brew shellenv)"' "$REPO_ROOT/setup/commands/10-bootstrap"
+grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/30-languages"
 grep -q 'karabiner-elements' "$REPO_ROOT/setup/commands/55-karabiner"
 grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/60-macos"
 if grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/55-karabiner"; then
