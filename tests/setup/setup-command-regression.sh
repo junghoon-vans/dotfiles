@@ -65,7 +65,9 @@ printf '%s' "$HELP_OUTPUT" | grep -q 'Language commands:'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go, gopls, and Go formatter/linter tools'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install TypeScript, TypeScript LSP, and Biome'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Gno CLI and gnopls using Go'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install Eclipse LemMinX XML language server'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Requires Go; run ./setup.sh go first on a clean host'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Requires Java; run ./setup.sh java first on a clean host'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Requires Bun; run ./setup.sh bun first on a clean host'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--yes'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--no-input'
@@ -78,12 +80,26 @@ while IFS= read -r language_name; do
   grep -Eq "(^|[[:space:]])${language_name}([[:space:];]|$)" "$REPO_ROOT/setup/commands/30-languages"
 done < <(for path in "$REPO_ROOT"/setup/languages/*.sh; do basename "${path%.sh}"; done | sort)
 
-EXPECTED_LANGUAGE_ORDER="go node bun java rust python gno typescript"
+EXPECTED_LANGUAGE_ORDER="go node bun java xml rust python gno typescript"
 ACTUAL_LANGUAGE_ORDER="$(grep '^for language_name in ' "$REPO_ROOT/setup/commands/30-languages" | sed 's/^for language_name in //; s/; do$//')"
 if [ "$ACTUAL_LANGUAGE_ORDER" != "$EXPECTED_LANGUAGE_ORDER" ]; then
   printf 'languages umbrella order changed: expected "%s", got "%s"\n' "$EXPECTED_LANGUAGE_ORDER" "$ACTUAL_LANGUAGE_ORDER" >&2
   exit 1
 fi
+
+python3 - "$REPO_ROOT/.config/opencode/opencode.json" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as config_file:
+    config = json.load(config_file)
+
+xml_lsp = config["lsp"]["xml"]
+if xml_lsp["command"] != ["lemminx"]:
+    raise SystemExit("OpenCode XML LSP command should be lemminx")
+if xml_lsp["extensions"] != [".xml", ".xsd", ".xsl", ".xslt", ".svg"]:
+    raise SystemExit("OpenCode XML LSP extensions changed")
+PY
 
 DRY_RUN_OUTPUT="$($SETUP_SH --dry-run --skip macos)"
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Selected setup commands'
@@ -106,9 +122,10 @@ NO_INPUT_OUTPUT="$($SETUP_SH --no-input --dry-run bootstrap)"
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'bootstrap'
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'Install Homebrew if it is missing'
 
-LANGUAGE_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run go gno typescript python)"
+LANGUAGE_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run go gno xml typescript python)"
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go, gopls'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  gno[[:space:]]\+Install Gno CLI'
+printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  xml[[:space:]]\+Install Eclipse LemMinX XML language server'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  typescript[[:space:]]\+Install TypeScript'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  python[[:space:]]\+Install uv, Python'
 
@@ -170,6 +187,67 @@ if HOME="$JAVA_SILENT_HOME" PATH="$JAVA_SILENT_BIN:/usr/bin:/bin" bash "$REPO_RO
   exit 1
 fi
 grep -q 'Java 11 installation did not create an SDKMAN candidate' "$JAVA_SILENT_OUTPUT"
+
+XML_HOME="$TMP_DIR/xml-home"
+XML_BIN="$TMP_DIR/xml-bin"
+XML_LOG="$TMP_DIR/xml.log"
+XML_JAR_URL='https://repo.eclipse.org/content/repositories/lemminx-releases/org/eclipse/lemminx/org.eclipse.lemminx/0.31.1/org.eclipse.lemminx-0.31.1-uber.jar'
+XML_EXPECTED_SHA1='1d65f934e0dc1bdde082b77ffda6d1081b90a0c3'
+mkdir -p "$XML_HOME" "$XML_BIN"
+cat > "$XML_BIN/java" <<'EOF'
+#!/bin/bash
+printf 'java %s\n' "$*" >> "$XML_LOG"
+exit 0
+EOF
+cat > "$XML_BIN/curl" <<'EOF'
+#!/bin/bash
+output=""
+url=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -o)
+      output="$2"
+      shift 2
+      ;;
+    -*)
+      shift
+      ;;
+    *)
+      url="$1"
+      shift
+      ;;
+  esac
+done
+printf 'curl %s\n' "$url" >> "$XML_LOG"
+if [ -z "$output" ]; then
+  exit 1
+fi
+case "$url" in
+  *.sha1)
+    printf '%s\n' "$XML_EXPECTED_SHA1" > "$output"
+    ;;
+  *)
+    printf 'fake lemminx jar\n' > "$output"
+    ;;
+esac
+EOF
+cat > "$XML_BIN/shasum" <<'EOF'
+#!/bin/bash
+if [ "$1" = "-a" ] && [ "$2" = "1" ]; then
+  printf '%s  %s\n' "$XML_EXPECTED_SHA1" "$3"
+  exit 0
+fi
+exit 1
+EOF
+chmod +x "$XML_BIN/java" "$XML_BIN/curl" "$XML_BIN/shasum"
+
+HOME="$XML_HOME" PATH="$XML_BIN:/usr/bin:/bin" XML_LOG="$XML_LOG" XML_EXPECTED_SHA1="$XML_EXPECTED_SHA1" bash "$REPO_ROOT/setup/languages/xml.sh" >/dev/null
+[ -s "$XML_HOME/.local/share/lemminx/org.eclipse.lemminx-0.31.1-uber.jar" ]
+[ -x "$XML_HOME/.local/bin/lemminx" ]
+grep -q "curl $XML_JAR_URL" "$XML_LOG"
+grep -q "curl $XML_JAR_URL.sha1" "$XML_LOG"
+HOME="$XML_HOME" PATH="$XML_BIN:/usr/bin:/bin" XML_LOG="$XML_LOG" "$XML_HOME/.local/bin/lemminx" --stdio
+grep -q "java -jar $XML_HOME/.local/share/lemminx/org.eclipse.lemminx-0.31.1-uber.jar --stdio" "$XML_LOG"
 
 DOCTOR_HOME="$TMP_DIR/doctor-home"
 DOCTOR_BIN="$TMP_DIR/doctor-bin"

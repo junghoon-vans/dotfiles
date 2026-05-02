@@ -126,6 +126,18 @@
         ".jsx"
       ]
     },
+    "xml": {
+      "command": [
+        "lemminx"
+      ],
+      "extensions": [
+        ".xml",
+        ".xsd",
+        ".xsl",
+        ".xslt",
+        ".svg"
+      ]
+    },
     "yaml-ls": {
       "command": [
         "yaml-language-server",

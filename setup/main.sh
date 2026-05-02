@@ -23,7 +23,7 @@ utility_commands() {
 }
 
 language_commands() {
-  printf '%s\n' go node bun java rust python gno typescript
+  printf '%s\n' go node bun java xml rust python gno typescript
 }
 
 command_name_from_entry() {
@@ -73,7 +73,7 @@ command_script() {
       printf '%s\n' "$SETUP_DIR/$command_name.sh"
       return 0
       ;;
-    go|node|bun|java|rust|python|gno|typescript)
+    go|node|bun|java|xml|rust|python|gno|typescript)
       printf '%s\n' "$SETUP_DIR/languages/$command_name.sh"
       return 0
       ;;
@@ -144,6 +144,7 @@ print_supported_commands() {
 
   printf '\nNotes:\n'
   printf '  %-14s %s\n' 'gno' 'Requires Go; run ./setup.sh go first on a clean host.'
+  printf '  %-14s %s\n' 'xml' 'Requires Java; run ./setup.sh java first on a clean host.'
   printf '  %-14s %s\n' 'typescript' 'Requires Bun; run ./setup.sh bun first on a clean host.'
 }
 
@@ -225,7 +226,7 @@ selected_commands_affect_shell() {
 
   for command_name in "$@"; do
     case "$command_name" in
-      bootstrap|brew-packages|languages|links|apps|opencode|go|node|bun|java|rust|python|gno|typescript)
+      bootstrap|brew-packages|languages|links|apps|opencode|go|node|bun|java|xml|rust|python|gno|typescript)
         return 0
         ;;
     esac
