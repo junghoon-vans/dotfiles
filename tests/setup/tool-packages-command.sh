@@ -62,9 +62,17 @@ printf '%s' "$HELP_OUTPUT" | grep -q -- '--skip COMMAND'
 DRY_RUN_OUTPUT="$("$REPO_ROOT/setup.sh" --dry-run --skip macos)"
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Selected setup commands'
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'languages'
+printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  keyboard$'
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Skipping command: macos'
 if printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  macos$'; then
   printf 'dry-run selected commands should not include skipped macos command\n' >&2
+  exit 1
+fi
+
+KEYBOARD_SKIP_OUTPUT="$("$REPO_ROOT/setup.sh" --dry-run --skip keyboard)"
+printf '%s' "$KEYBOARD_SKIP_OUTPUT" | grep -q 'Skipping command: keyboard'
+if printf '%s' "$KEYBOARD_SKIP_OUTPUT" | grep -q '^  keyboard$'; then
+  printf 'dry-run selected commands should not include skipped keyboard command\n' >&2
   exit 1
 fi
 
@@ -178,6 +186,11 @@ grep -q 'eval "$(brew shellenv)"' "$BOOTSTRAP_HOME/.zprofile"
 grep -q 'setup/link.sh' "$REPO_ROOT/setup/commands/40-links"
 # shellcheck disable=SC2016
 grep -q 'eval "$(brew shellenv)"' "$REPO_ROOT/setup/commands/10-bootstrap"
+grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/55-keyboard"
+if grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/60-macos"; then
+  printf 'macos command should not apply keyboard defaults\n' >&2
+  exit 1
+fi
 grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/.zshrc"
 if grep -q 'kaku' "$REPO_ROOT/.zshrc"; then
   printf '.zshrc should not reference kaku\n' >&2
