@@ -6,13 +6,15 @@
 
 ```bash
 ./setup.sh                 # Interactive full setup
+./setup.sh --help          # Show commands with descriptions
 ./setup.sh --yes           # Non-interactive; answer yes to prompts
 ./setup.sh --no-input      # Non-interactive; use prompt defaults
 ./setup.sh --dry-run       # Print selected commands only
-./setup.sh --skip keyboard # Exclude one command from a full setup
+./setup.sh --skip karabiner # Exclude one command from a full setup
 ```
 
 `--skip` accepts both default commands and utility commands, but utility commands are never selected unless passed explicitly.
+Interactive runs print each command description before asking for Y/n confirmation, so you can see what the step installs or changes before approving it.
 
 ## Default Commands
 
@@ -24,8 +26,8 @@
 | `tool-packages` | Installs global Go and Bun CLI tools from explicit scripts. |
 | `links` | Creates symlinks from this repo into `$HOME`. |
 | `apps` | Installs Oh My Zsh, OpenCode/OpenAgent, and Zed Gno extension support. |
-| `keyboard` | Applies keyboard defaults such as repeat rate and automatic text substitution settings. |
-| `macos` | Applies Finder, Dock, screenshot, and appearance defaults. |
+| `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
+| `macos` | Applies keyboard, Finder, Dock, screenshot, appearance, and related defaults. |
 
 ## Utility Commands
 

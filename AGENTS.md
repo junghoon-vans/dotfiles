@@ -38,7 +38,7 @@ dotfiles/
 | Tooling docs | `docs/tool-matrix.md` | LSP, formatter, linter, harness coverage |
 | Global CLI tools | `setup/packages/*.sh` | Explicit shell installers for Go/Bun tools |
 | Create symlinks | `setup/link.sh` | Links to `$HOME`, backs up only if content differs |
-| Keyboard settings | `setup/commands/55-keyboard` | Key repeat and text substitution defaults |
+| Karabiner setup | `setup/commands/55-karabiner` | Karabiner-Elements install and key remapping config |
 | macOS settings | `setup/commands/60-macos` | Finder, Dock, screenshot, and appearance defaults |
 | CI | `.github/workflows/ci.yml` | Mirrors repository validation checks |
 
@@ -52,7 +52,7 @@ dotfiles/
 - **go@1.25**: Pinned Homebrew formula with symlink to `/opt/homebrew/opt/go`.
 - **gnopls**: Built with the active `go@1.25` toolchain.
 - **Biome LSP**: Explicitly mapped to JSON/JSONC only, avoiding overlap with TypeScript LSP and leaving CSS to Biome formatter/linter coverage.
-- **Keyboard defaults**: Separate from broader macOS defaults so `--skip keyboard` can exclude them.
+- **Karabiner setup**: Separate from broader macOS defaults so `--skip karabiner` can exclude key remapping setup.
 - **Utility commands**: `check` and `doctor` are explicit-only commands, not part of full setup.
 - **Repo-local AGENTS files**: `.config/AGENTS.md` is skipped by `setup/link.sh` and should not be linked into `$HOME/.config`.
 - **Secrets**: `gh/hosts.yml` and GitHub Copilot generated token files are never tracked.
@@ -61,7 +61,7 @@ dotfiles/
 
 - All paths use `$HOME` instead of specific usernames.
 - `.config/` mirrors `~/.config/` except repo-local knowledge files such as `.config/AGENTS.md`.
-- `setup.sh` flow is `bootstrap → brew-packages → languages → tool-packages → links → apps → keyboard → macos`.
+- `setup.sh` flow is `bootstrap → brew-packages → languages → tool-packages → links → apps → karabiner → macos`.
 - `setup/link.sh` backs up files only when content differs from the dotfiles version.
 - Go and Bun global CLI tools are installed by explicit shell scripts under `setup/packages/`.
 - `set -euo pipefail` is active in all shell scripts; use `|| true` only for intentional optional commands.
@@ -72,7 +72,7 @@ dotfiles/
 ./setup.sh                         # Full interactive setup
 ./setup.sh --yes                   # Full non-interactive setup
 ./setup.sh --dry-run               # Preview selected commands
-./setup.sh --skip keyboard --yes   # Full setup except keyboard defaults
+./setup.sh --skip karabiner --yes  # Full setup except Karabiner key remapping setup
 ./setup.sh languages tool-packages # Run specific default commands
 ./setup.sh check                   # Run repository checks
 ./setup.sh doctor                  # Inspect host setup state

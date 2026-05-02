@@ -24,15 +24,16 @@ For non-interactive setup:
 
 ```bash
 ./setup.sh --yes
-./setup.sh --skip keyboard --yes
+./setup.sh --skip karabiner --yes
 ./setup.sh --skip macos --yes
 ```
 
 Preview what would run without changing the machine:
 
 ```bash
+./setup.sh --help
 ./setup.sh --dry-run
-./setup.sh --dry-run --skip keyboard
+./setup.sh --dry-run --skip karabiner
 ```
 
 ## Setup Commands
@@ -45,8 +46,8 @@ Default commands run in filename order from `setup/commands/`:
 4. `tool-packages` - install global Go and Bun CLI tools
 5. `links` - create symlinks for dotfiles and `.config/*`
 6. `apps` - install Oh My Zsh, OpenCode/OpenAgent, and Zed Gno extension support
-7. `keyboard` - apply keyboard defaults
-8. `macos` - apply Finder, Dock, screenshot, and appearance defaults
+7. `karabiner` - install Karabiner-Elements for key remapping
+8. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
 
 Utility commands are explicit only and are not part of full setup:
 

@@ -26,16 +26,16 @@ Use dry-run mode before applying setup commands:
 
 ```bash
 ./setup.sh --dry-run
-./setup.sh --dry-run --skip keyboard
+./setup.sh --dry-run --skip karabiner
 ./setup.sh --dry-run languages tool-packages
 ```
 
-## Avoid Keyboard or macOS Defaults
+## Avoid Karabiner or macOS Defaults
 
-Keyboard defaults and broader macOS defaults are separate commands:
+Karabiner key remapping setup and broader macOS defaults are separate commands:
 
 ```bash
-./setup.sh --skip keyboard --yes
+./setup.sh --skip karabiner --yes
 ./setup.sh --skip macos --yes
 ```
 
