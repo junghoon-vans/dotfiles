@@ -50,6 +50,7 @@ dotfiles/
 - **prek**: Replaces pre-commit with a faster Rust implementation.
 - **go@1.25**: Pinned Homebrew formula with symlink to `/opt/homebrew/opt/go`.
 - **gnopls**: Built with the active `go@1.25` toolchain.
+- **LemMinX**: Installed from the pinned Eclipse Maven uber JAR and exposed through `$HOME/.local/bin/lemminx`.
 - **Biome LSP**: Explicitly mapped to JSON/JSONC only, avoiding overlap with TypeScript LSP and leaving CSS to Biome formatter/linter coverage.
 - **Karabiner setup**: Separate from broader macOS defaults so `--skip karabiner` can exclude key remapping setup.
 - **Utility commands**: `check`, `doctor`, and `clean-backups` are explicit-only commands, not part of full setup.
@@ -61,7 +62,7 @@ dotfiles/
 - All paths use `$HOME` instead of specific usernames.
 - `.config/` mirrors `~/.config/` except repo-local knowledge files such as `.config/AGENTS.md`.
 - `setup.sh` flow is `bootstrap → brew-packages → languages → links → apps → opencode → karabiner → macos`.
-- Language commands (`go`, `node`, `bun`, `java`, `rust`, `python`, `gno`, `typescript`) are explicit options; `languages` is the default umbrella command.
+- Language commands (`go`, `node`, `bun`, `java`, `xml`, `rust`, `python`, `gno`, `typescript`) are explicit options; `languages` is the default umbrella command.
 - `--skip` accepts default, utility, and language command names; utility commands are explicit-only and are not selected by full setup.
 - `setup/link.sh` backs up files only when content differs from the dotfiles version.
 - `clean-backups` removes only managed `*.backup.YYYYMMDD-HHMMSS` files whose current target symlinks back to this repo.

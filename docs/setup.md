@@ -22,7 +22,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | --- | --- |
 | `bootstrap` | Installs Homebrew if it is missing. |
 | `brew-packages` | Installs common `Brewfile` dependencies and brew-owned post-install steps. |
-| `languages` | Installs all language runtimes and language-specific tools by running `go`, `node`, `bun`, `java`, `rust`, `python`, `gno`, and `typescript`. |
+| `languages` | Installs all language runtimes and language-specific tools by running `go`, `node`, `bun`, `java`, `xml`, `rust`, `python`, `gno`, and `typescript`. |
 | `links` | Creates symlinks from this repo into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
 | `opencode` | Installs OpenCode and bootstraps oh-my-openagent. |
@@ -47,6 +47,7 @@ Language commands are explicit options as well as the building blocks of `langua
 | `node` | Installs NVM and Node.js LTS. |
 | `bun` | Installs the Bun runtime. |
 | `java` | Installs SDKMAN, Java 11/17/21, Kotlin, `jdtls`, and `kotlin-language-server`. |
+| `xml` | Installs Eclipse LemMinX XML language server. |
 | `rust` | Installs Rust with rustup, `rust-analyzer`, and `cargo-nextest`. |
 | `python` | Installs `uv`, Python, `pyright`, and `ruff`. |
 | `gno` | Installs `gno` and `gnopls` using Go. |
@@ -60,7 +61,7 @@ Examples:
 ./setup.sh --skip rust --yes
 ```
 
-`gno` expects Go to be available, and `typescript` expects Bun to be available. Run the prerequisite language commands first on a clean host, or use `languages` to install the full ordered set.
+`gno` expects Go, `xml` expects Java, and `typescript` expects Bun to be available. Run the prerequisite language commands first on a clean host, or use `languages` to install the full ordered set.
 
 ## Symlink Behavior
 

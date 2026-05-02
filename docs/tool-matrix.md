@@ -26,6 +26,7 @@ OpenCode and OpenAgent config lives under `.config/opencode/`.
 | TypeScript / JavaScript | `./setup.sh typescript` | `typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
 | JSON / JSONC | `./setup.sh typescript` | `biome` | `biome` | `biome` | - |
 | CSS | `./setup.sh typescript` | not mapped | `biome` | `biome` | - |
+| XML / XSD / XSLT / SVG | `./setup.sh xml` (`lemminx`) | `lemminx` | - | LemMinX diagnostics | - |
 | YAML | - | `yaml-language-server` | `yamlfmt` | YAML LSP diagnostics | - |
 | GitHub Actions | `act` | `yaml-language-server` | `yamlfmt` | `actionlint` | `act` |
 
