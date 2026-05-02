@@ -6,6 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export DOTFILES_DIR="$SCRIPT_DIR"
 export SETUP_DIR="$SCRIPT_DIR/setup"
 
+# shellcheck source=setup/lib/common.sh
 source "$SETUP_DIR/lib/common.sh"
 
 command_entries() {
@@ -49,7 +50,6 @@ validate_command_entries() {
 
 command_script() {
   local command_name="$1"
-  local entry=""
   local entry_name=""
 
   case "$command_name" in
@@ -88,7 +88,14 @@ print_supported_commands() {
 
 print_help() {
   cat <<'EOF'
-Usage: ./setup.sh [command...]
+Usage: ./setup.sh [option...] [command...]
+
+Options:
+  -h, --help          Show this help message
+  -y, --yes           Run non-interactively and answer yes to prompts
+      --no-input      Run non-interactively using each prompt's default answer
+      --dry-run       Print the selected commands without running them
+      --skip COMMAND  Exclude a command from the selected command list
 
 Supported commands:
 EOF
@@ -101,17 +108,107 @@ run_command() {
   local script
 
   script="$(command_script "$command_name")"
+
+  if [ "${SETUP_DRY_RUN:-0}" = "1" ]; then
+    print_info "Would run command: $command_name"
+    return 0
+  fi
+
+  if ! confirm "Run setup command '$command_name'?" "yes"; then
+    print_info "Skipped command: $command_name"
+    return 0
+  fi
+
   [ -x "$script" ] || chmod +x "$script"
 
   print_step "Running command: $command_name"
   bash "$script"
 }
 
+contains_command() {
+  local needle="$1"
+  shift
+  local item=""
+
+  for item in "$@"; do
+    [ "$item" != "$needle" ] || return 0
+  done
+
+  return 1
+}
+
+print_selected_commands() {
+  local command_name=""
+
+  for command_name in "$@"; do
+    printf '  %s\n' "$command_name"
+  done
+}
+
 main() {
   local selected_commands=()
+  local skipped_commands=()
   local raw_command=""
 
   validate_command_entries
+
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -h|--help)
+        print_help
+        exit 0
+        ;;
+      -y|--yes)
+        export SETUP_YES=1
+        export SETUP_NO_INPUT=1
+        shift
+        ;;
+      --no-input)
+        export SETUP_NO_INPUT=1
+        shift
+        ;;
+      --dry-run)
+        export SETUP_DRY_RUN=1
+        shift
+        ;;
+      --skip)
+        if [ $# -lt 2 ]; then
+          print_error "--skip requires a command name"
+          print_help
+          exit 1
+        fi
+        if ! command_script "$2" >/dev/null; then
+          print_error "Unknown command for --skip: $2"
+          print_help
+          exit 1
+        fi
+        skipped_commands+=("$2")
+        shift 2
+        ;;
+      --skip=*)
+        raw_command="${1#--skip=}"
+        if ! command_script "$raw_command" >/dev/null; then
+          print_error "Unknown command for --skip: $raw_command"
+          print_help
+          exit 1
+        fi
+        skipped_commands+=("$raw_command")
+        shift
+        ;;
+      --)
+        shift
+        break
+        ;;
+      --*)
+        print_error "Unknown option: $1"
+        print_help
+        exit 1
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
 
   if [ $# -eq 0 ]; then
     while IFS= read -r raw_command; do
@@ -119,13 +216,6 @@ main() {
     done < <(default_commands)
   else
     for raw_command in "$@"; do
-      case "$raw_command" in
-        -h|--help)
-          print_help
-          exit 0
-          ;;
-      esac
-
       if ! command_script "$raw_command" >/dev/null; then
         print_error "Unknown command: $raw_command"
         print_help
@@ -134,6 +224,33 @@ main() {
 
       selected_commands+=("$raw_command")
     done
+  fi
+
+  if [ ${#skipped_commands[@]} -gt 0 ]; then
+    local filtered_commands=()
+
+    for raw_command in "${selected_commands[@]}"; do
+      if contains_command "$raw_command" "${skipped_commands[@]}"; then
+        print_info "Skipping command: $raw_command"
+        continue
+      fi
+      filtered_commands+=("$raw_command")
+    done
+
+    selected_commands=("${filtered_commands[@]}")
+  fi
+
+  if [ ${#selected_commands[@]} -eq 0 ]; then
+    print_error "No setup commands selected"
+    exit 1
+  fi
+
+  print_step "Selected setup commands"
+  print_selected_commands "${selected_commands[@]}"
+
+  if [ "${SETUP_DRY_RUN:-0}" = "1" ]; then
+    print_success "Dry run complete"
+    exit 0
   fi
 
   for raw_command in "${selected_commands[@]}"; do

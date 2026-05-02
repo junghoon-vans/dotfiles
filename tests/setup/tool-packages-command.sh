@@ -52,8 +52,24 @@ chmod +x "$FAKE_BIN/go" "$FAKE_BIN/bun" "$FAKE_BIN/curl" "$FAKE_BIN/brew"
 export HOME="$FAKE_HOME"
 export PATH="$FAKE_BIN:$PATH"
 
-HELP_OUTPUT="$($REPO_ROOT/setup.sh --help)"
+HELP_OUTPUT="$("$REPO_ROOT/setup.sh" --help)"
 printf '%s' "$HELP_OUTPUT" | grep -q 'tool-packages'
+printf '%s' "$HELP_OUTPUT" | grep -q -- '--yes'
+printf '%s' "$HELP_OUTPUT" | grep -q -- '--no-input'
+printf '%s' "$HELP_OUTPUT" | grep -q -- '--dry-run'
+printf '%s' "$HELP_OUTPUT" | grep -q -- '--skip COMMAND'
+
+DRY_RUN_OUTPUT="$("$REPO_ROOT/setup.sh" --dry-run --skip macos)"
+printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Selected setup commands'
+printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'languages'
+printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Skipping command: macos'
+if printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  macos$'; then
+  printf 'dry-run selected commands should not include skipped macos command\n' >&2
+  exit 1
+fi
+
+NO_INPUT_OUTPUT="$("$REPO_ROOT/setup.sh" --no-input --dry-run bootstrap)"
+printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'bootstrap'
 
 bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
 bash "$REPO_ROOT/setup/languages/bun.sh" >/dev/null
@@ -155,10 +171,12 @@ chmod +x "$BOOTSTRAP_BIN/curl" "$BOOTSTRAP_BIN/bash"
 
 env -i HOME="$BOOTSTRAP_HOME" PATH="$BOOTSTRAP_BIN:/usr/bin:/bin" HOMEBREW_PREFIX="$BOOTSTRAP_PREFIX" BOOTSTRAP_LOG="$BOOTSTRAP_LOG" bash "$REPO_ROOT/setup/commands/10-bootstrap" >/dev/null
 
+# shellcheck disable=SC2016
 grep -q 'eval "$(brew shellenv)"' "$BOOTSTRAP_HOME/.zprofile"
 
 [ ! -e "$REPO_ROOT/link.sh" ]
 grep -q 'setup/link.sh' "$REPO_ROOT/setup/commands/40-links"
+# shellcheck disable=SC2016
 grep -q 'eval "$(brew shellenv)"' "$REPO_ROOT/setup/commands/10-bootstrap"
 grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/.zshrc"
 if grep -q 'kaku' "$REPO_ROOT/.zshrc"; then
