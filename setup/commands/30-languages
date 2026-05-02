@@ -1,14 +1,15 @@
 #!/bin/bash
-# Description: Install Go, Node.js, Bun, Java/Kotlin, Rust, and Python support.
+# Description: Run all language runtime commands: go, node, bun, java, rust, and python.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
-for script in \
-    "$SETUP_DIR/languages/go.sh" \
-    "$SETUP_DIR/languages/node.sh" \
-    "$SETUP_DIR/languages/bun.sh" \
-    "$SETUP_DIR/languages/java.sh" \
-    "$SETUP_DIR/languages/rust.sh" \
-    "$SETUP_DIR/languages/python.sh"; do
-    bash "$script"
+for language_name in go node bun java rust python; do
+    case "${SETUP_SKIP_COMMANDS:-}" in
+        *" $language_name "*)
+            print_info "Skipping language runtime: $language_name"
+            continue
+            ;;
+    esac
+
+    bash "$SETUP_DIR/languages/$language_name.sh"
 done

@@ -22,6 +22,10 @@ utility_commands() {
   printf '%s\n' check doctor
 }
 
+language_commands() {
+  printf '%s\n' go node bun java rust python
+}
+
 command_name_from_entry() {
   printf '%s\n' "$1" | sed -E 's/^[0-9]+-//'
 }
@@ -67,6 +71,10 @@ command_script() {
   case "$command_name" in
     check|doctor)
       printf '%s\n' "$SETUP_DIR/$command_name.sh"
+      return 0
+      ;;
+    go|node|bun|java|rust|python)
+      printf '%s\n' "$SETUP_DIR/languages/$command_name.sh"
       return 0
       ;;
   esac
@@ -128,6 +136,11 @@ print_supported_commands() {
   while IFS= read -r command_name; do
     print_command_entry "$command_name"
   done < <(utility_commands)
+
+  printf '\nLanguage commands:\n'
+  while IFS= read -r command_name; do
+    print_command_entry "$command_name"
+  done < <(language_commands)
 }
 
 print_help() {
@@ -294,6 +307,7 @@ main() {
 
   if [ ${#skipped_commands[@]} -gt 0 ]; then
     local filtered_commands=()
+    export SETUP_SKIP_COMMANDS=" ${skipped_commands[*]} "
 
     for raw_command in "${selected_commands[@]}"; do
       if contains_command "$raw_command" "${skipped_commands[@]}"; then
