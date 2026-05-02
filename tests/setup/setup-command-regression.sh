@@ -3,6 +3,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+SETUP_SH="$REPO_ROOT/setup.sh"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
@@ -55,7 +56,7 @@ chmod +x "$FAKE_BIN/go" "$FAKE_BIN/bun" "$FAKE_BIN/curl" "$FAKE_BIN/brew"
 export HOME="$FAKE_HOME"
 export PATH="$FAKE_BIN:$PATH"
 
-HELP_OUTPUT="$($REPO_ROOT/setup.sh --help)"
+HELP_OUTPUT="$($SETUP_SH --help)"
 printf '%s' "$HELP_OUTPUT" | grep -q 'opencode'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install OpenCode and bootstrap oh-my-openagent'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
@@ -63,12 +64,27 @@ printf '%s' "$HELP_OUTPUT" | grep -q 'Language commands:'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go, gopls, and Go formatter/linter tools'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install TypeScript, TypeScript LSP, and Biome'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Gno CLI and gnopls using Go'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Requires Go; run ./setup.sh go first on a clean host'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Requires Bun; run ./setup.sh bun first on a clean host'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--yes'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--no-input'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--dry-run'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--skip COMMAND'
 
-DRY_RUN_OUTPUT="$($REPO_ROOT/setup.sh --dry-run --skip macos)"
+while IFS= read -r language_name; do
+  LANGUAGE_COMMAND_OUTPUT="$($SETUP_SH --dry-run "$language_name")"
+  printf '%s' "$LANGUAGE_COMMAND_OUTPUT" | grep -q "^  ${language_name}[[:space:]]"
+  grep -Eq "(^|[[:space:]])${language_name}([[:space:];]|$)" "$REPO_ROOT/setup/commands/30-languages"
+done < <(for path in "$REPO_ROOT"/setup/languages/*.sh; do basename "${path%.sh}"; done | sort)
+
+EXPECTED_LANGUAGE_ORDER="go node bun java rust python gno typescript"
+ACTUAL_LANGUAGE_ORDER="$(grep '^for language_name in ' "$REPO_ROOT/setup/commands/30-languages" | sed 's/^for language_name in //; s/; do$//')"
+if [ "$ACTUAL_LANGUAGE_ORDER" != "$EXPECTED_LANGUAGE_ORDER" ]; then
+  printf 'languages umbrella order changed: expected "%s", got "%s"\n' "$EXPECTED_LANGUAGE_ORDER" "$ACTUAL_LANGUAGE_ORDER" >&2
+  exit 1
+fi
+
+DRY_RUN_OUTPUT="$($SETUP_SH --dry-run --skip macos)"
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Selected setup commands'
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'languages'
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  karabiner[[:space:]]\+Install Karabiner-Elements'
@@ -78,25 +94,125 @@ if printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  macos[[:space:]]'; then
   exit 1
 fi
 
-KARABINER_SKIP_OUTPUT="$($REPO_ROOT/setup.sh --dry-run --skip karabiner)"
+KARABINER_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip karabiner)"
 printf '%s' "$KARABINER_SKIP_OUTPUT" | grep -q 'Skipping command: karabiner'
 if printf '%s' "$KARABINER_SKIP_OUTPUT" | grep -q '^  karabiner[[:space:]]'; then
   printf 'dry-run selected commands should not include skipped karabiner command\n' >&2
   exit 1
 fi
 
-NO_INPUT_OUTPUT="$($REPO_ROOT/setup.sh --no-input --dry-run bootstrap)"
+NO_INPUT_OUTPUT="$($SETUP_SH --no-input --dry-run bootstrap)"
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'bootstrap'
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'Install Homebrew if it is missing'
 
-LANGUAGE_DRY_RUN_OUTPUT="$($REPO_ROOT/setup.sh --dry-run go gno typescript python)"
+LANGUAGE_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run go gno typescript python)"
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go, gopls'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  gno[[:space:]]\+Install Gno CLI'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  typescript[[:space:]]\+Install TypeScript'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  python[[:space:]]\+Install uv, Python'
 
+LANGUAGE_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip gno go gno)"
+printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q 'Skipping command: gno'
+printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go, gopls'
+if printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q '^  gno[[:space:]]'; then
+  printf 'dry-run selected commands should not include skipped gno command\n' >&2
+  exit 1
+fi
+
+if DOCTOR_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip doctor doctor 2>&1)"; then
+  printf 'skipping the only selected utility command should fail\n' >&2
+  exit 1
+fi
+printf '%s' "$DOCTOR_SKIP_OUTPUT" | grep -q 'All selected commands were skipped: doctor'
+
+NODE_FAIL_HOME="$TMP_DIR/node-fail-home"
+NODE_FAIL_BIN="$TMP_DIR/node-fail-bin"
+mkdir -p "$NODE_FAIL_HOME" "$NODE_FAIL_BIN"
+cat > "$NODE_FAIL_BIN/curl" <<'EOF'
+#!/bin/bash
+exit 0
+EOF
+chmod +x "$NODE_FAIL_BIN/curl"
+NODE_FAIL_OUTPUT="$TMP_DIR/node-fail-output"
+if HOME="$NODE_FAIL_HOME" PATH="$NODE_FAIL_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/node.sh" >"$NODE_FAIL_OUTPUT" 2>&1; then
+  printf 'node installer should fail when the latest NVM version cannot be detected\n' >&2
+  exit 1
+fi
+grep -q 'Could not determine latest NVM version' "$NODE_FAIL_OUTPUT"
+
+JAVA_FAIL_HOME="$TMP_DIR/java-fail-home"
+JAVA_FAIL_BIN="$TMP_DIR/java-fail-bin"
+mkdir -p "$JAVA_FAIL_HOME" "$JAVA_FAIL_BIN"
+cat > "$JAVA_FAIL_BIN/curl" <<'EOF'
+#!/bin/bash
+exit 0
+EOF
+chmod +x "$JAVA_FAIL_BIN/curl"
+JAVA_FAIL_OUTPUT="$TMP_DIR/java-fail-output"
+if HOME="$JAVA_FAIL_HOME" PATH="$JAVA_FAIL_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/java.sh" >"$JAVA_FAIL_OUTPUT" 2>&1; then
+  printf 'java installer should fail when SDKMAN init is not created\n' >&2
+  exit 1
+fi
+grep -q 'SDKMAN installer completed but' "$JAVA_FAIL_OUTPUT"
+
+JAVA_SILENT_HOME="$TMP_DIR/java-silent-home"
+JAVA_SILENT_BIN="$TMP_DIR/java-silent-bin"
+mkdir -p "$JAVA_SILENT_HOME/.sdkman/bin" "$JAVA_SILENT_BIN"
+cat > "$JAVA_SILENT_HOME/.sdkman/bin/sdkman-init.sh" <<'EOF'
+sdk() {
+  return 0
+}
+EOF
+JAVA_SILENT_OUTPUT="$TMP_DIR/java-silent-output"
+if HOME="$JAVA_SILENT_HOME" PATH="$JAVA_SILENT_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/java.sh" >"$JAVA_SILENT_OUTPUT" 2>&1; then
+  printf 'java installer should fail when sdk install does not create a Java candidate\n' >&2
+  exit 1
+fi
+grep -q 'Java 11 installation did not create an SDKMAN candidate' "$JAVA_SILENT_OUTPUT"
+
+DOCTOR_HOME="$TMP_DIR/doctor-home"
+DOCTOR_BIN="$TMP_DIR/doctor-bin"
+mkdir -p "$DOCTOR_HOME" "$DOCTOR_BIN"
+cat > "$DOCTOR_BIN/git" <<'EOF'
+#!/bin/bash
+exit 0
+EOF
+cat > "$DOCTOR_BIN/bash" <<'EOF'
+#!/bin/bash
+exec /bin/bash "$@"
+EOF
+cat > "$DOCTOR_BIN/uname" <<'EOF'
+#!/bin/bash
+printf 'Darwin\n'
+EOF
+chmod +x "$DOCTOR_BIN/git" "$DOCTOR_BIN/bash" "$DOCTOR_BIN/uname"
+DOCTOR_OUTPUT="$(HOME="$DOCTOR_HOME" PATH="$DOCTOR_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/doctor.sh")"
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'brew missing — run ./setup.sh bootstrap before brew-managed setup'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'ruff missing; run ./setup.sh python'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'biome missing; run ./setup.sh typescript'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'Doctor completed'
+
 bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
 bash "$REPO_ROOT/setup/languages/bun.sh" >/dev/null
+
+GO_SETUP_OUTPUT="$($SETUP_SH --yes go)"
+if printf '%s' "$GO_SETUP_OUTPUT" | grep -q 'Activate Gno support in Zed'; then
+  printf 'go command should not print Zed Gno activation next step\n' >&2
+  exit 1
+fi
+
+APPS_HOME="$TMP_DIR/apps-home"
+APPS_ZSH_CUSTOM="$APPS_HOME/.oh-my-zsh/custom"
+mkdir -p \
+  "$APPS_ZSH_CUSTOM/plugins/zsh-autosuggestions" \
+  "$APPS_ZSH_CUSTOM/plugins/zsh-syntax-highlighting" \
+  "$APPS_ZSH_CUSTOM/plugins/zsh-completions" \
+  "$APPS_ZSH_CUSTOM/plugins/zsh-hangul" \
+  "$APPS_ZSH_CUSTOM/themes/spaceship-prompt" \
+  "$APPS_HOME/.local/share/zed/dev-extensions/zed-gno"
+touch "$APPS_HOME/.local/share/zed/dev-extensions/zed-gno/extension.toml"
+APPS_SETUP_OUTPUT="$(HOME="$APPS_HOME" ZSH_CUSTOM="$APPS_ZSH_CUSTOM" PATH="$FAKE_BIN:/usr/bin:/bin" "$SETUP_SH" --yes apps)"
+printf '%s' "$APPS_SETUP_OUTPUT" | grep -q 'Activate Gno support in Zed'
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'go install mvdan.cc/gofumpt@latest' "$LOG_FILE"
