@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Create symlinks from this repo into $HOME for dotfiles and app config.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
