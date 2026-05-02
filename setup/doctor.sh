@@ -68,11 +68,20 @@ if command -v brew >/dev/null 2>&1; then
 fi
 
 print_info "Checking common harness tools..."
-for command_name in shellcheck shfmt ruff biome yamlfmt; do
+for command_name in shellcheck shfmt yamlfmt; do
     if command -v "$command_name" >/dev/null 2>&1; then
         print_success "$command_name found"
     else
         print_info "$command_name missing; run ./setup.sh brew-packages"
+    fi
+done
+
+print_info "Checking language-owned tools..."
+for command_name in ruff biome; do
+    if command -v "$command_name" >/dev/null 2>&1; then
+        print_success "$command_name found"
+    else
+        print_info "$command_name missing; run the related language command"
     fi
 done
 
