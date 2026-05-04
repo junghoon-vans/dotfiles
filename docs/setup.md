@@ -25,7 +25,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `bootstrap` | Installs Homebrew if it is missing. |
 | `brew-packages` | Installs common `Brewfile` dependencies, runs `mise install` from the repository root, and performs brew-owned post-install steps. |
 | `languages` | Installs language-specific tools by running `go`, `node`, `bun`, `java`, `xml`, `rust`, `python`, `gno`, and `typescript`. `mise.toml` records and provisions the preferred runtime versions for tools mise can manage. |
-| `links` | Creates symlinks from this repo into `$HOME`. |
+| `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
 | `opencode` | Installs OpenCode and bootstraps oh-my-openagent. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
@@ -35,9 +35,9 @@ Interactive runs print each command description before asking for Y/n confirmati
 
 | Command | Purpose |
 | --- | --- |
-| `doctor` | Checks required host tools, Brewfile package state, harness tools, and core symlink targets. |
+| `doctor` | Checks required host tools, Brewfile package state, harness tools, and core managed dotfiles. |
 | `check` | Runs repository validation: shell syntax, optional shellcheck and actionlint, JSON parsing, Brewfile syntax, whitespace checks, and setup smoke tests. |
-| `clean-backups` | Removes managed `*.backup.YYYYMMDD-HHMMSS` files created by `links` when the current target is linked to this repo. |
+| `clean-backups` | Removes managed `*.backup.YYYYMMDD-HHMMSS` files created before chezmoi apply when the current target still matches the tracked source. |
 
 ## Language Commands
 
@@ -67,10 +67,10 @@ Examples:
 
 `mise.toml` is the declarative runtime target for Go, Node, Python, Rust, Java, and Bun. `./setup.sh brew-packages` installs Homebrew-managed `mise` and runs `mise install` from the repository root. The existing language scripts remain the compatibility layer for installing language-owned CLIs such as `gopls`, `gnopls`, `pyright`, `ruff`, `lemminx`, and Biome.
 
-## Symlink Behavior
+## Dotfile Apply Behavior
 
-`setup/link.sh` creates symlinks for root dotfiles and tracked `.config/*` files. Existing files are backed up only when their content differs from the repo version.
+`setup/link.sh` applies chezmoi source state from `home/`. Existing files are backed up only when their content differs from the tracked source before `chezmoi apply` runs.
 
-Use `./setup.sh clean-backups` to remove old managed backup files after confirming the linked dotfiles are working. The cleanup only removes backups for targets that currently symlink back to this repository.
+Use `./setup.sh clean-backups` to remove old managed backup files after confirming the applied dotfiles are working. The cleanup only removes backups for targets that still match the tracked chezmoi source.
 
-`.config/AGENTS.md` is intentionally skipped because it is repo-local agent knowledge, not user app configuration.
+`.config/AGENTS.md` remains repo-local knowledge and is not part of the chezmoi source tree.

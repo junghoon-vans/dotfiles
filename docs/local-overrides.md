@@ -4,7 +4,7 @@ Keep machine-specific or sensitive values outside tracked files.
 
 ## Git Identity
 
-The tracked `.gitconfig` supports a local override file:
+The tracked `home/dot_gitconfig` source applies `~/.gitconfig`, which supports a local override file:
 
 ```bash
 cp ~/workspace/dotfiles/.gitconfig.override.example ~/.gitconfig.override

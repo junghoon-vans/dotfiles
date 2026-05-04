@@ -8,7 +8,7 @@ Run:
 ./setup.sh doctor
 ```
 
-`doctor` checks core host tools, Brewfile package state, common harness tools, and whether core dotfiles are linked into `$HOME`.
+`doctor` checks core host tools, Brewfile package state, common harness tools, and whether core chezmoi-managed dotfiles are applied into `$HOME`.
 
 ## Validate the Repository
 
@@ -39,7 +39,7 @@ Karabiner key remapping setup and broader macOS defaults are separate commands:
 ./setup.sh --skip macos --yes
 ```
 
-## Recreate Symlinks
+## Reapply Dotfiles
 
 Run:
 
@@ -47,4 +47,4 @@ Run:
 ./setup.sh links
 ```
 
-Existing files are backed up only when their content differs from the tracked dotfiles version.
+Existing files are backed up only when their content differs from the tracked chezmoi source version.
