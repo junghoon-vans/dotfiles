@@ -143,9 +143,9 @@ print_supported_commands() {
   done < <(language_commands)
 
   printf '\nNotes:\n'
-  printf '  %-14s %s\n' 'gno' 'Requires Go; run ./setup.sh go first on a clean host.'
-  printf '  %-14s %s\n' 'xml' 'Requires Java; run ./setup.sh java first on a clean host.'
-  printf '  %-14s %s\n' 'typescript' 'Requires Bun; run ./setup.sh bun first on a clean host.'
+  printf '  %-14s %s\n' 'gno' 'Installs the configured Go runtime before Gno tooling.'
+  printf '  %-14s %s\n' 'xml' 'Installs the configured Java runtime before LemMinX.'
+  printf '  %-14s %s\n' 'typescript' 'Installs the configured Bun runtime before TypeScript tooling.'
 }
 
 print_help() {

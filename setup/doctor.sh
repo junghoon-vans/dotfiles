@@ -83,12 +83,8 @@ if command -v brew >/dev/null 2>&1; then
 fi
 
 if command -v mise >/dev/null 2>&1 && [ -f "$DOTFILES_DIR/mise.toml" ]; then
-    print_info "Checking mise runtime state..."
-    if (cd "$DOTFILES_DIR" && mise install --dry-run-code >/dev/null 2>&1); then
-        print_success "mise runtimes are installed"
-    else
-        print_info "mise runtimes are not fully installed; run ./setup.sh brew-packages"
-    fi
+    print_success "mise runtime config found"
+    print_info "Install selected runtimes with ./setup.sh languages or individual language commands"
 fi
 
 print_info "Checking common harness tools..."

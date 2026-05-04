@@ -16,19 +16,6 @@ fi
 )
 print_success "Homebrew packages installed"
 
-if [ -f "$DOTFILES_DIR/mise.toml" ]; then
-    if command -v mise >/dev/null 2>&1; then
-        print_info "Installing mise runtimes..."
-        (
-            cd "$DOTFILES_DIR" || exit
-            mise install
-        )
-        print_success "mise runtimes installed"
-    else
-        print_info "mise not found; skipping runtime install"
-    fi
-fi
-
 if brew list libpq >/dev/null 2>&1; then
     brew link --force libpq >/dev/null 2>&1 || true
     print_success "libpq linked"
