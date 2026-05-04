@@ -180,6 +180,11 @@ export GNOPATH=$HOME/gno
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # ========================================
+# mise Configuration
+# ========================================
+command -v mise &>/dev/null && eval "$(mise activate zsh)"
+
+# ========================================
 # General Aliases
 # ========================================
 alias ..='cd ..'
