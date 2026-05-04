@@ -3,7 +3,7 @@
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
-for language_name in go node bun java xml rust python gno typescript; do
+for language_name in go node bun java kotlin xml rust python gno typescript; do
     case "${SETUP_SKIP_COMMANDS:-}" in
         *" $language_name "*)
             print_info "Skipping language command: $language_name"

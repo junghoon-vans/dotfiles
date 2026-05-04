@@ -93,6 +93,7 @@ printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Remove managed dotfile backup files created before chezmoi apply'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Language commands:'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go via mise plus Go formatter/linter tools'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install Kotlin via mise plus Kotlin language server'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install TypeScript, TypeScript LSP, and Biome'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Gno CLI and gnopls using Go'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Eclipse LemMinX XML language server'
@@ -110,7 +111,7 @@ while IFS= read -r language_name; do
   grep -Eq "(^|[[:space:]])${language_name}([[:space:];]|$)" "$REPO_ROOT/setup/commands/30-languages"
 done < <(for path in "$REPO_ROOT"/setup/languages/*.sh; do basename "${path%.sh}"; done | sort)
 
-EXPECTED_LANGUAGE_ORDER="go node bun java xml rust python gno typescript"
+EXPECTED_LANGUAGE_ORDER="go node bun java kotlin xml rust python gno typescript"
 ACTUAL_LANGUAGE_ORDER="$(grep '^for language_name in ' "$REPO_ROOT/setup/commands/30-languages" | sed 's/^for language_name in //; s/; do$//')"
 if [ "$ACTUAL_LANGUAGE_ORDER" != "$EXPECTED_LANGUAGE_ORDER" ]; then
   printf 'languages umbrella order changed: expected "%s", got "%s"\n' "$EXPECTED_LANGUAGE_ORDER" "$ACTUAL_LANGUAGE_ORDER" >&2
@@ -268,6 +269,21 @@ if HOME="$JAVA_FAIL_HOME" PATH="$JAVA_FAIL_BIN:/usr/bin:/bin" bash "$REPO_ROOT/s
   exit 1
 fi
 grep -q 'mise is required to install Java' "$JAVA_FAIL_OUTPUT"
+
+KOTLIN_FAIL_HOME="$TMP_DIR/kotlin-fail-home"
+KOTLIN_FAIL_BIN="$TMP_DIR/kotlin-fail-bin"
+mkdir -p "$KOTLIN_FAIL_HOME" "$KOTLIN_FAIL_BIN"
+cat > "$KOTLIN_FAIL_BIN/curl" <<'EOF'
+#!/bin/bash
+exit 0
+EOF
+chmod +x "$KOTLIN_FAIL_BIN/curl"
+KOTLIN_FAIL_OUTPUT="$TMP_DIR/kotlin-fail-output"
+if HOME="$KOTLIN_FAIL_HOME" PATH="$KOTLIN_FAIL_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/kotlin.sh" >"$KOTLIN_FAIL_OUTPUT" 2>&1; then
+  printf 'kotlin installer should fail when mise is missing\n' >&2
+  exit 1
+fi
+grep -q 'mise is required to install Kotlin' "$KOTLIN_FAIL_OUTPUT"
 
 XML_HOME="$TMP_DIR/xml-home"
 XML_BIN="$TMP_DIR/xml-bin"
@@ -536,6 +552,7 @@ grep -q 'mise install go' "$REPO_ROOT/setup/languages/go.sh"
 grep -q 'mise install node' "$REPO_ROOT/setup/languages/node.sh"
 grep -q 'mise install bun' "$REPO_ROOT/setup/languages/bun.sh"
 grep -q 'mise install java' "$REPO_ROOT/setup/languages/java.sh"
+grep -q 'mise install kotlin' "$REPO_ROOT/setup/languages/kotlin.sh"
 grep -q 'mise install python' "$REPO_ROOT/setup/languages/python.sh"
 grep -q 'mise install rust' "$REPO_ROOT/setup/languages/rust.sh"
 grep -q 'mise runtime config found' "$REPO_ROOT/setup/doctor.sh"
