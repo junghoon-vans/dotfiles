@@ -12,7 +12,7 @@ OpenCode and OpenAgent config lives under `.config/opencode/`.
 
 ## Language and Harness Coverage
 
-`mise.toml` records the preferred runtime versions for languages that mise can manage. The setup language commands still install runtime-adjacent tools and language servers that are not fully covered by mise.
+`mise.toml` records the preferred runtime versions for languages that mise can manage. `./setup.sh brew-packages` installs Homebrew-managed `mise` and runs `mise install`; setup language commands still install runtime-adjacent tools and language servers that are not fully covered by mise.
 
 | Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
 | --- | --- | --- | --- | --- | --- |

@@ -8,7 +8,7 @@ This repository is a personal macOS development environment specification, not o
 | --- | --- | --- |
 | Dotfiles payload | Root dotfiles and `.config/**` | Shell, Git, editor, app, and agent configuration that is linked into `$HOME`. |
 | Package inventory | `Brewfile` | Homebrew formulae, casks, fonts, and brew-owned setup inputs. |
-| Runtime intent | `mise.toml` | Desired language runtime versions for tools that mise can manage declaratively. |
+| Runtime provisioning | `mise.toml`, `Brewfile`, and `setup/commands/20-brew-packages` | Desired language runtime versions and the setup step that installs them with mise. |
 | Host bootstrap | `setup.sh` and `setup/` | First-run orchestration, language-specific tools, app setup, macOS defaults, and validation. |
 | Verification | `./setup.sh doctor` and `./setup.sh check` | Host health checks and repository regression checks. |
 
@@ -19,8 +19,8 @@ The repository keeps a monorepo layout because the environment is personal and t
 The long-term direction is to keep using proven tools instead of replacing them:
 
 - Homebrew owns macOS package and app installation.
-- mise owns language runtime version intent where practical.
-- Shell scripts remain the pragmatic layer for macOS defaults and ecosystem-specific installers.
+- mise owns language runtime version intent and provisioning where practical.
+- Shell scripts remain the pragmatic layer for macOS defaults, mise orchestration, and ecosystem-specific installers.
 - The setup harness coordinates these tools and exposes predictable `dry-run`, `doctor`, and `check` commands.
 
 ## Runtime Model

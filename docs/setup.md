@@ -23,8 +23,8 @@ Interactive runs print each command description before asking for Y/n confirmati
 | Command | Purpose |
 | --- | --- |
 | `bootstrap` | Installs Homebrew if it is missing. |
-| `brew-packages` | Installs common `Brewfile` dependencies and brew-owned post-install steps. |
-| `languages` | Installs language runtimes and language-specific tools by running `go`, `node`, `bun`, `java`, `xml`, `rust`, `python`, `gno`, and `typescript`. `mise.toml` records the preferred runtime versions for tools mise can manage over time. |
+| `brew-packages` | Installs common `Brewfile` dependencies, runs `mise install` from the repository root, and performs brew-owned post-install steps. |
+| `languages` | Installs language-specific tools by running `go`, `node`, `bun`, `java`, `xml`, `rust`, `python`, `gno`, and `typescript`. `mise.toml` records and provisions the preferred runtime versions for tools mise can manage. |
 | `links` | Creates symlinks from this repo into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
 | `opencode` | Installs OpenCode and bootstraps oh-my-openagent. |
@@ -65,7 +65,7 @@ Examples:
 
 `gno` expects Go, `xml` expects Java, and `typescript` expects Bun to be available. Run the prerequisite language commands first on a clean host, or use `languages` to install the full ordered set.
 
-`mise.toml` is the declarative runtime target for Go, Node, Python, Rust, Java, and Bun. The existing language scripts remain the compatibility layer for bootstrapping runtimes and installing language-owned CLIs such as `gopls`, `gnopls`, `pyright`, `ruff`, `lemminx`, and Biome.
+`mise.toml` is the declarative runtime target for Go, Node, Python, Rust, Java, and Bun. `./setup.sh brew-packages` installs Homebrew-managed `mise` and runs `mise install` from the repository root. The existing language scripts remain the compatibility layer for installing language-owned CLIs such as `gopls`, `gnopls`, `pyright`, `ruff`, `lemminx`, and Biome.
 
 ## Symlink Behavior
 
