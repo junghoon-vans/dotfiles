@@ -43,8 +43,8 @@ Preview what would run without changing the machine:
 Default commands run in filename order from `setup/commands/`:
 
 1. `bootstrap` - install Homebrew if needed
-2. `brew-packages` - install common `Brewfile` packages, run `mise install`, and perform brew-owned post-install steps
-3. `languages` - install language runtimes and language-specific tools
+2. `brew-packages` - install common `Brewfile` packages, including `mise` and `chezmoi`, and perform brew-owned post-install steps
+3. `languages` - install selected language runtimes from `mise.toml` and language-specific tools
 4. `links` - apply chezmoi-managed dotfiles and `.config/*`
 5. `apps` - install Oh My Zsh and Zed Gno extension support
 6. `opencode` - install OpenCode and bootstrap OpenAgent
@@ -78,7 +78,7 @@ Utility commands are explicit only and are not part of full setup:
 ./setup.sh doctor
 ./setup.sh clean-backups
 brew bundle --file Brewfile
-mise install # also run by ./setup.sh brew-packages
+mise install go # also run by ./setup.sh go
 ```
 
 After setup, reload the shell:

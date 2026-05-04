@@ -8,7 +8,7 @@ This repository is a personal macOS development environment specification, not o
 | --- | --- | --- |
 | Dotfiles payload | `.chezmoiroot` and `home/**` | Shell, Git, editor, app, and agent configuration applied into `$HOME` by chezmoi. |
 | Package inventory | `Brewfile` | Homebrew formulae, casks, fonts, and brew-owned setup inputs. |
-| Runtime provisioning | `mise.toml`, `Brewfile`, and `setup/commands/20-brew-packages` | Desired language runtime versions and the setup step that installs them with mise. |
+| Runtime provisioning | `mise.toml`, `Brewfile`, and `setup/languages/*.sh` | Desired language runtime versions and the per-language setup steps that install selected runtimes with mise. |
 | Host bootstrap | `setup.sh` and `setup/` | First-run orchestration, language-specific tools, app setup, macOS defaults, and validation. |
 | Verification | `./setup.sh doctor` and `./setup.sh check` | Host health checks and repository regression checks. |
 
