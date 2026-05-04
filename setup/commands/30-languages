@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Run all language commands: go, node, bun, java, xml, rust, python, gno, and typescript.
+# Description: Run selected language runtime and tooling commands.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
