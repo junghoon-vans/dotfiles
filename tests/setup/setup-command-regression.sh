@@ -69,7 +69,7 @@ HELP_OUTPUT="$($SETUP_SH --help)"
 printf '%s' "$HELP_OUTPUT" | grep -q 'opencode'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install OpenCode and bootstrap oh-my-openagent'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Remove managed dotfile backup files created by the link command'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Remove managed dotfile backup files created before chezmoi apply'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Language commands:'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go, gopls, and Go formatter/linter tools'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install TypeScript, TypeScript LSP, and Biome'
@@ -131,7 +131,7 @@ if grep -q '^gno.sh$\|^typescript.sh$' "$LANGUAGE_PROMPT_LOG"; then
   exit 1
 fi
 
-python3 - "$REPO_ROOT/.config/opencode/opencode.json" <<'PY'
+python3 - "$REPO_ROOT/home/dot_config/opencode/opencode.json" <<'PY'
 import json
 import sys
 
@@ -346,8 +346,8 @@ printf '%s' "$DOCTOR_OUTPUT" | grep -q 'Doctor completed'
 
 CLEAN_HOME="$TMP_DIR/clean-home"
 mkdir -p "$CLEAN_HOME/.config/zed"
-ln -s "$REPO_ROOT/.zshrc" "$CLEAN_HOME/.zshrc"
-ln -s "$REPO_ROOT/.config/zed/settings.json" "$CLEAN_HOME/.config/zed/settings.json"
+cp "$REPO_ROOT/home/dot_zshrc" "$CLEAN_HOME/.zshrc"
+cp "$REPO_ROOT/home/dot_config/zed/settings.json" "$CLEAN_HOME/.config/zed/settings.json"
 printf 'old zshrc\n' > "$CLEAN_HOME/.zshrc.backup.20260101-010101"
 printf 'old zed settings\n' > "$CLEAN_HOME/.config/zed/settings.json.backup.20260101-010101"
 printf 'keep unrelated\n' > "$CLEAN_HOME/.config/zed/settings.json.backup.not-managed"
@@ -505,14 +505,17 @@ if grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/55-karabiner"; then
   printf 'karabiner command should not apply macOS keyboard defaults\n' >&2
   exit 1
 fi
-grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/.zshrc"
+grep -q 'home' "$REPO_ROOT/.chezmoiroot"
+grep -q 'brew "chezmoi"' "$REPO_ROOT/Brewfile"
+grep -q 'chezmoi --source' "$REPO_ROOT/setup/link.sh"
+grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'brew "mise"' "$REPO_ROOT/Brewfile"
 grep -q 'mise install' "$REPO_ROOT/setup/commands/20-brew-packages"
 grep -q 'mise install --dry-run-code' "$REPO_ROOT/setup/doctor.sh"
-grep -q 'mise activate zsh' "$REPO_ROOT/.zshrc"
+grep -q 'mise activate zsh' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'cask "brave-browser"' "$REPO_ROOT/Brewfile"
-grep -q 'PLAYWRIGHT_MCP_EXECUTABLE_PATH' "$REPO_ROOT/.zshrc"
-if grep -q 'kaku' "$REPO_ROOT/.zshrc"; then
-  printf '.zshrc should not reference kaku\n' >&2
+grep -q 'PLAYWRIGHT_MCP_EXECUTABLE_PATH' "$REPO_ROOT/home/dot_zshrc"
+if grep -q 'kaku' "$REPO_ROOT/home/dot_zshrc"; then
+  printf 'home/dot_zshrc should not reference kaku\n' >&2
   exit 1
 fi
