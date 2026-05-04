@@ -20,10 +20,15 @@ if ! command -v curl >/dev/null 2>&1; then
     exit 1
 fi
 
-if ! command -v java >/dev/null 2>&1; then
-    print_error "Java is required for LemMinX. Run ./setup.sh java first."
+if ! command -v mise >/dev/null 2>&1; then
+    print_error "mise is required for LemMinX. Run ./setup.sh brew-packages first."
     exit 1
 fi
+
+(
+    cd "$DOTFILES_DIR" || exit
+    mise install java
+)
 
 mkdir -p "$LEMMINX_INSTALL_DIR" "$LEMMINX_BIN_DIR"
 
@@ -58,8 +63,9 @@ cat > "$LEMMINX_WRAPPER_PATH" <<EOF
 #!/bin/bash
 set -euo pipefail
 
+cd "$DOTFILES_DIR"
 # shellcheck disable=SC2086
-exec java \${LEMMINX_JAVA_OPTS:-} -jar "$LEMMINX_JAR_PATH" "\$@"
+exec mise exec -- java \${LEMMINX_JAVA_OPTS:-} -jar "$LEMMINX_JAR_PATH" "\$@"
 EOF
 
 chmod +x "$LEMMINX_WRAPPER_PATH"
