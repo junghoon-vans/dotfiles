@@ -71,6 +71,47 @@ PY
 print_info "Checking Brewfile syntax..."
 ruby -c "$DOTFILES_DIR/Brewfile" >/dev/null
 
+print_info "Validating mise config..."
+python3 - "$DOTFILES_DIR/mise.toml" <<'PY'
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+
+try:
+    import tomllib
+except ModuleNotFoundError:
+    content = path.read_text(encoding="utf-8")
+    required_entries = [
+        "[tools]",
+        'go = "1.25"',
+        'node = "24"',
+        'python = "3.13"',
+        'rust = "latest"',
+        'java = "temurin-21"',
+        'bun = "latest"',
+    ]
+    missing = [entry for entry in required_entries if entry not in content]
+    if missing:
+        raise SystemExit(f"mise.toml missing entries: {', '.join(missing)}")
+else:
+    with path.open("rb") as file:
+        config = tomllib.load(file)
+    tools = config.get("tools")
+    if not isinstance(tools, dict):
+        raise SystemExit("mise.toml must define a [tools] table")
+    expected_tools = {
+        "go": "1.25",
+        "node": "24",
+        "python": "3.13",
+        "rust": "latest",
+        "java": "temurin-21",
+        "bun": "latest",
+    }
+    if tools != expected_tools:
+        raise SystemExit(f"mise.toml tools mismatch: {tools!r}")
+PY
+
 if command -v git >/dev/null 2>&1 && git -C "$DOTFILES_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     print_info "Checking git diff whitespace..."
     git -C "$DOTFILES_DIR" diff --check
