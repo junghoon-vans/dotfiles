@@ -1,11 +1,11 @@
 # .config/
 
-App-specific configurations. Each subdirectory mirrors `~/.config/` unless explicitly documented as repo-local knowledge.
+Repo-local reference for app-specific configurations. The actual chezmoi source lives under `home/dot_config/`, which mirrors `~/.config/`.
 
 ## STRUCTURE
 
 ```text
-.config/
+home/dot_config/
 ├── gh/config.yml              # GitHub CLI preferences; hosts.yml is not tracked
 ├── karabiner/karabiner.json   # Keyboard remapping
 ├── nvim/                      # Neovim config
@@ -34,4 +34,4 @@ App-specific configurations. Each subdirectory mirrors `~/.config/` unless expli
 - JSON, YAML, and Lua are the main config formats.
 - OpenCode LSP mappings should match packages installed by `Brewfile` or setup scripts.
 - Do not track OAuth/token files such as `gh/hosts.yml` or GitHub Copilot generated app credentials.
-- This `AGENTS.md` file is repo-local documentation and is skipped by `setup/link.sh`.
+- This `.config/AGENTS.md` file is repo-local documentation and is intentionally outside `home/dot_config/`, so chezmoi does not apply it into `$HOME/.config`.
