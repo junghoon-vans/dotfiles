@@ -6,20 +6,24 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 print_step "Installing TypeScript tooling..."
 
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-if ! command -v bun &> /dev/null; then
-    print_error "Bun is required for TypeScript tooling. Run ./setup.sh bun first."
+if ! command -v mise >/dev/null 2>&1; then
+    print_error "mise is required for TypeScript tooling. Run ./setup.sh brew-packages first."
     exit 1
 fi
 
 print_info "Installing typescript..."
-bun install -g typescript
+(
+    cd "$DOTFILES_DIR" || exit
+    mise install bun
+    mise exec -- bun install -g typescript
+)
 print_success "typescript installed"
 
 print_info "Installing typescript-language-server..."
-bun install -g typescript-language-server
+(
+    cd "$DOTFILES_DIR" || exit
+    mise exec -- bun install -g typescript-language-server
+)
 print_success "typescript-language-server installed"
 
 if command -v brew >/dev/null 2>&1; then
