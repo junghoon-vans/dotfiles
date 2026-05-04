@@ -57,6 +57,27 @@ printf 'mise %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "install" ] && [ "\${2:-}" = "--dry-run-code" ]; then
   exit 1
 fi
+if [ "\${1:-}" = "exec" ] && [ "\${2:-}" = "--" ]; then
+  shift 2
+  printf '%s\n' "\$*" >> "$LOG_FILE"
+  case "\${1:-}" in
+    go)
+      if [ "\${2:-}" = "version" ]; then
+        printf 'go version go1.25.6 darwin/arm64\n'
+      fi
+      ;;
+    bun)
+      if [ "\${2:-}" = "--version" ]; then
+        printf '1.2.0\n'
+      fi
+      ;;
+    node)
+      if [ "\${2:-}" = "--version" ]; then
+        printf 'v24.0.0\n'
+      fi
+      ;;
+  esac
+fi
 exit 0
 EOF
 
@@ -71,13 +92,13 @@ printf '%s' "$HELP_OUTPUT" | grep -q 'Install OpenCode and bootstrap oh-my-opena
 printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Remove managed dotfile backup files created before chezmoi apply'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Language commands:'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go, gopls, and Go formatter/linter tools'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go via mise plus Go formatter/linter tools'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install TypeScript, TypeScript LSP, and Biome'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Gno CLI and gnopls using Go'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Eclipse LemMinX XML language server'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Requires Go; run ./setup.sh go first on a clean host'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Requires Java; run ./setup.sh java first on a clean host'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Requires Bun; run ./setup.sh bun first on a clean host'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Go runtime before Gno tooling'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Java runtime before LemMinX'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Bun runtime before TypeScript tooling'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--yes'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--no-input'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--dry-run'
@@ -167,15 +188,15 @@ printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'bootstrap'
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'Install Homebrew if it is missing'
 
 LANGUAGE_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run go gno xml typescript python)"
-printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go, gopls'
+printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go via mise'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  gno[[:space:]]\+Install Gno CLI'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  xml[[:space:]]\+Install Eclipse LemMinX XML language server'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  typescript[[:space:]]\+Install TypeScript'
-printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  python[[:space:]]\+Install uv, Python'
+printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  python[[:space:]]\+Install Python via mise'
 
 LANGUAGE_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip gno go gno)"
 printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q 'Skipping command: gno'
-printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go, gopls'
+printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go via mise'
 if printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q '^  gno[[:space:]]'; then
   printf 'dry-run selected commands should not include skipped gno command\n' >&2
   exit 1
@@ -207,7 +228,10 @@ chmod +x "$BREW_PACKAGES_BIN/brew" "$BREW_PACKAGES_BIN/mise"
 BREW_PACKAGES_PATH="$BREW_PACKAGES_BIN:/usr/bin:/bin"
 env HOME="$BREW_PACKAGES_HOME" PATH="$BREW_PACKAGES_PATH" BREW_PACKAGES_HOME="$BREW_PACKAGES_HOME" BREW_PACKAGES_LOG="$BREW_PACKAGES_LOG" bash "$REPO_ROOT/setup/commands/20-brew-packages" >/dev/null
 grep -q 'brew bundle check' "$BREW_PACKAGES_LOG"
-grep -q 'mise install' "$BREW_PACKAGES_LOG"
+if grep -q 'mise install' "$BREW_PACKAGES_LOG"; then
+  printf 'brew-packages should not install all mise runtimes\n' >&2
+  exit 1
+fi
 
 if DOCTOR_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip doctor doctor 2>&1)"; then
   printf 'skipping the only selected utility command should fail\n' >&2
@@ -225,10 +249,10 @@ EOF
 chmod +x "$NODE_FAIL_BIN/curl"
 NODE_FAIL_OUTPUT="$TMP_DIR/node-fail-output"
 if HOME="$NODE_FAIL_HOME" PATH="$NODE_FAIL_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/node.sh" >"$NODE_FAIL_OUTPUT" 2>&1; then
-  printf 'node installer should fail when the latest NVM version cannot be detected\n' >&2
+  printf 'node installer should fail when mise is missing\n' >&2
   exit 1
 fi
-grep -q 'Could not determine latest NVM version' "$NODE_FAIL_OUTPUT"
+grep -q 'mise is required to install Node.js' "$NODE_FAIL_OUTPUT"
 
 JAVA_FAIL_HOME="$TMP_DIR/java-fail-home"
 JAVA_FAIL_BIN="$TMP_DIR/java-fail-bin"
@@ -240,25 +264,10 @@ EOF
 chmod +x "$JAVA_FAIL_BIN/curl"
 JAVA_FAIL_OUTPUT="$TMP_DIR/java-fail-output"
 if HOME="$JAVA_FAIL_HOME" PATH="$JAVA_FAIL_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/java.sh" >"$JAVA_FAIL_OUTPUT" 2>&1; then
-  printf 'java installer should fail when SDKMAN init is not created\n' >&2
+  printf 'java installer should fail when mise is missing\n' >&2
   exit 1
 fi
-grep -q 'SDKMAN installer completed but' "$JAVA_FAIL_OUTPUT"
-
-JAVA_SILENT_HOME="$TMP_DIR/java-silent-home"
-JAVA_SILENT_BIN="$TMP_DIR/java-silent-bin"
-mkdir -p "$JAVA_SILENT_HOME/.sdkman/bin" "$JAVA_SILENT_BIN"
-cat > "$JAVA_SILENT_HOME/.sdkman/bin/sdkman-init.sh" <<'EOF'
-sdk() {
-  return 0
-}
-EOF
-JAVA_SILENT_OUTPUT="$TMP_DIR/java-silent-output"
-if HOME="$JAVA_SILENT_HOME" PATH="$JAVA_SILENT_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/java.sh" >"$JAVA_SILENT_OUTPUT" 2>&1; then
-  printf 'java installer should fail when sdk install does not create a Java candidate\n' >&2
-  exit 1
-fi
-grep -q 'Java 11 installation did not create an SDKMAN candidate' "$JAVA_SILENT_OUTPUT"
+grep -q 'mise is required to install Java' "$JAVA_FAIL_OUTPUT"
 
 XML_HOME="$TMP_DIR/xml-home"
 XML_BIN="$TMP_DIR/xml-bin"
@@ -269,6 +278,15 @@ mkdir -p "$XML_HOME" "$XML_BIN"
 cat > "$XML_BIN/java" <<'EOF'
 #!/bin/bash
 printf 'java %s\n' "$*" >> "$XML_LOG"
+exit 0
+EOF
+cat > "$XML_BIN/mise" <<'EOF'
+#!/bin/bash
+printf 'mise %s\n' "$*" >> "$XML_LOG"
+if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
+  shift 2
+  printf '%s\n' "$*" >> "$XML_LOG"
+fi
 exit 0
 EOF
 cat > "$XML_BIN/curl" <<'EOF'
@@ -311,7 +329,7 @@ if [ "$1" = "-a" ] && [ "$2" = "1" ]; then
 fi
 exit 1
 EOF
-chmod +x "$XML_BIN/java" "$XML_BIN/curl" "$XML_BIN/shasum"
+chmod +x "$XML_BIN/java" "$XML_BIN/curl" "$XML_BIN/shasum" "$XML_BIN/mise"
 
 HOME="$XML_HOME" PATH="$XML_BIN:/usr/bin:/bin" XML_LOG="$XML_LOG" XML_EXPECTED_SHA1="$XML_EXPECTED_SHA1" bash "$REPO_ROOT/setup/languages/xml.sh" >/dev/null
 [ -s "$XML_HOME/.local/share/lemminx/org.eclipse.lemminx-0.31.1-uber.jar" ]
@@ -319,6 +337,7 @@ HOME="$XML_HOME" PATH="$XML_BIN:/usr/bin:/bin" XML_LOG="$XML_LOG" XML_EXPECTED_S
 grep -q "curl $XML_JAR_URL" "$XML_LOG"
 grep -q "curl $XML_JAR_URL.sha1" "$XML_LOG"
 HOME="$XML_HOME" PATH="$XML_BIN:/usr/bin:/bin" XML_LOG="$XML_LOG" "$XML_HOME/.local/bin/lemminx" --stdio
+grep -q "mise exec -- java -jar $XML_HOME/.local/share/lemminx/org.eclipse.lemminx-0.31.1-uber.jar --stdio" "$XML_LOG"
 grep -q "java -jar $XML_HOME/.local/share/lemminx/org.eclipse.lemminx-0.31.1-uber.jar --stdio" "$XML_LOG"
 
 DOCTOR_HOME="$TMP_DIR/doctor-home"
@@ -444,7 +463,6 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/gno.sh" >/dev/nu
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/null
 
-grep -q 'go version' "$LOG_FILE"
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'go install github.com/gnolang/gno/gnovm/cmd/gno@latest' "$LOG_FILE"
 grep -q 'bun install -g typescript' "$LOG_FILE"
@@ -510,8 +528,17 @@ grep -q 'brew "chezmoi"' "$REPO_ROOT/Brewfile"
 grep -q 'chezmoi --source' "$REPO_ROOT/setup/link.sh"
 grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'brew "mise"' "$REPO_ROOT/Brewfile"
-grep -q 'mise install' "$REPO_ROOT/setup/commands/20-brew-packages"
-grep -q 'mise install --dry-run-code' "$REPO_ROOT/setup/doctor.sh"
+if grep -q 'mise install' "$REPO_ROOT/setup/commands/20-brew-packages"; then
+  printf 'brew-packages should not run mise install directly\n' >&2
+  exit 1
+fi
+grep -q 'mise install go' "$REPO_ROOT/setup/languages/go.sh"
+grep -q 'mise install node' "$REPO_ROOT/setup/languages/node.sh"
+grep -q 'mise install bun' "$REPO_ROOT/setup/languages/bun.sh"
+grep -q 'mise install java' "$REPO_ROOT/setup/languages/java.sh"
+grep -q 'mise install python' "$REPO_ROOT/setup/languages/python.sh"
+grep -q 'mise install rust' "$REPO_ROOT/setup/languages/rust.sh"
+grep -q 'mise runtime config found' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise activate zsh' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'cask "brave-browser"' "$REPO_ROOT/Brewfile"
 grep -q 'PLAYWRIGHT_MCP_EXECUTABLE_PATH' "$REPO_ROOT/home/dot_zshrc"
