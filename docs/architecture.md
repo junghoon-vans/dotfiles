@@ -6,7 +6,7 @@ This repository is a personal macOS development environment specification, not o
 
 | Layer | Owner | Purpose |
 | --- | --- | --- |
-| Dotfiles payload | Root dotfiles and `.config/**` | Shell, Git, editor, app, and agent configuration that is linked into `$HOME`. |
+| Dotfiles payload | `.chezmoiroot` and `home/**` | Shell, Git, editor, app, and agent configuration applied into `$HOME` by chezmoi. |
 | Package inventory | `Brewfile` | Homebrew formulae, casks, fonts, and brew-owned setup inputs. |
 | Runtime provisioning | `mise.toml`, `Brewfile`, and `setup/commands/20-brew-packages` | Desired language runtime versions and the setup step that installs them with mise. |
 | Host bootstrap | `setup.sh` and `setup/` | First-run orchestration, language-specific tools, app setup, macOS defaults, and validation. |
@@ -18,6 +18,7 @@ The repository keeps a monorepo layout because the environment is personal and t
 
 The long-term direction is to keep using proven tools instead of replacing them:
 
+- Chezmoi owns dotfile materialization into `$HOME`.
 - Homebrew owns macOS package and app installation.
 - mise owns language runtime version intent and provisioning where practical.
 - Shell scripts remain the pragmatic layer for macOS defaults, mise orchestration, and ecosystem-specific installers.
@@ -25,7 +26,7 @@ The long-term direction is to keep using proven tools instead of replacing them:
 
 ## Runtime Model
 
-Dotfiles are linked from this repository into `$HOME`. If the setup harness eventually becomes a Go binary, the binary should still materialize a real dotfiles store on disk before linking because symlinks must target filesystem paths, not embedded binary assets.
+Dotfiles live in chezmoi source state under `home/` and are applied into `$HOME` by `./setup.sh links`. If the setup harness eventually becomes a Go binary, the binary should still materialize a real chezmoi source tree on disk before applying because chezmoi needs filesystem-backed source state.
 
 ## Non-Goals
 
