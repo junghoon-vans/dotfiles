@@ -147,13 +147,16 @@ export PATH="$PATH:$GOPATH/bin"
 # Gno Configuration
 export GNOPATH=$HOME/gno
 # ========================================
-# Rust Configuration
-# ========================================
-[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
-
-# ========================================
 # mise Configuration
 # ========================================
+# Keep mise-managed runtimes ahead of legacy managers inherited from old shells.
+path=(
+  ${path:#$HOME/.nvm/*}
+  ${path:#$HOME/.sdkman/*}
+  ${path:#$HOME/.bun/bin}
+  ${path:#$HOME/.cargo/bin}
+)
+unset NVM_DIR SDKMAN_DIR BUN_INSTALL
 command -v mise &>/dev/null && eval "$(mise activate zsh)"
 
 # ========================================
@@ -188,7 +191,8 @@ export VISUAL=nvim
 # libpq (PostgreSQL client)
 [[ -n "${HOMEBREW_PREFIX:-}" && -d "$HOMEBREW_PREFIX/opt/libpq/bin" ]] && export PATH="$HOMEBREW_PREFIX/opt/libpq/bin:$PATH"
 
-export PATH="$HOME/.local/bin:$PATH"
+path=(${path:#$HOME/.local/bin})
+path+=("$HOME/.local/bin")
 
 export ANTHROPIC_MODEL="sonnet"
 
@@ -196,13 +200,6 @@ export ANTHROPIC_MODEL="sonnet"
 _brave_browser_path="/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
 [[ -x "$_brave_browser_path" ]] && export PLAYWRIGHT_MCP_EXECUTABLE_PATH="$_brave_browser_path"
 unset _brave_browser_path
-
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
 
 # ========================================
 # Local Overrides (machine-specific)
