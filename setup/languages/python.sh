@@ -1,9 +1,14 @@
 #!/bin/bash
-# Description: Install uv, Python, pyright, and ruff.
+# Description: Install Python via mise plus pyright and ruff.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
-print_step "Installing Python (latest stable) via uv..."
+print_step "Installing Python runtime and tooling..."
+
+if ! command -v mise >/dev/null 2>&1; then
+    print_error "mise is required to install Python. Run ./setup.sh brew-packages first."
+    exit 1
+fi
 
 if ! command -v brew &> /dev/null; then
     print_error "Homebrew is required to install uv"
@@ -21,12 +26,9 @@ done
 
 export PATH="$HOME/.local/bin:$PATH"
 
-print_info "Installing latest stable Python with default python/python3 executables..."
-uv python install --preview-features python-install-default --default
-
-if command -v python3 &> /dev/null; then
-    print_success "Python ready ($(python3 --version 2>&1))"
-else
-    print_error "python3 command not found after uv install"
-    exit 1
-fi
+(
+    cd "$DOTFILES_DIR" || exit
+    mise install python
+    mise exec -- python --version
+)
+print_success "Python runtime installed via mise"

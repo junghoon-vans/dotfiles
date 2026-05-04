@@ -89,6 +89,7 @@ except ModuleNotFoundError:
         'python = "3.13"',
         'rust = "latest"',
         'java = "temurin-21"',
+        'kotlin = "latest"',
         'bun = "latest"',
     ]
     missing = [entry for entry in required_entries if entry not in content]
@@ -106,6 +107,7 @@ else:
         "python": "3.13",
         "rust": "latest",
         "java": "temurin-21",
+        "kotlin": "latest",
         "bun": "latest",
     }
     if tools != expected_tools:
