@@ -41,13 +41,13 @@ dotfiles/
 
 ## KEY DECISIONS
 
-- **NVM**: Lazy-loaded in `.zshrc` (not via OMZ plugin) to avoid startup penalty.
+- **mise**: Owns runtime version selection for Go, Node, Python, Rust, Java, Kotlin, and Bun.
 - **zoxide**: Replaces autojump. `z` jumps by frecency; `j` is kept for muscle memory.
 - **Shell aliases**: `.zshrc` is the source of truth for aliases like `ls`, `l`, `ll`, `la`, and `lt`.
 - **delta**: Git diff pager with syntax highlighting, side-by-side view, and line numbers.
 - **prek**: Replaces pre-commit with a faster Rust implementation.
-- **go@1.25**: Pinned Homebrew formula with symlink to `/opt/homebrew/opt/go`.
-- **gnopls**: Built with the active `go@1.25` toolchain.
+- **Go 1.25**: Pinned in `mise.toml`; Go tooling is installed by `./setup.sh go`.
+- **gnopls**: Built with the Go runtime selected by mise.
 - **LemMinX**: Installed from the pinned Eclipse Maven uber JAR and exposed through `$HOME/.local/bin/lemminx`.
 - **Biome LSP**: Explicitly mapped to JSON/JSONC only, avoiding overlap with TypeScript LSP and leaving CSS to Biome formatter/linter coverage.
 - **Karabiner setup**: Separate from broader macOS defaults so `--skip karabiner` can exclude key remapping setup.
@@ -86,4 +86,4 @@ brew bundle --file Brewfile        # Install Brewfile packages
 - Requires Homebrew for package installation.
 - `home/dot_config/nvim` is repo-owned and applied by chezmoi; setup no longer bootstraps LazyVim starter into `$HOME/.config/nvim`.
 - OpenCode config uses the public config schema and `oh-my-openagent` plugin config.
-- SDKMAN init sources with a `set +u` guard because `sdkman-init.sh` may reference shell-specific unbound variables.
+- Java runtime provisioning is mise-owned; Kotlin and JVM language servers are installed by `./setup.sh java`.

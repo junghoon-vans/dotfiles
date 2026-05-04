@@ -12,7 +12,7 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 
 ## Language and Harness Coverage
 
-`mise.toml` records the preferred runtime versions for languages that mise can manage. `./setup.sh brew-packages` installs Homebrew-managed `mise` and runs `mise install`; setup language commands still install runtime-adjacent tools and language servers that are not fully covered by mise.
+`mise.toml` records the preferred runtime versions for languages that mise can manage. `./setup.sh brew-packages` installs Homebrew-managed `mise`; setup language commands run `mise install <tool>` for the selected runtime and then install runtime-adjacent tools and language servers that are not fully covered by mise.
 
 | Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
 | --- | --- | --- | --- | --- | --- |
@@ -20,7 +20,7 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 | Go | `mise.toml` (`go = "1.25"`) + `./setup.sh go` tools | `gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
 | Gno | `./setup.sh gno` (`gno`) | `gnopls` | - | `gnopls` diagnostics | `gno test` |
 | Java | `mise.toml` (`java = "temurin-21"`) + `./setup.sh java` tools | `jdtls` | - | `jdtls` diagnostics | project build tool |
-| Kotlin | `./setup.sh java` (SDKMAN Kotlin) | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
+| Kotlin | `mise.toml` (`kotlin = "latest"`) + `./setup.sh java` tools | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
 | Markdown | - | `marksman` | - | `marksman` diagnostics | - |
 | Python | `mise.toml` (`python = "3.13"`) + `./setup.sh python` tools | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
 | Rust | `mise.toml` (`rust = "latest"`) + `./setup.sh rust` tools | `rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
