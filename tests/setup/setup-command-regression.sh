@@ -51,7 +51,16 @@ fi
 printf 'brew %s\n' "\$*" >> "$LOG_FILE"
 EOF
 
-chmod +x "$FAKE_BIN/go" "$FAKE_BIN/bun" "$FAKE_BIN/curl" "$FAKE_BIN/brew"
+cat > "$FAKE_BIN/mise" <<EOF
+#!/bin/bash
+printf 'mise %s\n' "\$*" >> "$LOG_FILE"
+if [ "\${1:-}" = "install" ] && [ "\${2:-}" = "--dry-run-code" ]; then
+  exit 1
+fi
+exit 0
+EOF
+
+chmod +x "$FAKE_BIN/go" "$FAKE_BIN/bun" "$FAKE_BIN/curl" "$FAKE_BIN/brew" "$FAKE_BIN/mise"
 
 export HOME="$FAKE_HOME"
 export PATH="$FAKE_BIN:$PATH"
@@ -101,7 +110,8 @@ done
 LANGUAGE_PROMPT_OUTPUT="$(SETUP_DIR="$LANGUAGE_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 LANGUAGE_PROMPT_LOG="$LANGUAGE_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/30-languages")"
 printf '%s' "$LANGUAGE_PROMPT_OUTPUT" | grep -q "Run language command 'go'? \[Y/n\] yes (--yes)"
 printf '%s' "$LANGUAGE_PROMPT_OUTPUT" | grep -q "Run language command 'xml'? \[Y/n\] yes (--yes)"
-EXPECTED_LANGUAGE_RUNS="$(printf '%s\n' $EXPECTED_LANGUAGE_ORDER | sed 's/$/.sh/')"
+read -r -a expected_languages <<< "$EXPECTED_LANGUAGE_ORDER"
+EXPECTED_LANGUAGE_RUNS="$(printf '%s.sh\n' "${expected_languages[@]}")"
 ACTUAL_LANGUAGE_RUNS="$(cat "$LANGUAGE_PROMPT_LOG")"
 if [ "$ACTUAL_LANGUAGE_RUNS" != "$EXPECTED_LANGUAGE_RUNS" ]; then
   printf 'languages umbrella run order changed: expected "%s", got "%s"\n' "$EXPECTED_LANGUAGE_RUNS" "$ACTUAL_LANGUAGE_RUNS" >&2
@@ -170,6 +180,34 @@ if printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q '^  gno[[:space:]]'; then
   printf 'dry-run selected commands should not include skipped gno command\n' >&2
   exit 1
 fi
+
+BREW_PACKAGES_HOME="$TMP_DIR/brew-packages-home"
+BREW_PACKAGES_BIN="$TMP_DIR/brew-packages-bin"
+BREW_PACKAGES_LOG="$TMP_DIR/brew-packages.log"
+mkdir -p "$BREW_PACKAGES_HOME" "$BREW_PACKAGES_BIN"
+cat > "$BREW_PACKAGES_BIN/brew" <<'EOF'
+#!/bin/bash
+printf 'brew %s\n' "$*" >> "$BREW_PACKAGES_LOG"
+case "${1:-}" in
+  list)
+    exit 1
+    ;;
+  --prefix)
+    printf '%s\n' "$BREW_PACKAGES_HOME/fake-homebrew"
+    ;;
+esac
+exit 0
+EOF
+cat > "$BREW_PACKAGES_BIN/mise" <<'EOF'
+#!/bin/bash
+printf 'mise %s\n' "$*" >> "$BREW_PACKAGES_LOG"
+exit 0
+EOF
+chmod +x "$BREW_PACKAGES_BIN/brew" "$BREW_PACKAGES_BIN/mise"
+BREW_PACKAGES_PATH="$BREW_PACKAGES_BIN:/usr/bin:/bin"
+env HOME="$BREW_PACKAGES_HOME" PATH="$BREW_PACKAGES_PATH" BREW_PACKAGES_HOME="$BREW_PACKAGES_HOME" BREW_PACKAGES_LOG="$BREW_PACKAGES_LOG" bash "$REPO_ROOT/setup/commands/20-brew-packages" >/dev/null
+grep -q 'brew bundle check' "$BREW_PACKAGES_LOG"
+grep -q 'mise install' "$BREW_PACKAGES_LOG"
 
 if DOCTOR_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip doctor doctor 2>&1)"; then
   printf 'skipping the only selected utility command should fail\n' >&2
@@ -301,6 +339,7 @@ EOF
 chmod +x "$DOCTOR_BIN/git" "$DOCTOR_BIN/bash" "$DOCTOR_BIN/uname"
 DOCTOR_OUTPUT="$(HOME="$DOCTOR_HOME" PATH="$DOCTOR_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/doctor.sh")"
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'brew missing — run ./setup.sh bootstrap before brew-managed setup'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'mise missing — run ./setup.sh brew-packages before runtime setup'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'ruff missing; run ./setup.sh python'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'biome missing; run ./setup.sh typescript'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'Doctor completed'
@@ -467,6 +506,10 @@ if grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/55-karabiner"; then
   exit 1
 fi
 grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/.zshrc"
+grep -q 'brew "mise"' "$REPO_ROOT/Brewfile"
+grep -q 'mise install' "$REPO_ROOT/setup/commands/20-brew-packages"
+grep -q 'mise install --dry-run-code' "$REPO_ROOT/setup/doctor.sh"
+grep -q 'mise activate zsh' "$REPO_ROOT/.zshrc"
 grep -q 'cask "brave-browser"' "$REPO_ROOT/Brewfile"
 grep -q 'PLAYWRIGHT_MCP_EXECUTABLE_PATH' "$REPO_ROOT/.zshrc"
 if grep -q 'kaku' "$REPO_ROOT/.zshrc"; then
