@@ -60,7 +60,7 @@ dotfiles/
 - All paths use `$HOME` instead of specific usernames.
 - `home/dot_config/` mirrors `~/.config/`; repo-local knowledge files such as `.config/AGENTS.md` stay outside chezmoi source state.
 - `setup.sh` flow is `bootstrap → brew-packages → languages → links → apps → opencode → karabiner → macos`.
-- Language commands (`go`, `node`, `bun`, `java`, `xml`, `rust`, `python`, `gno`, `typescript`) are explicit options; `languages` is the default umbrella command.
+- Language commands (`go`, `node`, `bun`, `java`, `kotlin`, `xml`, `rust`, `python`, `gno`, `typescript`) are explicit options; `languages` is the default umbrella command.
 - `--skip` accepts default, utility, and language command names; utility commands are explicit-only and are not selected by full setup.
 - `setup/link.sh` backs up files only when content differs from the chezmoi source version before applying.
 - `clean-backups` removes only managed `*.backup.YYYYMMDD-HHMMSS` files whose current target still matches the chezmoi source.
@@ -86,4 +86,4 @@ brew bundle --file Brewfile        # Install Brewfile packages
 - Requires Homebrew for package installation.
 - `home/dot_config/nvim` is repo-owned and applied by chezmoi; setup no longer bootstraps LazyVim starter into `$HOME/.config/nvim`.
 - OpenCode config uses the public config schema and `oh-my-openagent` plugin config.
-- Java runtime provisioning is mise-owned; Kotlin and JVM language servers are installed by `./setup.sh java`.
+- Java runtime provisioning is mise-owned by `./setup.sh java`; Kotlin runtime and language server provisioning is owned by `./setup.sh kotlin`.
