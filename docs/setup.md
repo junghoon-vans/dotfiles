@@ -48,7 +48,8 @@ Language commands are explicit options as well as the building blocks of `langua
 | `go` | Installs the configured Go runtime with mise, then `gopls`, `golangci-lint`, and `gofumpt`. |
 | `node` | Installs the configured Node.js runtime with mise. |
 | `bun` | Installs the configured Bun runtime with mise. |
-| `java` | Installs the configured Java and Kotlin runtimes with mise, then `jdtls` and `kotlin-language-server`. |
+| `java` | Installs the configured Java runtime with mise, then `jdtls`. |
+| `kotlin` | Installs the configured Kotlin runtime with mise, then `kotlin-language-server`. |
 | `xml` | Installs Eclipse LemMinX XML language server. |
 | `rust` | Installs the configured Rust runtime with mise, then `rust-analyzer` and `cargo-nextest`. |
 | `python` | Installs the configured Python runtime with mise, then `uv`, `pyright`, and `ruff`. |
@@ -65,7 +66,7 @@ Examples:
 
 `gno`, `xml`, and `typescript` install their required Go, Java, and Bun runtimes through mise before installing their tooling. Use `languages` to install the full ordered set, or run individual commands to install only selected language environments.
 
-`mise.toml` is the declarative runtime target for Go, Node, Python, Rust, Java, Kotlin, and Bun. `./setup.sh brew-packages` installs Homebrew-managed `mise`, while each language command runs `mise install <tool>` for its selected runtime before installing language-owned CLIs such as `gopls`, `gnopls`, `pyright`, `ruff`, `lemminx`, and Biome.
+`mise.toml` is the declarative runtime target for Go, Node, Python, Rust, Java, Kotlin, and Bun. `./setup.sh brew-packages` installs Homebrew-managed `mise`, while each language command runs `mise install <tool>` for its selected runtime before installing language-owned CLIs such as `gopls`, `gnopls`, `pyright`, `ruff`, `kotlin-language-server`, `lemminx`, and Biome.
 
 ## Dotfile Apply Behavior
 
