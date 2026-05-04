@@ -68,6 +68,7 @@ require_command bash "install Bash"
 warn_command python3 "run ./setup.sh python before Python-based checks"
 warn_command ruby "install Ruby before Brewfile syntax checks"
 warn_command brew "run ./setup.sh bootstrap before brew-managed setup"
+warn_command mise "run ./setup.sh brew-packages before runtime setup"
 
 if command -v brew >/dev/null 2>&1; then
     print_info "Checking Brewfile package state..."
@@ -75,6 +76,15 @@ if command -v brew >/dev/null 2>&1; then
         print_success "Brewfile dependencies are satisfied"
     else
         print_info "Brewfile dependencies are not fully installed; run ./setup.sh brew-packages"
+    fi
+fi
+
+if command -v mise >/dev/null 2>&1 && [ -f "$DOTFILES_DIR/mise.toml" ]; then
+    print_info "Checking mise runtime state..."
+    if (cd "$DOTFILES_DIR" && mise install --dry-run-code >/dev/null 2>&1); then
+        print_success "mise runtimes are installed"
+    else
+        print_info "mise runtimes are not fully installed; run ./setup.sh brew-packages"
     fi
 fi
 
