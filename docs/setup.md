@@ -74,4 +74,4 @@ Examples:
 
 Use `./setup.sh clean-backups` to remove old managed backup files after confirming the applied dotfiles are working. The cleanup only removes backups for targets that still match the tracked chezmoi source.
 
-`.config/AGENTS.md` remains repo-local knowledge and is not part of the chezmoi source tree.
+The repository root does not need a `.config/` tree. Chezmoi-applied app config source lives under `home/dot_config/`, and repo-local app config notes live in `AGENTS.md` or `docs/`.

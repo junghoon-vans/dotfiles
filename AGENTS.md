@@ -9,7 +9,7 @@ dotfiles/
 ├── .chezmoiroot          # Points chezmoi at home/
 ├── home/                 # Chezmoi source state for dotfiles and .config payload
 ├── Brewfile              # Homebrew packages and harness tools
-├── docs/                 # Split setup, tooling, overrides, and troubleshooting docs
+├── docs/                 # Split setup, tooling, overrides, examples, and troubleshooting docs
 ├── setup.sh              # Public setup entrypoint (execs setup/main.sh)
 ├── setup/
 │   ├── main.sh           # Command orchestrator with flags and utility commands
@@ -52,13 +52,12 @@ dotfiles/
 - **Biome LSP**: Explicitly mapped to JSON/JSONC only, avoiding overlap with TypeScript LSP and leaving CSS to Biome formatter/linter coverage.
 - **Karabiner setup**: Separate from broader macOS defaults so `--skip karabiner` can exclude key remapping setup.
 - **Utility commands**: `check`, `doctor`, and `clean-backups` are explicit-only commands, not part of full setup.
-- **Repo-local AGENTS files**: `.config/AGENTS.md` is repo-local documentation and is not part of `home/`, so it is not applied into `$HOME/.config`.
 - **Secrets**: `gh/hosts.yml` and GitHub Copilot generated token files are never tracked.
 
 ## CONVENTIONS
 
 - All paths use `$HOME` instead of specific usernames.
-- `home/dot_config/` mirrors `~/.config/`; repo-local knowledge files such as `.config/AGENTS.md` stay outside chezmoi source state.
+- `home/dot_config/` mirrors `~/.config/`; keep app config documentation in this root `AGENTS.md` or `docs/`, not in a root `.config/` tree.
 - `setup.sh` flow is `bootstrap → brew-packages → languages → links → apps → opencode → karabiner → macos`.
 - Language commands (`go`, `node`, `bun`, `java`, `kotlin`, `xml`, `rust`, `python`, `gno`, `typescript`) are explicit options; `languages` is the default umbrella command.
 - `--skip` accepts default, utility, and language command names; utility commands are explicit-only and are not selected by full setup.
@@ -84,6 +83,7 @@ brew bundle --file Brewfile        # Install Brewfile packages
 ## NOTES
 
 - Requires Homebrew for package installation.
+- App config source lives under `home/dot_config/`: GitHub CLI preferences in `gh/config.yml`, Karabiner remapping in `karabiner/karabiner.json`, Neovim config in `nvim/`, OpenCode/OpenAgent config in `opencode/`, and Zed settings in `zed/settings.json`.
 - `home/dot_config/nvim` is repo-owned and applied by chezmoi; setup no longer bootstraps LazyVim starter into `$HOME/.config/nvim`.
 - OpenCode config uses the public config schema and `oh-my-openagent` plugin config.
 - Java runtime provisioning is mise-owned by `./setup.sh java`; Kotlin runtime and language server provisioning is owned by `./setup.sh kotlin`.
