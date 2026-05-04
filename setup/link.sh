@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Dotfiles Link Script
-# This script creates symlinks from the home directory to dotfiles in this repository
+# Dotfiles Apply Script
+# This script prepares backups for existing files, then applies dotfiles with chezmoi.
 
 set -euo pipefail
 
@@ -10,86 +10,75 @@ DOTFILES_DIR="$(cd "$SETUP_DIR/.." && pwd)"
 
 source "$SETUP_DIR/lib/common.sh"
 
-# List of files to symlink
-FILES=".zshrc .gitconfig .gitignore_global"
+CHEZMOI_SOURCE="$DOTFILES_DIR/home"
 
 
 # Function to create backup
 backup_file() {
     local source="$1"
     local target="$2"
+    local backup=""
+
+    if [ ! -e "$target" ] && [ ! -L "$target" ]; then
+        return 0
+    fi
+
+    backup="${target}.backup.$(date +%Y%m%d-%H%M%S)"
+
     if [ -L "$target" ]; then
-        rm "$target"
+        if [ "$(readlink "$target")" = "$source" ]; then
+            rm "$target"
+        else
+            echo -e "${YELLOW}Backing up $target → $backup${NC}"
+            mv "$target" "$backup"
+        fi
     elif [ -f "$target" ]; then
         if diff -q "$source" "$target" > /dev/null 2>&1; then
             rm "$target"  # identical content, silently re-link
         else
-            local backup
-            backup="${target}.backup.$(date +%Y%m%d-%H%M%S)"
             echo -e "${YELLOW}Backing up $target → $backup${NC}"
             mv "$target" "$backup"
         fi
+    else
+        echo -e "${YELLOW}Backing up $target → $backup${NC}"
+        mv "$target" "$backup"
     fi
 }
 
-# Function to create symlink
-create_symlink() {
-    local file=$1
-    local source="$DOTFILES_DIR/$file"
-    local target="$HOME/$file"
+target_for_source() {
+    local source="$1"
+    local relative_path="${source#"$CHEZMOI_SOURCE/"}"
 
-    if [ ! -f "$source" ]; then
-        echo -e "${RED}✗${NC} $file not found in $DOTFILES_DIR"
-        return
-    fi
-
-    if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
-        echo -e "${GREEN}✓${NC} Already linked $file"
-        return
-    fi
-
-    backup_file "$source" "$target"
-    ln -sf "$source" "$target"
-    echo -e "${GREEN}✓${NC} Linked $file"
+    case "$relative_path" in
+        dot_config/*)
+            printf '%s\n' "$HOME/.config/${relative_path#dot_config/}"
+            ;;
+        dot_*)
+            printf '%s\n' "$HOME/.${relative_path#dot_}"
+            ;;
+        *)
+            return 1
+            ;;
+    esac
 }
 
-# Function to create .config file symlink
-create_config_symlink() {
-    local config_file=$1
-    local source="$DOTFILES_DIR/.config/$config_file"
-    local target="$HOME/.config/$config_file"
-    local target_dir
-    target_dir=$(dirname "$target")
+if ! command -v chezmoi >/dev/null 2>&1; then
+    print_error "chezmoi not found; run ./setup.sh brew-packages first"
+    exit 1
+fi
 
-    if [ ! -f "$source" ]; then
-        echo -e "${RED}✗${NC} .config/$config_file not found in $DOTFILES_DIR"
-        return
-    fi
+if [ ! -d "$CHEZMOI_SOURCE" ]; then
+    print_error "chezmoi source not found: $CHEZMOI_SOURCE"
+    exit 1
+fi
 
-    if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
-        echo -e "${GREEN}✓${NC} Already linked .config/$config_file"
-        return
-    fi
-
+while IFS= read -r -d '' source; do
+    target="$(target_for_source "$source")" || continue
+    target_dir="$(dirname "$target")"
     mkdir -p "$target_dir"
     backup_file "$source" "$target"
-    ln -sf "$source" "$target"
-    echo -e "${GREEN}✓${NC} Linked .config/$config_file"
-}
+done < <(find "$CHEZMOI_SOURCE" -type f -print0)
 
-# Create symlinks
-for file in $FILES; do
-    create_symlink "$file"
-done
-
-# Create .config symlinks (auto-discover all files in .config/)
-if [ -d "$DOTFILES_DIR/.config" ]; then
-    while IFS= read -r -d '' config_file; do
-        config_file="${config_file#"$DOTFILES_DIR/.config/"}"
-        if [ "$config_file" = "AGENTS.md" ]; then
-            print_info "Skipping repo knowledge file .config/$config_file"
-            continue
-        fi
-        create_config_symlink "$config_file"
-    done < <(find "$DOTFILES_DIR/.config" -type f -print0)
-fi
+print_info "Applying dotfiles with chezmoi..."
+chezmoi --source "$DOTFILES_DIR" --force --no-tty apply
+print_success "Dotfiles applied with chezmoi"
