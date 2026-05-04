@@ -21,6 +21,7 @@ brew "actionlint"      # GitHub Actions workflow linter
 brew "prek"            # pre-commit re-implemented in Rust
 brew "delve"           # Go debugger
 brew "go-task"         # Task runner
+brew "chezmoi"         # Dotfiles manager
 brew "mise"            # Declarative language runtime manager
 
 # Language-Adjacent Tooling
