@@ -48,13 +48,13 @@ else
 fi
 
 print_info "Validating JSON config..."
-python3 -m json.tool "$DOTFILES_DIR/.config/opencode/opencode.json" >/dev/null
-python3 -m json.tool "$DOTFILES_DIR/.config/opencode/oh-my-openagent.json" >/dev/null
-python3 -m json.tool "$DOTFILES_DIR/.config/opencode/tui.json" >/dev/null
-python3 -m json.tool "$DOTFILES_DIR/.config/karabiner/karabiner.json" >/dev/null
+python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/opencode.json" >/dev/null
+python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/oh-my-openagent.json" >/dev/null
+python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/tui.json" >/dev/null
+python3 -m json.tool "$DOTFILES_DIR/home/dot_config/karabiner/karabiner.json" >/dev/null
 
 print_info "Validating JSONC config..."
-python3 - "$DOTFILES_DIR/.config/zed/settings.json" <<'PY'
+python3 - "$DOTFILES_DIR/home/dot_config/zed/settings.json" <<'PY'
 import json
 import re
 import sys
@@ -111,6 +111,17 @@ else:
     if tools != expected_tools:
         raise SystemExit(f"mise.toml tools mismatch: {tools!r}")
 PY
+
+print_info "Validating chezmoi source..."
+if [ "$(tr -d '[:space:]' < "$DOTFILES_DIR/.chezmoiroot")" != "home" ]; then
+    print_error ".chezmoiroot must point to home"
+    exit 1
+fi
+if command -v chezmoi >/dev/null 2>&1; then
+    chezmoi --source "$DOTFILES_DIR" --no-tty apply --dry-run --verbose >/dev/null
+else
+    print_info "chezmoi not found; skipping chezmoi dry-run"
+fi
 
 if command -v git >/dev/null 2>&1 && git -C "$DOTFILES_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     print_info "Checking git diff whitespace..."
