@@ -2,7 +2,7 @@
 
 ## OpenCode / OpenAgent
 
-OpenCode and OpenAgent config lives under `.config/opencode/`.
+OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is applied to `~/.config/opencode/` by chezmoi.
 
 - `opencode.json` tracks OpenCode plugins, MCP endpoints, and LSP mappings.
 - `oh-my-openagent.json` tracks model routing, fallbacks, skills, and notification preferences.

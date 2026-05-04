@@ -6,14 +6,13 @@ Personal macOS development environment specification optimized for Go, Gno, Rust
 
 This repository manages:
 
-- Dotfiles for Zsh, Git, Delta, and global ignore configuration
-- Neovim, Zed, Karabiner-Elements, GitHub CLI, and OpenCode config under `.config/`
+- Chezmoi-managed dotfiles for Zsh, Git, Delta, global ignore configuration, and `.config` app settings under `home/`
 - Homebrew packages through `Brewfile`
 - Language runtime provisioning through Homebrew-managed `mise` and `mise.toml`
 - macOS defaults and app-specific bootstrap scripts under `setup/`
 - A command-based setup harness under `setup/`
 
-The repository is intentionally broader than a dotfiles store: it is the source of truth for recreating a personal macOS workstation. Dotfiles remain managed as payload, while Homebrew, mise, and setup scripts cover packages, runtimes, app setup, and host verification.
+The repository is intentionally broader than a dotfiles store: it is the source of truth for recreating a personal macOS workstation. Dotfiles are managed through chezmoi source state in `home/`, while Homebrew, mise, and setup scripts cover packages, runtimes, app setup, and host verification.
 
 ## Quick Start
 
@@ -46,7 +45,7 @@ Default commands run in filename order from `setup/commands/`:
 1. `bootstrap` - install Homebrew if needed
 2. `brew-packages` - install common `Brewfile` packages, run `mise install`, and perform brew-owned post-install steps
 3. `languages` - install language runtimes and language-specific tools
-4. `links` - create symlinks for dotfiles and `.config/*`
+4. `links` - apply chezmoi-managed dotfiles and `.config/*`
 5. `apps` - install Oh My Zsh and Zed Gno extension support
 6. `opencode` - install OpenCode and bootstrap OpenAgent
 7. `karabiner` - install Karabiner-Elements for key remapping
@@ -55,7 +54,7 @@ Default commands run in filename order from `setup/commands/`:
 Utility commands are explicit only and are not part of full setup:
 
 ```bash
-./setup.sh doctor    # Inspect host prerequisites and symlink state
+./setup.sh doctor    # Inspect host prerequisites and managed dotfile state
 ./setup.sh check     # Run repository validation checks
 ./setup.sh clean-backups # Remove managed dotfile backups created by links
 ```
