@@ -1,13 +1,13 @@
 #!/bin/bash
-# Description: Create symlinks from this repo into $HOME for dotfiles and app config.
+# Description: Apply chezmoi-managed dotfiles and app config into $HOME.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
-print_step "Creating symlinks for dotfiles..."
+print_step "Applying chezmoi-managed dotfiles..."
 
 if [ -f "$SETUP_DIR/link.sh" ]; then
     bash "$SETUP_DIR/link.sh"
-    print_success "Symlinks created"
+    print_success "Dotfiles applied"
 else
     print_error "setup/link.sh not found!"
     exit 1

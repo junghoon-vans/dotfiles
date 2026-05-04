@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Install Karabiner-Elements and use the linked key remapping config.
+# Description: Install Karabiner-Elements and use the chezmoi-managed key remapping config.
 
 # shellcheck source=setup/lib/common.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
@@ -18,9 +18,9 @@ else
     print_success "Karabiner-Elements installed"
 fi
 
-if [ -L "$HOME/.config/karabiner/karabiner.json" ]; then
-    print_success "Karabiner config is linked"
+if [ -f "$HOME/.config/karabiner/karabiner.json" ] && diff -q "$DOTFILES_DIR/home/dot_config/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json" >/dev/null 2>&1; then
+    print_success "Karabiner config is applied"
 else
     print_info "Karabiner config is managed by the links command"
-    print_info "Run './setup.sh links' if $HOME/.config/karabiner/karabiner.json is not linked yet"
+    print_info "Run './setup.sh links' if $HOME/.config/karabiner/karabiner.json is not applied yet"
 fi
