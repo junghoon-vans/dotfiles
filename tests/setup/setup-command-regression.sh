@@ -533,6 +533,19 @@ grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/30-languages"
 [ ! -e "$REPO_ROOT/setup/commands/35-tool-packages" ]
 [ ! -e "$REPO_ROOT/setup/packages/go.sh" ]
 [ ! -e "$REPO_ROOT/setup/packages/bun.sh" ]
+[ ! -e "$REPO_ROOT/.gitconfig" ]
+[ ! -e "$REPO_ROOT/.gitignore_global" ]
+[ ! -e "$REPO_ROOT/.zshrc" ]
+[ ! -e "$REPO_ROOT/.config/gh/config.yml" ]
+[ ! -e "$REPO_ROOT/.config/karabiner/karabiner.json" ]
+[ ! -e "$REPO_ROOT/.config/nvim/init.lua" ]
+[ ! -e "$REPO_ROOT/.config/nvim/lua/config/lazy.lua" ]
+[ ! -e "$REPO_ROOT/.config/nvim/lua/config/options.lua" ]
+[ ! -e "$REPO_ROOT/.config/opencode/oh-my-openagent.json" ]
+[ ! -e "$REPO_ROOT/.config/opencode/opencode.json" ]
+[ ! -e "$REPO_ROOT/.config/opencode/tui.json" ]
+[ ! -e "$REPO_ROOT/.config/zed/settings.json" ]
+[ -e "$REPO_ROOT/.config/AGENTS.md" ]
 grep -q 'karabiner-elements' "$REPO_ROOT/setup/commands/55-karabiner"
 grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/60-macos"
 if grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/55-karabiner"; then
