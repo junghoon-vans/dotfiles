@@ -1,5 +1,5 @@
 # Local Git Configuration Override Example
-# Copy this file to ~/.gitconfig.local and customize as needed
+# Copy this file to ~/.gitconfig.override and customize as needed
 # This file is not tracked in git, so you can safely store personal settings
 
 [user]

@@ -7,7 +7,7 @@ Keep machine-specific or sensitive values outside tracked files.
 The tracked `home/dot_gitconfig` source applies `~/.gitconfig`, which supports a local override file:
 
 ```bash
-cp ~/workspace/dotfiles/.gitconfig.override.example ~/.gitconfig.override
+cp ~/workspace/dotfiles/docs/gitconfig.override.example ~/.gitconfig.override
 ```
 
 Then edit `~/.gitconfig.override`:
