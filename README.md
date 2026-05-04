@@ -1,16 +1,19 @@
-# Dotfiles
+# dotfiles
 
-Personal macOS dotfiles optimized for Go, Rust, Java, Kotlin, Python, Node.js, and modern CLI tooling.
+Personal macOS development environment specification optimized for Go, Gno, Rust, Java, Kotlin, Python, Node.js, OpenCode, and modern CLI tooling.
 
 ## Overview
 
 This repository manages:
 
-- Zsh and Oh My Zsh configuration
-- Git, Delta, and global ignore configuration
+- Dotfiles for Zsh, Git, Delta, and global ignore configuration
 - Neovim, Zed, Karabiner-Elements, GitHub CLI, and OpenCode config under `.config/`
 - Homebrew packages through `Brewfile`
+- Language runtime intent through `mise.toml`
+- macOS defaults and app-specific bootstrap scripts under `setup/`
 - A command-based setup harness under `setup/`
+
+The repository is intentionally broader than a dotfiles store: it is the source of truth for recreating a personal macOS workstation. Dotfiles remain managed as payload, while Homebrew, mise, and setup scripts cover packages, runtimes, app setup, and host verification.
 
 ## Quick Start
 
@@ -42,7 +45,7 @@ Default commands run in filename order from `setup/commands/`:
 
 1. `bootstrap` - install Homebrew if needed
 2. `brew-packages` - install common `Brewfile` packages and brew-owned post-install steps
-3. `languages` - install all language runtimes and language-specific tools
+3. `languages` - install language runtimes and language-specific tools
 4. `links` - create symlinks for dotfiles and `.config/*`
 5. `apps` - install Oh My Zsh and Zed Gno extension support
 6. `opencode` - install OpenCode and bootstrap OpenAgent
@@ -60,6 +63,7 @@ Utility commands are explicit only and are not part of full setup:
 ## Documentation
 
 - [Setup guide](docs/setup.md)
+- [Architecture notes](docs/architecture.md)
 - [Tool matrix](docs/tool-matrix.md)
 - [Local overrides](docs/local-overrides.md)
 - [Troubleshooting](docs/troubleshooting.md)
@@ -75,6 +79,7 @@ Utility commands are explicit only and are not part of full setup:
 ./setup.sh doctor
 ./setup.sh clean-backups
 brew bundle --file Brewfile
+mise install
 ```
 
 After setup, reload the shell:

@@ -12,18 +12,20 @@ OpenCode and OpenAgent config lives under `.config/opencode/`.
 
 ## Language and Harness Coverage
 
+`mise.toml` records the preferred runtime versions for languages that mise can manage. The setup language commands still install runtime-adjacent tools and language servers that are not fully covered by mise.
+
 | Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
 | --- | --- | --- | --- | --- | --- |
 | Bash / Zsh | macOS shell | `bash-language-server` | `shfmt` | `shellcheck` | `bash -n` |
-| Go | `./setup.sh go` (`go@1.25`) | `gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
+| Go | `mise.toml` (`go = "1.25"`) + `./setup.sh go` tools | `gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
 | Gno | `./setup.sh gno` (`gno`) | `gnopls` | - | `gnopls` diagnostics | `gno test` |
-| Java | `./setup.sh java` (SDKMAN Java 11/17/21) | `jdtls` | - | `jdtls` diagnostics | project build tool |
+| Java | `mise.toml` (`java = "temurin-21"`) + `./setup.sh java` tools | `jdtls` | - | `jdtls` diagnostics | project build tool |
 | Kotlin | `./setup.sh java` (SDKMAN Kotlin) | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
 | Markdown | - | `marksman` | - | `marksman` diagnostics | - |
-| Python | `./setup.sh python` (`uv` + Python) | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
-| Rust | `./setup.sh rust` (`rustup`) | `rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
+| Python | `mise.toml` (`python = "3.13"`) + `./setup.sh python` tools | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
+| Rust | `mise.toml` (`rust = "latest"`) + `./setup.sh rust` tools | `rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
 | Terraform | `terraform` | `terraform-ls` | `terraform fmt` | `terraform validate` | - |
-| TypeScript / JavaScript | `./setup.sh typescript` | `typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
+| TypeScript / JavaScript | `mise.toml` (`node = "24"`, `bun = "latest"`) + `./setup.sh typescript` tools | `typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
 | JSON / JSONC | `./setup.sh typescript` | `biome` | `biome` | `biome` | - |
 | CSS | `./setup.sh typescript` | not mapped | `biome` | `biome` | - |
 | XML / XSD / XSLT / SVG | `./setup.sh xml` (`lemminx`) | `lemminx` | - | LemMinX diagnostics | - |

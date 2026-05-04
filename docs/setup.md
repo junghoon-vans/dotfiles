@@ -1,6 +1,8 @@
 # Setup Guide
 
-`./setup.sh` is the public entrypoint. It delegates to `setup/main.sh`, which discovers ordered command files from `setup/commands/`.
+`./setup.sh` is the public entrypoint for this macOS development environment. It delegates to `setup/main.sh`, which discovers ordered command files from `setup/commands/`.
+
+This repository intentionally combines dotfiles, Homebrew package state, runtime intent, app setup, and host checks. The setup harness coordinates those layers rather than replacing the underlying tools.
 
 ## Modes
 
@@ -22,7 +24,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | --- | --- |
 | `bootstrap` | Installs Homebrew if it is missing. |
 | `brew-packages` | Installs common `Brewfile` dependencies and brew-owned post-install steps. |
-| `languages` | Installs all language runtimes and language-specific tools by running `go`, `node`, `bun`, `java`, `xml`, `rust`, `python`, `gno`, and `typescript`. |
+| `languages` | Installs language runtimes and language-specific tools by running `go`, `node`, `bun`, `java`, `xml`, `rust`, `python`, `gno`, and `typescript`. `mise.toml` records the preferred runtime versions for tools mise can manage over time. |
 | `links` | Creates symlinks from this repo into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
 | `opencode` | Installs OpenCode and bootstraps oh-my-openagent. |
@@ -62,6 +64,8 @@ Examples:
 ```
 
 `gno` expects Go, `xml` expects Java, and `typescript` expects Bun to be available. Run the prerequisite language commands first on a clean host, or use `languages` to install the full ordered set.
+
+`mise.toml` is the declarative runtime target for Go, Node, Python, Rust, Java, and Bun. The existing language scripts remain the compatibility layer for bootstrapping runtimes and installing language-owned CLIs such as `gopls`, `gnopls`, `pyright`, `ruff`, `lemminx`, and Biome.
 
 ## Symlink Behavior
 
