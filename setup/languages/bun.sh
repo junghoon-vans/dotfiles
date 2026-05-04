@@ -1,17 +1,18 @@
 #!/bin/bash
-# Description: Install the Bun JavaScript runtime.
+# Description: Install Bun via mise.
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 print_step "Installing Bun..."
 
-if command -v bun &> /dev/null; then
-    print_success "Bun already installed ($(bun --version))"
-else
-    print_info "Installing Bun..."
-    curl -fsSL https://bun.sh/install | bash
-    print_success "Bun installed"
+if ! command -v mise >/dev/null 2>&1; then
+    print_error "mise is required to install Bun. Run ./setup.sh brew-packages first."
+    exit 1
 fi
 
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+(
+    cd "$DOTFILES_DIR" || exit
+    mise install bun
+    mise exec -- bun --version
+)
+print_success "Bun runtime installed via mise"
