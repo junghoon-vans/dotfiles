@@ -139,32 +139,9 @@ command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 alias j='z'  # muscle memory compatibility with autojump
 
 # ========================================
-# NVM Configuration
-# ========================================
-export NVM_DIR="$HOME/.nvm"
-# Ensure global CLIs that require Node (but are not invoked via `node`) can run.
-if [ -d "$NVM_DIR/versions/node" ]; then
-  _nvm_node_bin=$(ls -d "$NVM_DIR"/versions/node/v*/bin 2>/dev/null | sort -V | tail -n 1)
-  [ -n "$_nvm_node_bin" ] && export PATH="$_nvm_node_bin:$PATH"
-  unset _nvm_node_bin
-fi
-# Lazy-load NVM to avoid ~500ms shell startup penalty
-nvm() {
-  unset -f nvm node npm npx
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-  nvm "$@"
-}
-node() { nvm; node "$@"; }
-npm()  { nvm; npm "$@"; }
-npx()  { nvm; npx "$@"; }
-
-# ========================================
 # Go Configuration
 # ========================================
 export GOPATH=$HOME/go
-[[ -n "${HOMEBREW_PREFIX:-}" && -d "$HOMEBREW_PREFIX/opt/go@1.25/bin" ]] && export PATH="$HOMEBREW_PREFIX/opt/go@1.25/bin:$PATH"
-export GOTOOLCHAIN="go1.25.6"
 export PATH="$PATH:$GOPATH/bin"
 
 # Gno Configuration
@@ -173,11 +150,6 @@ export GNOPATH=$HOME/gno
 # Rust Configuration
 # ========================================
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
-
-# ========================================
-# SDKMAN Configuration
-# ========================================
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # ========================================
 # mise Configuration
