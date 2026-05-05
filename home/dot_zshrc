@@ -96,6 +96,8 @@ elif [[ -d "/usr/local/Homebrew" || -x "/usr/local/bin/brew" ]]; then
   export HOMEBREW_PREFIX="/usr/local"
 fi
 
+typeset -U path PATH
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -138,26 +140,24 @@ source $ZSH/oh-my-zsh.sh
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 alias j='z'  # muscle memory compatibility with autojump
 
-# ========================================
-# Go Configuration
-# ========================================
-export GOPATH=$HOME/go
-export PATH="$PATH:$GOPATH/bin"
-
 # Gno Configuration
 export GNOPATH=$HOME/gno
 # ========================================
 # mise Configuration
 # ========================================
 # Keep mise-managed runtimes ahead of legacy managers inherited from old shells.
-path=(
-  ${path:#$HOME/.nvm/*}
-  ${path:#$HOME/.sdkman/*}
-  ${path:#$HOME/.bun/bin}
-  ${path:#$HOME/.cargo/bin}
-)
+path=(${path:#$HOME/.nvm/*})
+path=(${path:#$HOME/.sdkman/*})
+path=(${path:#$HOME/.bun/bin})
+path=(${path:#$HOME/.cargo/bin})
+path=(${path:#$HOME/go/bin})
 unset NVM_DIR SDKMAN_DIR BUN_INSTALL
 command -v mise &>/dev/null && eval "$(mise activate zsh)"
+path=(${path:#$HOME/.nvm/*})
+path=(${path:#$HOME/.sdkman/*})
+path=(${path:#$HOME/.bun/bin})
+path=(${path:#*/opt/go@1.25/bin})
+path=(${path:#$HOME/go/bin})
 
 # ========================================
 # General Aliases
