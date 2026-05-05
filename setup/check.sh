@@ -19,6 +19,7 @@ bash -n \
     "$SETUP_DIR/lib/common.sh" \
     "$SETUP_DIR"/commands/* \
     "$SETUP_DIR"/languages/*.sh \
+    "$SETUP_DIR"/blockchain/*.sh \
     "$SETUP_DIR"/apps/*.sh \
     "$SETUP_DIR/check.sh" \
     "$SETUP_DIR/doctor.sh" \
@@ -32,6 +33,7 @@ if command -v shellcheck >/dev/null 2>&1; then
         "$SETUP_DIR/lib/common.sh" \
         "$SETUP_DIR"/commands/* \
         "$SETUP_DIR"/languages/*.sh \
+        "$SETUP_DIR"/blockchain/*.sh \
         "$SETUP_DIR"/apps/*.sh \
         "$SETUP_DIR/check.sh" \
         "$SETUP_DIR/doctor.sh" \

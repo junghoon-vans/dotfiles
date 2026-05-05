@@ -1,0 +1,20 @@
+#!/bin/bash
+# Description: Run selected blockchain tooling commands.
+
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
+
+for blockchain_name in solana gno; do
+    case "${SETUP_SKIP_COMMANDS:-}" in
+        *" $blockchain_name "*)
+            print_info "Skipping blockchain command: $blockchain_name"
+            continue
+            ;;
+    esac
+
+    if ! confirm "Run blockchain command '$blockchain_name'?" "yes"; then
+        print_info "Skipped blockchain command: $blockchain_name"
+        continue
+    fi
+
+    bash "$SETUP_DIR/blockchain/$blockchain_name.sh"
+done

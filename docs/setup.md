@@ -16,7 +16,7 @@ This repository intentionally combines dotfiles, Homebrew package state, runtime
 ```
 
 `--skip` accepts default commands, utility commands, and language commands, but utility commands are never selected unless passed explicitly.
-Interactive runs print each command description before asking for Y/n confirmation, so you can see what the step installs or changes before approving it. The `languages` command also asks before each language subcommand.
+Interactive runs print each command description before asking for Y/n confirmation, so you can see what the step installs or changes before approving it. The `languages` and `blockchain` commands also ask before each nested subcommand.
 
 ## Default Commands
 
@@ -24,7 +24,8 @@ Interactive runs print each command description before asking for Y/n confirmati
 | --- | --- |
 | `bootstrap` | Installs Homebrew if it is missing. |
 | `brew-packages` | Installs common `Brewfile` dependencies, including Homebrew-managed `mise` and `chezmoi`, and performs brew-owned post-install steps. |
-| `languages` | Installs selected language runtimes from `mise.toml` and language-specific tools by running `go`, `node`, `bun`, `java`, `xml`, `rust`, `python`, `gno`, and `typescript`. |
+| `languages` | Installs selected language runtimes from `mise.toml` and language-specific tools by running `go`, `node`, `bun`, `java`, `kotlin`, `xml`, `rust`, `python`, and `typescript`. |
+| `blockchain` | Installs selected blockchain tooling by running `solana` and `gno`. |
 | `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
 | `opencode` | Installs OpenCode and bootstraps oh-my-openagent. |
@@ -53,20 +54,30 @@ Language commands are explicit options as well as the building blocks of `langua
 | `xml` | Installs Eclipse LemMinX XML language server. |
 | `rust` | Installs the configured Rust runtime with mise, then `rust-analyzer` and `cargo-nextest`. |
 | `python` | Installs the configured Python runtime with mise, then `uv`, `pyright`, and `ruff`. |
-| `gno` | Installs `gno` and `gnopls` using Go. |
 | `typescript` | Installs TypeScript, TypeScript LSP, and Biome. |
+
+## Blockchain Commands
+
+Blockchain commands are explicit options as well as the building blocks of `blockchain`:
+
+| Command | Purpose |
+| --- | --- |
+| `solana` | Installs the Solana CLI with the Anza Agave installer, then Anchor through AVM. |
+| `gno` | Installs `gno` and `gnopls` using Go. |
 
 Examples:
 
 ```bash
 ./setup.sh go python
-./setup.sh go gno bun typescript
+./setup.sh go bun typescript
+./setup.sh blockchain
+./setup.sh solana
 ./setup.sh --skip rust --yes
 ```
 
-`gno`, `xml`, and `typescript` install their required Go, Java, and Bun runtimes through mise before installing their tooling. Use `languages` to install the full ordered set, or run individual commands to install only selected language environments.
+`gno`, `solana`, `xml`, and `typescript` install their required Go, Rust, Java, and Bun runtimes through mise before installing their tooling. Use `languages` and `blockchain` to install the full ordered sets, or run individual commands to install only selected environments.
 
-`mise.toml` is the declarative runtime target for Go, Node, Python, Rust, Java, Kotlin, and Bun. `./setup.sh brew-packages` installs Homebrew-managed `mise`, while each language command runs `mise install <tool>` for its selected runtime before installing language-owned CLIs such as `gopls`, `gnopls`, `pyright`, `ruff`, `kotlin-language-server`, `lemminx`, and Biome.
+`mise.toml` is the declarative runtime target for Go, Node, Python, Rust, Java, Kotlin, and Bun. `./setup.sh brew-packages` installs Homebrew-managed `mise`, while each language command runs `mise install <tool>` for its selected runtime before installing language-owned CLIs such as `gopls`, `pyright`, `ruff`, `kotlin-language-server`, `lemminx`, and Biome. Blockchain commands live under `setup/blockchain/`: Gno tooling uses the configured Go runtime, while Solana CLI and Anchor are intentionally not tracked in `mise.toml`. `./setup.sh solana` uses the upstream Anza Agave installer for Solana CLI and AVM from the Anchor repository for Anchor CLI.
 
 ## Dotfile Apply Behavior
 

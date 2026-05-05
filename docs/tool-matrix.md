@@ -12,7 +12,7 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 
 ## Language and Harness Coverage
 
-`mise.toml` records the preferred runtime versions for languages that mise can manage. `./setup.sh brew-packages` installs Homebrew-managed `mise`; setup language commands run `mise install <tool>` for the selected runtime and then install runtime-adjacent tools and language servers that are not fully covered by mise.
+`mise.toml` records the preferred runtime versions for languages that mise can manage. `./setup.sh brew-packages` installs Homebrew-managed `mise`; setup language and blockchain commands run `mise install <tool>` for required runtimes and then install runtime-adjacent tools, language servers, and chain-specific CLIs that are not fully covered by mise.
 
 | Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
 | --- | --- | --- | --- | --- | --- |
@@ -24,6 +24,7 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 | Markdown | - | `marksman` | - | `marksman` diagnostics | - |
 | Python | `mise.toml` (`python = "3.13"`) + `./setup.sh python` tools | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
 | Rust | `mise.toml` (`rust = "latest"`) + `./setup.sh rust` tools | `rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
+| Solana / Anchor | Agave Solana CLI + AVM/Anchor from `./setup.sh solana` | - | `anchor fmt` / `rustfmt` | `anchor` / Solana CLI diagnostics | `anchor test`, `solana-test-validator` |
 | Terraform | `terraform` | `terraform-ls` | `terraform fmt` | `terraform validate` | - |
 | TypeScript / JavaScript | `mise.toml` (`node = "24"`, `bun = "latest"`) + `./setup.sh typescript` tools | `typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
 | JSON / JSONC | `./setup.sh typescript` | `biome` | `biome` | `biome` | - |

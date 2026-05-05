@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal macOS development environment specification optimized for Go, Gno, Rust, Java, Kotlin, Python, Node.js, OpenCode, and modern CLI tooling.
+Personal macOS development environment specification optimized for Go, Gno, Rust, Solana/Anchor, Java, Kotlin, Python, Node.js, OpenCode, and modern CLI tooling.
 
 ## Overview
 
@@ -45,11 +45,12 @@ Default commands run in filename order from `setup/commands/`:
 1. `bootstrap` - install Homebrew if needed
 2. `brew-packages` - install common `Brewfile` packages, including `mise` and `chezmoi`, and perform brew-owned post-install steps
 3. `languages` - install selected language runtimes from `mise.toml` and language-specific tools
-4. `links` - apply chezmoi-managed dotfiles and `.config/*`
-5. `apps` - install Oh My Zsh and Zed Gno extension support
-6. `opencode` - install OpenCode and bootstrap OpenAgent
-7. `karabiner` - install Karabiner-Elements for key remapping
-8. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
+4. `blockchain` - install selected blockchain tooling, including Solana/Anchor and Gno
+5. `links` - apply chezmoi-managed dotfiles and `.config/*`
+6. `apps` - install Oh My Zsh and Zed Gno extension support
+7. `opencode` - install OpenCode and bootstrap OpenAgent
+8. `karabiner` - install Karabiner-Elements for key remapping
+9. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
 
 Utility commands are explicit only and are not part of full setup:
 
@@ -72,7 +73,9 @@ Utility commands are explicit only and are not part of full setup:
 ```bash
 ./setup.sh --help
 ./setup.sh go python
-./setup.sh languages opencode
+./setup.sh blockchain
+./setup.sh solana
+./setup.sh languages blockchain opencode
 ./setup.sh links apps
 ./setup.sh check
 ./setup.sh doctor

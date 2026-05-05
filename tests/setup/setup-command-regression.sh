@@ -89,15 +89,19 @@ export PATH="$FAKE_BIN:$PATH"
 HELP_OUTPUT="$($SETUP_SH --help)"
 printf '%s' "$HELP_OUTPUT" | grep -q 'opencode'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install OpenCode and bootstrap oh-my-openagent'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Run selected blockchain tooling commands'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Remove managed dotfile backup files created before chezmoi apply'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Language commands:'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Blockchain commands:'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go via mise plus Go formatter/linter tools'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Kotlin via mise plus Kotlin language server'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install TypeScript, TypeScript LSP, and Biome'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Gno CLI and gnopls using Go'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install Solana CLI and Anchor tooling'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Eclipse LemMinX XML language server'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Go runtime before Gno tooling'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Rust runtime before Solana and Anchor tooling'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Java runtime before LemMinX'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Bun runtime before TypeScript tooling'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--yes'
@@ -111,10 +115,23 @@ while IFS= read -r language_name; do
   grep -Eq "(^|[[:space:]])${language_name}([[:space:];]|$)" "$REPO_ROOT/setup/commands/30-languages"
 done < <(for path in "$REPO_ROOT"/setup/languages/*.sh; do basename "${path%.sh}"; done | sort)
 
-EXPECTED_LANGUAGE_ORDER="go node bun java kotlin xml rust python gno typescript"
+while IFS= read -r blockchain_name; do
+  BLOCKCHAIN_COMMAND_OUTPUT="$($SETUP_SH --dry-run "$blockchain_name")"
+  printf '%s' "$BLOCKCHAIN_COMMAND_OUTPUT" | grep -q "^  ${blockchain_name}[[:space:]]"
+  grep -Eq "(^|[[:space:]])${blockchain_name}([[:space:];]|$)" "$REPO_ROOT/setup/commands/35-blockchain"
+done < <(for path in "$REPO_ROOT"/setup/blockchain/*.sh; do basename "${path%.sh}"; done | sort)
+
+EXPECTED_LANGUAGE_ORDER="go node bun java kotlin xml rust python typescript"
 ACTUAL_LANGUAGE_ORDER="$(grep '^for language_name in ' "$REPO_ROOT/setup/commands/30-languages" | sed 's/^for language_name in //; s/; do$//')"
 if [ "$ACTUAL_LANGUAGE_ORDER" != "$EXPECTED_LANGUAGE_ORDER" ]; then
   printf 'languages umbrella order changed: expected "%s", got "%s"\n' "$EXPECTED_LANGUAGE_ORDER" "$ACTUAL_LANGUAGE_ORDER" >&2
+  exit 1
+fi
+
+EXPECTED_BLOCKCHAIN_ORDER="solana gno"
+ACTUAL_BLOCKCHAIN_ORDER="$(grep '^for blockchain_name in ' "$REPO_ROOT/setup/commands/35-blockchain" | sed 's/^for blockchain_name in //; s/; do$//')"
+if [ "$ACTUAL_BLOCKCHAIN_ORDER" != "$EXPECTED_BLOCKCHAIN_ORDER" ]; then
+  printf 'blockchain umbrella order changed: expected "%s", got "%s"\n' "$EXPECTED_BLOCKCHAIN_ORDER" "$ACTUAL_BLOCKCHAIN_ORDER" >&2
   exit 1
 fi
 
@@ -141,15 +158,49 @@ if [ "$ACTUAL_LANGUAGE_RUNS" != "$EXPECTED_LANGUAGE_RUNS" ]; then
 fi
 
 : > "$LANGUAGE_PROMPT_LOG"
-LANGUAGE_SKIP_PROMPT_OUTPUT="$(SETUP_DIR="$LANGUAGE_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 SETUP_SKIP_COMMANDS=' gno typescript ' LANGUAGE_PROMPT_LOG="$LANGUAGE_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/30-languages")"
-printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping language command: gno'
+LANGUAGE_SKIP_PROMPT_OUTPUT="$(SETUP_DIR="$LANGUAGE_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 SETUP_SKIP_COMMANDS=' rust typescript ' LANGUAGE_PROMPT_LOG="$LANGUAGE_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/30-languages")"
+printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping language command: rust'
 printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping language command: typescript'
-if printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q "Run language command 'gno'?"; then
-  printf 'skipped language command should not prompt: gno\n' >&2
+if printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q "Run language command 'rust'?"; then
+  printf 'skipped language command should not prompt: rust\n' >&2
   exit 1
 fi
-if grep -q '^gno.sh$\|^typescript.sh$' "$LANGUAGE_PROMPT_LOG"; then
+if grep -q '^rust.sh$\|^typescript.sh$' "$LANGUAGE_PROMPT_LOG"; then
   printf 'skipped language commands should not run\n' >&2
+  exit 1
+fi
+
+BLOCKCHAIN_PROMPT_SETUP_DIR="$TMP_DIR/blockchain-prompt-setup"
+BLOCKCHAIN_PROMPT_LOG="$TMP_DIR/blockchain-prompt.log"
+mkdir -p "$BLOCKCHAIN_PROMPT_SETUP_DIR/blockchain"
+for blockchain_name in $EXPECTED_BLOCKCHAIN_ORDER; do
+  cat > "$BLOCKCHAIN_PROMPT_SETUP_DIR/blockchain/$blockchain_name.sh" <<'EOF'
+#!/bin/bash
+printf '%s\n' "$(basename "$0")" >> "$BLOCKCHAIN_PROMPT_LOG"
+EOF
+  chmod +x "$BLOCKCHAIN_PROMPT_SETUP_DIR/blockchain/$blockchain_name.sh"
+done
+
+BLOCKCHAIN_PROMPT_OUTPUT="$(SETUP_DIR="$BLOCKCHAIN_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 BLOCKCHAIN_PROMPT_LOG="$BLOCKCHAIN_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/35-blockchain")"
+printf '%s' "$BLOCKCHAIN_PROMPT_OUTPUT" | grep -q "Run blockchain command 'solana'? \[Y/n\] yes (--yes)"
+printf '%s' "$BLOCKCHAIN_PROMPT_OUTPUT" | grep -q "Run blockchain command 'gno'? \[Y/n\] yes (--yes)"
+read -r -a expected_blockchains <<< "$EXPECTED_BLOCKCHAIN_ORDER"
+EXPECTED_BLOCKCHAIN_RUNS="$(printf '%s.sh\n' "${expected_blockchains[@]}")"
+ACTUAL_BLOCKCHAIN_RUNS="$(cat "$BLOCKCHAIN_PROMPT_LOG")"
+if [ "$ACTUAL_BLOCKCHAIN_RUNS" != "$EXPECTED_BLOCKCHAIN_RUNS" ]; then
+  printf 'blockchain umbrella run order changed: expected "%s", got "%s"\n' "$EXPECTED_BLOCKCHAIN_RUNS" "$ACTUAL_BLOCKCHAIN_RUNS" >&2
+  exit 1
+fi
+
+: > "$BLOCKCHAIN_PROMPT_LOG"
+BLOCKCHAIN_SKIP_PROMPT_OUTPUT="$(SETUP_DIR="$BLOCKCHAIN_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 SETUP_SKIP_COMMANDS=' gno ' BLOCKCHAIN_PROMPT_LOG="$BLOCKCHAIN_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/35-blockchain")"
+printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping blockchain command: gno'
+if printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q "Run blockchain command 'gno'?"; then
+  printf 'skipped blockchain command should not prompt: gno\n' >&2
+  exit 1
+fi
+if grep -q '^gno.sh$' "$BLOCKCHAIN_PROMPT_LOG"; then
+  printf 'skipped blockchain command should not run\n' >&2
   exit 1
 fi
 
@@ -170,10 +221,18 @@ PY
 DRY_RUN_OUTPUT="$($SETUP_SH --dry-run --skip macos)"
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Selected setup commands'
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'languages'
+printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'blockchain'
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  karabiner[[:space:]]\+Install Karabiner-Elements'
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Skipping command: macos'
 if printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  macos[[:space:]]'; then
   printf 'dry-run selected commands should not include skipped macos command\n' >&2
+  exit 1
+fi
+
+BLOCKCHAIN_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip blockchain)"
+printf '%s' "$BLOCKCHAIN_SKIP_OUTPUT" | grep -q 'Skipping command: blockchain'
+if printf '%s' "$BLOCKCHAIN_SKIP_OUTPUT" | grep -q '^  blockchain[[:space:]]'; then
+  printf 'dry-run selected commands should not include skipped blockchain command\n' >&2
   exit 1
 fi
 
@@ -188,10 +247,11 @@ NO_INPUT_OUTPUT="$($SETUP_SH --no-input --dry-run bootstrap)"
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'bootstrap'
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'Install Homebrew if it is missing'
 
-LANGUAGE_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run go gno xml typescript python)"
+LANGUAGE_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run go gno xml solana typescript python)"
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go via mise'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  gno[[:space:]]\+Install Gno CLI'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  xml[[:space:]]\+Install Eclipse LemMinX XML language server'
+printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  solana[[:space:]]\+Install Solana CLI and Anchor tooling'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  typescript[[:space:]]\+Install TypeScript'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  python[[:space:]]\+Install Python via mise'
 
@@ -356,6 +416,117 @@ HOME="$XML_HOME" PATH="$XML_BIN:/usr/bin:/bin" XML_LOG="$XML_LOG" "$XML_HOME/.lo
 grep -q "mise exec -- java -jar $XML_HOME/.local/share/lemminx/org.eclipse.lemminx-0.31.1-uber.jar --stdio" "$XML_LOG"
 grep -q "java -jar $XML_HOME/.local/share/lemminx/org.eclipse.lemminx-0.31.1-uber.jar --stdio" "$XML_LOG"
 
+SOLANA_HOME="$TMP_DIR/solana-home"
+SOLANA_BIN="$TMP_DIR/solana-bin"
+SOLANA_LOG="$TMP_DIR/solana.log"
+mkdir -p "$SOLANA_HOME" "$SOLANA_BIN"
+cat > "$SOLANA_BIN/mise" <<'EOF'
+#!/bin/bash
+printf 'mise %s\n' "$*" >> "$SOLANA_LOG"
+if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
+  shift 2
+  printf '%s\n' "$*" >> "$SOLANA_LOG"
+  if [ "${1:-}" = "cargo" ] && [ "${2:-}" = "install" ]; then
+    mkdir -p "$HOME/.cargo/bin"
+    cat > "$HOME/.cargo/bin/avm" <<'AVMEOF'
+#!/bin/bash
+printf 'avm %s\n' "$*" >> "$SOLANA_LOG"
+case "${1:-}" in
+  install)
+    mkdir -p "$HOME/.avm/bin"
+    cat > "$HOME/.avm/bin/anchor" <<'ANCHOREEOF'
+#!/bin/bash
+printf 'anchor %s\n' "$*" >> "$SOLANA_LOG"
+if [ "${1:-}" = "--version" ]; then
+  printf 'anchor-cli 0.31.1\n'
+fi
+ANCHOREEOF
+    chmod +x "$HOME/.avm/bin/anchor"
+    ;;
+esac
+exit 0
+AVMEOF
+    chmod +x "$HOME/.cargo/bin/avm"
+  fi
+fi
+exit 0
+EOF
+cat > "$SOLANA_BIN/curl" <<'EOF'
+#!/bin/bash
+output=""
+url=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -o)
+      output="$2"
+      shift 2
+      ;;
+    -*)
+      shift
+      ;;
+    *)
+      url="$1"
+      shift
+      ;;
+  esac
+done
+printf 'curl %s\n' "$url" >> "$SOLANA_LOG"
+if [ -z "$output" ]; then
+  exit 1
+fi
+cat > "$output" <<'INSTALLEREOF'
+#!/bin/sh
+set -eu
+
+printf 'agave installer\n' >> "$SOLANA_LOG"
+mkdir -p "$HOME/.local/share/solana/install/active_release/bin"
+cat > "$HOME/.local/share/solana/install/active_release/bin/solana" <<'SOLANAEOF'
+#!/bin/bash
+printf 'solana %s\n' "$*" >> "$SOLANA_LOG"
+if [ "${1:-}" = "--version" ]; then
+  printf 'solana-cli 2.0.0\n'
+fi
+SOLANAEOF
+cat > "$HOME/.local/share/solana/install/active_release/bin/agave-install" <<'AGAVEEOF'
+#!/bin/bash
+printf 'agave-install %s\n' "$*" >> "$SOLANA_LOG"
+AGAVEEOF
+chmod +x \
+  "$HOME/.local/share/solana/install/active_release/bin/solana" \
+  "$HOME/.local/share/solana/install/active_release/bin/agave-install"
+INSTALLEREOF
+EOF
+chmod +x "$SOLANA_BIN/mise" "$SOLANA_BIN/curl"
+
+ANCHOR_VERSION="0.31.1" HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" bash "$REPO_ROOT/setup/blockchain/solana.sh" >/dev/null
+[ -x "$SOLANA_HOME/.local/bin/solana" ]
+[ -x "$SOLANA_HOME/.local/bin/agave-install" ]
+[ -x "$SOLANA_HOME/.local/bin/avm" ]
+[ -x "$SOLANA_HOME/.local/bin/anchor" ]
+grep -q 'mise install rust' "$SOLANA_LOG"
+grep -q 'mise exec -- rustc --version' "$SOLANA_LOG"
+grep -q 'curl https://release.anza.xyz/stable/install' "$SOLANA_LOG"
+grep -q 'agave installer' "$SOLANA_LOG"
+grep -q 'cargo install --git https://github.com/solana-foundation/anchor avm --force' "$SOLANA_LOG"
+grep -q 'avm install 0.31.1' "$SOLANA_LOG"
+grep -q 'avm use 0.31.1' "$SOLANA_LOG"
+HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/solana" --version >/dev/null
+HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/agave-install" update >/dev/null
+HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/avm" --version >/dev/null
+HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/anchor" --version >/dev/null
+grep -q 'solana --version' "$SOLANA_LOG"
+grep -q 'agave-install update' "$SOLANA_LOG"
+grep -q 'avm --version' "$SOLANA_LOG"
+grep -q 'anchor --version' "$SOLANA_LOG"
+
+: > "$SOLANA_LOG"
+HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" bash "$REPO_ROOT/setup/blockchain/solana.sh" >/dev/null
+grep -q 'agave-install update' "$SOLANA_LOG"
+if grep -q 'curl https://release.anza.xyz/stable/install' "$SOLANA_LOG"; then
+  printf 'solana installer should prefer agave-install update when active release exists\n' >&2
+  exit 1
+fi
+
 DOCTOR_HOME="$TMP_DIR/doctor-home"
 DOCTOR_BIN="$TMP_DIR/doctor-bin"
 mkdir -p "$DOCTOR_HOME" "$DOCTOR_BIN"
@@ -423,7 +594,7 @@ fi
 
 : > "$LOG_FILE"
 
-PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/gno.sh" >/dev/null
+PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
 
 grep -q 'go install github.com/gnolang/gno/gnovm/cmd/gno@latest' "$LOG_FILE"
@@ -475,7 +646,7 @@ EOF
 chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_BIN/brew"
 
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
-PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/gno.sh" >/dev/null
+PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/null
 
@@ -530,6 +701,7 @@ grep -q 'setup/link.sh' "$REPO_ROOT/setup/commands/40-links"
 # shellcheck disable=SC2016
 grep -q 'eval "$(brew shellenv)"' "$REPO_ROOT/setup/commands/10-bootstrap"
 grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/30-languages"
+grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/35-blockchain"
 [ ! -e "$REPO_ROOT/setup/commands/35-tool-packages" ]
 [ ! -e "$REPO_ROOT/setup/packages/go.sh" ]
 [ ! -e "$REPO_ROOT/setup/packages/bun.sh" ]
@@ -570,6 +742,11 @@ grep -q 'mise install java' "$REPO_ROOT/setup/languages/java.sh"
 grep -q 'mise install kotlin' "$REPO_ROOT/setup/languages/kotlin.sh"
 grep -q 'mise install python' "$REPO_ROOT/setup/languages/python.sh"
 grep -q 'mise install rust' "$REPO_ROOT/setup/languages/rust.sh"
+grep -q 'mise install go' "$REPO_ROOT/setup/blockchain/gno.sh"
+grep -q 'github.com/gnolang/gno/gnovm/cmd/gno@latest' "$REPO_ROOT/setup/blockchain/gno.sh"
+grep -q 'mise install rust' "$REPO_ROOT/setup/blockchain/solana.sh"
+grep -q 'https://release.anza.xyz/stable/install' "$REPO_ROOT/setup/blockchain/solana.sh"
+grep -q 'https://github.com/solana-foundation/anchor avm --force' "$REPO_ROOT/setup/blockchain/solana.sh"
 grep -q 'mise runtime config found' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise activate zsh' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'cask "brave-browser"' "$REPO_ROOT/Brewfile"

@@ -23,7 +23,11 @@ utility_commands() {
 }
 
 language_commands() {
-  printf '%s\n' go node bun java kotlin xml rust python gno typescript
+  printf '%s\n' go node bun java kotlin xml rust python typescript
+}
+
+blockchain_commands() {
+  printf '%s\n' solana gno
 }
 
 command_name_from_entry() {
@@ -73,8 +77,12 @@ command_script() {
       printf '%s\n' "$SETUP_DIR/$command_name.sh"
       return 0
       ;;
-    go|node|bun|java|kotlin|xml|rust|python|gno|typescript)
+    go|node|bun|java|kotlin|xml|rust|python|typescript)
       printf '%s\n' "$SETUP_DIR/languages/$command_name.sh"
+      return 0
+      ;;
+    solana|gno)
+      printf '%s\n' "$SETUP_DIR/blockchain/$command_name.sh"
       return 0
       ;;
   esac
@@ -142,8 +150,14 @@ print_supported_commands() {
     print_command_entry "$command_name"
   done < <(language_commands)
 
+  printf '\nBlockchain commands:\n'
+  while IFS= read -r command_name; do
+    print_command_entry "$command_name"
+  done < <(blockchain_commands)
+
   printf '\nNotes:\n'
   printf '  %-14s %s\n' 'gno' 'Installs the configured Go runtime before Gno tooling.'
+  printf '  %-14s %s\n' 'solana' 'Installs the configured Rust runtime before Solana and Anchor tooling.'
   printf '  %-14s %s\n' 'xml' 'Installs the configured Java runtime before LemMinX.'
   printf '  %-14s %s\n' 'typescript' 'Installs the configured Bun runtime before TypeScript tooling.'
 }
@@ -226,7 +240,7 @@ selected_commands_affect_shell() {
 
   for command_name in "$@"; do
     case "$command_name" in
-      bootstrap|brew-packages|languages|links|apps|opencode|go|node|bun|java|kotlin|xml|rust|python|gno|typescript)
+      bootstrap|brew-packages|languages|blockchain|links|apps|opencode|go|node|bun|java|kotlin|xml|rust|python|typescript|solana|gno)
         return 0
         ;;
     esac
