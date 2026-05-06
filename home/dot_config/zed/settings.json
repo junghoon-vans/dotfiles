@@ -39,12 +39,12 @@
   "lsp": {
     "gopls": {
       "binary": {
-        "path": "~/go/bin/gopls",
+        "path": "~/.local/bin/gopls",
       },
     },
     "gnopls": {
       "binary": {
-        "path": "~/go/bin/gnopls",
+        "path": "~/.local/bin/gnopls",
         "arguments": ["-mode=stdio"],
       },
     },
