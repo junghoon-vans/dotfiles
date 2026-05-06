@@ -16,16 +16,12 @@ fi
 )
 print_success "Go runtime installed via mise"
 
-if command -v brew >/dev/null 2>&1; then
-    if brew list gopls >/dev/null 2>&1; then
-        print_success "gopls already installed"
-    else
-        brew install gopls
-        print_success "gopls installed"
-    fi
-else
-    print_info "Homebrew not found, skipping gopls installation"
-fi
+print_info "Installing golang.org/x/tools/gopls@latest..."
+(
+    cd "$DOTFILES_DIR" || exit
+    mise exec -- go install golang.org/x/tools/gopls@latest
+)
+print_success "gopls installed"
 
 print_info "Installing github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0..."
 (
@@ -40,3 +36,8 @@ print_info "Installing mvdan.cc/gofumpt@latest..."
     mise exec -- go install mvdan.cc/gofumpt@latest
 )
 print_success "gofumpt installed"
+
+for tool_name in gopls golangci-lint gofumpt; do
+    create_mise_go_tool_wrapper "$tool_name"
+done
+print_success "Go tool wrappers created in $HOME/.local/bin"

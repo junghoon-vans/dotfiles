@@ -43,6 +43,35 @@ prepend_path_if_dir() {
     esac
 }
 
+create_mise_go_tool_wrapper() {
+    local tool_name="$1"
+    local wrapper_dir="${2:-$HOME/.local/bin}"
+    local wrapper_path="$wrapper_dir/$tool_name"
+
+    mkdir -p "$wrapper_dir"
+
+    cat > "$wrapper_path" <<EOF
+#!/bin/bash
+set -euo pipefail
+
+cd "$DOTFILES_DIR"
+
+go_bin="\$(mise exec -- go env GOBIN)"
+if [ -z "\$go_bin" ]; then
+    go_path="\$(mise exec -- go env GOPATH)"
+    go_bin="\$go_path/bin"
+fi
+
+exec "\$go_bin/$tool_name" "\$@"
+EOF
+
+    chmod +x "$wrapper_path"
+    if [ ! -x "$wrapper_path" ]; then
+        print_error "$tool_name wrapper is not executable at $wrapper_path"
+        exit 1
+    fi
+}
+
 print_step() {
     echo -e "\n${CYAN}==>${NC} ${GREEN}$1${NC}"
 }

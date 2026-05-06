@@ -25,3 +25,8 @@ print_info "Installing github.com/gnoverse/gnopls@latest..."
     mise exec -- go install github.com/gnoverse/gnopls@latest
 )
 print_success "gnopls installed"
+
+for tool_name in gno gnopls; do
+    create_mise_go_tool_wrapper "$tool_name"
+done
+print_success "Gno tool wrappers created in $HOME/.local/bin"
