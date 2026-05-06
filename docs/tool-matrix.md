@@ -18,7 +18,7 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 | --- | --- | --- | --- | --- | --- |
 | Bash / Zsh | macOS shell | `bash-language-server` | `shfmt` | `shellcheck` | `bash -n` |
 | Go | `mise.toml` (`go = "1.25"`) + `./setup.sh go` tools | `gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
-| Gno | `./setup.sh gno` (`gno`) | `gnopls` | - | `gnopls` diagnostics | `gno test` |
+| Gno | `./setup.sh gno` (`~/.local/bin/gno`) | `~/.local/bin/gnopls` | - | `gnopls` diagnostics | `gno test` |
 | Java | `mise.toml` (`java = "temurin-21"`) + `./setup.sh java` tools | `jdtls` | - | `jdtls` diagnostics | project build tool |
 | Kotlin | `mise.toml` (`kotlin = "latest"`) + `./setup.sh kotlin` tools | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
 | Markdown | - | `marksman` | - | `marksman` diagnostics | - |

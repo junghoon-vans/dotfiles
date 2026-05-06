@@ -63,7 +63,7 @@ Blockchain commands are explicit options as well as the building blocks of `bloc
 | Command | Purpose |
 | --- | --- |
 | `solana` | Installs the Solana CLI with the Anza Agave installer, then Anchor through AVM. |
-| `gno` | Installs `gno` and `gnopls` using Go. |
+| `gno` | Installs `gno` and `gnopls` using mise-managed Go and exposes wrappers in `~/.local/bin`. |
 
 Examples:
 

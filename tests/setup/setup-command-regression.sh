@@ -585,7 +585,11 @@ APPS_SETUP_OUTPUT="$(HOME="$APPS_HOME" ZSH_CUSTOM="$APPS_ZSH_CUSTOM" PATH="$FAKE
 printf '%s' "$APPS_SETUP_OUTPUT" | grep -q 'Activate Gno support in Zed'
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
+grep -q 'go install golang.org/x/tools/gopls@latest' "$LOG_FILE"
 grep -q 'go install mvdan.cc/gofumpt@latest' "$LOG_FILE"
+test -x "$FAKE_HOME/.local/bin/gopls"
+test -x "$FAKE_HOME/.local/bin/golangci-lint"
+test -x "$FAKE_HOME/.local/bin/gofumpt"
 
 if grep -q 'bun install -g' "$LOG_FILE"; then
   printf 'languages/bun.sh should not install Bun packages\n' >&2
@@ -599,6 +603,8 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >
 
 grep -q 'go install github.com/gnolang/gno/gnovm/cmd/gno@latest' "$LOG_FILE"
 grep -q 'go install github.com/gnoverse/gnopls@latest' "$LOG_FILE"
+test -x "$FAKE_HOME/.local/bin/gno"
+test -x "$FAKE_HOME/.local/bin/gnopls"
 grep -q 'bun install -g typescript' "$LOG_FILE"
 grep -q 'bun install -g typescript-language-server' "$LOG_FILE"
 
@@ -651,6 +657,7 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/null
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
+grep -q 'go install golang.org/x/tools/gopls@latest' "$LOG_FILE"
 grep -q 'go install github.com/gnolang/gno/gnovm/cmd/gno@latest' "$LOG_FILE"
 grep -q 'bun install -g typescript' "$LOG_FILE"
 grep -q 'bun install -g opencode-ai' "$LOG_FILE"
