@@ -122,7 +122,7 @@ if [ "$(tr -d '[:space:]' < "$DOTFILES_DIR/.chezmoiroot")" != "home" ]; then
     exit 1
 fi
 if command -v chezmoi >/dev/null 2>&1; then
-    chezmoi --source "$DOTFILES_DIR" --no-tty apply --dry-run --verbose >/dev/null
+    chezmoi --source "$DOTFILES_DIR" --no-tty --force apply --dry-run --verbose >/dev/null
 else
     print_info "chezmoi not found; skipping chezmoi dry-run"
 fi
