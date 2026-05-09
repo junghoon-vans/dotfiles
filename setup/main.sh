@@ -160,6 +160,7 @@ print_supported_commands() {
   printf '  %-14s %s\n' 'solana' 'Installs the configured Rust runtime before Solana and Anchor tooling.'
   printf '  %-14s %s\n' 'xml' 'Installs the configured Java runtime before LemMinX.'
   printf '  %-14s %s\n' 'typescript' 'Installs the configured Bun runtime before TypeScript tooling.'
+  printf '  %-14s %s\n' 'node' 'Enables Corepack and installs pnpm with the configured Node runtime.'
 }
 
 print_help() {
