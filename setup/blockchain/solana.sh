@@ -84,6 +84,13 @@ set -euo pipefail
 exec "$HOME/.local/share/solana/install/active_release/bin/agave-install" "$@"
 EOF
 
+cat > "$LOCAL_BIN_DIR/cargo-build-sbf" <<'EOF'
+#!/bin/bash
+set -euo pipefail
+
+exec "$HOME/.local/share/solana/install/active_release/bin/cargo-build-sbf" "$@"
+EOF
+
 cat > "$LOCAL_BIN_DIR/avm" <<'EOF'
 #!/bin/bash
 set -euo pipefail
@@ -100,7 +107,7 @@ AVM_BIN_DIR="${AVM_HOME:-$HOME/.avm}/bin"
 exec "$AVM_BIN_DIR/anchor" "$@"
 EOF
 
-for wrapper_name in solana agave-install avm anchor; do
+for wrapper_name in solana agave-install cargo-build-sbf avm anchor; do
     chmod +x "$LOCAL_BIN_DIR/$wrapper_name"
     if [ ! -x "$LOCAL_BIN_DIR/$wrapper_name" ]; then
         print_error "$wrapper_name wrapper is not executable at $LOCAL_BIN_DIR/$wrapper_name"
