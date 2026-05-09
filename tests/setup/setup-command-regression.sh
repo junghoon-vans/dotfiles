@@ -9,13 +9,24 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 
 FAKE_HOME="$TMP_DIR/home"
 FAKE_BIN="$TMP_DIR/bin"
+FAKE_GOBIN="$TMP_DIR/fake-gobin"
+FAKE_GOPATH="$TMP_DIR/fake-gopath"
+FAKE_GOROOT="$TMP_DIR/fake-goroot"
 LOG_FILE="$TMP_DIR/commands.log"
 
-mkdir -p "$FAKE_HOME" "$FAKE_BIN"
+mkdir -p "$FAKE_HOME" "$FAKE_BIN" "$FAKE_GOBIN" "$FAKE_GOPATH/bin" "$FAKE_GOROOT/bin"
 
 cat > "$FAKE_BIN/go" <<EOF
 #!/bin/bash
 printf 'go %s\n' "\$*" >> "$LOG_FILE"
+if [ "\${1:-}" = "version" ]; then
+  printf 'go version go1.25.6 darwin/arm64\n'
+fi
+EOF
+
+cat > "$FAKE_GOROOT/bin/go" <<EOF
+#!/bin/bash
+printf 'goroot-go %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "version" ]; then
   printf 'go version go1.25.6 darwin/arm64\n'
 fi
@@ -62,6 +73,22 @@ if [ "\${1:-}" = "exec" ] && [ "\${2:-}" = "--" ]; then
   printf '%s\n' "\$*" >> "$LOG_FILE"
   case "\${1:-}" in
     go)
+      if [ "\${2:-}" = "env" ]; then
+        case "\${3:-}" in
+          GOBIN)
+            printf '%s\n' "$FAKE_GOBIN"
+            exit 0
+            ;;
+          GOPATH)
+            printf '%s\n' "$FAKE_GOPATH"
+            exit 0
+            ;;
+          GOROOT)
+            printf '%s\n' "$FAKE_GOROOT"
+            exit 0
+            ;;
+        esac
+      fi
       if [ "\${2:-}" = "version" ]; then
         printf 'go version go1.25.6 darwin/arm64\n'
       fi
@@ -76,12 +103,17 @@ if [ "\${1:-}" = "exec" ] && [ "\${2:-}" = "--" ]; then
         printf 'v24.0.0\n'
       fi
       ;;
+    pnpm)
+      if [ "\${2:-}" = "--version" ]; then
+        printf '10.0.0\n'
+      fi
+      ;;
   esac
 fi
 exit 0
 EOF
 
-chmod +x "$FAKE_BIN/go" "$FAKE_BIN/bun" "$FAKE_BIN/curl" "$FAKE_BIN/brew" "$FAKE_BIN/mise"
+chmod +x "$FAKE_BIN/go" "$FAKE_GOROOT/bin/go" "$FAKE_BIN/bun" "$FAKE_BIN/curl" "$FAKE_BIN/brew" "$FAKE_BIN/mise"
 
 export HOME="$FAKE_HOME"
 export PATH="$FAKE_BIN:$PATH"
@@ -104,6 +136,7 @@ printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Go runtime before 
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Rust runtime before Solana and Anchor tooling'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Java runtime before LemMinX'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Bun runtime before TypeScript tooling'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Enables Corepack and installs pnpm with the configured Node runtime'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--yes'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--no-input'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--dry-run'
@@ -211,10 +244,21 @@ import sys
 with open(sys.argv[1], encoding="utf-8") as config_file:
     config = json.load(config_file)
 
-xml_lsp = config["lsp"]["xml"]
-if xml_lsp["command"] != ["lemminx"]:
-    raise SystemExit("OpenCode XML LSP command should be lemminx")
-if xml_lsp["extensions"] != [".xml", ".xsd", ".xsl", ".xslt", ".svg"]:
+expected_commands = {
+    "gopls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/gopls"'],
+    "gnopls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/gnopls" -mode=stdio'],
+    "rust": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/rust-analyzer"'],
+    "typescript-language-server": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/typescript-language-server" --stdio'],
+    "xml": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/lemminx"'],
+}
+for lsp_name, command in expected_commands.items():
+    actual = config["lsp"][lsp_name]["command"]
+    if actual != command:
+        raise SystemExit(f"OpenCode {lsp_name} command should be {command}, got {actual}")
+    if "~" in " ".join(actual):
+        raise SystemExit(f"OpenCode {lsp_name} command should not rely on tilde expansion")
+
+if config["lsp"]["xml"]["extensions"] != [".xml", ".xsd", ".xsl", ".xslt", ".svg"]:
     raise SystemExit("OpenCode XML LSP extensions changed")
 PY
 
@@ -344,6 +388,79 @@ if HOME="$KOTLIN_FAIL_HOME" PATH="$KOTLIN_FAIL_BIN:/usr/bin:/bin" bash "$REPO_RO
   exit 1
 fi
 grep -q 'mise is required to install Kotlin' "$KOTLIN_FAIL_OUTPUT"
+
+RUST_HOME="$TMP_DIR/rust-home"
+RUST_BIN="$TMP_DIR/rust-bin"
+RUST_HOMEBREW_PREFIX="$TMP_DIR/rust-homebrew"
+RUST_TOOLCHAIN_BIN="$TMP_DIR/rust-toolchain-bin"
+RUST_LOG="$TMP_DIR/rust.log"
+mkdir -p "$RUST_HOME" "$RUST_BIN" "$RUST_HOMEBREW_PREFIX/bin" "$RUST_TOOLCHAIN_BIN"
+cat > "$RUST_BIN/mise" <<'EOF'
+#!/bin/bash
+printf 'mise %s\n' "$*" >> "$RUST_LOG"
+if [ "${1:-}" = "install" ] && [ "${2:-}" = "rust" ]; then
+  exit 0
+fi
+if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
+  shift 2
+  printf '%s\n' "$*" >> "$RUST_LOG"
+  if [ "${1:-}" = "rustc" ] && [ "${2:-}" = "--version" ]; then
+    printf 'rustc 1.90.0\n'
+    exit 0
+  fi
+  PATH="$RUST_TOOLCHAIN_BIN:$PATH" exec "$@"
+fi
+exit 0
+EOF
+cat > "$RUST_BIN/brew" <<'EOF'
+#!/bin/bash
+printf 'brew %s\n' "$*" >> "$RUST_LOG"
+if [ "${1:-}" = "list" ]; then
+  exit 0
+fi
+if [ "${1:-}" = "--prefix" ] && [ "${2:-}" = "rust-analyzer" ]; then
+  printf '%s\n' "$RUST_HOMEBREW_PREFIX"
+  exit 0
+fi
+if [ "${1:-}" = "--prefix" ]; then
+  printf '%s\n' "$RUST_HOMEBREW_PREFIX"
+  exit 0
+fi
+exit 0
+EOF
+cat > "$RUST_TOOLCHAIN_BIN/rustc" <<'EOF'
+#!/bin/bash
+printf 'toolchain rustc %s\n' "$*" >> "$RUST_LOG"
+EOF
+cat > "$RUST_TOOLCHAIN_BIN/cargo" <<'EOF'
+#!/bin/bash
+printf 'toolchain cargo %s\n' "$*" >> "$RUST_LOG"
+EOF
+cat > "$RUST_HOMEBREW_PREFIX/bin/rust-analyzer" <<'EOF'
+#!/bin/bash
+rustc_path="$(command -v rustc || true)"
+cargo_path="$(command -v cargo || true)"
+if [ "$rustc_path" != "$RUST_TOOLCHAIN_BIN/rustc" ] || [ "$cargo_path" != "$RUST_TOOLCHAIN_BIN/cargo" ]; then
+  printf 'rust-analyzer wrapper did not expose mise Rust tools\n' >&2
+  exit 1
+fi
+printf 'rust-analyzer %s\n' "$*" >> "$RUST_LOG"
+EOF
+chmod +x \
+  "$RUST_BIN/mise" \
+  "$RUST_BIN/brew" \
+  "$RUST_TOOLCHAIN_BIN/rustc" \
+  "$RUST_TOOLCHAIN_BIN/cargo" \
+  "$RUST_HOMEBREW_PREFIX/bin/rust-analyzer"
+
+HOME="$RUST_HOME" PATH="$RUST_BIN:/usr/bin:/bin" RUST_LOG="$RUST_LOG" RUST_HOMEBREW_PREFIX="$RUST_HOMEBREW_PREFIX" RUST_TOOLCHAIN_BIN="$RUST_TOOLCHAIN_BIN" bash "$REPO_ROOT/setup/languages/rust.sh" >/dev/null
+test -x "$RUST_HOME/.local/bin/rust-analyzer"
+grep -q 'mise install rust' "$RUST_LOG"
+grep -q 'mise exec -- rustc --version' "$RUST_LOG"
+grep -q 'brew --prefix rust-analyzer' "$RUST_LOG"
+HOME="$RUST_HOME" PATH="$RUST_BIN:/usr/bin:/bin" RUST_LOG="$RUST_LOG" RUST_TOOLCHAIN_BIN="$RUST_TOOLCHAIN_BIN" "$RUST_HOME/.local/bin/rust-analyzer" --version >/dev/null
+grep -q "mise exec -- $RUST_HOMEBREW_PREFIX/bin/rust-analyzer --version" "$RUST_LOG"
+grep -q 'rust-analyzer --version' "$RUST_LOG"
 
 XML_HOME="$TMP_DIR/xml-home"
 XML_BIN="$TMP_DIR/xml-bin"
@@ -491,16 +608,25 @@ cat > "$HOME/.local/share/solana/install/active_release/bin/agave-install" <<'AG
 #!/bin/bash
 printf 'agave-install %s\n' "$*" >> "$SOLANA_LOG"
 AGAVEEOF
+cat > "$HOME/.local/share/solana/install/active_release/bin/cargo-build-sbf" <<'CARGOBUILDSBFEOF'
+#!/bin/bash
+printf 'cargo-build-sbf %s\n' "$*" >> "$SOLANA_LOG"
+if [ "${1:-}" = "--version" ]; then
+  printf 'cargo-build-sbf 2.0.0\n'
+fi
+CARGOBUILDSBFEOF
 chmod +x \
   "$HOME/.local/share/solana/install/active_release/bin/solana" \
-  "$HOME/.local/share/solana/install/active_release/bin/agave-install"
+  "$HOME/.local/share/solana/install/active_release/bin/agave-install" \
+  "$HOME/.local/share/solana/install/active_release/bin/cargo-build-sbf"
 INSTALLEREOF
 EOF
 chmod +x "$SOLANA_BIN/mise" "$SOLANA_BIN/curl"
 
-ANCHOR_VERSION="0.31.1" HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" bash "$REPO_ROOT/setup/blockchain/solana.sh" >/dev/null
+ANCHOR_VERSION="0.31.1" HOME="$SOLANA_HOME" CARGO_HOME="$SOLANA_HOME/.cargo" AVM_HOME="$SOLANA_HOME/.avm" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" bash "$REPO_ROOT/setup/blockchain/solana.sh" >/dev/null
 [ -x "$SOLANA_HOME/.local/bin/solana" ]
 [ -x "$SOLANA_HOME/.local/bin/agave-install" ]
+[ -x "$SOLANA_HOME/.local/bin/cargo-build-sbf" ]
 [ -x "$SOLANA_HOME/.local/bin/avm" ]
 [ -x "$SOLANA_HOME/.local/bin/anchor" ]
 grep -q 'mise install rust' "$SOLANA_LOG"
@@ -510,17 +636,19 @@ grep -q 'agave installer' "$SOLANA_LOG"
 grep -q 'cargo install --git https://github.com/solana-foundation/anchor avm --force' "$SOLANA_LOG"
 grep -q 'avm install 0.31.1' "$SOLANA_LOG"
 grep -q 'avm use 0.31.1' "$SOLANA_LOG"
-HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/solana" --version >/dev/null
-HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/agave-install" update >/dev/null
-HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/avm" --version >/dev/null
-HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/anchor" --version >/dev/null
+HOME="$SOLANA_HOME" CARGO_HOME="$SOLANA_HOME/.cargo" AVM_HOME="$SOLANA_HOME/.avm" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/solana" --version >/dev/null
+HOME="$SOLANA_HOME" CARGO_HOME="$SOLANA_HOME/.cargo" AVM_HOME="$SOLANA_HOME/.avm" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/agave-install" update >/dev/null
+HOME="$SOLANA_HOME" CARGO_HOME="$SOLANA_HOME/.cargo" AVM_HOME="$SOLANA_HOME/.avm" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/cargo-build-sbf" --version >/dev/null
+HOME="$SOLANA_HOME" CARGO_HOME="$SOLANA_HOME/.cargo" AVM_HOME="$SOLANA_HOME/.avm" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/avm" --version >/dev/null
+HOME="$SOLANA_HOME" CARGO_HOME="$SOLANA_HOME/.cargo" AVM_HOME="$SOLANA_HOME/.avm" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" "$SOLANA_HOME/.local/bin/anchor" --version >/dev/null
 grep -q 'solana --version' "$SOLANA_LOG"
 grep -q 'agave-install update' "$SOLANA_LOG"
+grep -q 'cargo-build-sbf --version' "$SOLANA_LOG"
 grep -q 'avm --version' "$SOLANA_LOG"
 grep -q 'anchor --version' "$SOLANA_LOG"
 
 : > "$SOLANA_LOG"
-HOME="$SOLANA_HOME" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" bash "$REPO_ROOT/setup/blockchain/solana.sh" >/dev/null
+HOME="$SOLANA_HOME" CARGO_HOME="$SOLANA_HOME/.cargo" AVM_HOME="$SOLANA_HOME/.avm" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" bash "$REPO_ROOT/setup/blockchain/solana.sh" >/dev/null
 grep -q 'agave-install update' "$SOLANA_LOG"
 if grep -q 'curl https://release.anza.xyz/stable/install' "$SOLANA_LOG"; then
   printf 'solana installer should prefer agave-install update when active release exists\n' >&2
@@ -563,6 +691,7 @@ HOME="$CLEAN_HOME" SETUP_YES=1 SETUP_NO_INPUT=1 bash "$REPO_ROOT/setup/clean-bac
 [ -e "$CLEAN_HOME/.config/zed/settings.json.backup.not-managed" ]
 
 bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
+bash "$REPO_ROOT/setup/languages/node.sh" >/dev/null
 bash "$REPO_ROOT/setup/languages/bun.sh" >/dev/null
 
 GO_SETUP_OUTPUT="$($SETUP_SH --yes go)"
@@ -591,6 +720,29 @@ test -x "$FAKE_HOME/.local/bin/gopls"
 test -x "$FAKE_HOME/.local/bin/golangci-lint"
 test -x "$FAKE_HOME/.local/bin/gofumpt"
 
+FAKE_EDITOR_BIN="$TMP_DIR/editor-bin"
+GOPLS_CHECK_LOG="$TMP_DIR/gopls-check.log"
+mkdir -p "$FAKE_EDITOR_BIN"
+cp "$FAKE_BIN/mise" "$FAKE_EDITOR_BIN/mise"
+
+cat > "$FAKE_GOBIN/gopls" <<EOF
+#!/bin/bash
+go_path="\$(command -v go || true)"
+if [ -z "\$go_path" ]; then
+  printf 'gopls wrapper did not expose go on PATH\n' >&2
+  exit 1
+fi
+printf '%s\n' "\$go_path" > "$GOPLS_CHECK_LOG"
+EOF
+
+chmod +x "$FAKE_EDITOR_BIN/mise" "$FAKE_GOBIN/gopls"
+PATH="$FAKE_EDITOR_BIN:/usr/bin:/bin" "$FAKE_HOME/.local/bin/gopls" >/dev/null
+grep -q "^$FAKE_GOROOT/bin/go$" "$GOPLS_CHECK_LOG"
+
+grep -q 'corepack enable pnpm' "$LOG_FILE"
+grep -q 'corepack install --global pnpm@latest-10' "$LOG_FILE"
+grep -q 'pnpm --version' "$LOG_FILE"
+
 if grep -q 'bun install -g' "$LOG_FILE"; then
   printf 'languages/bun.sh should not install Bun packages\n' >&2
   exit 1
@@ -607,6 +759,55 @@ test -x "$FAKE_HOME/.local/bin/gno"
 test -x "$FAKE_HOME/.local/bin/gnopls"
 grep -q 'bun install -g typescript' "$LOG_FILE"
 grep -q 'bun install -g typescript-language-server' "$LOG_FILE"
+test -x "$FAKE_HOME/.local/bin/typescript-language-server"
+
+TYPESCRIPT_EDITOR_BIN="$TMP_DIR/typescript-editor-bin"
+TYPESCRIPT_GLOBAL_BIN="$TMP_DIR/typescript-global-bin"
+TYPESCRIPT_TOOLCHAIN_BIN="$TMP_DIR/typescript-toolchain-bin"
+TYPESCRIPT_WRAPPER_LOG="$TMP_DIR/typescript-wrapper.log"
+mkdir -p "$TYPESCRIPT_EDITOR_BIN" "$TYPESCRIPT_GLOBAL_BIN" "$TYPESCRIPT_TOOLCHAIN_BIN"
+cat > "$TYPESCRIPT_EDITOR_BIN/mise" <<'EOF'
+#!/bin/bash
+printf 'mise %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
+if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
+  shift 2
+  printf '%s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
+  if [ "${1:-}" = "bun" ] && [ "${2:-}" = "pm" ] && [ "${3:-}" = "bin" ] && [ "${4:-}" = "-g" ]; then
+    printf '%s\n' "$TYPESCRIPT_GLOBAL_BIN"
+    exit 0
+  fi
+  PATH="$TYPESCRIPT_TOOLCHAIN_BIN:$PATH" exec "$@"
+fi
+exit 0
+EOF
+cat > "$TYPESCRIPT_TOOLCHAIN_BIN/node" <<'EOF'
+#!/bin/bash
+printf 'node %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
+EOF
+cat > "$TYPESCRIPT_TOOLCHAIN_BIN/bun" <<'EOF'
+#!/bin/bash
+printf 'bun %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
+EOF
+cat > "$TYPESCRIPT_GLOBAL_BIN/typescript-language-server" <<'EOF'
+#!/bin/bash
+node_path="$(command -v node || true)"
+bun_path="$(command -v bun || true)"
+if [ "$node_path" != "$TYPESCRIPT_TOOLCHAIN_BIN/node" ] || [ "$bun_path" != "$TYPESCRIPT_TOOLCHAIN_BIN/bun" ]; then
+  printf 'typescript-language-server wrapper did not expose mise Node/Bun tools\n' >&2
+  exit 1
+fi
+printf 'typescript-language-server %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
+EOF
+chmod +x \
+  "$TYPESCRIPT_EDITOR_BIN/mise" \
+  "$TYPESCRIPT_TOOLCHAIN_BIN/node" \
+  "$TYPESCRIPT_TOOLCHAIN_BIN/bun" \
+  "$TYPESCRIPT_GLOBAL_BIN/typescript-language-server"
+
+HOME="$FAKE_HOME" PATH="$TYPESCRIPT_EDITOR_BIN:/usr/bin:/bin" TYPESCRIPT_WRAPPER_LOG="$TYPESCRIPT_WRAPPER_LOG" TYPESCRIPT_GLOBAL_BIN="$TYPESCRIPT_GLOBAL_BIN" TYPESCRIPT_TOOLCHAIN_BIN="$TYPESCRIPT_TOOLCHAIN_BIN" "$FAKE_HOME/.local/bin/typescript-language-server" --stdio >/dev/null
+grep -q 'mise exec -- bun pm bin -g' "$TYPESCRIPT_WRAPPER_LOG"
+grep -q "mise exec -- $TYPESCRIPT_GLOBAL_BIN/typescript-language-server --stdio" "$TYPESCRIPT_WRAPPER_LOG"
+grep -q 'typescript-language-server --stdio' "$TYPESCRIPT_WRAPPER_LOG"
 
 : > "$LOG_FILE"
 rm -f "$FAKE_BIN/go" "$FAKE_BIN/bun"
@@ -744,7 +945,10 @@ if grep -q 'mise install' "$REPO_ROOT/setup/commands/20-brew-packages"; then
 fi
 grep -q 'mise install go' "$REPO_ROOT/setup/languages/go.sh"
 grep -q 'mise install node' "$REPO_ROOT/setup/languages/node.sh"
+grep -q 'COREPACK_ENABLE_DOWNLOAD_PROMPT=0 mise exec -- corepack enable pnpm' "$REPO_ROOT/setup/languages/node.sh"
+grep -q 'corepack install --global pnpm@latest-10' "$REPO_ROOT/setup/languages/node.sh"
 grep -q 'mise install bun' "$REPO_ROOT/setup/languages/bun.sh"
+grep -q "chezmoi --source \"\$DOTFILES_DIR\" --no-tty --force apply --dry-run --verbose" "$REPO_ROOT/setup/check.sh"
 grep -q 'mise install java' "$REPO_ROOT/setup/languages/java.sh"
 grep -q 'mise install kotlin' "$REPO_ROOT/setup/languages/kotlin.sh"
 grep -q 'mise install python' "$REPO_ROOT/setup/languages/python.sh"

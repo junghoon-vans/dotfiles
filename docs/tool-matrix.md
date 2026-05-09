@@ -24,9 +24,9 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 | Markdown | - | `marksman` | - | `marksman` diagnostics | - |
 | Python | `mise.toml` (`python = "3.13"`) + `./setup.sh python` tools | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
 | Rust | `mise.toml` (`rust = "latest"`) + `./setup.sh rust` tools | `rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
-| Solana / Anchor | Agave Solana CLI + AVM/Anchor from `./setup.sh solana` | - | `anchor fmt` / `rustfmt` | `anchor` / Solana CLI diagnostics | `anchor test`, `solana-test-validator` |
+| Solana / Anchor | Agave Solana CLI + `cargo build-sbf` + AVM/Anchor from `./setup.sh solana` | - | `anchor fmt` / `rustfmt` | `anchor` / Solana CLI diagnostics | `anchor test`, `solana-test-validator` |
 | Terraform | `terraform` | `terraform-ls` | `terraform fmt` | `terraform validate` | - |
-| TypeScript / JavaScript | `mise.toml` (`node = "24"`, `bun = "latest"`) + `./setup.sh typescript` tools | `typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
+| TypeScript / JavaScript | `mise.toml` (`node = "24"` + Corepack pnpm, `bun = "latest"`) + `./setup.sh typescript` tools | `typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
 | JSON / JSONC | `./setup.sh typescript` | `biome` | `biome` | `biome` | - |
 | CSS | `./setup.sh typescript` | not mapped | `biome` | `biome` | - |
 | XML / XSD / XSLT / SVG | `./setup.sh xml` (`lemminx`) | `lemminx` | - | LemMinX diagnostics | - |
