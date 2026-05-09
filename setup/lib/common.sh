@@ -43,18 +43,36 @@ prepend_path_if_dir() {
     esac
 }
 
-create_mise_go_tool_wrapper() {
+create_local_bin_wrapper() {
     local tool_name="$1"
     local wrapper_dir="${2:-$HOME/.local/bin}"
     local wrapper_path="$wrapper_dir/$tool_name"
 
     mkdir -p "$wrapper_dir"
 
-    cat > "$wrapper_path" <<EOF
+    cat > "$wrapper_path"
+
+    chmod +x "$wrapper_path"
+    if [ ! -x "$wrapper_path" ]; then
+        print_error "$tool_name wrapper is not executable at $wrapper_path"
+        exit 1
+    fi
+}
+
+create_mise_go_tool_wrapper() {
+    local tool_name="$1"
+    local wrapper_dir="${2:-$HOME/.local/bin}"
+
+    create_local_bin_wrapper "$tool_name" "$wrapper_dir" <<EOF
 #!/bin/bash
 set -euo pipefail
 
 cd "$DOTFILES_DIR"
+
+go_root="\$(mise exec -- go env GOROOT)"
+if [ -n "\$go_root" ]; then
+    export PATH="\$go_root/bin:\$PATH"
+fi
 
 go_bin="\$(mise exec -- go env GOBIN)"
 if [ -z "\$go_bin" ]; then
@@ -64,12 +82,48 @@ fi
 
 exec "\$go_bin/$tool_name" "\$@"
 EOF
+}
 
-    chmod +x "$wrapper_path"
-    if [ ! -x "$wrapper_path" ]; then
-        print_error "$tool_name wrapper is not executable at $wrapper_path"
-        exit 1
-    fi
+create_mise_bun_global_tool_wrapper() {
+    local tool_name="$1"
+    local wrapper_dir="${2:-$HOME/.local/bin}"
+
+    create_local_bin_wrapper "$tool_name" "$wrapper_dir" <<EOF
+#!/bin/bash
+set -euo pipefail
+
+cd "$DOTFILES_DIR"
+
+tool_bin="\$(mise exec -- bun pm bin -g)"
+tool_path="\$tool_bin/$tool_name"
+if [ ! -x "\$tool_path" ]; then
+    printf '%s\n' "$tool_name is not executable at \$tool_path" >&2
+    exit 1
+fi
+
+exec mise exec -- "\$tool_path" "\$@"
+EOF
+}
+
+create_mise_tool_path_wrapper() {
+    local tool_name="$1"
+    local tool_path="$2"
+    local wrapper_dir="${3:-$HOME/.local/bin}"
+
+    create_local_bin_wrapper "$tool_name" "$wrapper_dir" <<EOF
+#!/bin/bash
+set -euo pipefail
+
+cd "$DOTFILES_DIR"
+
+tool_path="$tool_path"
+if [ ! -x "\$tool_path" ]; then
+    printf '%s\n' "$tool_name is not executable at \$tool_path" >&2
+    exit 1
+fi
+
+exec mise exec -- "\$tool_path" "\$@"
+EOF
 }
 
 print_step() {

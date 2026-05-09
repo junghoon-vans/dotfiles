@@ -27,6 +27,25 @@ if command -v brew >/dev/null 2>&1; then
             print_success "$formula installed"
         fi
     done
+
+    rust_analyzer_path=""
+    rust_analyzer_prefix="$(brew --prefix rust-analyzer 2>/dev/null || true)"
+    if [ -n "$rust_analyzer_prefix" ] && [ -x "$rust_analyzer_prefix/bin/rust-analyzer" ]; then
+        rust_analyzer_path="$rust_analyzer_prefix/bin/rust-analyzer"
+    else
+        rust_analyzer_candidate="$(command -v rust-analyzer 2>/dev/null || true)"
+        if [ -n "$rust_analyzer_candidate" ] && [ "$rust_analyzer_candidate" != "$HOME/.local/bin/rust-analyzer" ]; then
+            rust_analyzer_path="$rust_analyzer_candidate"
+        fi
+    fi
+
+    if [ -z "$rust_analyzer_path" ]; then
+        print_error "rust-analyzer executable not found after Homebrew installation"
+        exit 1
+    fi
+
+    create_mise_tool_path_wrapper "rust-analyzer" "$rust_analyzer_path"
+    print_success "rust-analyzer wrapper created in $HOME/.local/bin"
 else
     print_info "Homebrew not found, skipping Rust language server and test tooling"
 fi

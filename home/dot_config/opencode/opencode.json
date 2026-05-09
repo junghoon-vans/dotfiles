@@ -46,7 +46,9 @@
     },
     "gopls": {
       "command": [
-        "gopls"
+        "/bin/bash",
+        "-lc",
+        "exec \"$HOME/.local/bin/gopls\""
       ],
       "extensions": [
         ".go"
@@ -63,8 +65,9 @@
     },
     "gnopls": {
       "command": [
-        "gnopls",
-        "-mode=stdio"
+        "/bin/bash",
+        "-lc",
+        "exec \"$HOME/.local/bin/gnopls\" -mode=stdio"
       ],
       "extensions": [
         ".gno"
@@ -98,7 +101,9 @@
     },
     "rust": {
       "command": [
-        "rust-analyzer"
+        "/bin/bash",
+        "-lc",
+        "exec \"$HOME/.local/bin/rust-analyzer\""
       ],
       "extensions": [
         ".rs"
@@ -116,8 +121,9 @@
     },
     "typescript-language-server": {
       "command": [
-        "typescript-language-server",
-        "--stdio"
+        "/bin/bash",
+        "-lc",
+        "exec \"$HOME/.local/bin/typescript-language-server\" --stdio"
       ],
       "extensions": [
         ".ts",
@@ -128,7 +134,9 @@
     },
     "xml": {
       "command": [
-        "lemminx"
+        "/bin/bash",
+        "-lc",
+        "exec \"$HOME/.local/bin/lemminx\""
       ],
       "extensions": [
         ".xml",
