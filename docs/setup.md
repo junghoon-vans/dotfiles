@@ -46,7 +46,7 @@ Language commands are explicit options as well as the building blocks of `langua
 
 | Command | Purpose |
 | --- | --- |
-| `go` | Installs the configured Go runtime with mise, then `gopls`, `golangci-lint`, and `gofumpt`. |
+| `go` | Installs the configured Go runtime with mise, then `gopls`, `golangci-lint`, and `gofumpt` into `~/.local/bin`. |
 | `node` | Installs the configured Node.js runtime with mise, then enables Corepack and installs pnpm. |
 | `bun` | Installs the configured Bun runtime with mise. |
 | `java` | Installs the configured Java runtime with mise, then `jdtls`. |
@@ -63,7 +63,7 @@ Blockchain commands are explicit options as well as the building blocks of `bloc
 | Command | Purpose |
 | --- | --- |
 | `solana` | Installs the Solana CLI with the Anza Agave installer, exposes `cargo build-sbf`, then Anchor through AVM. |
-| `gno` | Installs `gno` and `gnopls` using mise-managed Go and exposes wrappers in `~/.local/bin`. |
+| `gno` | Installs `gno` and `gnopls` into `~/.local/bin` using mise-managed Go. |
 
 Examples:
 
@@ -77,7 +77,7 @@ Examples:
 
 `gno`, `solana`, `xml`, and `typescript` install their required Go, Rust, Java, and Bun runtimes through mise before installing their tooling. Use `languages` and `blockchain` to install the full ordered sets, or run individual commands to install only selected environments.
 
-`mise.toml` is the declarative runtime target for Go, Node, Python, Rust, Java, Kotlin, and Bun. `./setup.sh brew-packages` installs Homebrew-managed `mise`, while each language command runs `mise install <tool>` for its selected runtime before installing language-owned CLIs such as `gopls`, `pnpm`, `pyright`, `ruff`, `kotlin-language-server`, `lemminx`, and Biome. Blockchain commands live under `setup/blockchain/`: Gno tooling uses the configured Go runtime, while Solana CLI and Anchor are intentionally not tracked in `mise.toml`. `./setup.sh solana` uses the upstream Anza Agave installer for Solana CLI, exposes Solana's `cargo-build-sbf` binary so `cargo build-sbf` works from `~/.local/bin`, and installs AVM from the Anchor repository for Anchor CLI.
+`mise.toml` is the declarative runtime target for Go, Node, Python, Rust, Java, Kotlin, and Bun. `./setup.sh brew-packages` installs Homebrew-managed `mise`, while each language command runs `mise install <tool>` for its selected runtime before installing language-owned CLIs such as `gopls`, `pnpm`, `pyright`, `ruff`, `kotlin-language-server`, `lemminx`, and Biome. Go-backed CLI installs use the mise-selected Go runtime and set `GOBIN=$HOME/.local/bin`, so future `mise exec -- go install ...` commands expose binaries without adding `$HOME/go/bin` to PATH. Blockchain commands live under `setup/blockchain/`: Gno tooling uses the configured Go runtime, while Solana CLI and Anchor are intentionally not tracked in `mise.toml`. `./setup.sh solana` uses the upstream Anza Agave installer for Solana CLI, exposes Solana's `cargo-build-sbf` binary so `cargo build-sbf` works from `~/.local/bin`, and installs AVM from the Anchor repository for Anchor CLI.
 
 ## Dotfile Apply Behavior
 

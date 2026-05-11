@@ -12,12 +12,12 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 
 ## Language and Harness Coverage
 
-`mise.toml` records the preferred runtime versions for languages that mise can manage. `./setup.sh brew-packages` installs Homebrew-managed `mise`; setup language and blockchain commands run `mise install <tool>` for required runtimes and then install runtime-adjacent tools, language servers, and chain-specific CLIs that are not fully covered by mise.
+`mise.toml` records the preferred runtime versions for languages that mise can manage. `./setup.sh brew-packages` installs Homebrew-managed `mise`; setup language and blockchain commands run `mise install <tool>` for required runtimes and then install runtime-adjacent tools, language servers, and chain-specific CLIs with those runtimes.
 
 | Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
 | --- | --- | --- | --- | --- | --- |
 | Bash / Zsh | macOS shell | `bash-language-server` | `shfmt` | `shellcheck` | `bash -n` |
-| Go | `mise.toml` (`go = "1.25"`) + `./setup.sh go` tools | `gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
+| Go | `mise.toml` (`go = "1.25"`) + `./setup.sh go` tools in `~/.local/bin` | `gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
 | Gno | `./setup.sh gno` (`~/.local/bin/gno`) | `~/.local/bin/gnopls` | - | `gnopls` diagnostics | `gno test` |
 | Java | `mise.toml` (`java = "temurin-21"`) + `./setup.sh java` tools | `jdtls` | - | `jdtls` diagnostics | project build tool |
 | Kotlin | `mise.toml` (`kotlin = "latest"`) + `./setup.sh kotlin` tools | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
