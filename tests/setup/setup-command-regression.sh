@@ -922,6 +922,12 @@ grep -q 'brew "chezmoi"' "$REPO_ROOT/Brewfile"
 grep -q 'chezmoi --source' "$REPO_ROOT/setup/link.sh"
 grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'brew "mise"' "$REPO_ROOT/Brewfile"
+grep -q 'go env -w GOBIN="\$HOME/.local/bin"' "$REPO_ROOT/.github/workflows/ci.yml"
+if grep -q 'go env GOPATH' "$REPO_ROOT/.github/workflows/ci.yml"; then
+  printf 'CI should not add GOPATH/bin to PATH\n' >&2
+  exit 1
+fi
+grep -q 'setup/blockchain/\*.sh' "$REPO_ROOT/.github/workflows/ci.yml"
 if grep -q 'mise install' "$REPO_ROOT/setup/commands/20-brew-packages"; then
   printf 'brew-packages should not run mise install directly\n' >&2
   exit 1
