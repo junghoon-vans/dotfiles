@@ -48,8 +48,8 @@ dotfiles/
 - **Shell aliases**: `.zshrc` is the source of truth for aliases like `ls`, `l`, `ll`, `la`, and `lt`.
 - **delta**: Git diff pager with syntax highlighting, side-by-side view, and line numbers.
 - **prek**: Replaces pre-commit with a faster Rust implementation.
-- **Go 1.25**: Pinned in `mise.toml`; Go tooling is installed by `./setup.sh go`.
-- **gnopls**: Built with the Go runtime selected by mise.
+- **Go 1.25**: Pinned in `mise.toml`; Go tooling is installed with the mise-selected Go runtime and exposed from `$HOME/.local/bin` through `GOBIN`.
+- **Gno tooling**: `gno` and `gnopls` are installed with the mise-selected Go runtime and exposed from `$HOME/.local/bin` through `GOBIN`.
 - **LemMinX**: Installed from the pinned Eclipse Maven uber JAR and exposed through `$HOME/.local/bin/lemminx`.
 - **Solana/Anchor**: Solana CLI is installed with the upstream Anza Agave installer; Anchor is installed through AVM from `solana-foundation/anchor`; wrappers expose `solana`, `agave-install`, `cargo-build-sbf`, `avm`, and `anchor` through `$HOME/.local/bin`.
 - **Blockchain setup**: `./setup.sh blockchain` owns Solana/Anchor and Gno tooling; they remain explicit commands but are not part of the language umbrella.
