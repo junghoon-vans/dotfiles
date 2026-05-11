@@ -129,7 +129,7 @@ printf '%s' "$HELP_OUTPUT" | grep -q 'Blockchain commands:'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go via mise plus Go formatter/linter tools'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Kotlin via mise plus Kotlin language server'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install TypeScript, TypeScript LSP, and Biome'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install Gno CLI and gnopls using Go'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install Gno CLI and gnopls using mise-managed Go'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Solana CLI and Anchor tooling'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Eclipse LemMinX XML language server'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Go runtime before Gno tooling'
@@ -713,31 +713,13 @@ touch "$APPS_HOME/.local/share/zed/dev-extensions/zed-gno/extension.toml"
 APPS_SETUP_OUTPUT="$(HOME="$APPS_HOME" ZSH_CUSTOM="$APPS_ZSH_CUSTOM" PATH="$FAKE_BIN:/usr/bin:/bin" "$SETUP_SH" --yes apps)"
 printf '%s' "$APPS_SETUP_OUTPUT" | grep -q 'Activate Gno support in Zed'
 
+grep -q 'go env -w GOBIN=' "$LOG_FILE"
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'go install golang.org/x/tools/gopls@latest' "$LOG_FILE"
 grep -q 'go install mvdan.cc/gofumpt@latest' "$LOG_FILE"
-test -x "$FAKE_HOME/.local/bin/gopls"
-test -x "$FAKE_HOME/.local/bin/golangci-lint"
-test -x "$FAKE_HOME/.local/bin/gofumpt"
-
-FAKE_EDITOR_BIN="$TMP_DIR/editor-bin"
-GOPLS_CHECK_LOG="$TMP_DIR/gopls-check.log"
-mkdir -p "$FAKE_EDITOR_BIN"
-cp "$FAKE_BIN/mise" "$FAKE_EDITOR_BIN/mise"
-
-cat > "$FAKE_GOBIN/gopls" <<EOF
-#!/bin/bash
-go_path="\$(command -v go || true)"
-if [ -z "\$go_path" ]; then
-  printf 'gopls wrapper did not expose go on PATH\n' >&2
-  exit 1
-fi
-printf '%s\n' "\$go_path" > "$GOPLS_CHECK_LOG"
-EOF
-
-chmod +x "$FAKE_EDITOR_BIN/mise" "$FAKE_GOBIN/gopls"
-PATH="$FAKE_EDITOR_BIN:/usr/bin:/bin" "$FAKE_HOME/.local/bin/gopls" >/dev/null
-grep -q "^$FAKE_GOROOT/bin/go$" "$GOPLS_CHECK_LOG"
+test ! -e "$FAKE_HOME/.local/bin/gopls"
+test ! -e "$FAKE_HOME/.local/bin/golangci-lint"
+test ! -e "$FAKE_HOME/.local/bin/gofumpt"
 
 grep -q 'corepack enable pnpm' "$LOG_FILE"
 grep -q 'corepack install --global pnpm@latest-10' "$LOG_FILE"
@@ -753,10 +735,11 @@ fi
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
 
+grep -q 'go env -w GOBIN=' "$LOG_FILE"
 grep -q 'go install github.com/gnolang/gno/gnovm/cmd/gno@latest' "$LOG_FILE"
 grep -q 'go install github.com/gnoverse/gnopls@latest' "$LOG_FILE"
-test -x "$FAKE_HOME/.local/bin/gno"
-test -x "$FAKE_HOME/.local/bin/gnopls"
+test ! -e "$FAKE_HOME/.local/bin/gno"
+test ! -e "$FAKE_HOME/.local/bin/gnopls"
 grep -q 'bun install -g typescript' "$LOG_FILE"
 grep -q 'bun install -g typescript-language-server' "$LOG_FILE"
 test -x "$FAKE_HOME/.local/bin/typescript-language-server"
@@ -944,6 +927,7 @@ if grep -q 'mise install' "$REPO_ROOT/setup/commands/20-brew-packages"; then
   exit 1
 fi
 grep -q 'mise install go' "$REPO_ROOT/setup/languages/go.sh"
+grep -q 'configure_mise_go_bin' "$REPO_ROOT/setup/languages/go.sh"
 grep -q 'mise install node' "$REPO_ROOT/setup/languages/node.sh"
 grep -q 'COREPACK_ENABLE_DOWNLOAD_PROMPT=0 mise exec -- corepack enable pnpm' "$REPO_ROOT/setup/languages/node.sh"
 grep -q 'corepack install --global pnpm@latest-10' "$REPO_ROOT/setup/languages/node.sh"
@@ -954,7 +938,12 @@ grep -q 'mise install kotlin' "$REPO_ROOT/setup/languages/kotlin.sh"
 grep -q 'mise install python' "$REPO_ROOT/setup/languages/python.sh"
 grep -q 'mise install rust' "$REPO_ROOT/setup/languages/rust.sh"
 grep -q 'mise install go' "$REPO_ROOT/setup/blockchain/gno.sh"
+grep -q 'configure_mise_go_bin' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'github.com/gnolang/gno/gnovm/cmd/gno@latest' "$REPO_ROOT/setup/blockchain/gno.sh"
+if grep -q 'create_mise_go_tool_wrapper' "$REPO_ROOT/setup/lib/common.sh" "$REPO_ROOT/setup/languages/go.sh" "$REPO_ROOT/setup/blockchain/gno.sh"; then
+  printf 'Go tooling should be managed by mise without custom wrappers\n' >&2
+  exit 1
+fi
 grep -q 'mise install rust' "$REPO_ROOT/setup/blockchain/solana.sh"
 grep -q 'https://release.anza.xyz/stable/install' "$REPO_ROOT/setup/blockchain/solana.sh"
 grep -q 'https://github.com/solana-foundation/anchor avm --force' "$REPO_ROOT/setup/blockchain/solana.sh"

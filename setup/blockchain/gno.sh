@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Install Gno CLI and gnopls using Go.
+# Description: Install Gno CLI and gnopls using mise-managed Go.
 
 # shellcheck source=setup/lib/common.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
@@ -11,10 +11,18 @@ if ! command -v mise >/dev/null 2>&1; then
     exit 1
 fi
 
-print_info "Installing github.com/gnolang/gno/gnovm/cmd/gno@latest..."
 (
     cd "$DOTFILES_DIR" || exit
     mise install go
+)
+print_success "Go runtime installed via mise"
+
+configure_mise_go_bin
+print_success "Go install target set to $HOME/.local/bin"
+
+print_info "Installing github.com/gnolang/gno/gnovm/cmd/gno@latest..."
+(
+    cd "$DOTFILES_DIR" || exit
     mise exec -- go install github.com/gnolang/gno/gnovm/cmd/gno@latest
 )
 print_success "gno installed"
@@ -25,8 +33,3 @@ print_info "Installing github.com/gnoverse/gnopls@latest..."
     mise exec -- go install github.com/gnoverse/gnopls@latest
 )
 print_success "gnopls installed"
-
-for tool_name in gno gnopls; do
-    create_mise_go_tool_wrapper "$tool_name"
-done
-print_success "Gno tool wrappers created in $HOME/.local/bin"

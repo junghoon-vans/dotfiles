@@ -59,37 +59,12 @@ create_local_bin_wrapper() {
     fi
 }
 
-create_mise_go_tool_wrapper() {
-    local tool_name="$1"
-    local wrapper_dir="${2:-$HOME/.local/bin}"
-
-    create_local_bin_wrapper "$tool_name" "$wrapper_dir" <<EOF
-#!/bin/bash
-set -euo pipefail
-
-caller_dir="\$PWD"
-cd "$DOTFILES_DIR"
-
-go_root="\$(mise exec -- go env GOROOT)"
-if [ -n "\$go_root" ]; then
-    export PATH="\$go_root/bin:\$PATH"
-fi
-
-go_bin="\$(mise exec -- go env GOBIN)"
-tool_path="\$go_bin/$tool_name"
-if [ -z "\$go_bin" ] || [ ! -x "\$tool_path" ]; then
-    go_path="\$(mise exec -- go env GOPATH)"
-    tool_path="\$go_path/bin/$tool_name"
-fi
-
-if [ ! -x "\$tool_path" ]; then
-    printf '%s\n' "$tool_name is not executable at \$tool_path" >&2
-    exit 1
-fi
-
-cd "\$caller_dir"
-exec "\$tool_path" "\$@"
-EOF
+configure_mise_go_bin() {
+    mkdir -p "$HOME/.local/bin"
+    (
+        cd "$DOTFILES_DIR" || exit
+        mise exec -- go env -w GOBIN="$HOME/.local/bin"
+    )
 }
 
 create_mise_bun_global_tool_wrapper() {

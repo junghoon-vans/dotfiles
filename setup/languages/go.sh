@@ -16,6 +16,9 @@ fi
 )
 print_success "Go runtime installed via mise"
 
+configure_mise_go_bin
+print_success "Go install target set to $HOME/.local/bin"
+
 print_info "Installing golang.org/x/tools/gopls@latest..."
 (
     cd "$DOTFILES_DIR" || exit
@@ -36,8 +39,3 @@ print_info "Installing mvdan.cc/gofumpt@latest..."
     mise exec -- go install mvdan.cc/gofumpt@latest
 )
 print_success "gofumpt installed"
-
-for tool_name in gopls golangci-lint gofumpt; do
-    create_mise_go_tool_wrapper "$tool_name"
-done
-print_success "Go tool wrappers created in $HOME/.local/bin"
