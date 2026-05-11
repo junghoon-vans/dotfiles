@@ -67,6 +67,7 @@ create_mise_go_tool_wrapper() {
 #!/bin/bash
 set -euo pipefail
 
+caller_dir="\$PWD"
 cd "$DOTFILES_DIR"
 
 go_root="\$(mise exec -- go env GOROOT)"
@@ -75,12 +76,19 @@ if [ -n "\$go_root" ]; then
 fi
 
 go_bin="\$(mise exec -- go env GOBIN)"
-if [ -z "\$go_bin" ]; then
+tool_path="\$go_bin/$tool_name"
+if [ -z "\$go_bin" ] || [ ! -x "\$tool_path" ]; then
     go_path="\$(mise exec -- go env GOPATH)"
-    go_bin="\$go_path/bin"
+    tool_path="\$go_path/bin/$tool_name"
 fi
 
-exec "\$go_bin/$tool_name" "\$@"
+if [ ! -x "\$tool_path" ]; then
+    printf '%s\n' "$tool_name is not executable at \$tool_path" >&2
+    exit 1
+fi
+
+cd "\$caller_dir"
+exec "\$tool_path" "\$@"
 EOF
 }
 
