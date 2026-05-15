@@ -225,4 +225,17 @@ alias lt='eza --tree --icons'
 alias grep='rg'
 alias pre-commit='prek'
 alias lg='lazygit'
-alias opencode='opencode 2>>$HOME/.cache/opencode/stderr.log'
+opencode() {
+  mkdir -p "$HOME/.cache/opencode"
+
+  local github_token="${GITHUB_PERSONAL_ACCESS_TOKEN:-}"
+  if [[ -z "$github_token" ]] && command -v gh >/dev/null 2>&1; then
+    github_token="$(gh auth token 2>/dev/null || true)"
+  fi
+
+  if [[ -n "$github_token" ]]; then
+    GITHUB_PERSONAL_ACCESS_TOKEN="$github_token" command opencode "$@" 2>>"$HOME/.cache/opencode/stderr.log"
+  else
+    command opencode "$@" 2>>"$HOME/.cache/opencode/stderr.log"
+  fi
+}
