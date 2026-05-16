@@ -10,9 +10,7 @@ LEMMINX_VERSION="0.31.1"
 LEMMINX_BASE_URL="https://repo.eclipse.org/content/repositories/lemminx-releases/org/eclipse/lemminx/org.eclipse.lemminx/${LEMMINX_VERSION}"
 LEMMINX_JAR_NAME="org.eclipse.lemminx-${LEMMINX_VERSION}-uber.jar"
 LEMMINX_INSTALL_DIR="$HOME/.local/share/lemminx"
-LEMMINX_BIN_DIR="$HOME/.local/bin"
-LEMMINX_JAR_PATH="$LEMMINX_INSTALL_DIR/$LEMMINX_JAR_NAME"
-LEMMINX_WRAPPER_PATH="$LEMMINX_BIN_DIR/lemminx"
+LEMMINX_JAR_PATH="$LEMMINX_INSTALL_DIR/lemminx.jar"
 LEMMINX_JAR_URL="$LEMMINX_BASE_URL/$LEMMINX_JAR_NAME"
 
 if ! command -v curl >/dev/null 2>&1; then
@@ -30,7 +28,7 @@ fi
     mise install java
 )
 
-mkdir -p "$LEMMINX_INSTALL_DIR" "$LEMMINX_BIN_DIR"
+mkdir -p "$LEMMINX_INSTALL_DIR"
 
 print_info "Downloading $LEMMINX_JAR_NAME..."
 curl -fsSL -o "$LEMMINX_JAR_PATH" "$LEMMINX_JAR_URL"
@@ -39,7 +37,7 @@ checksum_file="$(mktemp)"
 trap 'rm -f "$checksum_file"' EXIT
 
 if curl -fsSL -o "$checksum_file" "$LEMMINX_JAR_URL.sha1"; then
-    expected_checksum="$(tr -d '[:space:]' < "$checksum_file")"
+    expected_checksum="$(tr -d '[:space:]' <"$checksum_file")"
     if [ -z "$expected_checksum" ]; then
         print_error "Downloaded LemMinX checksum is empty"
         exit 1
@@ -59,16 +57,4 @@ else
     print_info "LemMinX checksum file unavailable, skipping checksum validation"
 fi
 
-cat > "$LEMMINX_WRAPPER_PATH" <<EOF
-#!/bin/bash
-set -euo pipefail
-
-cd "$DOTFILES_DIR"
-# shellcheck disable=SC2086
-exec mise exec -- java \${LEMMINX_JAVA_OPTS:-} -jar "$LEMMINX_JAR_PATH" "\$@"
-EOF
-
-chmod +x "$LEMMINX_WRAPPER_PATH"
-
 print_success "LemMinX installed at $LEMMINX_JAR_PATH"
-print_success "lemminx wrapper created at $LEMMINX_WRAPPER_PATH"

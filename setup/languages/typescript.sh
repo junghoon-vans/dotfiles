@@ -27,9 +27,6 @@ print_info "Installing typescript-language-server..."
 )
 print_success "typescript-language-server installed"
 
-create_mise_bun_global_tool_wrapper "typescript-language-server"
-print_success "typescript-language-server wrapper created in $HOME/.local/bin"
-
 if command -v brew >/dev/null 2>&1; then
     if brew list biome >/dev/null 2>&1; then
         print_success "biome already installed"
