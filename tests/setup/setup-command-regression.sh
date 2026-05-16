@@ -16,7 +16,7 @@ LOG_FILE="$TMP_DIR/commands.log"
 
 mkdir -p "$FAKE_HOME" "$FAKE_BIN" "$FAKE_GOBIN" "$FAKE_GOPATH/bin" "$FAKE_GOROOT/bin"
 
-cat > "$FAKE_BIN/go" <<EOF
+cat >"$FAKE_BIN/go" <<EOF
 #!/bin/bash
 printf 'go %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "version" ]; then
@@ -24,7 +24,7 @@ if [ "\${1:-}" = "version" ]; then
 fi
 EOF
 
-cat > "$FAKE_GOROOT/bin/go" <<EOF
+cat >"$FAKE_GOROOT/bin/go" <<EOF
 #!/bin/bash
 printf 'goroot-go %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "version" ]; then
@@ -32,7 +32,7 @@ if [ "\${1:-}" = "version" ]; then
 fi
 EOF
 
-cat > "$FAKE_BIN/bun" <<EOF
+cat >"$FAKE_BIN/bun" <<EOF
 #!/bin/bash
 printf 'bun %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "--version" ]; then
@@ -40,13 +40,13 @@ if [ "\${1:-}" = "--version" ]; then
 fi
 EOF
 
-cat > "$FAKE_BIN/curl" <<EOF
+cat >"$FAKE_BIN/curl" <<EOF
 #!/bin/bash
 printf 'curl %s\n' "\$*" >> "$LOG_FILE"
 exit 0
 EOF
 
-cat > "$FAKE_BIN/brew" <<EOF
+cat >"$FAKE_BIN/brew" <<EOF
 #!/bin/bash
 if [ "\${1:-}" = "list" ]; then
   exit 0
@@ -62,7 +62,7 @@ fi
 printf 'brew %s\n' "\$*" >> "$LOG_FILE"
 EOF
 
-cat > "$FAKE_BIN/mise" <<EOF
+cat >"$FAKE_BIN/mise" <<EOF
 #!/bin/bash
 printf 'mise %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "install" ] && [ "\${2:-}" = "--dry-run-code" ]; then
@@ -143,98 +143,98 @@ printf '%s' "$HELP_OUTPUT" | grep -q -- '--dry-run'
 printf '%s' "$HELP_OUTPUT" | grep -q -- '--skip COMMAND'
 
 while IFS= read -r language_name; do
-  LANGUAGE_COMMAND_OUTPUT="$($SETUP_SH --dry-run "$language_name")"
-  printf '%s' "$LANGUAGE_COMMAND_OUTPUT" | grep -q "^  ${language_name}[[:space:]]"
-  grep -Eq "(^|[[:space:]])${language_name}([[:space:];]|$)" "$REPO_ROOT/setup/commands/30-languages"
+    LANGUAGE_COMMAND_OUTPUT="$($SETUP_SH --dry-run "$language_name")"
+    printf '%s' "$LANGUAGE_COMMAND_OUTPUT" | grep -q "^  ${language_name}[[:space:]]"
+    grep -Eq "(^|[[:space:]])${language_name}([[:space:];]|$)" "$REPO_ROOT/setup/commands/30-languages"
 done < <(for path in "$REPO_ROOT"/setup/languages/*.sh; do basename "${path%.sh}"; done | sort)
 
 while IFS= read -r blockchain_name; do
-  BLOCKCHAIN_COMMAND_OUTPUT="$($SETUP_SH --dry-run "$blockchain_name")"
-  printf '%s' "$BLOCKCHAIN_COMMAND_OUTPUT" | grep -q "^  ${blockchain_name}[[:space:]]"
-  grep -Eq "(^|[[:space:]])${blockchain_name}([[:space:];]|$)" "$REPO_ROOT/setup/commands/35-blockchain"
+    BLOCKCHAIN_COMMAND_OUTPUT="$($SETUP_SH --dry-run "$blockchain_name")"
+    printf '%s' "$BLOCKCHAIN_COMMAND_OUTPUT" | grep -q "^  ${blockchain_name}[[:space:]]"
+    grep -Eq "(^|[[:space:]])${blockchain_name}([[:space:];]|$)" "$REPO_ROOT/setup/commands/35-blockchain"
 done < <(for path in "$REPO_ROOT"/setup/blockchain/*.sh; do basename "${path%.sh}"; done | sort)
 
 EXPECTED_LANGUAGE_ORDER="go node bun java kotlin xml rust python typescript"
 ACTUAL_LANGUAGE_ORDER="$(grep '^for language_name in ' "$REPO_ROOT/setup/commands/30-languages" | sed 's/^for language_name in //; s/; do$//')"
 if [ "$ACTUAL_LANGUAGE_ORDER" != "$EXPECTED_LANGUAGE_ORDER" ]; then
-  printf 'languages umbrella order changed: expected "%s", got "%s"\n' "$EXPECTED_LANGUAGE_ORDER" "$ACTUAL_LANGUAGE_ORDER" >&2
-  exit 1
+    printf 'languages umbrella order changed: expected "%s", got "%s"\n' "$EXPECTED_LANGUAGE_ORDER" "$ACTUAL_LANGUAGE_ORDER" >&2
+    exit 1
 fi
 
 EXPECTED_BLOCKCHAIN_ORDER="solana gno"
 ACTUAL_BLOCKCHAIN_ORDER="$(grep '^for blockchain_name in ' "$REPO_ROOT/setup/commands/35-blockchain" | sed 's/^for blockchain_name in //; s/; do$//')"
 if [ "$ACTUAL_BLOCKCHAIN_ORDER" != "$EXPECTED_BLOCKCHAIN_ORDER" ]; then
-  printf 'blockchain umbrella order changed: expected "%s", got "%s"\n' "$EXPECTED_BLOCKCHAIN_ORDER" "$ACTUAL_BLOCKCHAIN_ORDER" >&2
-  exit 1
+    printf 'blockchain umbrella order changed: expected "%s", got "%s"\n' "$EXPECTED_BLOCKCHAIN_ORDER" "$ACTUAL_BLOCKCHAIN_ORDER" >&2
+    exit 1
 fi
 
 LANGUAGE_PROMPT_SETUP_DIR="$TMP_DIR/language-prompt-setup"
 LANGUAGE_PROMPT_LOG="$TMP_DIR/language-prompt.log"
 mkdir -p "$LANGUAGE_PROMPT_SETUP_DIR/languages"
 for language_name in $EXPECTED_LANGUAGE_ORDER; do
-  cat > "$LANGUAGE_PROMPT_SETUP_DIR/languages/$language_name.sh" <<'EOF'
+    cat >"$LANGUAGE_PROMPT_SETUP_DIR/languages/$language_name.sh" <<'EOF'
 #!/bin/bash
 printf '%s\n' "$(basename "$0")" >> "$LANGUAGE_PROMPT_LOG"
 EOF
-  chmod +x "$LANGUAGE_PROMPT_SETUP_DIR/languages/$language_name.sh"
+    chmod +x "$LANGUAGE_PROMPT_SETUP_DIR/languages/$language_name.sh"
 done
 
 LANGUAGE_PROMPT_OUTPUT="$(SETUP_DIR="$LANGUAGE_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 LANGUAGE_PROMPT_LOG="$LANGUAGE_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/30-languages")"
 printf '%s' "$LANGUAGE_PROMPT_OUTPUT" | grep -q "Run language command 'go'? \[Y/n\] yes (--yes)"
 printf '%s' "$LANGUAGE_PROMPT_OUTPUT" | grep -q "Run language command 'xml'? \[Y/n\] yes (--yes)"
-read -r -a expected_languages <<< "$EXPECTED_LANGUAGE_ORDER"
+read -r -a expected_languages <<<"$EXPECTED_LANGUAGE_ORDER"
 EXPECTED_LANGUAGE_RUNS="$(printf '%s.sh\n' "${expected_languages[@]}")"
 ACTUAL_LANGUAGE_RUNS="$(cat "$LANGUAGE_PROMPT_LOG")"
 if [ "$ACTUAL_LANGUAGE_RUNS" != "$EXPECTED_LANGUAGE_RUNS" ]; then
-  printf 'languages umbrella run order changed: expected "%s", got "%s"\n' "$EXPECTED_LANGUAGE_RUNS" "$ACTUAL_LANGUAGE_RUNS" >&2
-  exit 1
+    printf 'languages umbrella run order changed: expected "%s", got "%s"\n' "$EXPECTED_LANGUAGE_RUNS" "$ACTUAL_LANGUAGE_RUNS" >&2
+    exit 1
 fi
 
-: > "$LANGUAGE_PROMPT_LOG"
+: >"$LANGUAGE_PROMPT_LOG"
 LANGUAGE_SKIP_PROMPT_OUTPUT="$(SETUP_DIR="$LANGUAGE_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 SETUP_SKIP_COMMANDS=' rust typescript ' LANGUAGE_PROMPT_LOG="$LANGUAGE_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/30-languages")"
 printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping language command: rust'
 printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping language command: typescript'
 if printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q "Run language command 'rust'?"; then
-  printf 'skipped language command should not prompt: rust\n' >&2
-  exit 1
+    printf 'skipped language command should not prompt: rust\n' >&2
+    exit 1
 fi
 if grep -q '^rust.sh$\|^typescript.sh$' "$LANGUAGE_PROMPT_LOG"; then
-  printf 'skipped language commands should not run\n' >&2
-  exit 1
+    printf 'skipped language commands should not run\n' >&2
+    exit 1
 fi
 
 BLOCKCHAIN_PROMPT_SETUP_DIR="$TMP_DIR/blockchain-prompt-setup"
 BLOCKCHAIN_PROMPT_LOG="$TMP_DIR/blockchain-prompt.log"
 mkdir -p "$BLOCKCHAIN_PROMPT_SETUP_DIR/blockchain"
 for blockchain_name in $EXPECTED_BLOCKCHAIN_ORDER; do
-  cat > "$BLOCKCHAIN_PROMPT_SETUP_DIR/blockchain/$blockchain_name.sh" <<'EOF'
+    cat >"$BLOCKCHAIN_PROMPT_SETUP_DIR/blockchain/$blockchain_name.sh" <<'EOF'
 #!/bin/bash
 printf '%s\n' "$(basename "$0")" >> "$BLOCKCHAIN_PROMPT_LOG"
 EOF
-  chmod +x "$BLOCKCHAIN_PROMPT_SETUP_DIR/blockchain/$blockchain_name.sh"
+    chmod +x "$BLOCKCHAIN_PROMPT_SETUP_DIR/blockchain/$blockchain_name.sh"
 done
 
 BLOCKCHAIN_PROMPT_OUTPUT="$(SETUP_DIR="$BLOCKCHAIN_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 BLOCKCHAIN_PROMPT_LOG="$BLOCKCHAIN_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/35-blockchain")"
 printf '%s' "$BLOCKCHAIN_PROMPT_OUTPUT" | grep -q "Run blockchain command 'solana'? \[Y/n\] yes (--yes)"
 printf '%s' "$BLOCKCHAIN_PROMPT_OUTPUT" | grep -q "Run blockchain command 'gno'? \[Y/n\] yes (--yes)"
-read -r -a expected_blockchains <<< "$EXPECTED_BLOCKCHAIN_ORDER"
+read -r -a expected_blockchains <<<"$EXPECTED_BLOCKCHAIN_ORDER"
 EXPECTED_BLOCKCHAIN_RUNS="$(printf '%s.sh\n' "${expected_blockchains[@]}")"
 ACTUAL_BLOCKCHAIN_RUNS="$(cat "$BLOCKCHAIN_PROMPT_LOG")"
 if [ "$ACTUAL_BLOCKCHAIN_RUNS" != "$EXPECTED_BLOCKCHAIN_RUNS" ]; then
-  printf 'blockchain umbrella run order changed: expected "%s", got "%s"\n' "$EXPECTED_BLOCKCHAIN_RUNS" "$ACTUAL_BLOCKCHAIN_RUNS" >&2
-  exit 1
+    printf 'blockchain umbrella run order changed: expected "%s", got "%s"\n' "$EXPECTED_BLOCKCHAIN_RUNS" "$ACTUAL_BLOCKCHAIN_RUNS" >&2
+    exit 1
 fi
 
-: > "$BLOCKCHAIN_PROMPT_LOG"
+: >"$BLOCKCHAIN_PROMPT_LOG"
 BLOCKCHAIN_SKIP_PROMPT_OUTPUT="$(SETUP_DIR="$BLOCKCHAIN_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 SETUP_SKIP_COMMANDS=' gno ' BLOCKCHAIN_PROMPT_LOG="$BLOCKCHAIN_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/35-blockchain")"
 printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping blockchain command: gno'
 if printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q "Run blockchain command 'gno'?"; then
-  printf 'skipped blockchain command should not prompt: gno\n' >&2
-  exit 1
+    printf 'skipped blockchain command should not prompt: gno\n' >&2
+    exit 1
 fi
 if grep -q '^gno.sh$' "$BLOCKCHAIN_PROMPT_LOG"; then
-  printf 'skipped blockchain command should not run\n' >&2
-  exit 1
+    printf 'skipped blockchain command should not run\n' >&2
+    exit 1
 fi
 
 python3 - "$REPO_ROOT/home/dot_config/opencode/opencode.json" <<'PY'
@@ -247,6 +247,9 @@ with open(sys.argv[1], encoding="utf-8") as config_file:
 expected_commands = {
     "gopls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/gopls"'],
     "gnopls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/gnopls" -mode=stdio'],
+    "jdtls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/jdtls"'],
+    "kotlin-ls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/kotlin-language-server"'],
+    "pyright": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/pyright-langserver" --stdio'],
     "rust": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/rust-analyzer"'],
     "typescript-language-server": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/typescript-language-server" --stdio'],
     "xml": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/lemminx"'],
@@ -269,22 +272,22 @@ printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'blockchain'
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  karabiner[[:space:]]\+Install Karabiner-Elements'
 printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Skipping command: macos'
 if printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  macos[[:space:]]'; then
-  printf 'dry-run selected commands should not include skipped macos command\n' >&2
-  exit 1
+    printf 'dry-run selected commands should not include skipped macos command\n' >&2
+    exit 1
 fi
 
 BLOCKCHAIN_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip blockchain)"
 printf '%s' "$BLOCKCHAIN_SKIP_OUTPUT" | grep -q 'Skipping command: blockchain'
 if printf '%s' "$BLOCKCHAIN_SKIP_OUTPUT" | grep -q '^  blockchain[[:space:]]'; then
-  printf 'dry-run selected commands should not include skipped blockchain command\n' >&2
-  exit 1
+    printf 'dry-run selected commands should not include skipped blockchain command\n' >&2
+    exit 1
 fi
 
 KARABINER_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip karabiner)"
 printf '%s' "$KARABINER_SKIP_OUTPUT" | grep -q 'Skipping command: karabiner'
 if printf '%s' "$KARABINER_SKIP_OUTPUT" | grep -q '^  karabiner[[:space:]]'; then
-  printf 'dry-run selected commands should not include skipped karabiner command\n' >&2
-  exit 1
+    printf 'dry-run selected commands should not include skipped karabiner command\n' >&2
+    exit 1
 fi
 
 NO_INPUT_OUTPUT="$($SETUP_SH --no-input --dry-run bootstrap)"
@@ -303,15 +306,15 @@ LANGUAGE_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip gno go gno)"
 printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q 'Skipping command: gno'
 printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go via mise'
 if printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q '^  gno[[:space:]]'; then
-  printf 'dry-run selected commands should not include skipped gno command\n' >&2
-  exit 1
+    printf 'dry-run selected commands should not include skipped gno command\n' >&2
+    exit 1
 fi
 
 BREW_PACKAGES_HOME="$TMP_DIR/brew-packages-home"
 BREW_PACKAGES_BIN="$TMP_DIR/brew-packages-bin"
 BREW_PACKAGES_LOG="$TMP_DIR/brew-packages.log"
 mkdir -p "$BREW_PACKAGES_HOME" "$BREW_PACKAGES_BIN"
-cat > "$BREW_PACKAGES_BIN/brew" <<'EOF'
+cat >"$BREW_PACKAGES_BIN/brew" <<'EOF'
 #!/bin/bash
 printf 'brew %s\n' "$*" >> "$BREW_PACKAGES_LOG"
 case "${1:-}" in
@@ -324,7 +327,7 @@ case "${1:-}" in
 esac
 exit 0
 EOF
-cat > "$BREW_PACKAGES_BIN/mise" <<'EOF'
+cat >"$BREW_PACKAGES_BIN/mise" <<'EOF'
 #!/bin/bash
 printf 'mise %s\n' "$*" >> "$BREW_PACKAGES_LOG"
 exit 0
@@ -334,58 +337,58 @@ BREW_PACKAGES_PATH="$BREW_PACKAGES_BIN:/usr/bin:/bin"
 env HOME="$BREW_PACKAGES_HOME" PATH="$BREW_PACKAGES_PATH" BREW_PACKAGES_HOME="$BREW_PACKAGES_HOME" BREW_PACKAGES_LOG="$BREW_PACKAGES_LOG" bash "$REPO_ROOT/setup/commands/20-brew-packages" >/dev/null
 grep -q 'brew bundle check' "$BREW_PACKAGES_LOG"
 if grep -q 'mise install' "$BREW_PACKAGES_LOG"; then
-  printf 'brew-packages should not install all mise runtimes\n' >&2
-  exit 1
+    printf 'brew-packages should not install all mise runtimes\n' >&2
+    exit 1
 fi
 
 if DOCTOR_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip doctor doctor 2>&1)"; then
-  printf 'skipping the only selected utility command should fail\n' >&2
-  exit 1
+    printf 'skipping the only selected utility command should fail\n' >&2
+    exit 1
 fi
 printf '%s' "$DOCTOR_SKIP_OUTPUT" | grep -q 'All selected commands were skipped: doctor'
 
 NODE_FAIL_HOME="$TMP_DIR/node-fail-home"
 NODE_FAIL_BIN="$TMP_DIR/node-fail-bin"
 mkdir -p "$NODE_FAIL_HOME" "$NODE_FAIL_BIN"
-cat > "$NODE_FAIL_BIN/curl" <<'EOF'
+cat >"$NODE_FAIL_BIN/curl" <<'EOF'
 #!/bin/bash
 exit 0
 EOF
 chmod +x "$NODE_FAIL_BIN/curl"
 NODE_FAIL_OUTPUT="$TMP_DIR/node-fail-output"
 if HOME="$NODE_FAIL_HOME" PATH="$NODE_FAIL_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/node.sh" >"$NODE_FAIL_OUTPUT" 2>&1; then
-  printf 'node installer should fail when mise is missing\n' >&2
-  exit 1
+    printf 'node installer should fail when mise is missing\n' >&2
+    exit 1
 fi
 grep -q 'mise is required to install Node.js' "$NODE_FAIL_OUTPUT"
 
 JAVA_FAIL_HOME="$TMP_DIR/java-fail-home"
 JAVA_FAIL_BIN="$TMP_DIR/java-fail-bin"
 mkdir -p "$JAVA_FAIL_HOME" "$JAVA_FAIL_BIN"
-cat > "$JAVA_FAIL_BIN/curl" <<'EOF'
+cat >"$JAVA_FAIL_BIN/curl" <<'EOF'
 #!/bin/bash
 exit 0
 EOF
 chmod +x "$JAVA_FAIL_BIN/curl"
 JAVA_FAIL_OUTPUT="$TMP_DIR/java-fail-output"
 if HOME="$JAVA_FAIL_HOME" PATH="$JAVA_FAIL_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/java.sh" >"$JAVA_FAIL_OUTPUT" 2>&1; then
-  printf 'java installer should fail when mise is missing\n' >&2
-  exit 1
+    printf 'java installer should fail when mise is missing\n' >&2
+    exit 1
 fi
 grep -q 'mise is required to install Java' "$JAVA_FAIL_OUTPUT"
 
 KOTLIN_FAIL_HOME="$TMP_DIR/kotlin-fail-home"
 KOTLIN_FAIL_BIN="$TMP_DIR/kotlin-fail-bin"
 mkdir -p "$KOTLIN_FAIL_HOME" "$KOTLIN_FAIL_BIN"
-cat > "$KOTLIN_FAIL_BIN/curl" <<'EOF'
+cat >"$KOTLIN_FAIL_BIN/curl" <<'EOF'
 #!/bin/bash
 exit 0
 EOF
 chmod +x "$KOTLIN_FAIL_BIN/curl"
 KOTLIN_FAIL_OUTPUT="$TMP_DIR/kotlin-fail-output"
 if HOME="$KOTLIN_FAIL_HOME" PATH="$KOTLIN_FAIL_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/kotlin.sh" >"$KOTLIN_FAIL_OUTPUT" 2>&1; then
-  printf 'kotlin installer should fail when mise is missing\n' >&2
-  exit 1
+    printf 'kotlin installer should fail when mise is missing\n' >&2
+    exit 1
 fi
 grep -q 'mise is required to install Kotlin' "$KOTLIN_FAIL_OUTPUT"
 
@@ -395,7 +398,7 @@ RUST_HOMEBREW_PREFIX="$TMP_DIR/rust-homebrew"
 RUST_TOOLCHAIN_BIN="$TMP_DIR/rust-toolchain-bin"
 RUST_LOG="$TMP_DIR/rust.log"
 mkdir -p "$RUST_HOME" "$RUST_BIN" "$RUST_HOMEBREW_PREFIX/bin" "$RUST_TOOLCHAIN_BIN"
-cat > "$RUST_BIN/mise" <<'EOF'
+cat >"$RUST_BIN/mise" <<'EOF'
 #!/bin/bash
 printf 'mise %s\n' "$*" >> "$RUST_LOG"
 if [ "${1:-}" = "install" ] && [ "${2:-}" = "rust" ]; then
@@ -412,7 +415,7 @@ if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
 fi
 exit 0
 EOF
-cat > "$RUST_BIN/brew" <<'EOF'
+cat >"$RUST_BIN/brew" <<'EOF'
 #!/bin/bash
 printf 'brew %s\n' "$*" >> "$RUST_LOG"
 if [ "${1:-}" = "list" ]; then
@@ -428,15 +431,15 @@ if [ "${1:-}" = "--prefix" ]; then
 fi
 exit 0
 EOF
-cat > "$RUST_TOOLCHAIN_BIN/rustc" <<'EOF'
+cat >"$RUST_TOOLCHAIN_BIN/rustc" <<'EOF'
 #!/bin/bash
 printf 'toolchain rustc %s\n' "$*" >> "$RUST_LOG"
 EOF
-cat > "$RUST_TOOLCHAIN_BIN/cargo" <<'EOF'
+cat >"$RUST_TOOLCHAIN_BIN/cargo" <<'EOF'
 #!/bin/bash
 printf 'toolchain cargo %s\n' "$*" >> "$RUST_LOG"
 EOF
-cat > "$RUST_HOMEBREW_PREFIX/bin/rust-analyzer" <<'EOF'
+cat >"$RUST_HOMEBREW_PREFIX/bin/rust-analyzer" <<'EOF'
 #!/bin/bash
 rustc_path="$(command -v rustc || true)"
 cargo_path="$(command -v cargo || true)"
@@ -447,11 +450,11 @@ fi
 printf 'rust-analyzer %s\n' "$*" >> "$RUST_LOG"
 EOF
 chmod +x \
-  "$RUST_BIN/mise" \
-  "$RUST_BIN/brew" \
-  "$RUST_TOOLCHAIN_BIN/rustc" \
-  "$RUST_TOOLCHAIN_BIN/cargo" \
-  "$RUST_HOMEBREW_PREFIX/bin/rust-analyzer"
+    "$RUST_BIN/mise" \
+    "$RUST_BIN/brew" \
+    "$RUST_TOOLCHAIN_BIN/rustc" \
+    "$RUST_TOOLCHAIN_BIN/cargo" \
+    "$RUST_HOMEBREW_PREFIX/bin/rust-analyzer"
 
 HOME="$RUST_HOME" PATH="$RUST_BIN:/usr/bin:/bin" RUST_LOG="$RUST_LOG" RUST_HOMEBREW_PREFIX="$RUST_HOMEBREW_PREFIX" RUST_TOOLCHAIN_BIN="$RUST_TOOLCHAIN_BIN" bash "$REPO_ROOT/setup/languages/rust.sh" >/dev/null
 test -x "$RUST_HOME/.local/bin/rust-analyzer"
@@ -468,12 +471,12 @@ XML_LOG="$TMP_DIR/xml.log"
 XML_JAR_URL='https://repo.eclipse.org/content/repositories/lemminx-releases/org/eclipse/lemminx/org.eclipse.lemminx/0.31.1/org.eclipse.lemminx-0.31.1-uber.jar'
 XML_EXPECTED_SHA1='1d65f934e0dc1bdde082b77ffda6d1081b90a0c3'
 mkdir -p "$XML_HOME" "$XML_BIN"
-cat > "$XML_BIN/java" <<'EOF'
+cat >"$XML_BIN/java" <<'EOF'
 #!/bin/bash
 printf 'java %s\n' "$*" >> "$XML_LOG"
 exit 0
 EOF
-cat > "$XML_BIN/mise" <<'EOF'
+cat >"$XML_BIN/mise" <<'EOF'
 #!/bin/bash
 printf 'mise %s\n' "$*" >> "$XML_LOG"
 if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
@@ -482,7 +485,7 @@ if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
 fi
 exit 0
 EOF
-cat > "$XML_BIN/curl" <<'EOF'
+cat >"$XML_BIN/curl" <<'EOF'
 #!/bin/bash
 output=""
 url=""
@@ -514,7 +517,7 @@ case "$url" in
     ;;
 esac
 EOF
-cat > "$XML_BIN/shasum" <<'EOF'
+cat >"$XML_BIN/shasum" <<'EOF'
 #!/bin/bash
 if [ "$1" = "-a" ] && [ "$2" = "1" ]; then
   printf '%s  %s\n' "$XML_EXPECTED_SHA1" "$3"
@@ -537,7 +540,7 @@ SOLANA_HOME="$TMP_DIR/solana-home"
 SOLANA_BIN="$TMP_DIR/solana-bin"
 SOLANA_LOG="$TMP_DIR/solana.log"
 mkdir -p "$SOLANA_HOME" "$SOLANA_BIN"
-cat > "$SOLANA_BIN/mise" <<'EOF'
+cat >"$SOLANA_BIN/mise" <<'EOF'
 #!/bin/bash
 printf 'mise %s\n' "$*" >> "$SOLANA_LOG"
 if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
@@ -568,7 +571,7 @@ AVMEOF
 fi
 exit 0
 EOF
-cat > "$SOLANA_BIN/curl" <<'EOF'
+cat >"$SOLANA_BIN/curl" <<'EOF'
 #!/bin/bash
 output=""
 url=""
@@ -647,26 +650,26 @@ grep -q 'cargo-build-sbf --version' "$SOLANA_LOG"
 grep -q 'avm --version' "$SOLANA_LOG"
 grep -q 'anchor --version' "$SOLANA_LOG"
 
-: > "$SOLANA_LOG"
+: >"$SOLANA_LOG"
 HOME="$SOLANA_HOME" CARGO_HOME="$SOLANA_HOME/.cargo" AVM_HOME="$SOLANA_HOME/.avm" PATH="$SOLANA_BIN:/usr/bin:/bin" SOLANA_LOG="$SOLANA_LOG" bash "$REPO_ROOT/setup/blockchain/solana.sh" >/dev/null
 grep -q 'agave-install update' "$SOLANA_LOG"
 if grep -q 'curl https://release.anza.xyz/stable/install' "$SOLANA_LOG"; then
-  printf 'solana installer should prefer agave-install update when active release exists\n' >&2
-  exit 1
+    printf 'solana installer should prefer agave-install update when active release exists\n' >&2
+    exit 1
 fi
 
 DOCTOR_HOME="$TMP_DIR/doctor-home"
 DOCTOR_BIN="$TMP_DIR/doctor-bin"
 mkdir -p "$DOCTOR_HOME" "$DOCTOR_BIN"
-cat > "$DOCTOR_BIN/git" <<'EOF'
+cat >"$DOCTOR_BIN/git" <<'EOF'
 #!/bin/bash
 exit 0
 EOF
-cat > "$DOCTOR_BIN/bash" <<'EOF'
+cat >"$DOCTOR_BIN/bash" <<'EOF'
 #!/bin/bash
 exec /bin/bash "$@"
 EOF
-cat > "$DOCTOR_BIN/uname" <<'EOF'
+cat >"$DOCTOR_BIN/uname" <<'EOF'
 #!/bin/bash
 printf 'Darwin\n'
 EOF
@@ -676,15 +679,19 @@ printf '%s' "$DOCTOR_OUTPUT" | grep -q 'brew missing — run ./setup.sh bootstra
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'mise missing — run ./setup.sh brew-packages before runtime setup'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'ruff missing; run ./setup.sh python'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'biome missing; run ./setup.sh typescript'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'jdtls wrapper missing; run ./setup.sh java'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'kotlin-language-server wrapper missing; run ./setup.sh kotlin'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'pyright-langserver wrapper missing; run ./setup.sh python'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'bash-language-server missing; run ./setup.sh brew-packages'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'Doctor completed'
 
 CLEAN_HOME="$TMP_DIR/clean-home"
 mkdir -p "$CLEAN_HOME/.config/zed"
 cp "$REPO_ROOT/home/dot_zshrc" "$CLEAN_HOME/.zshrc"
 cp "$REPO_ROOT/home/dot_config/zed/settings.json" "$CLEAN_HOME/.config/zed/settings.json"
-printf 'old zshrc\n' > "$CLEAN_HOME/.zshrc.backup.20260101-010101"
-printf 'old zed settings\n' > "$CLEAN_HOME/.config/zed/settings.json.backup.20260101-010101"
-printf 'keep unrelated\n' > "$CLEAN_HOME/.config/zed/settings.json.backup.not-managed"
+printf 'old zshrc\n' >"$CLEAN_HOME/.zshrc.backup.20260101-010101"
+printf 'old zed settings\n' >"$CLEAN_HOME/.config/zed/settings.json.backup.20260101-010101"
+printf 'keep unrelated\n' >"$CLEAN_HOME/.config/zed/settings.json.backup.not-managed"
 HOME="$CLEAN_HOME" SETUP_YES=1 SETUP_NO_INPUT=1 bash "$REPO_ROOT/setup/clean-backups.sh" >/dev/null
 [ ! -e "$CLEAN_HOME/.zshrc.backup.20260101-010101" ]
 [ ! -e "$CLEAN_HOME/.config/zed/settings.json.backup.20260101-010101" ]
@@ -696,19 +703,19 @@ bash "$REPO_ROOT/setup/languages/bun.sh" >/dev/null
 
 GO_SETUP_OUTPUT="$($SETUP_SH --yes go)"
 if printf '%s' "$GO_SETUP_OUTPUT" | grep -q 'Activate Gno support in Zed'; then
-  printf 'go command should not print Zed Gno activation next step\n' >&2
-  exit 1
+    printf 'go command should not print Zed Gno activation next step\n' >&2
+    exit 1
 fi
 
 APPS_HOME="$TMP_DIR/apps-home"
 APPS_ZSH_CUSTOM="$APPS_HOME/.oh-my-zsh/custom"
 mkdir -p \
-  "$APPS_ZSH_CUSTOM/plugins/zsh-autosuggestions" \
-  "$APPS_ZSH_CUSTOM/plugins/zsh-syntax-highlighting" \
-  "$APPS_ZSH_CUSTOM/plugins/zsh-completions" \
-  "$APPS_ZSH_CUSTOM/plugins/zsh-hangul" \
-  "$APPS_ZSH_CUSTOM/themes/spaceship-prompt" \
-  "$APPS_HOME/.local/share/zed/dev-extensions/zed-gno"
+    "$APPS_ZSH_CUSTOM/plugins/zsh-autosuggestions" \
+    "$APPS_ZSH_CUSTOM/plugins/zsh-syntax-highlighting" \
+    "$APPS_ZSH_CUSTOM/plugins/zsh-completions" \
+    "$APPS_ZSH_CUSTOM/plugins/zsh-hangul" \
+    "$APPS_ZSH_CUSTOM/themes/spaceship-prompt" \
+    "$APPS_HOME/.local/share/zed/dev-extensions/zed-gno"
 touch "$APPS_HOME/.local/share/zed/dev-extensions/zed-gno/extension.toml"
 APPS_SETUP_OUTPUT="$(HOME="$APPS_HOME" ZSH_CUSTOM="$APPS_ZSH_CUSTOM" PATH="$FAKE_BIN:/usr/bin:/bin" "$SETUP_SH" --yes apps)"
 printf '%s' "$APPS_SETUP_OUTPUT" | grep -q 'Activate Gno support in Zed'
@@ -726,11 +733,11 @@ grep -q 'corepack install --global pnpm@latest-10' "$LOG_FILE"
 grep -q 'pnpm --version' "$LOG_FILE"
 
 if grep -q 'bun install -g' "$LOG_FILE"; then
-  printf 'languages/bun.sh should not install Bun packages\n' >&2
-  exit 1
+    printf 'languages/bun.sh should not install Bun packages\n' >&2
+    exit 1
 fi
 
-: > "$LOG_FILE"
+: >"$LOG_FILE"
 
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
@@ -749,7 +756,7 @@ TYPESCRIPT_GLOBAL_BIN="$TMP_DIR/typescript-global-bin"
 TYPESCRIPT_TOOLCHAIN_BIN="$TMP_DIR/typescript-toolchain-bin"
 TYPESCRIPT_WRAPPER_LOG="$TMP_DIR/typescript-wrapper.log"
 mkdir -p "$TYPESCRIPT_EDITOR_BIN" "$TYPESCRIPT_GLOBAL_BIN" "$TYPESCRIPT_TOOLCHAIN_BIN"
-cat > "$TYPESCRIPT_EDITOR_BIN/mise" <<'EOF'
+cat >"$TYPESCRIPT_EDITOR_BIN/mise" <<'EOF'
 #!/bin/bash
 printf 'mise %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
 if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
@@ -763,15 +770,15 @@ if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
 fi
 exit 0
 EOF
-cat > "$TYPESCRIPT_TOOLCHAIN_BIN/node" <<'EOF'
+cat >"$TYPESCRIPT_TOOLCHAIN_BIN/node" <<'EOF'
 #!/bin/bash
 printf 'node %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
 EOF
-cat > "$TYPESCRIPT_TOOLCHAIN_BIN/bun" <<'EOF'
+cat >"$TYPESCRIPT_TOOLCHAIN_BIN/bun" <<'EOF'
 #!/bin/bash
 printf 'bun %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
 EOF
-cat > "$TYPESCRIPT_GLOBAL_BIN/typescript-language-server" <<'EOF'
+cat >"$TYPESCRIPT_GLOBAL_BIN/typescript-language-server" <<'EOF'
 #!/bin/bash
 node_path="$(command -v node || true)"
 bun_path="$(command -v bun || true)"
@@ -782,21 +789,21 @@ fi
 printf 'typescript-language-server %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
 EOF
 chmod +x \
-  "$TYPESCRIPT_EDITOR_BIN/mise" \
-  "$TYPESCRIPT_TOOLCHAIN_BIN/node" \
-  "$TYPESCRIPT_TOOLCHAIN_BIN/bun" \
-  "$TYPESCRIPT_GLOBAL_BIN/typescript-language-server"
+    "$TYPESCRIPT_EDITOR_BIN/mise" \
+    "$TYPESCRIPT_TOOLCHAIN_BIN/node" \
+    "$TYPESCRIPT_TOOLCHAIN_BIN/bun" \
+    "$TYPESCRIPT_GLOBAL_BIN/typescript-language-server"
 
 HOME="$FAKE_HOME" PATH="$TYPESCRIPT_EDITOR_BIN:/usr/bin:/bin" TYPESCRIPT_WRAPPER_LOG="$TYPESCRIPT_WRAPPER_LOG" TYPESCRIPT_GLOBAL_BIN="$TYPESCRIPT_GLOBAL_BIN" TYPESCRIPT_TOOLCHAIN_BIN="$TYPESCRIPT_TOOLCHAIN_BIN" "$FAKE_HOME/.local/bin/typescript-language-server" --stdio >/dev/null
 grep -q 'mise exec -- bun pm bin -g' "$TYPESCRIPT_WRAPPER_LOG"
 grep -q "mise exec -- $TYPESCRIPT_GLOBAL_BIN/typescript-language-server --stdio" "$TYPESCRIPT_WRAPPER_LOG"
 grep -q 'typescript-language-server --stdio' "$TYPESCRIPT_WRAPPER_LOG"
 
-: > "$LOG_FILE"
+: >"$LOG_FILE"
 rm -f "$FAKE_BIN/go" "$FAKE_BIN/bun"
 mkdir -p "$TMP_DIR/fake-go-prefix/bin" "$FAKE_HOME/.bun/bin"
 
-cat > "$TMP_DIR/fake-go-prefix/bin/go" <<EOF
+cat >"$TMP_DIR/fake-go-prefix/bin/go" <<EOF
 #!/bin/bash
 printf 'go %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "version" ]; then
@@ -804,7 +811,7 @@ if [ "\${1:-}" = "version" ]; then
 fi
 EOF
 
-cat > "$FAKE_BIN/brew" <<EOF
+cat >"$FAKE_BIN/brew" <<EOF
 #!/bin/bash
 if [ "\${1:-}" = "list" ]; then
   exit 0
@@ -820,7 +827,7 @@ fi
 printf 'brew %s\n' "\$*" >> "$LOG_FILE"
 EOF
 
-cat > "$FAKE_HOME/.bun/bin/bun" <<EOF
+cat >"$FAKE_HOME/.bun/bin/bun" <<EOF
 #!/bin/bash
 printf 'bun %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "--version" ]; then
@@ -828,7 +835,7 @@ if [ "\${1:-}" = "--version" ]; then
 fi
 EOF
 
-cat > "$FAKE_HOME/.bun/bin/bunx" <<EOF
+cat >"$FAKE_HOME/.bun/bin/bunx" <<EOF
 #!/bin/bash
 printf 'bunx %s\n' "\$*" >> "$LOG_FILE"
 EOF
@@ -854,7 +861,7 @@ BOOTSTRAP_LOG="$TMP_DIR/bootstrap.log"
 
 mkdir -p "$BOOTSTRAP_HOME" "$BOOTSTRAP_BIN" "$BOOTSTRAP_PREFIX/bin"
 
-cat > "$BOOTSTRAP_BIN/curl" <<'EOF'
+cat >"$BOOTSTRAP_BIN/curl" <<'EOF'
 #!/bin/bash
 cat <<'SCRIPT'
 mkdir -p "$HOMEBREW_PREFIX/bin"
@@ -870,7 +877,7 @@ chmod +x "$HOMEBREW_PREFIX/bin/brew"
 SCRIPT
 EOF
 
-cat > "$BOOTSTRAP_BIN/bash" <<'EOF'
+cat >"$BOOTSTRAP_BIN/bash" <<'EOF'
 #!/bin/bash
 if [ "$1" = "-c" ]; then
   shift
@@ -914,8 +921,8 @@ grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/35-blockchain"
 grep -q 'karabiner-elements' "$REPO_ROOT/setup/commands/55-karabiner"
 grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/60-macos"
 if grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/55-karabiner"; then
-  printf 'karabiner command should not apply macOS keyboard defaults\n' >&2
-  exit 1
+    printf 'karabiner command should not apply macOS keyboard defaults\n' >&2
+    exit 1
 fi
 grep -q 'home' "$REPO_ROOT/.chezmoiroot"
 grep -q 'brew "chezmoi"' "$REPO_ROOT/Brewfile"
@@ -924,13 +931,13 @@ grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'brew "mise"' "$REPO_ROOT/Brewfile"
 grep -q 'go env -w GOBIN="\$HOME/.local/bin"' "$REPO_ROOT/.github/workflows/ci.yml"
 if grep -q 'go env GOPATH' "$REPO_ROOT/.github/workflows/ci.yml"; then
-  printf 'CI should not add GOPATH/bin to PATH\n' >&2
-  exit 1
+    printf 'CI should not add GOPATH/bin to PATH\n' >&2
+    exit 1
 fi
 grep -q 'setup/blockchain/\*.sh' "$REPO_ROOT/.github/workflows/ci.yml"
 if grep -q 'mise install' "$REPO_ROOT/setup/commands/20-brew-packages"; then
-  printf 'brew-packages should not run mise install directly\n' >&2
-  exit 1
+    printf 'brew-packages should not run mise install directly\n' >&2
+    exit 1
 fi
 grep -q 'mise install go' "$REPO_ROOT/setup/languages/go.sh"
 grep -q 'configure_mise_go_bin' "$REPO_ROOT/setup/languages/go.sh"
@@ -940,15 +947,19 @@ grep -q 'corepack install --global pnpm@latest-10' "$REPO_ROOT/setup/languages/n
 grep -q 'mise install bun' "$REPO_ROOT/setup/languages/bun.sh"
 grep -q "chezmoi --source \"\$DOTFILES_DIR\" --no-tty --force apply --dry-run --verbose" "$REPO_ROOT/setup/check.sh"
 grep -q 'mise install java' "$REPO_ROOT/setup/languages/java.sh"
+grep -q 'create_mise_tool_path_wrapper "jdtls"' "$REPO_ROOT/setup/languages/java.sh"
+grep -q 'mise install java' "$REPO_ROOT/setup/languages/kotlin.sh"
 grep -q 'mise install kotlin' "$REPO_ROOT/setup/languages/kotlin.sh"
+grep -q 'create_mise_tool_path_wrapper "kotlin-language-server"' "$REPO_ROOT/setup/languages/kotlin.sh"
 grep -q 'mise install python' "$REPO_ROOT/setup/languages/python.sh"
+grep -q 'create_mise_tool_path_wrapper "pyright-langserver"' "$REPO_ROOT/setup/languages/python.sh"
 grep -q 'mise install rust' "$REPO_ROOT/setup/languages/rust.sh"
 grep -q 'mise install go' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'configure_mise_go_bin' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'github.com/gnolang/gno/gnovm/cmd/gno@latest' "$REPO_ROOT/setup/blockchain/gno.sh"
 if grep -q 'create_mise_go_tool_wrapper' "$REPO_ROOT/setup/lib/common.sh" "$REPO_ROOT/setup/languages/go.sh" "$REPO_ROOT/setup/blockchain/gno.sh"; then
-  printf 'Go tooling should be managed by mise without custom wrappers\n' >&2
-  exit 1
+    printf 'Go tooling should be managed by mise without custom wrappers\n' >&2
+    exit 1
 fi
 grep -q 'mise install rust' "$REPO_ROOT/setup/blockchain/solana.sh"
 grep -q 'https://release.anza.xyz/stable/install' "$REPO_ROOT/setup/blockchain/solana.sh"
@@ -958,6 +969,6 @@ grep -q 'mise activate zsh' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'cask "brave-browser"' "$REPO_ROOT/Brewfile"
 grep -q 'PLAYWRIGHT_MCP_EXECUTABLE_PATH' "$REPO_ROOT/home/dot_zshrc"
 if grep -q 'kaku' "$REPO_ROOT/home/dot_zshrc"; then
-  printf 'home/dot_zshrc should not reference kaku\n' >&2
-  exit 1
+    printf 'home/dot_zshrc should not reference kaku\n' >&2
+    exit 1
 fi
