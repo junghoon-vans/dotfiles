@@ -53,7 +53,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec \"$HOME/.local/bin/gopls\""
+        "exec PATH=\"$HOME/.local/bin:$PATH\" mise exec go@1.25 -- gopls"
       ],
       "extensions": [
         ".go"
@@ -72,7 +72,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec \"$HOME/.local/bin/gnopls\" -mode=stdio"
+        "exec PATH=\"$HOME/.local/bin:$PATH\" mise exec go@1.25 -- gnopls -mode=stdio"
       ],
       "extensions": [
         ".gno"
@@ -82,7 +82,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec mise exec -C \"$HOME/workspace/dotfiles\" -- jdtls"
+        "project_hash=$(printf \"%s\" \"$PWD\" | shasum | cut -d\" \" -f1); mkdir -p \"$HOME/Library/Caches/jdtls/workspaces\"; exec mise exec java@temurin-21 -- jdtls -data \"$HOME/Library/Caches/jdtls/workspaces/$project_hash\""
       ],
       "extensions": [
         ".java"
@@ -92,7 +92,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec mise exec -C \"$HOME/workspace/dotfiles\" -- kotlin-language-server"
+        "exec mise exec java@temurin-21 kotlin@latest -- kotlin-language-server"
       ],
       "extensions": [
         ".kt",
@@ -103,7 +103,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec mise exec -C \"$HOME/workspace/dotfiles\" -- pyright-langserver --stdio"
+        "exec mise exec python@3.13 -- pyright-langserver --stdio"
       ],
       "extensions": [
         ".py"
@@ -113,7 +113,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec \"$HOME/.local/bin/rust-analyzer\""
+        "exec mise exec rust@latest -- \"$(brew --prefix rust-analyzer)/bin/rust-analyzer\""
       ],
       "extensions": [
         ".rs"
@@ -133,7 +133,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec \"$HOME/.local/bin/typescript-language-server\" --stdio"
+        "exec PATH=\"$(mise exec bun@latest -- bun pm bin -g):$PATH\" mise exec node@24 bun@latest -- typescript-language-server --stdio"
       ],
       "extensions": [
         ".ts",
@@ -146,7 +146,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec \"$HOME/.local/bin/lemminx\""
+        "exec mise exec java@temurin-21 -- java ${LEMMINX_JAVA_OPTS:-} -jar \"$HOME/.local/share/lemminx/lemminx.jar\""
       ],
       "extensions": [
         ".xml",

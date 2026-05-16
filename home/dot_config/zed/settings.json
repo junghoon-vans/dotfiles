@@ -39,13 +39,14 @@
   "lsp": {
     "gopls": {
       "binary": {
-        "path": "~/.local/bin/gopls",
+        "path": "/bin/bash",
+        "arguments": ["-lc", "exec PATH=\"$HOME/.local/bin:$PATH\" mise exec go@1.25 -- gopls"],
       },
     },
     "gnopls": {
       "binary": {
-        "path": "~/.local/bin/gnopls",
-        "arguments": ["-mode=stdio"],
+        "path": "/bin/bash",
+        "arguments": ["-lc", "exec PATH=\"$HOME/.local/bin:$PATH\" mise exec go@1.25 -- gnopls -mode=stdio"],
       },
     },
   },
