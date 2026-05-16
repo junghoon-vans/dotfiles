@@ -24,6 +24,15 @@ if command -v brew >/dev/null 2>&1; then
         brew install jdtls
         print_success "jdtls installed"
     fi
+
+    jdtls_path="$(resolve_tool_path "jdtls" "jdtls" || true)"
+    if [ -z "$jdtls_path" ]; then
+        print_error "jdtls executable not found after Homebrew installation"
+        exit 1
+    fi
+
+    create_mise_tool_path_wrapper "jdtls" "$jdtls_path"
+    print_success "jdtls wrapper created in $HOME/.local/bin"
 else
     print_info "Homebrew not found, skipping JDTLS installation"
 fi
