@@ -245,14 +245,14 @@ with open(sys.argv[1], encoding="utf-8") as config_file:
     config = json.load(config_file)
 
 expected_commands = {
-    "gopls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/gopls"'],
-    "gnopls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/gnopls" -mode=stdio'],
-    "jdtls": ["/bin/bash", "-lc", 'exec mise exec -C "$HOME/workspace/dotfiles" -- jdtls'],
-    "kotlin-ls": ["/bin/bash", "-lc", 'exec mise exec -C "$HOME/workspace/dotfiles" -- kotlin-language-server'],
-    "pyright": ["/bin/bash", "-lc", 'exec mise exec -C "$HOME/workspace/dotfiles" -- pyright-langserver --stdio'],
-    "rust": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/rust-analyzer"'],
-    "typescript-language-server": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/typescript-language-server" --stdio'],
-    "xml": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/lemminx"'],
+    "gopls": ["/bin/bash", "-lc", 'exec PATH="$HOME/.local/bin:$PATH" mise exec go@1.25 -- gopls'],
+    "gnopls": ["/bin/bash", "-lc", 'exec PATH="$HOME/.local/bin:$PATH" mise exec go@1.25 -- gnopls -mode=stdio'],
+    "jdtls": ["/bin/bash", "-lc", "project_hash=$(printf \"%s\" \"$PWD\" | shasum | cut -d\" \" -f1); mkdir -p \"$HOME/Library/Caches/jdtls/workspaces\"; exec mise exec java@temurin-21 -- jdtls -data \"$HOME/Library/Caches/jdtls/workspaces/$project_hash\""],
+    "kotlin-ls": ["/bin/bash", "-lc", "exec mise exec java@temurin-21 kotlin@latest -- kotlin-language-server"],
+    "pyright": ["/bin/bash", "-lc", "exec mise exec python@3.13 -- pyright-langserver --stdio"],
+    "rust": ["/bin/bash", "-lc", 'exec mise exec rust@latest -- "$(brew --prefix rust-analyzer)/bin/rust-analyzer"'],
+    "typescript-language-server": ["/bin/bash", "-lc", 'exec PATH="$(mise exec bun@latest -- bun pm bin -g):$PATH" mise exec node@24 bun@latest -- typescript-language-server --stdio'],
+    "xml": ["/bin/bash", "-lc", 'exec mise exec java@temurin-21 -- java ${LEMMINX_JAVA_OPTS:-} -jar "$HOME/.local/share/lemminx/lemminx.jar"'],
 }
 for lsp_name, command in expected_commands.items():
     actual = config["lsp"][lsp_name]["command"]
@@ -260,6 +260,14 @@ for lsp_name, command in expected_commands.items():
         raise SystemExit(f"OpenCode {lsp_name} command should be {command}, got {actual}")
     if "~" in " ".join(actual):
         raise SystemExit(f"OpenCode {lsp_name} command should not rely on tilde expansion")
+
+    for forbidden_path in ("$HOME/workspace/dotfiles", "~/workspace/dotfiles"):
+        if forbidden_path in " ".join(actual):
+            raise SystemExit(f"OpenCode {lsp_name} command should not depend on local checkout path {forbidden_path}")
+
+    for forbidden_exec in ('exec "$HOME/.local/bin/',):
+        if forbidden_exec in " ".join(actual):
+            raise SystemExit(f"OpenCode {lsp_name} command should not directly exec local bin wrappers")
 
 if config["lsp"]["xml"]["extensions"] != [".xml", ".xsd", ".xsl", ".xslt", ".svg"]:
     raise SystemExit("OpenCode XML LSP extensions changed")
@@ -457,13 +465,9 @@ chmod +x \
     "$RUST_HOMEBREW_PREFIX/bin/rust-analyzer"
 
 HOME="$RUST_HOME" PATH="$RUST_BIN:/usr/bin:/bin" RUST_LOG="$RUST_LOG" RUST_HOMEBREW_PREFIX="$RUST_HOMEBREW_PREFIX" RUST_TOOLCHAIN_BIN="$RUST_TOOLCHAIN_BIN" bash "$REPO_ROOT/setup/languages/rust.sh" >/dev/null
-test -x "$RUST_HOME/.local/bin/rust-analyzer"
+test ! -e "$RUST_HOME/.local/bin/rust-analyzer"
 grep -q 'mise install rust' "$RUST_LOG"
 grep -q 'mise exec -- rustc --version' "$RUST_LOG"
-grep -q 'brew --prefix rust-analyzer' "$RUST_LOG"
-HOME="$RUST_HOME" PATH="$RUST_BIN:/usr/bin:/bin" RUST_LOG="$RUST_LOG" RUST_TOOLCHAIN_BIN="$RUST_TOOLCHAIN_BIN" "$RUST_HOME/.local/bin/rust-analyzer" --version >/dev/null
-grep -q "mise exec -- $RUST_HOMEBREW_PREFIX/bin/rust-analyzer --version" "$RUST_LOG"
-grep -q 'rust-analyzer --version' "$RUST_LOG"
 
 XML_HOME="$TMP_DIR/xml-home"
 XML_BIN="$TMP_DIR/xml-bin"
@@ -528,13 +532,10 @@ EOF
 chmod +x "$XML_BIN/java" "$XML_BIN/curl" "$XML_BIN/shasum" "$XML_BIN/mise"
 
 HOME="$XML_HOME" PATH="$XML_BIN:/usr/bin:/bin" XML_LOG="$XML_LOG" XML_EXPECTED_SHA1="$XML_EXPECTED_SHA1" bash "$REPO_ROOT/setup/languages/xml.sh" >/dev/null
-[ -s "$XML_HOME/.local/share/lemminx/org.eclipse.lemminx-0.31.1-uber.jar" ]
-[ -x "$XML_HOME/.local/bin/lemminx" ]
+[ -s "$XML_HOME/.local/share/lemminx/lemminx.jar" ]
+[ ! -e "$XML_HOME/.local/bin/lemminx" ]
 grep -q "curl $XML_JAR_URL" "$XML_LOG"
 grep -q "curl $XML_JAR_URL.sha1" "$XML_LOG"
-HOME="$XML_HOME" PATH="$XML_BIN:/usr/bin:/bin" XML_LOG="$XML_LOG" "$XML_HOME/.local/bin/lemminx" --stdio
-grep -q "mise exec -- java -jar $XML_HOME/.local/share/lemminx/org.eclipse.lemminx-0.31.1-uber.jar --stdio" "$XML_LOG"
-grep -q "java -jar $XML_HOME/.local/share/lemminx/org.eclipse.lemminx-0.31.1-uber.jar --stdio" "$XML_LOG"
 
 SOLANA_HOME="$TMP_DIR/solana-home"
 SOLANA_BIN="$TMP_DIR/solana-bin"
@@ -749,55 +750,7 @@ test ! -e "$FAKE_HOME/.local/bin/gno"
 test ! -e "$FAKE_HOME/.local/bin/gnopls"
 grep -q 'bun install -g typescript' "$LOG_FILE"
 grep -q 'bun install -g typescript-language-server' "$LOG_FILE"
-test -x "$FAKE_HOME/.local/bin/typescript-language-server"
-
-TYPESCRIPT_EDITOR_BIN="$TMP_DIR/typescript-editor-bin"
-TYPESCRIPT_GLOBAL_BIN="$TMP_DIR/typescript-global-bin"
-TYPESCRIPT_TOOLCHAIN_BIN="$TMP_DIR/typescript-toolchain-bin"
-TYPESCRIPT_WRAPPER_LOG="$TMP_DIR/typescript-wrapper.log"
-mkdir -p "$TYPESCRIPT_EDITOR_BIN" "$TYPESCRIPT_GLOBAL_BIN" "$TYPESCRIPT_TOOLCHAIN_BIN"
-cat >"$TYPESCRIPT_EDITOR_BIN/mise" <<'EOF'
-#!/bin/bash
-printf 'mise %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
-if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
-  shift 2
-  printf '%s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
-  if [ "${1:-}" = "bun" ] && [ "${2:-}" = "pm" ] && [ "${3:-}" = "bin" ] && [ "${4:-}" = "-g" ]; then
-    printf '%s\n' "$TYPESCRIPT_GLOBAL_BIN"
-    exit 0
-  fi
-  PATH="$TYPESCRIPT_TOOLCHAIN_BIN:$PATH" exec "$@"
-fi
-exit 0
-EOF
-cat >"$TYPESCRIPT_TOOLCHAIN_BIN/node" <<'EOF'
-#!/bin/bash
-printf 'node %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
-EOF
-cat >"$TYPESCRIPT_TOOLCHAIN_BIN/bun" <<'EOF'
-#!/bin/bash
-printf 'bun %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
-EOF
-cat >"$TYPESCRIPT_GLOBAL_BIN/typescript-language-server" <<'EOF'
-#!/bin/bash
-node_path="$(command -v node || true)"
-bun_path="$(command -v bun || true)"
-if [ "$node_path" != "$TYPESCRIPT_TOOLCHAIN_BIN/node" ] || [ "$bun_path" != "$TYPESCRIPT_TOOLCHAIN_BIN/bun" ]; then
-  printf 'typescript-language-server wrapper did not expose mise Node/Bun tools\n' >&2
-  exit 1
-fi
-printf 'typescript-language-server %s\n' "$*" >> "$TYPESCRIPT_WRAPPER_LOG"
-EOF
-chmod +x \
-    "$TYPESCRIPT_EDITOR_BIN/mise" \
-    "$TYPESCRIPT_TOOLCHAIN_BIN/node" \
-    "$TYPESCRIPT_TOOLCHAIN_BIN/bun" \
-    "$TYPESCRIPT_GLOBAL_BIN/typescript-language-server"
-
-HOME="$FAKE_HOME" PATH="$TYPESCRIPT_EDITOR_BIN:/usr/bin:/bin" TYPESCRIPT_WRAPPER_LOG="$TYPESCRIPT_WRAPPER_LOG" TYPESCRIPT_GLOBAL_BIN="$TYPESCRIPT_GLOBAL_BIN" TYPESCRIPT_TOOLCHAIN_BIN="$TYPESCRIPT_TOOLCHAIN_BIN" "$FAKE_HOME/.local/bin/typescript-language-server" --stdio >/dev/null
-grep -q 'mise exec -- bun pm bin -g' "$TYPESCRIPT_WRAPPER_LOG"
-grep -q "mise exec -- $TYPESCRIPT_GLOBAL_BIN/typescript-language-server --stdio" "$TYPESCRIPT_WRAPPER_LOG"
-grep -q 'typescript-language-server --stdio' "$TYPESCRIPT_WRAPPER_LOG"
+test ! -e "$FAKE_HOME/.local/bin/typescript-language-server"
 
 : >"$LOG_FILE"
 rm -f "$FAKE_BIN/go" "$FAKE_BIN/bun"
@@ -956,6 +909,10 @@ grep -q 'configure_mise_go_bin' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'github.com/gnolang/gno/gnovm/cmd/gno@latest' "$REPO_ROOT/setup/blockchain/gno.sh"
 if grep -q 'create_mise_go_tool_wrapper' "$REPO_ROOT/setup/lib/common.sh" "$REPO_ROOT/setup/languages/go.sh" "$REPO_ROOT/setup/blockchain/gno.sh"; then
     printf 'Go tooling should be managed by mise without custom wrappers\n' >&2
+    exit 1
+fi
+if grep -q 'create_.*wrapper' "$REPO_ROOT/setup/lib/common.sh" "$REPO_ROOT/setup/languages/rust.sh" "$REPO_ROOT/setup/languages/typescript.sh" "$REPO_ROOT/setup/languages/xml.sh"; then
+    printf 'Runtime LSP launch should not rely on generated wrappers\n' >&2
     exit 1
 fi
 grep -q 'mise install rust' "$REPO_ROOT/setup/blockchain/solana.sh"
