@@ -80,7 +80,9 @@
     },
     "jdtls": {
       "command": [
-        "jdtls"
+        "/bin/bash",
+        "-lc",
+        "exec \"$HOME/.local/bin/jdtls\""
       ],
       "extensions": [
         ".java"
@@ -88,7 +90,9 @@
     },
     "kotlin-ls": {
       "command": [
-        "kotlin-language-server"
+        "/bin/bash",
+        "-lc",
+        "exec \"$HOME/.local/bin/kotlin-language-server\""
       ],
       "extensions": [
         ".kt",
@@ -97,8 +101,9 @@
     },
     "pyright": {
       "command": [
-        "pyright-langserver",
-        "--stdio"
+        "/bin/bash",
+        "-lc",
+        "exec \"$HOME/.local/bin/pyright-langserver\" --stdio"
       ],
       "extensions": [
         ".py"
