@@ -38,8 +38,8 @@ prepend_path_if_dir() {
     [ -d "$dir" ] || return 0
 
     case ":$PATH:" in
-        *":$dir:"*) ;;
-        *) export PATH="$dir:$PATH" ;;
+    *":$dir:"*) ;;
+    *) export PATH="$dir:$PATH" ;;
     esac
 }
 
@@ -50,13 +50,36 @@ create_local_bin_wrapper() {
 
     mkdir -p "$wrapper_dir"
 
-    cat > "$wrapper_path"
+    cat >"$wrapper_path"
 
     chmod +x "$wrapper_path"
     if [ ! -x "$wrapper_path" ]; then
         print_error "$tool_name wrapper is not executable at $wrapper_path"
         exit 1
     fi
+}
+
+resolve_tool_path() {
+    local tool_name="$1"
+    local formula_name="${2:-$tool_name}"
+    local tool_prefix=""
+    local tool_candidate=""
+
+    if command -v brew >/dev/null 2>&1; then
+        tool_prefix="$(brew --prefix "$formula_name" 2>/dev/null || true)"
+        if [ -n "$tool_prefix" ] && [ -x "$tool_prefix/bin/$tool_name" ]; then
+            printf '%s\n' "$tool_prefix/bin/$tool_name"
+            return 0
+        fi
+    fi
+
+    tool_candidate="$(command -v "$tool_name" 2>/dev/null || true)"
+    if [ -n "$tool_candidate" ] && [ "$tool_candidate" != "$HOME/.local/bin/$tool_name" ]; then
+        printf '%s\n' "$tool_candidate"
+        return 0
+    fi
+
+    return 1
 }
 
 configure_mise_go_bin() {
@@ -132,18 +155,18 @@ confirm() {
     local suffix="[Y/n]"
 
     case "$default_answer" in
-        yes|y|Y|YES)
-            default_answer="yes"
-            suffix="[Y/n]"
-            ;;
-        no|n|N|NO)
-            default_answer="no"
-            suffix="[y/N]"
-            ;;
-        *)
-            print_error "Invalid confirm default: $default_answer"
-            return 1
-            ;;
+    yes | y | Y | YES)
+        default_answer="yes"
+        suffix="[Y/n]"
+        ;;
+    no | n | N | NO)
+        default_answer="no"
+        suffix="[y/N]"
+        ;;
+    *)
+        print_error "Invalid confirm default: $default_answer"
+        return 1
+        ;;
     esac
 
     if [ "${SETUP_YES:-0}" = "1" ]; then
@@ -164,9 +187,9 @@ confirm() {
         fi
 
         case "$answer" in
-            y|Y|yes|YES) return 0 ;;
-            n|N|no|NO) return 1 ;;
-            *) print_info "Please answer yes or no." ;;
+        y | Y | yes | YES) return 0 ;;
+        n | N | no | NO) return 1 ;;
+        *) print_info "Please answer yes or no." ;;
         esac
     done
 }
