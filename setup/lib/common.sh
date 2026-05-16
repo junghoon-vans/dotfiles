@@ -59,29 +59,6 @@ create_local_bin_wrapper() {
     fi
 }
 
-resolve_tool_path() {
-    local tool_name="$1"
-    local formula_name="${2:-$tool_name}"
-    local tool_prefix=""
-    local tool_candidate=""
-
-    if command -v brew >/dev/null 2>&1; then
-        tool_prefix="$(brew --prefix "$formula_name" 2>/dev/null || true)"
-        if [ -n "$tool_prefix" ] && [ -x "$tool_prefix/bin/$tool_name" ]; then
-            printf '%s\n' "$tool_prefix/bin/$tool_name"
-            return 0
-        fi
-    fi
-
-    tool_candidate="$(command -v "$tool_name" 2>/dev/null || true)"
-    if [ -n "$tool_candidate" ] && [ "$tool_candidate" != "$HOME/.local/bin/$tool_name" ]; then
-        printf '%s\n' "$tool_candidate"
-        return 0
-    fi
-
-    return 1
-}
-
 configure_mise_go_bin() {
     mkdir -p "$HOME/.local/bin"
     (

@@ -247,9 +247,9 @@ with open(sys.argv[1], encoding="utf-8") as config_file:
 expected_commands = {
     "gopls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/gopls"'],
     "gnopls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/gnopls" -mode=stdio'],
-    "jdtls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/jdtls"'],
-    "kotlin-ls": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/kotlin-language-server"'],
-    "pyright": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/pyright-langserver" --stdio'],
+    "jdtls": ["/bin/bash", "-lc", 'exec mise exec -C "$HOME/workspace/dotfiles" -- jdtls'],
+    "kotlin-ls": ["/bin/bash", "-lc", 'exec mise exec -C "$HOME/workspace/dotfiles" -- kotlin-language-server'],
+    "pyright": ["/bin/bash", "-lc", 'exec mise exec -C "$HOME/workspace/dotfiles" -- pyright-langserver --stdio'],
     "rust": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/rust-analyzer"'],
     "typescript-language-server": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/typescript-language-server" --stdio'],
     "xml": ["/bin/bash", "-lc", 'exec "$HOME/.local/bin/lemminx"'],
@@ -679,9 +679,9 @@ printf '%s' "$DOCTOR_OUTPUT" | grep -q 'brew missing — run ./setup.sh bootstra
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'mise missing — run ./setup.sh brew-packages before runtime setup'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'ruff missing; run ./setup.sh python'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'biome missing; run ./setup.sh typescript'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'jdtls wrapper missing; run ./setup.sh java'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'kotlin-language-server wrapper missing; run ./setup.sh kotlin'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'pyright-langserver wrapper missing; run ./setup.sh python'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'jdtls missing; run ./setup.sh java'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'kotlin-language-server missing; run ./setup.sh kotlin'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'pyright-langserver missing; run ./setup.sh python'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'bash-language-server missing; run ./setup.sh brew-packages'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'Doctor completed'
 
@@ -947,12 +947,9 @@ grep -q 'corepack install --global pnpm@latest-10' "$REPO_ROOT/setup/languages/n
 grep -q 'mise install bun' "$REPO_ROOT/setup/languages/bun.sh"
 grep -q "chezmoi --source \"\$DOTFILES_DIR\" --no-tty --force apply --dry-run --verbose" "$REPO_ROOT/setup/check.sh"
 grep -q 'mise install java' "$REPO_ROOT/setup/languages/java.sh"
-grep -q 'create_mise_tool_path_wrapper "jdtls"' "$REPO_ROOT/setup/languages/java.sh"
 grep -q 'mise install java' "$REPO_ROOT/setup/languages/kotlin.sh"
 grep -q 'mise install kotlin' "$REPO_ROOT/setup/languages/kotlin.sh"
-grep -q 'create_mise_tool_path_wrapper "kotlin-language-server"' "$REPO_ROOT/setup/languages/kotlin.sh"
 grep -q 'mise install python' "$REPO_ROOT/setup/languages/python.sh"
-grep -q 'create_mise_tool_path_wrapper "pyright-langserver"' "$REPO_ROOT/setup/languages/python.sh"
 grep -q 'mise install rust' "$REPO_ROOT/setup/languages/rust.sh"
 grep -q 'mise install go' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'configure_mise_go_bin' "$REPO_ROOT/setup/blockchain/gno.sh"

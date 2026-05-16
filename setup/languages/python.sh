@@ -32,12 +32,3 @@ export PATH="$HOME/.local/bin:$PATH"
     mise exec -- python --version
 )
 print_success "Python runtime installed via mise"
-
-pyright_langserver_path="$(resolve_tool_path "pyright-langserver" "pyright" || true)"
-if [ -z "$pyright_langserver_path" ]; then
-    print_error "pyright-langserver executable not found after Homebrew installation"
-    exit 1
-fi
-
-create_mise_tool_path_wrapper "pyright-langserver" "$pyright_langserver_path"
-print_success "pyright-langserver wrapper created in $HOME/.local/bin"

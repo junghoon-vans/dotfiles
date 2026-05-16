@@ -108,17 +108,14 @@ for command_name in ruff biome; do
     fi
 done
 
-print_info "Checking OpenCode LSP wrappers..."
-for wrapper_name in gopls gnopls jdtls kotlin-language-server pyright-langserver rust-analyzer typescript-language-server lemminx; do
+print_info "Checking OpenCode local LSP wrappers..."
+for wrapper_name in gopls gnopls rust-analyzer typescript-language-server lemminx; do
     if [ -x "$HOME/.local/bin/$wrapper_name" ]; then
         print_success "$wrapper_name wrapper found"
     else
         case "$wrapper_name" in
         gopls) print_info "$wrapper_name wrapper missing; run ./setup.sh go" ;;
         gnopls) print_info "$wrapper_name wrapper missing; run ./setup.sh gno" ;;
-        jdtls) print_info "$wrapper_name wrapper missing; run ./setup.sh java" ;;
-        kotlin-language-server) print_info "$wrapper_name wrapper missing; run ./setup.sh kotlin" ;;
-        pyright-langserver) print_info "$wrapper_name wrapper missing; run ./setup.sh python" ;;
         rust-analyzer) print_info "$wrapper_name wrapper missing; run ./setup.sh rust" ;;
         typescript-language-server) print_info "$wrapper_name wrapper missing; run ./setup.sh typescript" ;;
         lemminx) print_info "$wrapper_name wrapper missing; run ./setup.sh xml" ;;
@@ -126,12 +123,17 @@ for wrapper_name in gopls gnopls jdtls kotlin-language-server pyright-langserver
     fi
 done
 
-print_info "Checking Brewfile LSP servers..."
-for command_name in bash-language-server marksman terraform-ls yaml-language-server; do
+print_info "Checking executable LSP servers..."
+for command_name in bash-language-server jdtls kotlin-language-server marksman pyright-langserver terraform-ls yaml-language-server; do
     if command -v "$command_name" >/dev/null 2>&1; then
         print_success "$command_name found"
     else
-        print_info "$command_name missing; run ./setup.sh brew-packages"
+        case "$command_name" in
+        jdtls) print_info "$command_name missing; run ./setup.sh java" ;;
+        kotlin-language-server) print_info "$command_name missing; run ./setup.sh kotlin" ;;
+        pyright-langserver) print_info "$command_name missing; run ./setup.sh python" ;;
+        *) print_info "$command_name missing; run ./setup.sh brew-packages" ;;
+        esac
     fi
 done
 

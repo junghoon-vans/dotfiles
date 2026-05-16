@@ -82,7 +82,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec \"$HOME/.local/bin/jdtls\""
+        "exec mise exec -C \"$HOME/workspace/dotfiles\" -- jdtls"
       ],
       "extensions": [
         ".java"
@@ -92,7 +92,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec \"$HOME/.local/bin/kotlin-language-server\""
+        "exec mise exec -C \"$HOME/workspace/dotfiles\" -- kotlin-language-server"
       ],
       "extensions": [
         ".kt",
@@ -103,7 +103,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec \"$HOME/.local/bin/pyright-langserver\" --stdio"
+        "exec mise exec -C \"$HOME/workspace/dotfiles\" -- pyright-langserver --stdio"
       ],
       "extensions": [
         ".py"
