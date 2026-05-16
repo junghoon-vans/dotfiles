@@ -50,7 +50,7 @@ dotfiles/
 - **prek**: Replaces pre-commit with a faster Rust implementation.
 - **Go 1.25**: Pinned in `mise.toml`; Go tooling is installed with the mise-selected Go runtime and exposed from `$HOME/.local/bin` through `GOBIN`.
 - **Gno tooling**: `gno` and `gnopls` are installed with the mise-selected Go runtime and exposed from `$HOME/.local/bin` through `GOBIN`.
-- **LemMinX**: Installed from the pinned Eclipse Maven uber JAR and exposed through `$HOME/.local/bin/lemminx`.
+- **LemMinX**: Installed from the pinned Eclipse Maven uber JAR at `$HOME/.local/share/lemminx/lemminx.jar` and launched with mise-managed Java.
 - **Solana/Anchor**: Solana CLI is installed with the upstream Anza Agave installer; Anchor is installed through AVM from `solana-foundation/anchor`; wrappers expose `solana`, `agave-install`, `cargo-build-sbf`, `avm`, and `anchor` through `$HOME/.local/bin`.
 - **Blockchain setup**: `./setup.sh blockchain` owns Solana/Anchor and Gno tooling; they remain explicit commands but are not part of the language umbrella.
 - **Biome LSP**: Explicitly mapped to JSON/JSONC only, avoiding overlap with TypeScript LSP and leaving CSS to Biome formatter/linter coverage.
@@ -92,6 +92,6 @@ brew bundle --file Brewfile        # Install Brewfile packages
 - Requires Homebrew for package installation.
 - App config source lives under `home/dot_config/`: GitHub CLI preferences in `gh/config.yml`, Karabiner remapping in `karabiner/karabiner.json`, Neovim config in `nvim/`, OpenCode/OpenAgent config in `opencode/`, and Zed settings in `zed/settings.json`.
 - `home/dot_config/nvim` is repo-owned and applied by chezmoi; setup no longer bootstraps LazyVim starter into `$HOME/.config/nvim`.
-- OpenCode config uses the public config schema and `oh-my-openagent` plugin config.
+- OpenCode config uses the public config schema and `oh-my-openagent` plugin config. Runtime-backed LSP commands launch through `mise exec <tool@version> -- ...` without hard-coded checkout paths.
 - Java runtime provisioning is mise-owned by `./setup.sh java`; Kotlin runtime and language server provisioning is owned by `./setup.sh kotlin`.
 - Solana CLI and Anchor are not mise-managed: `./setup.sh solana` installs Rust with mise, then uses the Anza Agave installer and AVM, with shell integration through `$HOME/.local/bin` wrappers.
