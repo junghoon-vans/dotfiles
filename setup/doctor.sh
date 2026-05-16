@@ -108,23 +108,35 @@ for command_name in ruff biome; do
     fi
 done
 
-print_info "Checking OpenCode local LSP wrappers..."
-for wrapper_name in gopls gnopls rust-analyzer typescript-language-server lemminx; do
-    if [ -x "$HOME/.local/bin/$wrapper_name" ]; then
-        print_success "$wrapper_name wrapper found"
+print_info "Checking local language server artifacts..."
+for artifact_name in gopls gnopls; do
+    if [ -x "$HOME/.local/bin/$artifact_name" ]; then
+        print_success "$artifact_name artifact found"
     else
-        case "$wrapper_name" in
-        gopls) print_info "$wrapper_name wrapper missing; run ./setup.sh go" ;;
-        gnopls) print_info "$wrapper_name wrapper missing; run ./setup.sh gno" ;;
-        rust-analyzer) print_info "$wrapper_name wrapper missing; run ./setup.sh rust" ;;
-        typescript-language-server) print_info "$wrapper_name wrapper missing; run ./setup.sh typescript" ;;
-        lemminx) print_info "$wrapper_name wrapper missing; run ./setup.sh xml" ;;
+        case "$artifact_name" in
+        gopls) print_info "$artifact_name artifact missing; run ./setup.sh go" ;;
+        gnopls) print_info "$artifact_name artifact missing; run ./setup.sh gno" ;;
         esac
     fi
 done
 
+if [ -s "$HOME/.local/share/lemminx/lemminx.jar" ]; then
+    print_success "lemminx.jar artifact found"
+else
+    print_info "lemminx.jar artifact missing; run ./setup.sh xml"
+fi
+
+if command -v mise >/dev/null 2>&1; then
+    typescript_global_bin="$(mise exec bun@latest -- bun pm bin -g 2>/dev/null || true)"
+    if [ -n "$typescript_global_bin" ] && [ -x "$typescript_global_bin/typescript-language-server" ]; then
+        print_success "typescript-language-server artifact found"
+    else
+        print_info "typescript-language-server artifact missing; run ./setup.sh typescript"
+    fi
+fi
+
 print_info "Checking executable LSP servers..."
-for command_name in bash-language-server jdtls kotlin-language-server marksman pyright-langserver terraform-ls yaml-language-server; do
+for command_name in bash-language-server jdtls kotlin-language-server marksman pyright-langserver rust-analyzer terraform-ls yaml-language-server; do
     if command -v "$command_name" >/dev/null 2>&1; then
         print_success "$command_name found"
     else
@@ -132,6 +144,7 @@ for command_name in bash-language-server jdtls kotlin-language-server marksman p
         jdtls) print_info "$command_name missing; run ./setup.sh java" ;;
         kotlin-language-server) print_info "$command_name missing; run ./setup.sh kotlin" ;;
         pyright-langserver) print_info "$command_name missing; run ./setup.sh python" ;;
+        rust-analyzer) print_info "$command_name missing; run ./setup.sh rust" ;;
         *) print_info "$command_name missing; run ./setup.sh brew-packages" ;;
         esac
     fi
