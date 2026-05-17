@@ -8,7 +8,7 @@ This repository manages:
 
 - Chezmoi-managed dotfiles for Zsh, Git, Delta, global ignore configuration, and `.config` app settings under `home/`
 - Homebrew packages through `Brewfile`
-- Language runtime provisioning through Homebrew-managed `mise` and `mise.toml`
+- Language runtime provisioning through Homebrew-managed `mise`, repo `mise.toml`, and global `~/.config/mise/config.toml`
 - macOS defaults and app-specific bootstrap scripts under `setup/`
 - A command-based setup harness under `setup/`
 
@@ -89,3 +89,5 @@ After setup, reload the shell:
 ```bash
 source ~/.zshrc
 ```
+
+The tracked global mise config is applied to `~/.config/mise/config.toml`, so mise-managed runtimes such as Go, Node, Bun, Java, Kotlin, Python, and Rust are available from any directory after shell activation.

@@ -12,21 +12,21 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 
 ## Language and Harness Coverage
 
-`mise.toml` records the preferred runtime versions for languages that mise can manage. `./setup.sh brew-packages` installs Homebrew-managed `mise`; setup language and blockchain commands run `mise install <tool>` for required runtimes and then install runtime-adjacent tools, language servers, and chain-specific CLIs with those runtimes.
+`mise.toml` records the repository runtime versions for languages that mise can manage, and `home/dot_config/mise/config.toml` mirrors those versions for the global `~/.config/mise/config.toml` baseline. `./setup.sh brew-packages` installs Homebrew-managed `mise`; setup language and blockchain commands sync the global mise config, run `mise install <tool>` for required runtimes, and then install runtime-adjacent tools, language servers, and chain-specific CLIs with those runtimes.
 
 | Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
 | --- | --- | --- | --- | --- | --- |
 | Bash / Zsh | macOS shell | `bash-language-server` | `shfmt` | `shellcheck` | `bash -n` |
-| Go | `mise.toml` (`go = "1.25"`) + `./setup.sh go` tools in `~/.local/bin` | `mise exec go@1.25 -- gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
+| Go | Global mise config (`go = "1.25"`) + `./setup.sh go` tools in `~/.local/bin` | `mise exec go@1.25 -- gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
 | Gno | `./setup.sh gno` (`~/.local/bin/gno`) | `mise exec go@1.25 -- gnopls` | - | `gnopls` diagnostics | `gno test` |
-| Java | `mise.toml` (`java = "temurin-21"`) + `./setup.sh java` tools | `mise exec java@temurin-21 -- jdtls` with per-project `-data` | - | `jdtls` diagnostics | project build tool |
-| Kotlin | `mise.toml` (`kotlin = "latest"`) + `./setup.sh kotlin` tools | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
+| Java | Global mise config (`java = "temurin-21"`) + `./setup.sh java` tools | `mise exec java@temurin-21 -- jdtls` with per-project `-data` | - | `jdtls` diagnostics | project build tool |
+| Kotlin | Global mise config (`kotlin = "latest"`) + `./setup.sh kotlin` tools | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
 | Markdown | - | `marksman` | - | `marksman` diagnostics | - |
-| Python | `mise.toml` (`python = "3.13"`) + `./setup.sh python` tools | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
-| Rust | `mise.toml` (`rust = "latest"`) + `./setup.sh rust` tools | `mise exec rust@latest -- $(brew --prefix rust-analyzer)/bin/rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
+| Python | Global mise config (`python = "3.13"`) + `./setup.sh python` tools | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
+| Rust | Global mise config (`rust = "latest"`) + `./setup.sh rust` tools | `mise exec rust@latest -- $(brew --prefix rust-analyzer)/bin/rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
 | Solana / Anchor | Agave Solana CLI + `cargo build-sbf` + AVM/Anchor from `./setup.sh solana` | - | `anchor fmt` / `rustfmt` | `anchor` / Solana CLI diagnostics | `anchor test`, `solana-test-validator` |
 | Terraform | `terraform` | `terraform-ls` | `terraform fmt` | `terraform validate` | - |
-| TypeScript / JavaScript | `mise.toml` (`node = "24"` + Corepack pnpm, `bun = "latest"`) + `./setup.sh typescript` tools | `mise exec node@24 bun@latest -- typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
+| TypeScript / JavaScript | Global mise config (`node = "24"` + Corepack pnpm, `bun = "latest"`) + `./setup.sh typescript` tools | `mise exec node@24 bun@latest -- typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
 | JSON / JSONC | `./setup.sh typescript` | `biome` | `biome` | `biome` | - |
 | CSS | `./setup.sh typescript` | not mapped | `biome` | `biome` | - |
 | XML / XSD / XSLT / SVG | `./setup.sh xml` (`lemminx.jar`) | `mise exec java@temurin-21 -- java -jar lemminx.jar` | - | LemMinX diagnostics | - |
