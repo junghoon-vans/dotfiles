@@ -28,7 +28,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `blockchain` | Installs selected blockchain tooling by running `solana` and `gno`. |
 | `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
-| `opencode` | Installs OpenCode and bootstraps oh-my-openagent. |
+| `opencode` | Installs OpenCode, bootstraps oh-my-openagent, and configures the status HUD. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
 | `macos` | Applies keyboard, Finder, Dock, screenshot, appearance, and related defaults. |
 
