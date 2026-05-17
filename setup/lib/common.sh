@@ -51,6 +51,19 @@ configure_mise_go_bin() {
     )
 }
 
+sync_mise_global_config() {
+    local source_config="$DOTFILES_DIR/home/dot_config/mise/config.toml"
+    local target_config="$HOME/.config/mise/config.toml"
+
+    if [ ! -f "$source_config" ]; then
+        print_error "Tracked mise global config missing at $source_config"
+        exit 1
+    fi
+
+    mkdir -p "$(dirname "$target_config")"
+    cp "$source_config" "$target_config"
+}
+
 print_step() {
     echo -e "\n${CYAN}==>${NC} ${GREEN}$1${NC}"
 }

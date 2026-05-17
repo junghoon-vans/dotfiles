@@ -146,6 +146,7 @@ export GNOPATH=$HOME/gno
 # mise Configuration
 # ========================================
 # Keep mise-managed runtimes ahead of legacy managers inherited from old shells.
+# Global defaults are tracked in ~/.config/mise/config.toml.
 path=(${path:#$HOME/.nvm/*})
 path=(${path:#$HOME/.sdkman/*})
 path=(${path:#$HOME/.bun/bin})

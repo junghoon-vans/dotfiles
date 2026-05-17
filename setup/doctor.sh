@@ -87,6 +87,12 @@ if command -v mise >/dev/null 2>&1 && [ -f "$DOTFILES_DIR/mise.toml" ]; then
     print_info "Install selected runtimes with ./setup.sh languages or individual language commands"
 fi
 
+if [ -f "$HOME/.config/mise/config.toml" ]; then
+    print_success "mise global runtime config found"
+else
+    print_info "mise global runtime config missing; run ./setup.sh links or any language command"
+fi
+
 print_info "Checking common harness tools..."
 for command_name in actionlint shellcheck shfmt yamlfmt; do
     if command -v "$command_name" >/dev/null 2>&1; then
