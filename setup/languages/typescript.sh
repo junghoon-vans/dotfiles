@@ -11,6 +11,8 @@ if ! command -v mise >/dev/null 2>&1; then
     exit 1
 fi
 
+sync_mise_global_config
+
 print_info "Installing typescript..."
 (
     cd "$DOTFILES_DIR" || exit

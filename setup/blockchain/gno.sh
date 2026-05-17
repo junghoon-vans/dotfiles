@@ -11,6 +11,8 @@ if ! command -v mise >/dev/null 2>&1; then
     exit 1
 fi
 
+sync_mise_global_config
+
 (
     cd "$DOTFILES_DIR" || exit
     mise install go

@@ -23,6 +23,8 @@ if ! command -v mise >/dev/null 2>&1; then
     exit 1
 fi
 
+sync_mise_global_config
+
 prepend_path_if_dir "$SOLANA_ACTIVE_BIN_DIR"
 prepend_path_if_dir "$CARGO_BIN_DIR"
 prepend_path_if_dir "$AVM_BIN_DIR"

@@ -10,6 +10,8 @@ if ! command -v mise >/dev/null 2>&1; then
     exit 1
 fi
 
+sync_mise_global_config
+
 if ! command -v brew &>/dev/null; then
     print_error "Homebrew is required to install uv"
     exit 1

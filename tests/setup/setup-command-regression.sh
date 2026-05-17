@@ -726,6 +726,8 @@ bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
 bash "$REPO_ROOT/setup/languages/node.sh" >/dev/null
 bash "$REPO_ROOT/setup/languages/bun.sh" >/dev/null
 
+cmp -s "$REPO_ROOT/home/dot_config/mise/config.toml" "$FAKE_HOME/.config/mise/config.toml"
+
 GO_SETUP_OUTPUT="$($SETUP_SH --yes go)"
 if printf '%s' "$GO_SETUP_OUTPUT" | grep -q 'Activate Gno support in Zed'; then
     printf 'go command should not print Zed Gno activation next step\n' >&2
@@ -918,18 +920,28 @@ if grep -q 'mise install' "$REPO_ROOT/setup/commands/20-brew-packages"; then
 fi
 grep -q 'mise install go' "$REPO_ROOT/setup/languages/go.sh"
 grep -q 'configure_mise_go_bin' "$REPO_ROOT/setup/languages/go.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/languages/go.sh"
 grep -q 'mise install node' "$REPO_ROOT/setup/languages/node.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/languages/node.sh"
 grep -q 'COREPACK_ENABLE_DOWNLOAD_PROMPT=0 mise exec -- corepack enable pnpm' "$REPO_ROOT/setup/languages/node.sh"
 grep -q 'corepack install --global pnpm@latest-10' "$REPO_ROOT/setup/languages/node.sh"
 grep -q 'mise install bun' "$REPO_ROOT/setup/languages/bun.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/languages/bun.sh"
 grep -q "chezmoi --source \"\$DOTFILES_DIR\" --no-tty --force apply --dry-run --verbose" "$REPO_ROOT/setup/check.sh"
 grep -q 'mise install java' "$REPO_ROOT/setup/languages/java.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/languages/java.sh"
 grep -q 'mise install java' "$REPO_ROOT/setup/languages/kotlin.sh"
 grep -q 'mise install kotlin' "$REPO_ROOT/setup/languages/kotlin.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/languages/kotlin.sh"
 grep -q 'mise install python' "$REPO_ROOT/setup/languages/python.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/languages/python.sh"
 grep -q 'mise install rust' "$REPO_ROOT/setup/languages/rust.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/languages/rust.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/languages/xml.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/languages/typescript.sh"
 grep -q 'mise install go' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'configure_mise_go_bin' "$REPO_ROOT/setup/blockchain/gno.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'github.com/gnolang/gno/gnovm/cmd/gno@latest' "$REPO_ROOT/setup/blockchain/gno.sh"
 if grep -q 'create_mise_go_tool_wrapper' "$REPO_ROOT/setup/lib/common.sh" "$REPO_ROOT/setup/languages/go.sh" "$REPO_ROOT/setup/blockchain/gno.sh"; then
     printf 'Go tooling should be managed by mise without custom wrappers\n' >&2
@@ -940,10 +952,14 @@ if grep -q 'create_.*wrapper' "$REPO_ROOT/setup/lib/common.sh" "$REPO_ROOT/setup
     exit 1
 fi
 grep -q 'mise install rust' "$REPO_ROOT/setup/blockchain/solana.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/blockchain/solana.sh"
 grep -q 'https://release.anza.xyz/stable/install' "$REPO_ROOT/setup/blockchain/solana.sh"
 grep -q 'https://github.com/solana-foundation/anchor avm --force' "$REPO_ROOT/setup/blockchain/solana.sh"
 grep -q 'mise runtime config found' "$REPO_ROOT/setup/doctor.sh"
+grep -q 'mise global runtime config found' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise activate zsh' "$REPO_ROOT/home/dot_zshrc"
+grep -q 'Global defaults are tracked in ~/.config/mise/config.toml' "$REPO_ROOT/home/dot_zshrc"
+cmp -s "$REPO_ROOT/mise.toml" "$REPO_ROOT/home/dot_config/mise/config.toml"
 grep -q 'cask "brave-browser"' "$REPO_ROOT/Brewfile"
 grep -q 'PLAYWRIGHT_MCP_EXECUTABLE_PATH' "$REPO_ROOT/home/dot_zshrc"
 if grep -q 'kaku' "$REPO_ROOT/home/dot_zshrc"; then
