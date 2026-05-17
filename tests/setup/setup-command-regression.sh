@@ -120,7 +120,7 @@ export PATH="$FAKE_BIN:$PATH"
 
 HELP_OUTPUT="$($SETUP_SH --help)"
 printf '%s' "$HELP_OUTPUT" | grep -q 'opencode'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install OpenCode and bootstrap oh-my-openagent'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install OpenCode, bootstrap oh-my-openagent, and configure status HUD'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Run selected blockchain tooling commands'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Remove managed dotfile backup files created before chezmoi apply'
@@ -819,7 +819,12 @@ cat >"$FAKE_HOME/.bun/bin/bunx" <<EOF
 printf 'bunx %s\n' "\$*" >> "$LOG_FILE"
 EOF
 
-chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_BIN/brew"
+cat >"$FAKE_HOME/.bun/bin/opencode-status-hud" <<EOF
+#!/bin/bash
+printf 'opencode-status-hud %s\n' "\$*" >> "$LOG_FILE"
+EOF
+
+chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_HOME/.bun/bin/opencode-status-hud" "$FAKE_BIN/brew"
 
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/null
@@ -831,7 +836,9 @@ grep -q 'go install golang.org/x/tools/gopls@latest' "$LOG_FILE"
 grep -q 'go install github.com/gnolang/gno/gnovm/cmd/gno@latest' "$LOG_FILE"
 grep -q 'bun install -g typescript' "$LOG_FILE"
 grep -q 'bun install -g opencode-ai' "$LOG_FILE"
+grep -q 'bun install -g opencode-status-hud' "$LOG_FILE"
 grep -q 'bunx oh-my-openagent install --no-tui --claude=no --openai=yes --gemini=no --copilot=no' "$LOG_FILE"
+grep -q 'opencode-status-hud install' "$LOG_FILE"
 
 BOOTSTRAP_HOME="$TMP_DIR/bootstrap-home"
 BOOTSTRAP_BIN="$TMP_DIR/bootstrap-bin"

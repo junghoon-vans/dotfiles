@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Install OpenCode and bootstrap oh-my-openagent.
+# Description: Install OpenCode, bootstrap oh-my-openagent, and configure status HUD.
 
 # shellcheck source=setup/lib/common.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
