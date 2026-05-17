@@ -53,7 +53,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec PATH=\"$HOME/.local/bin:$PATH\" mise exec go@1.25 -- gopls"
+        "PATH=\"$HOME/.local/bin:$PATH\" exec mise exec go@1.25 -- gopls"
       ],
       "extensions": [
         ".go"
@@ -72,7 +72,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec PATH=\"$HOME/.local/bin:$PATH\" mise exec go@1.25 -- gnopls -mode=stdio"
+        "PATH=\"$HOME/.local/bin:$PATH\" exec mise exec go@1.25 -- gnopls -mode=stdio"
       ],
       "extensions": [
         ".gno"
@@ -133,7 +133,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "exec PATH=\"$(mise exec bun@latest -- bun pm bin -g):$PATH\" mise exec node@24 bun@latest -- typescript-language-server --stdio"
+        "PATH=\"$(mise exec bun@latest -- bun pm bin -g):$PATH\" exec mise exec node@24 bun@latest -- typescript-language-server --stdio"
       ],
       "extensions": [
         ".ts",

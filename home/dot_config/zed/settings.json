@@ -40,13 +40,13 @@
     "gopls": {
       "binary": {
         "path": "/bin/bash",
-        "arguments": ["-lc", "exec PATH=\"$HOME/.local/bin:$PATH\" mise exec go@1.25 -- gopls"],
+        "arguments": ["-lc", "PATH=\"$HOME/.local/bin:$PATH\" exec mise exec go@1.25 -- gopls"],
       },
     },
     "gnopls": {
       "binary": {
         "path": "/bin/bash",
-        "arguments": ["-lc", "exec PATH=\"$HOME/.local/bin:$PATH\" mise exec go@1.25 -- gnopls -mode=stdio"],
+        "arguments": ["-lc", "PATH=\"$HOME/.local/bin:$PATH\" exec mise exec go@1.25 -- gnopls -mode=stdio"],
       },
     },
   },

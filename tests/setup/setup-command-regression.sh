@@ -245,13 +245,13 @@ with open(sys.argv[1], encoding="utf-8") as config_file:
     config = json.load(config_file)
 
 expected_commands = {
-    "gopls": ["/bin/bash", "-lc", 'exec PATH="$HOME/.local/bin:$PATH" mise exec go@1.25 -- gopls'],
-    "gnopls": ["/bin/bash", "-lc", 'exec PATH="$HOME/.local/bin:$PATH" mise exec go@1.25 -- gnopls -mode=stdio'],
+    "gopls": ["/bin/bash", "-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gopls'],
+    "gnopls": ["/bin/bash", "-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gnopls -mode=stdio'],
     "jdtls": ["/bin/bash", "-lc", "project_hash=$(printf \"%s\" \"$PWD\" | shasum | cut -d\" \" -f1); mkdir -p \"$HOME/Library/Caches/jdtls/workspaces\"; exec mise exec java@temurin-21 -- jdtls -data \"$HOME/Library/Caches/jdtls/workspaces/$project_hash\""],
     "kotlin-ls": ["/bin/bash", "-lc", "exec mise exec java@temurin-21 kotlin@latest -- kotlin-language-server"],
     "pyright": ["/bin/bash", "-lc", "exec mise exec python@3.13 -- pyright-langserver --stdio"],
     "rust": ["/bin/bash", "-lc", 'exec mise exec rust@latest -- "$(brew --prefix rust-analyzer)/bin/rust-analyzer"'],
-    "typescript-language-server": ["/bin/bash", "-lc", 'exec PATH="$(mise exec bun@latest -- bun pm bin -g):$PATH" mise exec node@24 bun@latest -- typescript-language-server --stdio'],
+    "typescript-language-server": ["/bin/bash", "-lc", 'PATH="$(mise exec bun@latest -- bun pm bin -g):$PATH" exec mise exec node@24 bun@latest -- typescript-language-server --stdio'],
     "xml": ["/bin/bash", "-lc", 'exec mise exec java@temurin-21 -- java ${LEMMINX_JAVA_OPTS:-} -jar "$HOME/.local/share/lemminx/lemminx.jar"'],
 }
 for lsp_name, command in expected_commands.items():
@@ -271,6 +271,30 @@ for lsp_name, command in expected_commands.items():
 
 if config["lsp"]["xml"]["extensions"] != [".xml", ".xsd", ".xsl", ".xslt", ".svg"]:
     raise SystemExit("OpenCode XML LSP extensions changed")
+PY
+
+python3 - "$REPO_ROOT/home/dot_config/zed/settings.json" <<'PY'
+import json
+import re
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as config_file:
+    lines = [line for line in config_file if not line.lstrip().startswith("//")]
+
+content = "".join(lines)
+content = re.sub(r",(\s*[}\]])", r"\1", content)
+config = json.loads(content)
+
+expected_commands = {
+    "gopls": ["-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gopls'],
+    "gnopls": ["-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gnopls -mode=stdio'],
+}
+for lsp_name, arguments in expected_commands.items():
+    binary = config["lsp"][lsp_name]["binary"]
+    if binary["path"] != "/bin/bash":
+        raise SystemExit(f"Zed {lsp_name} binary should launch through /bin/bash")
+    if binary["arguments"] != arguments:
+        raise SystemExit(f"Zed {lsp_name} arguments should be {arguments}, got {binary['arguments']}")
 PY
 
 DRY_RUN_OUTPUT="$($SETUP_SH --dry-run --skip macos)"
