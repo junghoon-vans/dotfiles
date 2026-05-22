@@ -49,6 +49,12 @@
         "arguments": ["-lc", "PATH=\"$HOME/.local/bin:$PATH\" exec mise exec go@1.25 -- gnopls -mode=stdio"],
       },
     },
+    "typescript-language-server": {
+      "binary": {
+        "path": "/bin/bash",
+        "arguments": ["-lc", "PATH=\"$(mise exec bun@latest -- bun pm bin -g):$PATH\" exec mise exec node@24 bun@latest -- typescript-language-server --stdio"],
+      },
+    },
   },
   "languages": {
     "Go": {
@@ -58,6 +64,18 @@
       "language_servers": ["gnopls"],
       "format_on_save": "on",
       "tab_size": 4,
+    },
+    "TypeScript": {
+      "language_servers": ["typescript-language-server", "!vtsls", "..."],
+    },
+    "TSX": {
+      "language_servers": ["typescript-language-server", "!vtsls", "..."],
+    },
+    "JavaScript": {
+      "language_servers": ["typescript-language-server", "!vtsls", "..."],
+    },
+    "JSX": {
+      "language_servers": ["typescript-language-server", "!vtsls", "..."],
     },
     "SQL": {
       "format_on_save": "off",

@@ -288,6 +288,7 @@ config = json.loads(content)
 expected_commands = {
     "gopls": ["-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gopls'],
     "gnopls": ["-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gnopls -mode=stdio'],
+    "typescript-language-server": ["-lc", 'PATH="$(mise exec bun@latest -- bun pm bin -g):$PATH" exec mise exec node@24 bun@latest -- typescript-language-server --stdio'],
 }
 for lsp_name, arguments in expected_commands.items():
     binary = config["lsp"][lsp_name]["binary"]
@@ -295,6 +296,12 @@ for lsp_name, arguments in expected_commands.items():
         raise SystemExit(f"Zed {lsp_name} binary should launch through /bin/bash")
     if binary["arguments"] != arguments:
         raise SystemExit(f"Zed {lsp_name} arguments should be {arguments}, got {binary['arguments']}")
+
+for language_name in ("TypeScript", "TSX", "JavaScript", "JSX"):
+    language_servers = config["languages"][language_name]["language_servers"]
+    expected_language_servers = ["typescript-language-server", "!vtsls", "..."]
+    if language_servers != expected_language_servers:
+        raise SystemExit(f"Zed {language_name} language_servers should be {expected_language_servers}, got {language_servers}")
 PY
 
 DRY_RUN_OUTPUT="$($SETUP_SH --dry-run --skip macos)"
