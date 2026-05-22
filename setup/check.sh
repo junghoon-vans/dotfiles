@@ -88,6 +88,9 @@ expected_tools = {
     "kotlin": "latest",
     "bun": "latest",
 }
+expected_settings = {
+    "idiomatic_version_file_enable_tools": ["node", "python", "go", "java", "rust", "bun"],
+}
 
 try:
     import tomllib
@@ -101,6 +104,8 @@ except ModuleNotFoundError:
         'java = "temurin-21"',
         'kotlin = "latest"',
         'bun = "latest"',
+        "[settings]",
+        'idiomatic_version_file_enable_tools = ["node", "python", "go", "java", "rust", "bun"]',
     ]
     for path in paths:
         content = path.read_text(encoding="utf-8")
@@ -116,6 +121,13 @@ else:
             raise SystemExit(f"{path} must define a [tools] table")
         if tools != expected_tools:
             raise SystemExit(f"{path} tools mismatch: {tools!r}")
+        settings = config.get("settings")
+        if not isinstance(settings, dict):
+            raise SystemExit(f"{path} must define a [settings] table")
+        for key, expected_value in expected_settings.items():
+            value = settings.get(key)
+            if value != expected_value:
+                raise SystemExit(f"{path} settings.{key} mismatch: {value!r}")
 PY
 
 print_info "Validating chezmoi source..."
