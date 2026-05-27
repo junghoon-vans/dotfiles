@@ -142,6 +142,7 @@ alias j='z'  # muscle memory compatibility with autojump
 
 # Gno Configuration
 export GNOPATH=$HOME/gno
+export GNOROOT=$HOME/gno
 # ========================================
 # mise Configuration
 # ========================================
