@@ -46,6 +46,15 @@ printf 'curl %s\n' "\$*" >> "$LOG_FILE"
 exit 0
 EOF
 
+cat >"$FAKE_BIN/git" <<EOF
+#!/bin/bash
+printf 'git %s\n' "\$*" >> "$LOG_FILE"
+if [ "\${1:-}" = "clone" ]; then
+  mkdir -p "\${3:-}/.git"
+fi
+exit 0
+EOF
+
 cat >"$FAKE_BIN/brew" <<EOF
 #!/bin/bash
 if [ "\${1:-}" = "list" ]; then
@@ -113,7 +122,7 @@ fi
 exit 0
 EOF
 
-chmod +x "$FAKE_BIN/go" "$FAKE_GOROOT/bin/go" "$FAKE_BIN/bun" "$FAKE_BIN/curl" "$FAKE_BIN/brew" "$FAKE_BIN/mise"
+chmod +x "$FAKE_BIN/go" "$FAKE_GOROOT/bin/go" "$FAKE_BIN/bun" "$FAKE_BIN/curl" "$FAKE_BIN/git" "$FAKE_BIN/brew" "$FAKE_BIN/mise"
 
 export HOME="$FAKE_HOME"
 export PATH="$FAKE_BIN:$PATH"
@@ -129,7 +138,7 @@ printf '%s' "$HELP_OUTPUT" | grep -q 'Blockchain commands:'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go via mise plus Go formatter/linter tools'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Kotlin via mise plus Kotlin language server'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install TypeScript, TypeScript LSP, and Biome'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install Gno CLI and gnopls using mise-managed Go'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install Gno from ~/gno and gnopls using mise-managed Go'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Solana CLI and Anchor tooling'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Eclipse LemMinX XML language server'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Go runtime before Gno tooling'
@@ -335,7 +344,7 @@ printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'Install Homebrew if it is missing'
 
 LANGUAGE_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run go gno xml solana typescript python)"
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go via mise'
-printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  gno[[:space:]]\+Install Gno CLI'
+printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  gno[[:space:]]\+Install Gno from ~/gno and gnopls using mise-managed Go'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  xml[[:space:]]\+Install Eclipse LemMinX XML language server'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  solana[[:space:]]\+Install Solana CLI and Anchor tooling'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  typescript[[:space:]]\+Install TypeScript'
@@ -777,8 +786,10 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/n
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
 
 grep -q 'go env -w GOBIN=' "$LOG_FILE"
-grep -q 'go install github.com/gnolang/gno/gnovm/cmd/gno@latest' "$LOG_FILE"
+grep -q "git clone https://github.com/gnolang/gno $FAKE_HOME/gno" "$LOG_FILE"
+grep -q 'make install' "$LOG_FILE"
 grep -q 'go install github.com/gnoverse/gnopls@latest' "$LOG_FILE"
+test -d "$FAKE_HOME/gno"
 test ! -e "$FAKE_HOME/.local/bin/gno"
 test ! -e "$FAKE_HOME/.local/bin/gnopls"
 grep -q 'bun install -g typescript' "$LOG_FILE"
@@ -840,7 +851,8 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/nu
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'go install golang.org/x/tools/gopls@latest' "$LOG_FILE"
-grep -q 'go install github.com/gnolang/gno/gnovm/cmd/gno@latest' "$LOG_FILE"
+grep -q "git -C $FAKE_HOME/gno pull --ff-only --autostash" "$LOG_FILE"
+grep -q 'make install' "$LOG_FILE"
 grep -q 'bun install -g typescript' "$LOG_FILE"
 grep -q 'bun install -g opencode-ai' "$LOG_FILE"
 grep -q 'bun install -g opencode-status-hud' "$LOG_FILE"
@@ -956,7 +968,13 @@ grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/languages/typescript.sh"
 grep -q 'mise install go' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'configure_mise_go_bin' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/blockchain/gno.sh"
-grep -q 'github.com/gnolang/gno/gnovm/cmd/gno@latest' "$REPO_ROOT/setup/blockchain/gno.sh"
+grep -q 'https://github.com/gnolang/gno' "$REPO_ROOT/setup/blockchain/gno.sh"
+grep -q '\$HOME/gno' "$REPO_ROOT/setup/blockchain/gno.sh"
+grep -q 'make install' "$REPO_ROOT/setup/blockchain/gno.sh"
+if grep -q 'github.com/gnolang/gno/gnovm/cmd/gno@latest' "$REPO_ROOT/setup/blockchain/gno.sh"; then
+    printf 'gno should be installed from the local gnolang checkout, not go install @latest\n' >&2
+    exit 1
+fi
 if grep -q 'create_mise_go_tool_wrapper' "$REPO_ROOT/setup/lib/common.sh" "$REPO_ROOT/setup/languages/go.sh" "$REPO_ROOT/setup/blockchain/gno.sh"; then
     printf 'Go tooling should be managed by mise without custom wrappers\n' >&2
     exit 1
