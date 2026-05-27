@@ -9,5 +9,8 @@
   "diff_style": "stacked",
   "scroll_acceleration": {
     "enabled": true
-  }
+  },
+  "plugin": [
+    "oh-my-openagent/tui"
+  ]
 }
