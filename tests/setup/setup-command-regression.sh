@@ -246,12 +246,19 @@ if grep -q '^gno.sh$' "$BLOCKCHAIN_PROMPT_LOG"; then
     exit 1
 fi
 
-python3 - "$REPO_ROOT/home/dot_config/opencode/opencode.json" <<'PY'
+python3 - "$REPO_ROOT/home/dot_config/opencode/opencode.json" "$REPO_ROOT/home/dot_codex/lsp-client.json" <<'PY'
 import json
 import sys
 
 with open(sys.argv[1], encoding="utf-8") as config_file:
     config = json.load(config_file)
+with open(sys.argv[2], encoding="utf-8") as config_file:
+    codex_config = json.load(config_file)
+
+if set(codex_config) != {"lsp"}:
+    raise SystemExit("Codex LSP config should only define the top-level lsp map")
+if codex_config["lsp"] != config["lsp"]:
+    raise SystemExit("Codex LSP config should exactly mirror OpenCode lsp config")
 
 expected_commands = {
     "gopls": ["/bin/bash", "-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gopls'],
