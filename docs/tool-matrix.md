@@ -28,6 +28,7 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 | Python | Global mise config (`python = "3.13"`) + `./setup.sh python` tools | `pyright` | `ruff format` | `ruff check`, `pyright` | project test runner |
 | Rust | Global mise config (`rust = "latest"`) + `./setup.sh rust` tools | `mise exec rust@latest -- $(brew --prefix rust-analyzer)/bin/rust-analyzer` | `rustfmt` | `rust-analyzer` diagnostics | `cargo-nextest` |
 | Solana / Anchor | Agave Solana CLI + `cargo build-sbf` + AVM/Anchor from `./setup.sh solana` | - | `anchor fmt` / `rustfmt` | `anchor` / Solana CLI diagnostics | `anchor test`, `solana-test-validator` |
+| Sui / Move | `suiup`, Sui CLI, `move-analyzer`, and compatibility `sui-test-validator` from `./setup.sh sui` | not mapped | `sui move` | `sui move` / `move-analyzer` diagnostics | `sui move test`, `sui start --with-faucet --force-regenesis` |
 | Terraform | `terraform` | `terraform-ls` | `terraform fmt` | `terraform validate` | - |
 | TypeScript / JavaScript | Global mise config (`node = "24"` + Corepack pnpm, `bun = "latest"`) + `./setup.sh typescript` tools | `mise exec node@24 bun@latest -- typescript-language-server` | `biome` | `biome`, TypeScript diagnostics | project test runner |
 | JSON / JSONC | `./setup.sh typescript` | `biome` | `biome` | `biome` | - |
