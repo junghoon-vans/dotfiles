@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal macOS development environment specification optimized for Go, Gno, Rust, Solana/Anchor, Java, Kotlin, Python, Node.js, OpenCode, and modern CLI tooling.
+Personal macOS development environment specification optimized for Go, Gno, Rust, Solana/Anchor, Sui, Java, Kotlin, Python, Node.js, OpenCode, and modern CLI tooling.
 
 ## Overview
 
@@ -45,7 +45,7 @@ Default commands run in filename order from `setup/commands/`:
 1. `bootstrap` - install Homebrew if needed
 2. `brew-packages` - install common `Brewfile` packages, including `mise` and `chezmoi`, and perform brew-owned post-install steps
 3. `languages` - install selected language runtimes from `mise.toml` and language-specific tools
-4. `blockchain` - install selected blockchain tooling, including Solana/Anchor and Gno
+4. `blockchain` - install selected blockchain tooling, including Solana/Anchor, Gno, and Sui
 5. `links` - apply chezmoi-managed dotfiles and `.config/*`
 6. `apps` - install Oh My Zsh and Zed Gno extension support
 7. `opencode` - install OpenCode and bootstrap OpenAgent
@@ -75,6 +75,7 @@ Utility commands are explicit only and are not part of full setup:
 ./setup.sh go python
 ./setup.sh blockchain
 ./setup.sh solana
+./setup.sh sui
 ./setup.sh languages blockchain opencode
 ./setup.sh links apps
 ./setup.sh check
@@ -91,3 +92,5 @@ source ~/.zshrc
 ```
 
 The tracked global mise config is applied to `~/.config/mise/config.toml`, so mise-managed runtimes such as Go, Node, Bun, Java, Kotlin, Python, and Rust are available from any directory after shell activation.
+
+Sui setup uses `./setup.sh sui`, installs the testnet Sui CLI by default through `suiup`, and installs `move-analyzer` when the current `suiup` supports it. Sui Move work is done with `sui move`; local validator runs should use `sui start --with-faucet --force-regenesis`. The generated `sui-test-validator` command is a compatibility wrapper for older muscle memory.

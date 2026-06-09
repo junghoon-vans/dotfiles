@@ -52,7 +52,8 @@ dotfiles/
 - **Gno tooling**: `gno` and `gnopls` are installed with the mise-selected Go runtime and exposed from `$HOME/.local/bin` through `GOBIN`.
 - **LemMinX**: Installed from the pinned Eclipse Maven uber JAR at `$HOME/.local/share/lemminx/lemminx.jar` and launched with mise-managed Java.
 - **Solana/Anchor**: Solana CLI is installed with the upstream Anza Agave installer; Anchor is installed through AVM from `solana-foundation/anchor`; wrappers expose `solana`, `agave-install`, `cargo-build-sbf`, `avm`, and `anchor` through `$HOME/.local/bin`.
-- **Blockchain setup**: `./setup.sh blockchain` owns Solana/Anchor and Gno tooling; they remain explicit commands but are not part of the language umbrella.
+- **Sui**: Sui CLI and Move tooling are installed through `suiup`, default to testnet, and use `sui move` for Sui Move work. Local validator runs use `sui start --with-faucet --force-regenesis`; `sui-test-validator` is compatibility-only.
+- **Blockchain setup**: `./setup.sh blockchain` owns Solana/Anchor, Gno, and Sui tooling; they remain explicit commands but are not part of the language umbrella.
 - **Biome LSP**: Explicitly mapped to JSON/JSONC only, avoiding overlap with TypeScript LSP and leaving CSS to Biome formatter/linter coverage.
 - **Karabiner setup**: Separate from broader macOS defaults so `--skip karabiner` can exclude key remapping setup.
 - **Utility commands**: `check`, `doctor`, and `clean-backups` are explicit-only commands, not part of full setup.
@@ -64,8 +65,8 @@ dotfiles/
 - `home/dot_config/` mirrors `~/.config/`; keep app config documentation in this root `AGENTS.md` or `docs/`, not in a root `.config/` tree.
 - `setup.sh` flow is `bootstrap → brew-packages → languages → blockchain → links → apps → opencode → karabiner → macos`.
 - Language commands (`go`, `node`, `bun`, `java`, `kotlin`, `xml`, `rust`, `python`, `typescript`) are explicit options; `languages` is the default language umbrella command.
-- Blockchain commands (`solana`, `gno`) are explicit options; `blockchain` is the default blockchain umbrella command.
-- `--skip` accepts default, utility, and language command names; utility commands are explicit-only and are not selected by full setup.
+- Blockchain commands (`solana`, `gno`, `sui`) are explicit options; `blockchain` is the default blockchain umbrella command.
+- `--skip` accepts default, utility, language, and blockchain command names; utility commands are explicit-only and are not selected by full setup.
 - `setup/link.sh` backs up files only when content differs from the chezmoi source version before applying.
 - `clean-backups` removes only managed `*.backup.YYYYMMDD-HHMMSS` files whose current target still matches the chezmoi source.
 - Language-specific LSPs, formatters, linters, and related CLIs are installed by their language commands.
@@ -79,8 +80,9 @@ dotfiles/
 ./setup.sh --dry-run               # Preview selected commands
 ./setup.sh --skip karabiner --yes  # Full setup except Karabiner key remapping setup
 ./setup.sh languages opencode      # Run specific default commands
-./setup.sh blockchain              # Install Solana/Anchor and Gno tooling
+./setup.sh blockchain              # Install Solana/Anchor, Gno, and Sui tooling
 ./setup.sh solana                  # Install Solana CLI and Anchor tooling
+./setup.sh sui                     # Install Sui CLI and Move tooling
 ./setup.sh check                   # Run repository checks
 ./setup.sh doctor                  # Inspect host setup state
 ./setup.sh clean-backups           # Remove managed dotfile backups
@@ -95,3 +97,4 @@ brew bundle --file Brewfile        # Install Brewfile packages
 - OpenCode config uses the public config schema and `oh-my-openagent` plugin config. Runtime-backed LSP commands launch through `mise exec <tool@version> -- ...` without hard-coded checkout paths.
 - Java runtime provisioning is mise-owned by `./setup.sh java`; Kotlin runtime and language server provisioning is owned by `./setup.sh kotlin`.
 - Solana CLI and Anchor are not mise-managed: `./setup.sh solana` installs Rust with mise, then uses the Anza Agave installer and AVM, with shell integration through `$HOME/.local/bin` wrappers.
+- Sui CLI is not Homebrew-managed: `./setup.sh sui` installs Rust with mise, then uses the official `suiup` installer, with shell integration through `$HOME/.local/bin`.

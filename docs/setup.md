@@ -15,7 +15,7 @@ This repository intentionally combines dotfiles, Homebrew package state, runtime
 ./setup.sh --skip karabiner # Exclude one command from a full setup
 ```
 
-`--skip` accepts default commands, utility commands, and language commands, but utility commands are never selected unless passed explicitly.
+`--skip` accepts default commands, utility commands, language commands, and blockchain commands, but utility commands are never selected unless passed explicitly.
 Interactive runs print each command description before asking for Y/n confirmation, so you can see what the step installs or changes before approving it. The `languages` and `blockchain` commands also ask before each nested subcommand.
 
 ## Default Commands
@@ -25,7 +25,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `bootstrap` | Installs Homebrew if it is missing. |
 | `brew-packages` | Installs common `Brewfile` dependencies, including Homebrew-managed `mise` and `chezmoi`, and performs brew-owned post-install steps. |
 | `languages` | Installs selected language runtimes from `mise.toml` and language-specific tools by running `go`, `node`, `bun`, `java`, `kotlin`, `xml`, `rust`, `python`, and `typescript`. |
-| `blockchain` | Installs selected blockchain tooling by running `solana` and `gno`. |
+| `blockchain` | Installs selected blockchain tooling by running `solana`, `gno`, and `sui`. |
 | `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
 | `opencode` | Installs OpenCode, bootstraps oh-my-openagent, and configures the status HUD. |
@@ -64,6 +64,7 @@ Blockchain commands are explicit options as well as the building blocks of `bloc
 | --- | --- |
 | `solana` | Installs the Solana CLI with the Anza Agave installer, exposes `cargo build-sbf`, then Anchor through AVM. |
 | `gno` | Clones or updates `~/gno`, installs `gno` with `make install`, and installs `gnopls` using mise-managed Go. |
+| `sui` | Installs the configured Rust runtime with mise, then installs `suiup`, Sui CLI, `move-analyzer` when supported, and the compatibility `sui-test-validator` wrapper. |
 
 Examples:
 
@@ -72,12 +73,13 @@ Examples:
 ./setup.sh go bun typescript
 ./setup.sh blockchain
 ./setup.sh solana
+./setup.sh sui
 ./setup.sh --skip rust --yes
 ```
 
-`gno`, `solana`, `xml`, and `typescript` install their required Go, Rust, Java, and Bun runtimes through mise before installing their tooling. Use `languages` and `blockchain` to install the full ordered sets, or run individual commands to install only selected environments.
+`gno`, `solana`, `sui`, `xml`, and `typescript` install their required Go, Rust, Java, and Bun runtimes through mise before installing their tooling. Use `languages` and `blockchain` to install the full ordered sets, or run individual commands to install only selected environments.
 
-`mise.toml` is the repository runtime target for Go, Node, Python, Rust, Java, Kotlin, and Bun. The matching chezmoi-managed `home/dot_config/mise/config.toml` is applied to `~/.config/mise/config.toml` as the global baseline, so those runtimes resolve from any directory after `.zshrc` activates mise. `./setup.sh brew-packages` installs Homebrew-managed `mise`, while each language command first syncs the global mise config and then runs `mise install <tool>` for its selected runtime before installing language-owned CLIs such as `gopls`, `pnpm`, `pyright`, `ruff`, `kotlin-language-server`, the LemMinX JAR, and Biome. OpenCode launches runtime-backed LSPs through `mise exec <tool@version> -- ...` without depending on a local dotfiles checkout path. Go-backed CLI installs use the mise-selected Go runtime and set `GOBIN=$HOME/.local/bin`, so future `mise exec -- go install ...` commands expose binaries without adding `$HOME/go/bin` to PATH. Blockchain commands live under `setup/blockchain/`: Gno tooling uses the configured Go runtime, keeps the upstream checkout at `~/gno`, installs `gno` from that checkout with `make install`, and installs `gnopls` with Go; Solana CLI and Anchor are intentionally not tracked in `mise.toml`. `./setup.sh solana` uses the upstream Anza Agave installer for Solana CLI, exposes Solana's `cargo-build-sbf` binary so `cargo build-sbf` works from `~/.local/bin`, and installs AVM from the Anchor repository for Anchor CLI.
+`mise.toml` is the repository runtime target for Go, Node, Python, Rust, Java, Kotlin, and Bun. The matching chezmoi-managed `home/dot_config/mise/config.toml` is applied to `~/.config/mise/config.toml` as the global baseline, so those runtimes resolve from any directory after `.zshrc` activates mise. `./setup.sh brew-packages` installs Homebrew-managed `mise`, while each language command first syncs the global mise config and then runs `mise install <tool>` for its selected runtime before installing language-owned CLIs such as `gopls`, `pnpm`, `pyright`, `ruff`, `kotlin-language-server`, the LemMinX JAR, and Biome. OpenCode launches runtime-backed LSPs through `mise exec <tool@version> -- ...` without depending on a local dotfiles checkout path. Go-backed CLI installs use the mise-selected Go runtime and set `GOBIN=$HOME/.local/bin`, so future `mise exec -- go install ...` commands expose binaries without adding `$HOME/go/bin` to PATH. Blockchain commands live under `setup/blockchain/`: Gno tooling uses the configured Go runtime, keeps the upstream checkout at `~/gno`, installs `gno` from that checkout with `make install`, and installs `gnopls` with Go; Solana CLI and Anchor are intentionally not tracked in `mise.toml`; Sui CLI and Move tooling are installed through `suiup` instead of Homebrew to avoid path and version conflicts. `./setup.sh solana` uses the upstream Anza Agave installer for Solana CLI, exposes Solana's `cargo-build-sbf` binary so `cargo build-sbf` works from `~/.local/bin`, and installs AVM from the Anchor repository for Anchor CLI. `./setup.sh sui` defaults to `SUI_VERSION=testnet`, uses `suiup install sui@testnet -y`, and installs `move-analyzer@testnet` when supported. Sui Move work is via `sui move`; local validator runs should use `sui start --with-faucet --force-regenesis`. The `sui-test-validator` wrapper remains compatibility-only and delegates to `sui start`.
 
 ## Dotfile Apply Behavior
 
