@@ -27,7 +27,7 @@ language_commands() {
 }
 
 blockchain_commands() {
-  printf '%s\n' solana gno
+  printf '%s\n' solana gno sui
 }
 
 command_name_from_entry() {
@@ -81,7 +81,7 @@ command_script() {
       printf '%s\n' "$SETUP_DIR/languages/$command_name.sh"
       return 0
       ;;
-    solana|gno)
+    solana|gno|sui)
       printf '%s\n' "$SETUP_DIR/blockchain/$command_name.sh"
       return 0
       ;;
@@ -158,6 +158,7 @@ print_supported_commands() {
   printf '\nNotes:\n'
   printf '  %-14s %s\n' 'gno' 'Installs the configured Go runtime before Gno tooling.'
   printf '  %-14s %s\n' 'solana' 'Installs the configured Rust runtime before Solana and Anchor tooling.'
+  printf '  %-14s %s\n' 'sui' 'Installs the configured Rust runtime before Sui tooling.'
   printf '  %-14s %s\n' 'xml' 'Installs the configured Java runtime before LemMinX.'
   printf '  %-14s %s\n' 'typescript' 'Installs the configured Bun runtime before TypeScript tooling.'
   printf '  %-14s %s\n' 'node' 'Enables Corepack and installs pnpm with the configured Node runtime.'
@@ -241,7 +242,7 @@ selected_commands_affect_shell() {
 
   for command_name in "$@"; do
     case "$command_name" in
-      bootstrap|brew-packages|languages|blockchain|links|apps|opencode|go|node|bun|java|kotlin|xml|rust|python|typescript|solana|gno)
+      bootstrap|brew-packages|languages|blockchain|links|apps|opencode|go|node|bun|java|kotlin|xml|rust|python|typescript|solana|gno|sui)
         return 0
         ;;
     esac

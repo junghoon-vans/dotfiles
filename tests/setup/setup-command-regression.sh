@@ -140,9 +140,11 @@ printf '%s' "$HELP_OUTPUT" | grep -q 'Install Kotlin via mise plus Kotlin langua
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install TypeScript, TypeScript LSP, and Biome'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Gno from ~/gno and gnopls using mise-managed Go'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Solana CLI and Anchor tooling'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install Sui CLI, Move analyzer, and local validator wrapper through suiup'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Eclipse LemMinX XML language server'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Go runtime before Gno tooling'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Rust runtime before Solana and Anchor tooling'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Rust runtime before Sui tooling'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Java runtime before LemMinX'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Bun runtime before TypeScript tooling'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Enables Corepack and installs pnpm with the configured Node runtime'
@@ -170,7 +172,7 @@ if [ "$ACTUAL_LANGUAGE_ORDER" != "$EXPECTED_LANGUAGE_ORDER" ]; then
     exit 1
 fi
 
-EXPECTED_BLOCKCHAIN_ORDER="solana gno"
+EXPECTED_BLOCKCHAIN_ORDER="solana gno sui"
 ACTUAL_BLOCKCHAIN_ORDER="$(grep '^for blockchain_name in ' "$REPO_ROOT/setup/commands/35-blockchain" | sed 's/^for blockchain_name in //; s/; do$//')"
 if [ "$ACTUAL_BLOCKCHAIN_ORDER" != "$EXPECTED_BLOCKCHAIN_ORDER" ]; then
     printf 'blockchain umbrella order changed: expected "%s", got "%s"\n' "$EXPECTED_BLOCKCHAIN_ORDER" "$ACTUAL_BLOCKCHAIN_ORDER" >&2
@@ -226,6 +228,7 @@ done
 BLOCKCHAIN_PROMPT_OUTPUT="$(SETUP_DIR="$BLOCKCHAIN_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 BLOCKCHAIN_PROMPT_LOG="$BLOCKCHAIN_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/35-blockchain")"
 printf '%s' "$BLOCKCHAIN_PROMPT_OUTPUT" | grep -q "Run blockchain command 'solana'? \[Y/n\] yes (--yes)"
 printf '%s' "$BLOCKCHAIN_PROMPT_OUTPUT" | grep -q "Run blockchain command 'gno'? \[Y/n\] yes (--yes)"
+printf '%s' "$BLOCKCHAIN_PROMPT_OUTPUT" | grep -q "Run blockchain command 'sui'? \[Y/n\] yes (--yes)"
 read -r -a expected_blockchains <<<"$EXPECTED_BLOCKCHAIN_ORDER"
 EXPECTED_BLOCKCHAIN_RUNS="$(printf '%s.sh\n' "${expected_blockchains[@]}")"
 ACTUAL_BLOCKCHAIN_RUNS="$(cat "$BLOCKCHAIN_PROMPT_LOG")"
@@ -235,13 +238,18 @@ if [ "$ACTUAL_BLOCKCHAIN_RUNS" != "$EXPECTED_BLOCKCHAIN_RUNS" ]; then
 fi
 
 : >"$BLOCKCHAIN_PROMPT_LOG"
-BLOCKCHAIN_SKIP_PROMPT_OUTPUT="$(SETUP_DIR="$BLOCKCHAIN_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 SETUP_SKIP_COMMANDS=' gno ' BLOCKCHAIN_PROMPT_LOG="$BLOCKCHAIN_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/35-blockchain")"
+BLOCKCHAIN_SKIP_PROMPT_OUTPUT="$(SETUP_DIR="$BLOCKCHAIN_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 SETUP_SKIP_COMMANDS=' gno sui ' BLOCKCHAIN_PROMPT_LOG="$BLOCKCHAIN_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/35-blockchain")"
 printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping blockchain command: gno'
+printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping blockchain command: sui'
 if printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q "Run blockchain command 'gno'?"; then
     printf 'skipped blockchain command should not prompt: gno\n' >&2
     exit 1
 fi
-if grep -q '^gno.sh$' "$BLOCKCHAIN_PROMPT_LOG"; then
+if printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q "Run blockchain command 'sui'?"; then
+    printf 'skipped blockchain command should not prompt: sui\n' >&2
+    exit 1
+fi
+if grep -q '^gno.sh$\|^sui.sh$' "$BLOCKCHAIN_PROMPT_LOG"; then
     printf 'skipped blockchain command should not run\n' >&2
     exit 1
 fi
@@ -349,11 +357,12 @@ NO_INPUT_OUTPUT="$($SETUP_SH --no-input --dry-run bootstrap)"
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'bootstrap'
 printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'Install Homebrew if it is missing'
 
-LANGUAGE_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run go gno xml solana typescript python)"
+LANGUAGE_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run go gno xml solana sui typescript python)"
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go via mise'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  gno[[:space:]]\+Install Gno from ~/gno and gnopls using mise-managed Go'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  xml[[:space:]]\+Install Eclipse LemMinX XML language server'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  solana[[:space:]]\+Install Solana CLI and Anchor tooling'
+printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  sui[[:space:]]\+Install Sui CLI, Move analyzer, and local validator wrapper through suiup'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  typescript[[:space:]]\+Install TypeScript'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  python[[:space:]]\+Install Python via mise'
 
@@ -706,6 +715,96 @@ if grep -q 'curl https://release.anza.xyz/stable/install' "$SOLANA_LOG"; then
     exit 1
 fi
 
+SUI_HOME="$TMP_DIR/sui-home"
+SUI_BIN="$TMP_DIR/sui-bin"
+SUI_LOG="$TMP_DIR/sui.log"
+mkdir -p "$SUI_HOME" "$SUI_BIN"
+cat >"$SUI_BIN/mise" <<'EOF'
+#!/bin/bash
+printf 'mise %s\n' "$*" >> "$SUI_LOG"
+if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
+  shift 2
+  printf '%s\n' "$*" >> "$SUI_LOG"
+  if [ "${1:-}" = "rustc" ] && [ "${2:-}" = "--version" ]; then
+    printf 'rustc 1.90.0\n'
+    exit 0
+  fi
+fi
+exit 0
+EOF
+cat >"$SUI_BIN/curl" <<'EOF'
+#!/bin/bash
+output=""
+url=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -o)
+      output="$2"
+      shift 2
+      ;;
+    -*)
+      shift
+      ;;
+    *)
+      url="$1"
+      shift
+      ;;
+  esac
+done
+printf 'curl %s\n' "$url" >> "$SUI_LOG"
+if [ -z "$output" ]; then
+  exit 1
+fi
+cat > "$output" <<'INSTALLEREOF'
+#!/bin/sh
+set -eu
+
+printf 'suiup installer install=%s default=%s\n' "$SUIUP_INSTALL_DIR" "$SUIUP_DEFAULT_BIN_DIR" >> "$SUI_LOG"
+mkdir -p "$SUIUP_INSTALL_DIR" "$SUIUP_DEFAULT_BIN_DIR"
+cat > "$SUIUP_INSTALL_DIR/suiup" <<'SUIUPEOF'
+#!/bin/bash
+printf 'suiup %s\n' "$*" >> "$SUI_LOG"
+if [ "${1:-}" = "install" ]; then
+  case "${2:-}" in
+    sui@*)
+      cat > "$SUIUP_DEFAULT_BIN_DIR/sui" <<'SUIEOF'
+#!/bin/bash
+printf 'sui %s\n' "$*" >> "$SUI_LOG"
+SUIEOF
+      chmod +x "$SUIUP_DEFAULT_BIN_DIR/sui"
+      ;;
+    move-analyzer@*)
+      cat > "$SUIUP_DEFAULT_BIN_DIR/move-analyzer" <<'MOVEEOF'
+#!/bin/bash
+printf 'move-analyzer %s\n' "$*" >> "$SUI_LOG"
+MOVEEOF
+      chmod +x "$SUIUP_DEFAULT_BIN_DIR/move-analyzer"
+      ;;
+  esac
+fi
+exit 0
+SUIUPEOF
+chmod +x "$SUIUP_INSTALL_DIR/suiup"
+INSTALLEREOF
+EOF
+chmod +x "$SUI_BIN/mise" "$SUI_BIN/curl"
+
+HOME="$SUI_HOME" PATH="$SUI_BIN:/usr/bin:/bin" SUI_LOG="$SUI_LOG" bash "$REPO_ROOT/setup/blockchain/sui.sh" >/dev/null
+[ -x "$SUI_HOME/.local/bin/suiup" ]
+[ -x "$SUI_HOME/.local/bin/sui" ]
+[ -x "$SUI_HOME/.local/bin/move-analyzer" ]
+[ -x "$SUI_HOME/.local/bin/sui-test-validator" ]
+grep -q 'mise install rust' "$SUI_LOG"
+grep -q 'mise exec -- rustc --version' "$SUI_LOG"
+grep -q 'curl https://raw.githubusercontent.com/Mystenlabs/suiup/main/install.sh' "$SUI_LOG"
+grep -q "suiup installer install=$SUI_HOME/.local/bin default=$SUI_HOME/.local/bin" "$SUI_LOG"
+grep -q 'suiup install sui@testnet -y' "$SUI_LOG"
+grep -q 'suiup install move-analyzer@testnet -y' "$SUI_LOG"
+HOME="$SUI_HOME" PATH="$SUI_HOME/.local/bin:$SUI_BIN:/usr/bin:/bin" SUI_LOG="$SUI_LOG" "$SUI_HOME/.local/bin/sui-test-validator" >/dev/null
+HOME="$SUI_HOME" PATH="$SUI_HOME/.local/bin:$SUI_BIN:/usr/bin:/bin" SUI_LOG="$SUI_LOG" "$SUI_HOME/.local/bin/sui-test-validator" --network devnet >/dev/null
+grep -q 'sui start --with-faucet --force-regenesis' "$SUI_LOG"
+grep -q 'sui start --network devnet' "$SUI_LOG"
+
 DOCTOR_HOME="$TMP_DIR/doctor-home"
 DOCTOR_BIN="$TMP_DIR/doctor-bin"
 mkdir -p "$DOCTOR_HOME" "$DOCTOR_BIN"
@@ -725,6 +824,12 @@ chmod +x "$DOCTOR_BIN/git" "$DOCTOR_BIN/bash" "$DOCTOR_BIN/uname"
 DOCTOR_OUTPUT="$(HOME="$DOCTOR_HOME" PATH="$DOCTOR_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/doctor.sh")"
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'brew missing — run ./setup.sh bootstrap before brew-managed setup'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'mise missing — run ./setup.sh brew-packages before runtime setup'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'cmake missing; run ./setup.sh brew-packages'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'pkg-config missing; run ./setup.sh brew-packages'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'suiup missing; run ./setup.sh sui'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'sui missing; run ./setup.sh sui'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'move-analyzer missing; run ./setup.sh sui'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'sui-test-validator missing; run ./setup.sh sui'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'ruff missing; run ./setup.sh python'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'biome missing; run ./setup.sh typescript'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'jdtls missing; run ./setup.sh java'
@@ -941,7 +1046,7 @@ grep -q 'brew "chezmoi"' "$REPO_ROOT/Brewfile"
 grep -q 'chezmoi --source' "$REPO_ROOT/setup/link.sh"
 grep -q 'HOMEBREW_PREFIX' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'brew "mise"' "$REPO_ROOT/Brewfile"
-grep -q 'go env -w GOBIN="\$HOME/.local/bin"' "$REPO_ROOT/.github/workflows/ci.yml"
+grep -q "go env -w GOBIN=\"\$HOME/.local/bin\"" "$REPO_ROOT/.github/workflows/ci.yml"
 if grep -q 'go env GOPATH' "$REPO_ROOT/.github/workflows/ci.yml"; then
     printf 'CI should not add GOPATH/bin to PATH\n' >&2
     exit 1
@@ -976,7 +1081,7 @@ grep -q 'mise install go' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'configure_mise_go_bin' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'https://github.com/gnolang/gno' "$REPO_ROOT/setup/blockchain/gno.sh"
-grep -q '\$HOME/gno' "$REPO_ROOT/setup/blockchain/gno.sh"
+grep -q "\$HOME/gno" "$REPO_ROOT/setup/blockchain/gno.sh"
 grep -q 'make install' "$REPO_ROOT/setup/blockchain/gno.sh"
 if grep -q 'github.com/gnolang/gno/gnovm/cmd/gno@latest' "$REPO_ROOT/setup/blockchain/gno.sh"; then
     printf 'gno should be installed from the local gnolang checkout, not go install @latest\n' >&2
@@ -994,6 +1099,25 @@ grep -q 'mise install rust' "$REPO_ROOT/setup/blockchain/solana.sh"
 grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/blockchain/solana.sh"
 grep -q 'https://release.anza.xyz/stable/install' "$REPO_ROOT/setup/blockchain/solana.sh"
 grep -q 'https://github.com/solana-foundation/anchor avm --force' "$REPO_ROOT/setup/blockchain/solana.sh"
+grep -q 'brew "cmake"' "$REPO_ROOT/Brewfile"
+grep -q 'brew "pkgconf"' "$REPO_ROOT/Brewfile"
+if grep -q 'brew "sui"' "$REPO_ROOT/Brewfile"; then
+    printf 'Sui should be installed through suiup, not Homebrew sui\n' >&2
+    exit 1
+fi
+grep -q 'mise install rust' "$REPO_ROOT/setup/blockchain/sui.sh"
+grep -q 'sync_mise_global_config' "$REPO_ROOT/setup/blockchain/sui.sh"
+grep -q 'https://raw.githubusercontent.com/Mystenlabs/suiup/main/install.sh' "$REPO_ROOT/setup/blockchain/sui.sh"
+grep -q "SUIUP_INSTALL_DIR=\"\$LOCAL_BIN_DIR\" SUIUP_DEFAULT_BIN_DIR=\"\$LOCAL_BIN_DIR\" sh \"\$suiup_installer_file\"" "$REPO_ROOT/setup/blockchain/sui.sh"
+grep -q "SUI_VERSION=\"\${SUI_VERSION:-testnet}\"" "$REPO_ROOT/setup/blockchain/sui.sh"
+grep -q "SUI_MOVE_ANALYZER_VERSION=\"\${SUI_MOVE_ANALYZER_VERSION:-testnet}\"" "$REPO_ROOT/setup/blockchain/sui.sh"
+grep -q "suiup\" install \"sui@\$SUI_VERSION\" -y" "$REPO_ROOT/setup/blockchain/sui.sh"
+grep -q "suiup\" install \"move-analyzer@\$SUI_MOVE_ANALYZER_VERSION\" -y" "$REPO_ROOT/setup/blockchain/sui.sh"
+grep -q 'sui start --with-faucet --force-regenesis' "$REPO_ROOT/setup/blockchain/sui.sh"
+grep -q "exec sui start \"\$@\"" "$REPO_ROOT/setup/blockchain/sui.sh"
+grep -q 'suiup sui move-analyzer sui-test-validator' "$REPO_ROOT/setup/doctor.sh"
+grep -q 'run ./setup.sh sui' "$REPO_ROOT/setup/doctor.sh"
+grep -q 'cmake pkg-config' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise runtime config found' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise global runtime config found' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise activate zsh' "$REPO_ROOT/home/dot_zshrc"

@@ -3,7 +3,7 @@
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
-for blockchain_name in solana gno; do
+for blockchain_name in solana gno sui; do
     case "${SETUP_SKIP_COMMANDS:-}" in
         *" $blockchain_name "*)
             print_info "Skipping blockchain command: $blockchain_name"

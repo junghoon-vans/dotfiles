@@ -94,11 +94,20 @@ else
 fi
 
 print_info "Checking common harness tools..."
-for command_name in actionlint shellcheck shfmt yamlfmt; do
+for command_name in actionlint cmake pkg-config shellcheck shfmt yamlfmt; do
     if command -v "$command_name" >/dev/null 2>&1; then
         print_success "$command_name found"
     else
         print_info "$command_name missing; run ./setup.sh brew-packages"
+    fi
+done
+
+print_info "Checking blockchain-owned tools..."
+for command_name in suiup sui move-analyzer sui-test-validator; do
+    if command -v "$command_name" >/dev/null 2>&1; then
+        print_success "$command_name found"
+    else
+        print_info "$command_name missing; run ./setup.sh sui"
     fi
 done
 

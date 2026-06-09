@@ -23,6 +23,8 @@ brew "delve"           # Go debugger
 brew "go-task"         # Task runner
 brew "chezmoi"         # Dotfiles manager
 brew "mise"            # Declarative language runtime manager
+brew "cmake"           # Build system used by source-built tooling
+brew "pkgconf"         # pkg-config implementation for source builds
 
 # Language-Adjacent Tooling
 brew "marksman"        # Markdown LSP server
