@@ -242,7 +242,7 @@ selected_commands_affect_shell() {
 
   for command_name in "$@"; do
     case "$command_name" in
-      bootstrap|brew-packages|languages|blockchain|links|apps|opencode|go|node|bun|java|kotlin|xml|rust|python|typescript|solana|gno|sui)
+      bootstrap|brew-packages|languages|blockchain|links|apps|opencode|codex|go|node|bun|java|kotlin|xml|rust|python|typescript|solana|gno|sui)
         return 0
         ;;
     esac

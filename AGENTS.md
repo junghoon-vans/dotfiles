@@ -63,7 +63,7 @@ dotfiles/
 
 - All paths use `$HOME` instead of specific usernames.
 - `home/dot_config/` mirrors `~/.config/`; keep app config documentation in this root `AGENTS.md` or `docs/`, not in a root `.config/` tree.
-- `setup.sh` flow is `bootstrap → brew-packages → languages → blockchain → links → apps → opencode → karabiner → macos`.
+- `setup.sh` flow is `bootstrap → brew-packages → languages → blockchain → links → apps → opencode → codex → karabiner → macos`.
 - Language commands (`go`, `node`, `bun`, `java`, `kotlin`, `xml`, `rust`, `python`, `typescript`) are explicit options; `languages` is the default language umbrella command.
 - Blockchain commands (`solana`, `gno`, `sui`) are explicit options; `blockchain` is the default blockchain umbrella command.
 - `--skip` accepts default, utility, language, and blockchain command names; utility commands are explicit-only and are not selected by full setup.
@@ -83,6 +83,7 @@ dotfiles/
 ./setup.sh blockchain              # Install Solana/Anchor, Gno, and Sui tooling
 ./setup.sh solana                  # Install Solana CLI and Anchor tooling
 ./setup.sh sui                     # Install Sui CLI and Move tooling
+./setup.sh codex                   # Install Codex CLI and LazyCodex
 ./setup.sh check                   # Run repository checks
 ./setup.sh doctor                  # Inspect host setup state
 ./setup.sh clean-backups           # Remove managed dotfile backups
@@ -98,3 +99,4 @@ brew bundle --file Brewfile        # Install Brewfile packages
 - Java runtime provisioning is mise-owned by `./setup.sh java`; Kotlin runtime and language server provisioning is owned by `./setup.sh kotlin`.
 - Solana CLI and Anchor are not mise-managed: `./setup.sh solana` installs Rust with mise, then uses the Anza Agave installer and AVM, with shell integration through `$HOME/.local/bin` wrappers.
 - Sui CLI is not Homebrew-managed: `./setup.sh sui` installs Rust with mise, then uses the official `suiup` installer, with shell integration through `$HOME/.local/bin`.
+- **Codex CLI and LazyCodex**: `./setup.sh codex` installs `@openai/codex` globally via mise-managed npm, then runs `npx lazycodex-ai install --no-tui --codex-autonomous` to bootstrap LazyCodex (oh-my-openagent for Codex). Requires Node.js runtime.
