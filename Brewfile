@@ -45,7 +45,7 @@ brew "mysql-client"
 brew "libpq"
 
 # GUI Apps
-cask "warp"            # Rust-based terminal
+cask "cmux"            # Ghostty-based terminal for AI coding agents
 cask "orbstack"        # Fast Docker Desktop alternative
 cask "brave-browser"   # Privacy-focused browser
 cask "jordanbaird-ice" # Menu bar management
