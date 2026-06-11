@@ -1035,11 +1035,105 @@ env -i HOME="$BOOTSTRAP_HOME" PATH="$BOOTSTRAP_BIN:/usr/bin:/bin" HOMEBREW_PREFI
 
 # shellcheck disable=SC2016
 grep -q 'eval "$(brew shellenv)"' "$BOOTSTRAP_HOME/.zprofile"
+# shellcheck disable=SC2016
+grep -q 'eval "$(mise activate zsh)"' "$BOOTSTRAP_HOME/.zprofile"
+grep -q 'unset GOROOT' "$BOOTSTRAP_HOME/.zprofile"
+
+BOOTSTRAP_EXISTING_HOME="$TMP_DIR/bootstrap-existing-home"
+BOOTSTRAP_EXISTING_BIN="$TMP_DIR/bootstrap-existing-bin"
+BOOTSTRAP_EXISTING_PREFIX="$TMP_DIR/bootstrap-existing-homebrew"
+mkdir -p "$BOOTSTRAP_EXISTING_HOME" "$BOOTSTRAP_EXISTING_BIN" "$BOOTSTRAP_EXISTING_PREFIX/bin"
+printf 'preserve me\n' >"$BOOTSTRAP_EXISTING_HOME/.zprofile"
+
+cat >"$BOOTSTRAP_EXISTING_BIN/brew" <<EOF
+#!/bin/bash
+if [ "\${1:-}" = "shellenv" ]; then
+  printf 'export PATH="%s/bin:\$PATH"\\n' "$BOOTSTRAP_EXISTING_PREFIX"
+  exit 0
+fi
+if [ "\${1:-}" = "--prefix" ]; then
+  printf '%s\\n' "$BOOTSTRAP_EXISTING_PREFIX"
+  exit 0
+fi
+exit 0
+EOF
+chmod +x "$BOOTSTRAP_EXISTING_BIN/brew"
+
+env -i HOME="$BOOTSTRAP_EXISTING_HOME" PATH="$BOOTSTRAP_EXISTING_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/commands/10-bootstrap" >/dev/null
+
+grep -q 'preserve me' "$BOOTSTRAP_EXISTING_HOME/.zprofile"
+[ "$(grep -c '# >>> dotfiles runtime environment >>>' "$BOOTSTRAP_EXISTING_HOME/.zprofile")" -eq 1 ]
+
+if command -v zsh >/dev/null 2>&1; then
+    ZPROFILE_HOME="$TMP_DIR/zprofile-home"
+    ZPROFILE_BIN="$TMP_DIR/zprofile-bin"
+    ZPROFILE_HOMEBREW_PREFIX="$TMP_DIR/zprofile-homebrew"
+    ZPROFILE_MISE_GO="$TMP_DIR/zprofile-mise-go"
+    mkdir -p "$ZPROFILE_HOME" "$ZPROFILE_BIN" "$ZPROFILE_HOMEBREW_PREFIX/bin" "$ZPROFILE_MISE_GO/bin"
+
+    cat >"$ZPROFILE_BIN/brew" <<EOF
+#!/bin/bash
+if [ "\${1:-}" = "shellenv" ]; then
+  printf 'export PATH="%s/bin:\$PATH"\\n' "$ZPROFILE_HOMEBREW_PREFIX"
+  exit 0
+fi
+if [ "\${1:-}" = "--prefix" ]; then
+  printf '%s\\n' "$ZPROFILE_HOMEBREW_PREFIX"
+  exit 0
+fi
+exit 0
+EOF
+
+    cat >"$ZPROFILE_BIN/mise" <<EOF
+#!/bin/bash
+if [ "\${1:-}" = "activate" ] && [ "\${2:-}" = "zsh" ]; then
+  printf 'unset GOROOT\\n'
+  printf 'export PATH="%s/bin:\$PATH"\\n' "$ZPROFILE_MISE_GO"
+  exit 0
+fi
+exit 0
+EOF
+
+    cat >"$ZPROFILE_HOMEBREW_PREFIX/bin/go" <<'EOF'
+#!/bin/bash
+if [ "${1:-}" = "version" ]; then
+  printf 'go version go1.25.6 darwin/arm64\n'
+  exit 0
+fi
+if [ "${1:-}" = "env" ] && [ "${2:-}" = "GOROOT" ]; then
+  printf '%s\n' "${GOROOT:-homebrew-goroot}"
+  exit 0
+fi
+EOF
+
+    cat >"$ZPROFILE_MISE_GO/bin/go" <<EOF
+#!/bin/bash
+if [ "\${1:-}" = "version" ]; then
+  printf 'go version go1.25.11 darwin/arm64\\n'
+  exit 0
+fi
+if [ "\${1:-}" = "env" ] && [ "\${2:-}" = "GOROOT" ]; then
+  printf '%s\\n' "$ZPROFILE_MISE_GO"
+  exit 0
+fi
+EOF
+
+    chmod +x "$ZPROFILE_BIN/brew" "$ZPROFILE_BIN/mise" "$ZPROFILE_HOMEBREW_PREFIX/bin/go" "$ZPROFILE_MISE_GO/bin/go"
+
+    env -i HOME="$ZPROFILE_HOME" PATH="$ZPROFILE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/commands/10-bootstrap" >/dev/null
+    ZPROFILE_GO_OUTPUT="$(env -i HOME="$ZPROFILE_HOME" ZDOTDIR="$ZPROFILE_HOME" PATH="$ZPROFILE_BIN:/usr/bin:/bin" GOROOT="$ZPROFILE_MISE_GO-stale" zsh -dfc 'source "$ZDOTDIR/.zprofile"; command -v go; go version; printf "GOROOT=%s\n" "${GOROOT-unset}"; go env GOROOT')"
+    printf '%s\n' "$ZPROFILE_GO_OUTPUT" | grep -q "^$ZPROFILE_MISE_GO/bin/go$"
+    printf '%s\n' "$ZPROFILE_GO_OUTPUT" | grep -q '^go version go1.25.11 darwin/arm64$'
+    printf '%s\n' "$ZPROFILE_GO_OUTPUT" | grep -q '^GOROOT=unset$'
+    printf '%s\n' "$ZPROFILE_GO_OUTPUT" | grep -q "^$ZPROFILE_MISE_GO$"
+fi
 
 [ ! -e "$REPO_ROOT/link.sh" ]
 grep -q 'setup/link.sh' "$REPO_ROOT/setup/commands/40-links"
 # shellcheck disable=SC2016
 grep -q 'eval "$(brew shellenv)"' "$REPO_ROOT/setup/commands/10-bootstrap"
+grep -q 'mise activate zsh' "$REPO_ROOT/setup/commands/10-bootstrap"
+grep -q 'unset GOROOT' "$REPO_ROOT/setup/commands/10-bootstrap"
 grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/30-languages"
 grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/35-blockchain"
 [ ! -e "$REPO_ROOT/setup/commands/35-tool-packages" ]
@@ -1147,6 +1241,7 @@ grep -q 'mise runtime config found' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise global runtime config found' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise activate zsh' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'Global defaults are tracked in ~/.config/mise/config.toml' "$REPO_ROOT/home/dot_zshrc"
+grep -q 'unset NVM_DIR SDKMAN_DIR BUN_INSTALL GOROOT' "$REPO_ROOT/home/dot_zshrc"
 cmp -s "$REPO_ROOT/mise.toml" "$REPO_ROOT/home/dot_config/mise/config.toml"
 grep -q 'cask "brave-browser"' "$REPO_ROOT/Brewfile"
 grep -q 'PLAYWRIGHT_MCP_EXECUTABLE_PATH' "$REPO_ROOT/home/dot_zshrc"

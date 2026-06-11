@@ -153,8 +153,11 @@ path=(${path:#$HOME/.sdkman/*})
 path=(${path:#$HOME/.bun/bin})
 path=(${path:#$HOME/.cargo/bin})
 path=(${path:#$HOME/go/bin})
-unset NVM_DIR SDKMAN_DIR BUN_INSTALL
-command -v mise &>/dev/null && eval "$(mise activate zsh)"
+unset NVM_DIR SDKMAN_DIR BUN_INSTALL GOROOT
+if command -v mise &>/dev/null; then
+  eval "$(mise activate zsh)"
+  unset GOROOT
+fi
 path=(${path:#$HOME/.nvm/*})
 path=(${path:#$HOME/.sdkman/*})
 path=(${path:#$HOME/.bun/bin})

@@ -28,6 +28,8 @@ export SOME_WORK_VAR=value
 
 `.zshrc` sources this file automatically when it exists.
 
+`./setup.sh bootstrap` preserves existing `~/.zprofile` content and maintains only the marked `dotfiles runtime environment` block used for login-shell Homebrew and mise activation.
+
 ## Secrets and OAuth Files
 
 Do not track OAuth tokens or generated app secrets. In particular:
