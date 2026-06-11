@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Install Codex CLI and bootstrap LazyCodex configuration.
+# Description: Install Codex CLI, bootstrap LazyCodex, and configure Codex MCP.
 
 # shellcheck source=setup/lib/common.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"

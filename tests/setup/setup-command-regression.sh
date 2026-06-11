@@ -954,12 +954,32 @@ cat >"$FAKE_HOME/.bun/bin/opencode-status-hud" <<EOF
 printf 'opencode-status-hud %s\n' "\$*" >> "$LOG_FILE"
 EOF
 
-chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_HOME/.bun/bin/opencode-status-hud" "$FAKE_BIN/brew"
+cat >"$FAKE_BIN/codex" <<EOF
+#!/bin/bash
+printf 'codex %s\n' "\$*" >> "$LOG_FILE"
+if [ "\${1:-}" = "mcp" ] && [ "\${2:-}" = "get" ] && [ "\${3:-}" = "atlassian" ]; then
+  exit 1
+fi
+exit 0
+EOF
+
+chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_HOME/.bun/bin/opencode-status-hud" "$FAKE_BIN/brew" "$FAKE_BIN/codex"
+
+mkdir -p "$FAKE_HOME/.codex"
+cat >"$FAKE_HOME/.codex/config.toml" <<'EOF'
+model = "gpt-5.5"
+mcp_oauth_credentials_store = "auto"
+mcp_oauth_credentials_store = "keyring"
+
+[mcp_servers.atlassian]
+url = "https://mcp.atlassian.com/v1/mcp/authv2"
+EOF
 
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/null
+PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/codex.sh" >/dev/null
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'go install golang.org/x/tools/gopls@latest' "$LOG_FILE"
@@ -970,6 +990,11 @@ grep -q 'bun install -g opencode-ai' "$LOG_FILE"
 grep -q 'bun install -g opencode-status-hud' "$LOG_FILE"
 grep -q 'bunx oh-my-openagent install --no-tui --claude=no --openai=yes --gemini=no --copilot=no' "$LOG_FILE"
 grep -q 'opencode-status-hud install' "$LOG_FILE"
+grep -q 'npm install -g @openai/codex' "$LOG_FILE"
+grep -q 'npx --yes lazycodex-ai install --no-tui --codex-autonomous' "$LOG_FILE"
+grep -q 'codex mcp add atlassian --url https://mcp.atlassian.com/v1/mcp/authv2' "$LOG_FILE"
+[ "$(grep -c '^mcp_oauth_credentials_store = ' "$FAKE_HOME/.codex/config.toml")" -eq 1 ]
+grep -q '^mcp_oauth_credentials_store = "file"$' "$FAKE_HOME/.codex/config.toml"
 
 BOOTSTRAP_HOME="$TMP_DIR/bootstrap-home"
 BOOTSTRAP_BIN="$TMP_DIR/bootstrap-bin"
