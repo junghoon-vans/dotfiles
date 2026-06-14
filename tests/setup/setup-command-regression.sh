@@ -822,8 +822,12 @@ cat >"$DOCTOR_BIN/uname" <<'EOF'
 #!/bin/bash
 printf 'Darwin\n'
 EOF
-chmod +x "$DOCTOR_BIN/git" "$DOCTOR_BIN/bash" "$DOCTOR_BIN/uname"
-DOCTOR_OUTPUT="$(HOME="$DOCTOR_HOME" PATH="$DOCTOR_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/doctor.sh")"
+cat >"$DOCTOR_BIN/dirname" <<'EOF'
+#!/bin/bash
+exec /usr/bin/dirname "$@"
+EOF
+chmod +x "$DOCTOR_BIN/git" "$DOCTOR_BIN/bash" "$DOCTOR_BIN/uname" "$DOCTOR_BIN/dirname"
+DOCTOR_OUTPUT="$(HOME="$DOCTOR_HOME" PATH="$DOCTOR_BIN" /bin/bash "$REPO_ROOT/setup/doctor.sh")"
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'brew missing — run ./setup.sh bootstrap before brew-managed setup'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'mise missing — run ./setup.sh brew-packages before runtime setup'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'cmake missing; run ./setup.sh brew-packages'
