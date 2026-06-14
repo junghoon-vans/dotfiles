@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+trap 'printf "setup-command-regression failed at line %s: %s\n" "$LINENO" "$BASH_COMMAND" >&2' ERR
+
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SETUP_SH="$REPO_ROOT/setup.sh"
 TMP_DIR="$(mktemp -d)"
