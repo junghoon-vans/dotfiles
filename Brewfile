@@ -48,6 +48,7 @@ brew "libpq"
 cask "cmux"            # Ghostty-based terminal for AI coding agents
 cask "orbstack"        # Fast Docker Desktop alternative
 cask "brave-browser"   # Privacy-focused browser
+cask "tailscale-app"   # Mesh VPN
 cask "jordanbaird-ice" # Menu bar management
 cask "hop"             # HWP document viewer/editor
 
