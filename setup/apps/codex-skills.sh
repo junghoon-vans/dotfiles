@@ -8,6 +8,8 @@ DEFAULT_CODEX_SKILLS=(
     "juliusbrussee/caveman@caveman"
     "dietrichgebert/ponytail@ponytail"
     "vercel-labs/skills@find-skills"
+    "vercel-labs/agent-skills@vercel-react-best-practices"
+    "jeffallan/claude-skills@golang-pro"
 )
 
 if ! command -v mise &> /dev/null; then

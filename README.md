@@ -50,9 +50,10 @@ Default commands run in filename order from `setup/commands/`:
 6. `apps` - install Oh My Zsh and Zed Gno extension support
 7. `opencode` - install OpenCode and bootstrap OpenAgent
 8. `codex` - install Codex CLI and bootstrap LazyCodex
-9. `codex-skills` - install default global Codex skills through `npx skills`
-10. `karabiner` - install Karabiner-Elements for key remapping
-11. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
+9. `codex-agents` - install default global Codex custom agents
+10. `codex-skills` - install default global Codex skills through `npx skills`
+11. `karabiner` - install Karabiner-Elements for key remapping
+12. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
 
 Utility commands are explicit only and are not part of full setup:
 
