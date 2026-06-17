@@ -2,7 +2,7 @@
 
 ## OpenCode / OpenAgent
 
-OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is applied to `~/.config/opencode/` by chezmoi. The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json` and is applied to `~/.codex/lsp-client.json`.
+OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is applied to `~/.config/opencode/` by chezmoi. The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json` and is applied to `~/.codex/lsp-client.json`. Global Codex custom agents are installed into `~/.codex/agents/` by `./setup.sh codex-agents`.
 
 - `opencode.json` tracks OpenCode plugins, MCP endpoints, and native LSP mappings.
 - `lsp-client.json` mirrors the OpenCode LSP mappings for OpenAgent/lsp-tools-mcp fallback use.
