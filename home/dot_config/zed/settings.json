@@ -93,6 +93,7 @@
   "on_last_window_closed": "quit_app",
   "when_closing_with_no_tabs": "keep_window_open",
   "agent": {
+    "sidebar_side": "right",
     "dock": "right",
     "default_model": {
       "provider": "copilot_chat",

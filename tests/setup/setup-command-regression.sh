@@ -114,6 +114,9 @@ if [ "\${1:-}" = "exec" ] && [ "\${2:-}" = "--" ]; then
         printf 'v24.0.0\n'
       fi
       ;;
+    npx)
+      exit 0
+      ;;
     pnpm)
       if [ "\${2:-}" = "--version" ]; then
         printf '10.0.0\n'
@@ -132,6 +135,7 @@ export PATH="$FAKE_BIN:$PATH"
 HELP_OUTPUT="$($SETUP_SH --help)"
 printf '%s' "$HELP_OUTPUT" | grep -q 'opencode'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install OpenCode, bootstrap oh-my-openagent, and configure status HUD'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install default global Codex skills through npx skills'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Run selected blockchain tooling commands'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Remove managed dotfile backup files created before chezmoi apply'
@@ -367,6 +371,31 @@ printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  solana[[:space:]]\+Install 
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  sui[[:space:]]\+Install Sui CLI, Move analyzer, and local validator wrapper through suiup'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  typescript[[:space:]]\+Install TypeScript'
 printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  python[[:space:]]\+Install Python via mise'
+
+CODEX_SKILLS_OUTPUT="$($SETUP_SH --dry-run codex-skills)"
+printf '%s' "$CODEX_SKILLS_OUTPUT" | grep -q '^  codex-skills[[:space:]]\+Install default global Codex skills through npx skills'
+
+CODEX_SKILLS_HOME="$TMP_DIR/codex-skills-home"
+CODEX_SKILLS_BIN="$TMP_DIR/codex-skills-bin"
+CODEX_SKILLS_LOG="$TMP_DIR/codex-skills.log"
+mkdir -p "$CODEX_SKILLS_HOME" "$CODEX_SKILLS_BIN"
+cat >"$CODEX_SKILLS_BIN/mise" <<'EOF'
+#!/bin/bash
+printf 'mise %s\n' "$*" >> "$CODEX_SKILLS_LOG"
+if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
+  shift 2
+  printf '%s\n' "$*" >> "$CODEX_SKILLS_LOG"
+  if [ "${1:-}" = "node" ] && [ "${2:-}" = "--version" ]; then
+    printf 'v24.0.0\n'
+    exit 0
+  fi
+fi
+exit 0
+EOF
+chmod +x "$CODEX_SKILLS_BIN/mise"
+env HOME="$CODEX_SKILLS_HOME" PATH="$CODEX_SKILLS_BIN:/usr/bin:/bin" CODEX_SKILLS_LOG="$CODEX_SKILLS_LOG" bash "$REPO_ROOT/setup/apps/codex-skills.sh" >/dev/null
+grep -q 'npx --yes skills add juliusbrussee/caveman --skill caveman --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
+grep -q 'npx --yes skills add dietrichgebert/ponytail --skill ponytail --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
 
 LANGUAGE_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip gno go gno)"
 printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q 'Skipping command: gno'
@@ -883,7 +912,7 @@ printf '%s' "$APPS_SETUP_OUTPUT" | grep -q 'Activate Gno support in Zed'
 
 grep -q 'go env -w GOBIN=' "$LOG_FILE"
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
-grep -q 'go install golang.org/x/tools/gopls@latest' "$LOG_FILE"
+grep -q 'go install golang.org/x/tools/gopls@v0.21.1' "$LOG_FILE"
 grep -q 'go install mvdan.cc/gofumpt@latest' "$LOG_FILE"
 test ! -e "$FAKE_HOME/.local/bin/gopls"
 test ! -e "$FAKE_HOME/.local/bin/golangci-lint"
@@ -988,7 +1017,7 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/nu
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/codex.sh" >/dev/null
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
-grep -q 'go install golang.org/x/tools/gopls@latest' "$LOG_FILE"
+grep -q 'go install golang.org/x/tools/gopls@v0.21.1' "$LOG_FILE"
 grep -q "git -C $FAKE_HOME/gno pull --ff-only --autostash" "$LOG_FILE"
 grep -q 'make install' "$LOG_FILE"
 grep -q 'bun install -g typescript' "$LOG_FILE"
@@ -1226,6 +1255,11 @@ grep -q 'https://release.anza.xyz/stable/install' "$REPO_ROOT/setup/blockchain/s
 grep -q 'https://github.com/solana-foundation/anchor avm --force' "$REPO_ROOT/setup/blockchain/solana.sh"
 grep -q 'brew "cmake"' "$REPO_ROOT/Brewfile"
 grep -q 'brew "pkgconf"' "$REPO_ROOT/Brewfile"
+grep -q 'cask "tailscale-app"' "$REPO_ROOT/Brewfile"
+if grep -q 'brew "tailscale"' "$REPO_ROOT/Brewfile"; then
+    printf 'Tailscale should use the desktop app cask instead of the headless formula\n' >&2
+    exit 1
+fi
 if grep -q 'brew "sui"' "$REPO_ROOT/Brewfile"; then
     printf 'Sui should be installed through suiup, not Homebrew sui\n' >&2
     exit 1
@@ -1246,6 +1280,7 @@ grep -q 'cmake pkg-config' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise runtime config found' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise global runtime config found' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise activate zsh' "$REPO_ROOT/home/dot_zshrc"
+grep -q '\[ -z "${MISE_SHELL:-}" \]' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'Global defaults are tracked in ~/.config/mise/config.toml' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'unset NVM_DIR SDKMAN_DIR BUN_INSTALL GOROOT' "$REPO_ROOT/home/dot_zshrc"
 cmp -s "$REPO_ROOT/mise.toml" "$REPO_ROOT/home/dot_config/mise/config.toml"

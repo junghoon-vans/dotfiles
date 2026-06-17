@@ -18,6 +18,19 @@ Then edit `~/.gitconfig.override`:
     email = your.email@example.com
 ```
 
+## Git Ignore Overrides
+
+Keep project-specific, client-specific, or sensitive ignore patterns out of the tracked `~/.gitignore_global`.
+
+Git supports one effective `core.excludesfile`, so use the local gitconfig override to point Git at a private ignore file:
+
+```bash
+cp ~/.gitignore_global ~/.gitignore_global.local
+git config --file ~/.gitconfig.override core.excludesfile ~/.gitignore_global.local
+```
+
+Then add private ignore patterns only to `~/.gitignore_global.local`.
+
 ## Shell Overrides
 
 Create `~/.zshrc.local` for work proxies, machine-specific paths, or private environment variables:

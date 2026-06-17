@@ -49,8 +49,10 @@ Default commands run in filename order from `setup/commands/`:
 5. `links` - apply chezmoi-managed dotfiles and `.config/*`
 6. `apps` - install Oh My Zsh and Zed Gno extension support
 7. `opencode` - install OpenCode and bootstrap OpenAgent
-8. `karabiner` - install Karabiner-Elements for key remapping
-9. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
+8. `codex` - install Codex CLI and bootstrap LazyCodex
+9. `codex-skills` - install default global Codex skills through `npx skills`
+10. `karabiner` - install Karabiner-Elements for key remapping
+11. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
 
 Utility commands are explicit only and are not part of full setup:
 
@@ -77,6 +79,7 @@ Utility commands are explicit only and are not part of full setup:
 ./setup.sh solana
 ./setup.sh sui
 ./setup.sh languages blockchain opencode
+./setup.sh codex-skills
 ./setup.sh links apps
 ./setup.sh check
 ./setup.sh doctor

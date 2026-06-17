@@ -154,7 +154,7 @@ path=(${path:#$HOME/.bun/bin})
 path=(${path:#$HOME/.cargo/bin})
 path=(${path:#$HOME/go/bin})
 unset NVM_DIR SDKMAN_DIR BUN_INSTALL GOROOT
-if command -v mise &>/dev/null; then
+if command -v mise &>/dev/null && [ -z "${MISE_SHELL:-}" ]; then
   eval "$(mise activate zsh)"
   unset GOROOT
 fi

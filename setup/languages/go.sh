@@ -21,10 +21,12 @@ print_success "Go runtime installed via mise"
 configure_mise_go_bin
 print_success "Go install target set to $HOME/.local/bin"
 
-print_info "Installing golang.org/x/tools/gopls@latest..."
+GOPLS_VERSION="v0.21.1"
+
+print_info "Installing golang.org/x/tools/gopls@$GOPLS_VERSION..."
 (
     cd "$DOTFILES_DIR" || exit
-    mise exec -- go install golang.org/x/tools/gopls@latest
+    mise exec -- go install "golang.org/x/tools/gopls@$GOPLS_VERSION"
 )
 print_success "gopls installed"
 

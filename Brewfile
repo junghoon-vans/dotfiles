@@ -42,13 +42,13 @@ brew "terraform"
 brew "grpcurl"         # gRPC command-line tool
 brew "protobuf"        # Protocol Buffers compiler/runtime
 brew "mysql-client"
-brew "libpq"
+brew "libpq", link: true
 
 # GUI Apps
 cask "cmux"            # Ghostty-based terminal for AI coding agents
 cask "orbstack"        # Fast Docker Desktop alternative
 cask "brave-browser"   # Privacy-focused browser
-cask "tailscale-app"   # Mesh VPN
+cask "tailscale-app"   # Mesh VPN desktop app
 cask "jordanbaird-ice" # Menu bar management
 cask "hop"             # HWP document viewer/editor
 
