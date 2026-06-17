@@ -7,6 +7,7 @@ print_step "Setting up Codex skills..."
 DEFAULT_CODEX_SKILLS=(
     "juliusbrussee/caveman@caveman"
     "dietrichgebert/ponytail@ponytail"
+    "vercel-labs/skills@find-skills"
 )
 
 if ! command -v mise &> /dev/null; then
