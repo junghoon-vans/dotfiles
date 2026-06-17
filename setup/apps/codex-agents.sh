@@ -22,6 +22,7 @@ DEFAULT_CODEX_AGENTS=(
     "spring-boot-engineer|categories/02-language-specialists/spring-boot-engineer.toml"
     "sql-pro|categories/02-language-specialists/sql-pro.toml"
     "postgres-pro|categories/05-data-ai/postgres-pro.toml"
+    "database-optimizer|categories/05-data-ai/database-optimizer.toml"
     "kubernetes-specialist|categories/03-infrastructure/kubernetes-specialist.toml"
     "terraform-engineer|categories/03-infrastructure/terraform-engineer.toml"
     "deployment-engineer|categories/03-infrastructure/deployment-engineer.toml"

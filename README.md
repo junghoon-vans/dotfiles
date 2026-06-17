@@ -80,6 +80,7 @@ Utility commands are explicit only and are not part of full setup:
 ./setup.sh solana
 ./setup.sh sui
 ./setup.sh languages blockchain opencode
+./setup.sh codex-agents
 ./setup.sh codex-skills
 ./setup.sh links apps
 ./setup.sh check

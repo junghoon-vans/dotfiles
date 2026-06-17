@@ -13,6 +13,18 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 - Optional `OPENCODE_STATUS_HUD_*` display overrides are local runtime preferences and should stay out of tracked config unless they become part of the shared baseline.
 - OpenAgent uses Playwright MCP for browser automation. Brave is Brewfile-managed and selected through `PLAYWRIGHT_MCP_EXECUTABLE_PATH` in `.zshrc` when installed.
 
+## Codex Agents and Skills
+
+`./setup.sh codex-agents` installs generic global custom agents from `VoltAgent/awesome-codex-subagents`. Keep private project workflow rules in repo-local `.agents/skills` or `AGENTS.md`, not in global agent files.
+
+- Core workflow: `codebase-orchestrator`, `git-workflow-manager`, `documentation-engineer`.
+- Review and QA: `code-reviewer`, `debugger`, `test-automator`, `security-auditor`.
+- App development: `frontend-developer`, `golang-pro`, `typescript-pro`, `react-specialist`, `spring-boot-engineer`.
+- Data and infrastructure: `sql-pro`, `postgres-pro`, `database-optimizer`, `kubernetes-specialist`, `terraform-engineer`, `deployment-engineer`.
+- Domain tooling: `blockchain-developer`, `mcp-developer`.
+
+`./setup.sh codex-skills` installs global Codex skills through `npx skills`. The default set is `caveman`, `ponytail`, `find-skills`, `vercel-react-best-practices`, and `golang-pro`.
+
 ## Language and Harness Coverage
 
 `mise.toml` records the repository runtime versions for languages that mise can manage, and `home/dot_config/mise/config.toml` mirrors those versions for the global `~/.config/mise/config.toml` baseline. `./setup.sh brew-packages` installs Homebrew-managed `mise`; setup language and blockchain commands sync the global mise config, run `mise install <tool>` for required runtimes, and then install runtime-adjacent tools, language servers, and chain-specific CLIs with those runtimes.
