@@ -8,7 +8,7 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 - `lsp-client.json` mirrors the OpenCode LSP mappings for OpenAgent/lsp-tools-mcp fallback use.
 - `oh-my-openagent.json` tracks model routing, fallbacks, skills, and notification preferences.
 - `tui.json` tracks terminal UI preferences.
-- MCP endpoints include GitHub, Atlassian, and Context7. API keys and OAuth host files are not tracked.
+- MCP endpoints include GitHub, Atlassian, Firecrawl, and Context7. API keys and OAuth host files are not tracked.
 - The `opencode` setup command installs `opencode-status-hud`; its installer-managed local shim lives at `~/.config/opencode/plugins/opencode-status-hud.js` and is not tracked by chezmoi.
 - Optional `OPENCODE_STATUS_HUD_*` display overrides are local runtime preferences and should stay out of tracked config unless they become part of the shared baseline.
 - OpenAgent uses Playwright MCP for browser automation. Brave is Brewfile-managed and selected through `PLAYWRIGHT_MCP_EXECUTABLE_PATH` in `.zshrc` when installed.

@@ -993,8 +993,12 @@ EOF
 cat >"$FAKE_BIN/codex" <<EOF
 #!/bin/bash
 printf 'codex %s\n' "\$*" >> "$LOG_FILE"
-if [ "\${1:-}" = "mcp" ] && [ "\${2:-}" = "get" ] && [ "\${3:-}" = "atlassian" ]; then
-  exit 1
+if [ "\${1:-}" = "mcp" ] && [ "\${2:-}" = "get" ]; then
+  case "\${3:-}" in
+    atlassian|firecrawl)
+      exit 1
+      ;;
+  esac
 fi
 exit 0
 EOF
@@ -1029,6 +1033,7 @@ grep -q 'opencode-status-hud install' "$LOG_FILE"
 grep -q 'npm install -g @openai/codex' "$LOG_FILE"
 grep -q 'npx --yes lazycodex-ai install --no-tui --codex-autonomous' "$LOG_FILE"
 grep -q 'codex mcp add atlassian --url https://mcp.atlassian.com/v1/mcp/authv2' "$LOG_FILE"
+grep -q 'codex mcp add firecrawl -- /bin/zsh -lc source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp' "$LOG_FILE"
 [ "$(grep -c '^mcp_oauth_credentials_store = ' "$FAKE_HOME/.codex/config.toml")" -eq 1 ]
 grep -q '^mcp_oauth_credentials_store = "file"$' "$FAKE_HOME/.codex/config.toml"
 

@@ -41,6 +41,29 @@ ensure_codex_mcp_oauth_credentials_store() {
     chmod 600 "$config_file"
 }
 
+ensure_atlassian_mcp() {
+    print_info "Ensuring Atlassian MCP is configured..."
+    if codex mcp get atlassian >/dev/null 2>&1; then
+        print_success "Atlassian MCP already configured"
+    else
+        codex mcp add atlassian --url https://mcp.atlassian.com/v1/mcp/authv2
+        print_success "Atlassian MCP configured"
+    fi
+}
+
+ensure_firecrawl_mcp() {
+    local launch_script='source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp'
+
+    print_info "Ensuring Firecrawl MCP is configured..."
+    if codex mcp get firecrawl >/dev/null 2>&1; then
+        print_success "Firecrawl MCP already configured"
+    else
+        codex mcp add firecrawl -- /bin/zsh -lc "$launch_script"
+        print_success "Firecrawl MCP configured"
+        print_info "Set FIRECRAWL_API_KEY in ~/.zshrc.local before using Firecrawl MCP."
+    fi
+}
+
 if ! command -v mise &> /dev/null; then
     print_error "mise is required for Codex setup. Run ./setup.sh brew-packages first."
     exit 1
@@ -63,10 +86,5 @@ print_info "Configuring Codex MCP OAuth credential storage..."
 ensure_codex_mcp_oauth_credentials_store
 print_success "Codex MCP OAuth credentials configured for file storage"
 
-print_info "Ensuring Atlassian MCP is configured..."
-if codex mcp get atlassian >/dev/null 2>&1; then
-    print_success "Atlassian MCP already configured"
-else
-    codex mcp add atlassian --url https://mcp.atlassian.com/v1/mcp/authv2
-    print_success "Atlassian MCP configured"
-fi
+ensure_atlassian_mcp
+ensure_firecrawl_mcp

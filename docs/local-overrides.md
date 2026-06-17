@@ -41,6 +41,12 @@ export SOME_WORK_VAR=value
 
 `.zshrc` sources this file automatically when it exists.
 
+`./setup.sh codex` also configures Firecrawl MCP to source `~/.zshrc.local` before launching, so keep the API key there instead of tracked Codex config:
+
+```bash
+export FIRECRAWL_API_KEY=your-api-key
+```
+
 `./setup.sh bootstrap` preserves existing `~/.zprofile` content and maintains only the marked `dotfiles runtime environment` block used for login-shell Homebrew and mise activation.
 
 ## Secrets and OAuth Files
