@@ -5,7 +5,6 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 print_step "Setting up Codex skills..."
 
 DEFAULT_CODEX_SKILLS=(
-    "juliusbrussee/caveman@caveman"
     "dietrichgebert/ponytail@ponytail"
     "vercel-labs/skills@find-skills"
     "vercel-labs/agent-skills@vercel-react-best-practices"

@@ -394,9 +394,10 @@ exit 0
 EOF
 chmod +x "$CODEX_SKILLS_BIN/mise"
 env HOME="$CODEX_SKILLS_HOME" PATH="$CODEX_SKILLS_BIN:/usr/bin:/bin" CODEX_SKILLS_LOG="$CODEX_SKILLS_LOG" bash "$REPO_ROOT/setup/apps/codex-skills.sh" >/dev/null
-grep -q 'npx --yes skills add juliusbrussee/caveman --skill caveman --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
 grep -q 'npx --yes skills add dietrichgebert/ponytail --skill ponytail --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
 grep -q 'npx --yes skills add vercel-labs/skills --skill find-skills --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
+grep -q 'npx --yes skills add vercel-labs/agent-skills --skill vercel-react-best-practices --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
+grep -q 'npx --yes skills add jeffallan/claude-skills --skill golang-pro --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
 
 LANGUAGE_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip gno go gno)"
 printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q 'Skipping command: gno'
