@@ -136,6 +136,8 @@ temp/
 # OMC runtime state
 **/.omc/
 **/.omo/
+.codegraph/
+**/.codegraph/
 
 # Playwright MCP runtime state
 .playwright-mcp/
