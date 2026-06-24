@@ -30,7 +30,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
 | `opencode` | Installs OpenCode, bootstraps oh-my-openagent, and configures the status HUD. |
-| `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, configures file-backed MCP OAuth storage, and ensures Atlassian and Firecrawl MCP servers are registered. |
+| `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs pinned gnomcp, registers the `gnomcp@gnoverse` Codex plugin, configures file-backed MCP OAuth storage, and ensures gnomcp, Atlassian, and Firecrawl MCP servers are registered. |
 | `codex-agents` | Installs selected global Codex custom agents into `~/.codex/agents/`. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
 | `macos-shortcuts` | Installs five neutral macOS Quick Action shortcut slots backed by local ignored scripts. |

@@ -50,7 +50,7 @@ Default commands run in filename order from `setup/commands/`:
 5. `links` - apply chezmoi-managed dotfiles and `.config/*`
 6. `apps` - install Oh My Zsh and Zed Gno extension support
 7. `opencode` - install OpenCode and bootstrap OpenAgent
-8. `codex` - install Codex CLI and bootstrap LazyCodex
+8. `codex` - install Codex CLI, bootstrap LazyCodex, and register Codex MCP servers including gnomcp
 9. `codex-agents` - install default global Codex custom agents
 10. `codex-skills` - install default global Codex skills through `npx skills`
 11. `karabiner` - install Karabiner-Elements for key remapping

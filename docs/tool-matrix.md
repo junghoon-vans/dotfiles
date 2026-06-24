@@ -23,6 +23,8 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 - Data and infrastructure: `sql-pro`, `postgres-pro`, `database-optimizer`, `kubernetes-specialist`, `terraform-engineer`, `deployment-engineer`.
 - Domain tooling: `blockchain-developer`, `mcp-developer`.
 
+`./setup.sh codex` installs pinned `gnomcp` into `~/.local/bin`, registers the `gnomcp@gnoverse` Codex plugin, and registers the `gnomcp` MCP server so Gno chain tools and bundled Gno audit/build/debug skills are available after restarting Codex.
+
 `./setup.sh codex-skills` installs global Codex skills through `npx skills`. The default set is `ponytail`, `find-skills`, `vercel-react-best-practices`, and `golang-pro`.
 
 ## Language and Harness Coverage

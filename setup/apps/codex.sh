@@ -4,6 +4,13 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 print_step "Setting up Codex CLI and LazyCodex..."
 
+GNOMCP_VERSION="${GNOMCP_VERSION:-v0.7.0}"
+GNOMCP_REPO="gnoverse/gno-mcp"
+GNOMCP_BINARY="$HOME/.local/bin/gnomcp"
+GNOMCP_PLUGIN_VERSION="${GNOMCP_VERSION#v}"
+GNOMCP_MARKETPLACE_ROOT="$HOME/.codex/plugins/cache/gnoverse"
+GNOMCP_REPO_DIR="$GNOMCP_MARKETPLACE_ROOT/gno-mcp/$GNOMCP_PLUGIN_VERSION"
+
 ensure_codex_mcp_oauth_credentials_store() {
     local config_dir="$HOME/.codex"
     local config_file="$config_dir/config.toml"
@@ -39,6 +46,125 @@ ensure_codex_mcp_oauth_credentials_store() {
     fi
 
     chmod 600 "$config_file"
+}
+
+gnomcp_release_asset() {
+    case "$(uname -s) $(uname -m)" in
+    "Darwin arm64") printf '%s\n' "gno-mcp_darwin_arm64.tar.gz" ;;
+    "Darwin x86_64") printf '%s\n' "gno-mcp_darwin_amd64.tar.gz" ;;
+    "Linux arm64" | "Linux aarch64") printf '%s\n' "gno-mcp_linux_arm64.tar.gz" ;;
+    "Linux x86_64") printf '%s\n' "gno-mcp_linux_amd64.tar.gz" ;;
+    *)
+        print_error "Unsupported platform for gnomcp release asset: $(uname -s) $(uname -m)"
+        exit 1
+        ;;
+    esac
+}
+
+sha256_file() {
+    local file="$1"
+
+    if command -v sha256sum >/dev/null 2>&1; then
+        sha256sum "$file" | awk '{print $1}'
+    elif command -v shasum >/dev/null 2>&1; then
+        shasum -a 256 "$file" | awk '{print $1}'
+    else
+        print_error "sha256sum or shasum is required to verify gnomcp downloads"
+        exit 1
+    fi
+}
+
+install_gnomcp_binary() {
+    local asset=""
+    local base_url=""
+    local tmp_dir=""
+    local archive=""
+    local checksums=""
+    local expected=""
+    local actual=""
+
+    if [ -x "$GNOMCP_BINARY" ] && [ "$("$GNOMCP_BINARY" version 2>/dev/null || true)" = "$GNOMCP_PLUGIN_VERSION" ]; then
+        print_success "gnomcp $GNOMCP_PLUGIN_VERSION already installed at $GNOMCP_BINARY"
+        return
+    fi
+
+    asset="$(gnomcp_release_asset)"
+    base_url="https://github.com/$GNOMCP_REPO/releases/download/$GNOMCP_VERSION"
+    tmp_dir="$(mktemp -d "${TMPDIR:-/tmp}/gnomcp.XXXXXX")"
+    archive="$tmp_dir/$asset"
+    checksums="$tmp_dir/checksums.txt"
+
+    print_info "Installing gnomcp $GNOMCP_VERSION..."
+    curl --proto '=https' --tlsv1.2 -fsSL "$base_url/$asset" -o "$archive"
+    curl --proto '=https' --tlsv1.2 -fsSL "$base_url/checksums.txt" -o "$checksums"
+
+    expected="$(awk -v asset="$asset" '$2 == asset { print $1 }' "$checksums")"
+    if [ -z "$expected" ]; then
+        print_error "No checksum found for $asset"
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
+
+    actual="$(sha256_file "$archive")"
+    if [ "$actual" != "$expected" ]; then
+        print_error "gnomcp checksum mismatch for $asset"
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
+
+    tar -xzf "$archive" -C "$tmp_dir" gnomcp
+    mkdir -p "$(dirname "$GNOMCP_BINARY")"
+    install -m 0755 "$tmp_dir/gnomcp" "$GNOMCP_BINARY"
+    rm -rf "$tmp_dir"
+
+    print_success "gnomcp installed at $GNOMCP_BINARY"
+}
+
+ensure_gnomcp_codex_plugin() {
+    local marketplace_file="$GNOMCP_MARKETPLACE_ROOT/.agents/plugins/marketplace.json"
+
+    print_info "Ensuring gnomcp Codex plugin marketplace..."
+    mkdir -p "$(dirname "$marketplace_file")" "$GNOMCP_MARKETPLACE_ROOT/gno-mcp"
+
+    if [ -d "$GNOMCP_REPO_DIR/.git" ]; then
+        git -C "$GNOMCP_REPO_DIR" fetch --tags --prune origin
+        git -C "$GNOMCP_REPO_DIR" checkout --force "$GNOMCP_VERSION"
+    elif [ -e "$GNOMCP_REPO_DIR" ]; then
+        print_error "$GNOMCP_REPO_DIR exists but is not a git checkout"
+        exit 1
+    else
+        git clone --depth 1 --branch "$GNOMCP_VERSION" "https://github.com/$GNOMCP_REPO.git" "$GNOMCP_REPO_DIR"
+    fi
+
+    cat > "$marketplace_file" <<EOF
+{
+  "name": "gnoverse",
+  "plugins": [
+    {
+      "name": "gnomcp",
+      "source": {
+        "source": "local",
+        "path": "./gno-mcp/$GNOMCP_PLUGIN_VERSION"
+      }
+    }
+  ]
+}
+EOF
+
+    codex plugin marketplace add "$GNOMCP_MARKETPLACE_ROOT" >/dev/null
+    codex plugin add gnomcp@gnoverse >/dev/null
+    print_success "gnomcp Codex plugin installed"
+}
+
+ensure_gnomcp_mcp() {
+    print_info "Ensuring gnomcp MCP is configured..."
+    if codex mcp get gnomcp 2>/dev/null | grep -Fq "command: $GNOMCP_BINARY"; then
+        print_success "gnomcp MCP already configured"
+    else
+        codex mcp remove gnomcp >/dev/null 2>&1 || true
+        codex mcp add gnomcp -- "$GNOMCP_BINARY"
+        print_success "gnomcp MCP configured"
+    fi
 }
 
 ensure_atlassian_mcp() {
@@ -86,5 +212,8 @@ print_info "Configuring Codex MCP OAuth credential storage..."
 ensure_codex_mcp_oauth_credentials_store
 print_success "Codex MCP OAuth credentials configured for file storage"
 
+install_gnomcp_binary
+ensure_gnomcp_codex_plugin
+ensure_gnomcp_mcp
 ensure_atlassian_mcp
 ensure_firecrawl_mcp

@@ -104,5 +104,6 @@ brew bundle --file Brewfile        # Install Brewfile packages
 - Solana CLI and Anchor are not mise-managed: `./setup.sh solana` installs Rust with mise, then uses the Anza Agave installer and AVM, with shell integration through `$HOME/.local/bin` wrappers.
 - Sui CLI is not Homebrew-managed: `./setup.sh sui` installs Rust with mise, then uses the official `suiup` installer, with shell integration through `$HOME/.local/bin`.
 - **Codex CLI and LazyCodex**: `./setup.sh codex` installs `@openai/codex` globally via mise-managed npm, then runs `npx lazycodex-ai install --no-tui --codex-autonomous` to bootstrap LazyCodex (oh-my-openagent for Codex). Requires Node.js runtime.
+- **Gno MCP for Codex**: `./setup.sh codex` installs pinned `gnomcp` into `$HOME/.local/bin`, registers the `gnomcp@gnoverse` Codex plugin through a local marketplace wrapper, and registers the Codex `gnomcp` MCP server.
 - **Codex agents**: `./setup.sh codex-agents` installs selected generic global Codex custom agents from `VoltAgent/awesome-codex-subagents` into `~/.codex/agents`; keep private project rules in repo-local `.agents/skills` or `AGENTS.md`, not in global agent files.
 - **Codex skills**: `./setup.sh codex-skills` installs default global Codex skills through `npx skills`; the current default set is Ponytail, Find Skills, Vercel React Best Practices, and Golang Pro.

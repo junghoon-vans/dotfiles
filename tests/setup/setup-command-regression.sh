@@ -1015,6 +1015,15 @@ EOF
 chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_HOME/.bun/bin/opencode-status-hud" "$FAKE_BIN/brew" "$FAKE_BIN/codex"
 
 mkdir -p "$FAKE_HOME/.codex"
+mkdir -p "$FAKE_HOME/.local/bin"
+cat >"$FAKE_HOME/.local/bin/gnomcp" <<'EOF'
+#!/bin/bash
+if [ "${1:-}" = "version" ]; then
+  printf '0.7.0\n'
+fi
+EOF
+chmod +x "$FAKE_HOME/.local/bin/gnomcp"
+
 cat >"$FAKE_HOME/.codex/config.toml" <<'EOF'
 model = "gpt-5.5"
 mcp_oauth_credentials_store = "auto"
@@ -1041,6 +1050,9 @@ grep -q 'bunx oh-my-openagent install --no-tui --claude=no --openai=yes --gemini
 grep -q 'opencode-status-hud install' "$LOG_FILE"
 grep -q 'npm install -g @openai/codex' "$LOG_FILE"
 grep -q 'npx --yes lazycodex-ai install --no-tui --codex-autonomous' "$LOG_FILE"
+grep -q 'codex plugin marketplace add '"$FAKE_HOME"'/.codex/plugins/cache/gnoverse' "$LOG_FILE"
+grep -q 'codex plugin add gnomcp@gnoverse' "$LOG_FILE"
+grep -q 'codex mcp add gnomcp -- '"$FAKE_HOME"'/.local/bin/gnomcp' "$LOG_FILE"
 grep -q 'codex mcp add atlassian --url https://mcp.atlassian.com/v1/mcp/authv2' "$LOG_FILE"
 grep -q 'codex mcp add firecrawl -- /bin/zsh -lc source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp' "$LOG_FILE"
 [ "$(grep -c '^mcp_oauth_credentials_store = ' "$FAKE_HOME/.codex/config.toml")" -eq 1 ]

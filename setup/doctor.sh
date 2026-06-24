@@ -124,13 +124,14 @@ for command_name in ruff biome; do
 done
 
 print_info "Checking local language server artifacts..."
-for artifact_name in gopls gnopls; do
+for artifact_name in gopls gnopls gnomcp; do
     if [ -x "$HOME/.local/bin/$artifact_name" ]; then
         print_success "$artifact_name artifact found"
     else
         case "$artifact_name" in
         gopls) print_info "$artifact_name artifact missing; run ./setup.sh go" ;;
         gnopls) print_info "$artifact_name artifact missing; run ./setup.sh gno" ;;
+        gnomcp) print_info "$artifact_name artifact missing; run ./setup.sh codex" ;;
         esac
     fi
 done
