@@ -9,7 +9,7 @@ This repository manages:
 - Chezmoi-managed dotfiles for Zsh, Git, Delta, global ignore configuration, and `.config` app settings under `home/`
 - Homebrew packages through `Brewfile`
 - Language runtime provisioning through Homebrew-managed `mise`, repo `mise.toml`, and global `~/.config/mise/config.toml`
-- macOS defaults and app-specific bootstrap scripts under `setup/`
+- macOS defaults, shortcut slots, and app-specific bootstrap scripts under `setup/`
 - A command-based setup harness under `setup/`
 
 The repository is intentionally broader than a dotfiles store: it is the source of truth for recreating a personal macOS workstation. Dotfiles are managed through chezmoi source state in `home/`, while Homebrew, mise, and setup scripts cover packages, runtimes, app setup, and host verification.
@@ -27,6 +27,7 @@ For non-interactive setup:
 ```bash
 ./setup.sh --yes
 ./setup.sh --skip karabiner --yes
+./setup.sh --skip macos-shortcuts --yes
 ./setup.sh --skip macos --yes
 ```
 
@@ -53,7 +54,8 @@ Default commands run in filename order from `setup/commands/`:
 9. `codex-agents` - install default global Codex custom agents
 10. `codex-skills` - install default global Codex skills through `npx skills`
 11. `karabiner` - install Karabiner-Elements for key remapping
-12. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
+12. `macos-shortcuts` - install five generic macOS Quick Action shortcut slots
+13. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
 
 Utility commands are explicit only and are not part of full setup:
 
@@ -82,6 +84,7 @@ Utility commands are explicit only and are not part of full setup:
 ./setup.sh languages blockchain opencode
 ./setup.sh codex-agents
 ./setup.sh codex-skills
+./setup.sh macos-shortcuts
 ./setup.sh links apps
 ./setup.sh check
 ./setup.sh doctor

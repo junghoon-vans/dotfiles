@@ -13,6 +13,7 @@ This repository intentionally combines dotfiles, Homebrew package state, runtime
 ./setup.sh --no-input      # Non-interactive; use prompt defaults
 ./setup.sh --dry-run       # Print selected commands only
 ./setup.sh --skip karabiner # Exclude one command from a full setup
+./setup.sh --skip macos-shortcuts # Exclude macOS shortcut slot installation
 ```
 
 `--skip` accepts default commands, utility commands, language commands, and blockchain commands, but utility commands are never selected unless passed explicitly.
@@ -32,6 +33,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, configures file-backed MCP OAuth storage, and ensures Atlassian and Firecrawl MCP servers are registered. |
 | `codex-agents` | Installs selected global Codex custom agents into `~/.codex/agents/`. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
+| `macos-shortcuts` | Installs five neutral macOS Quick Action shortcut slots backed by local ignored scripts. |
 | `macos` | Applies keyboard, Finder, Dock, screenshot, appearance, and related defaults. |
 
 ## Utility Commands
@@ -90,3 +92,26 @@ Examples:
 Use `./setup.sh clean-backups` to remove old managed backup files after confirming the applied dotfiles are working. The cleanup only removes backups for targets that still match the tracked chezmoi source.
 
 The repository root does not need a `.config/` tree. Chezmoi-applied app config source lives under `home/dot_config/`, and repo-local app config notes live in `AGENTS.md` or `docs/`.
+
+## macOS Shortcut Slots
+
+`./setup.sh macos-shortcuts` installs five neutral macOS Quick Actions named by key slot:
+
+| Local script | Shortcut |
+| --- | --- |
+| `local/macos-shortcuts/1.sh` | `Ctrl+Cmd+Shift+1` |
+| `local/macos-shortcuts/2.sh` | `Ctrl+Cmd+Shift+2` |
+| `local/macos-shortcuts/5.sh` | `Ctrl+Cmd+Shift+5` |
+| `local/macos-shortcuts/6.sh` | `Ctrl+Cmd+Shift+6` |
+| `local/macos-shortcuts/7.sh` | `Ctrl+Cmd+Shift+7` |
+
+Those `*.sh` files are ignored by Git. Setup symlinks each one into
+`~/.local/share/dotfiles/macos-shortcuts/`, and the Automator workflows run the
+symlink path. Editing an ignored local script changes the next shortcut run
+without reinstalling the workflows.
+
+To verify the installed workflows on macOS:
+
+```bash
+setup/apps/macos-shortcuts.sh check
+```

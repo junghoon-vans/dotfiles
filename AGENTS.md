@@ -37,6 +37,7 @@ dotfiles/
 | Tooling docs | `docs/tool-matrix.md` | LSP, formatter, linter, harness coverage |
 | Apply dotfiles | `setup/link.sh` | Backs up differing targets, then applies chezmoi source state into `$HOME` |
 | Karabiner setup | `setup/commands/55-karabiner` | Karabiner-Elements install and key remapping config |
+| macOS shortcut slots | `setup/commands/56-macos-shortcuts` | Five neutral Quick Action hotkey slots backed by ignored local scripts |
 | macOS settings | `setup/commands/60-macos` | Finder, Dock, screenshot, and appearance defaults |
 | CI | `.github/workflows/ci.yml` | Mirrors repository validation checks |
 
@@ -63,7 +64,7 @@ dotfiles/
 
 - All paths use `$HOME` instead of specific usernames.
 - `home/dot_config/` mirrors `~/.config/`; keep app config documentation in this root `AGENTS.md` or `docs/`, not in a root `.config/` tree.
-- `setup.sh` flow is `bootstrap → brew-packages → languages → blockchain → links → apps → opencode → codex → codex-agents → codex-skills → karabiner → macos`.
+- `setup.sh` flow is `bootstrap → brew-packages → languages → blockchain → links → apps → opencode → codex → codex-agents → codex-skills → karabiner → macos-shortcuts → macos`.
 - Global Codex custom agents are installed by `setup/apps/codex-agents.sh` into `~/.codex/agents/`.
 - Language commands (`go`, `node`, `bun`, `java`, `kotlin`, `xml`, `rust`, `python`, `typescript`) are explicit options; `languages` is the default language umbrella command.
 - Blockchain commands (`solana`, `gno`, `sui`) are explicit options; `blockchain` is the default blockchain umbrella command.

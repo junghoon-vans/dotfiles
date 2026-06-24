@@ -136,6 +136,7 @@ HELP_OUTPUT="$($SETUP_SH --help)"
 printf '%s' "$HELP_OUTPUT" | grep -q 'opencode'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install OpenCode, bootstrap oh-my-openagent, and configure status HUD'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install default global Codex skills through npx skills'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Install macOS Quick Action shortcut slots'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Run selected blockchain tooling commands'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Remove managed dotfile backup files created before chezmoi apply'
@@ -356,6 +357,13 @@ KARABINER_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip karabiner)"
 printf '%s' "$KARABINER_SKIP_OUTPUT" | grep -q 'Skipping command: karabiner'
 if printf '%s' "$KARABINER_SKIP_OUTPUT" | grep -q '^  karabiner[[:space:]]'; then
     printf 'dry-run selected commands should not include skipped karabiner command\n' >&2
+    exit 1
+fi
+
+MACOS_SHORTCUTS_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip macos-shortcuts)"
+printf '%s' "$MACOS_SHORTCUTS_SKIP_OUTPUT" | grep -q 'Skipping command: macos-shortcuts'
+if printf '%s' "$MACOS_SHORTCUTS_SKIP_OUTPUT" | grep -q '^  macos-shortcuts[[:space:]]'; then
+    printf 'dry-run selected commands should not include skipped macos-shortcuts command\n' >&2
     exit 1
 fi
 
@@ -1197,6 +1205,13 @@ grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/35-blockchain"
 [ ! -e "$REPO_ROOT/.config/zed/settings.json" ]
 [ -e "$REPO_ROOT/docs/gitconfig.override.example" ]
 grep -q 'karabiner-elements' "$REPO_ROOT/setup/commands/55-karabiner"
+grep -q 'macos-shortcuts.sh' "$REPO_ROOT/setup/commands/56-macos-shortcuts"
+grep -q 'Ctrl+Cmd+Shift+7' "$REPO_ROOT/local/macos-shortcuts/README.md"
+grep -Fq 'local/macos-shortcuts/*.sh' "$REPO_ROOT/.gitignore"
+grep -Fq "printf '%s\\n' 1 2 5 6 7" "$REPO_ROOT/setup/apps/macos-shortcuts.sh"
+grep -q 'service_prefix="dotfiles-shortcut"' "$REPO_ROOT/setup/apps/macos-shortcuts.sh"
+grep -q 'slot_local_script' "$REPO_ROOT/setup/apps/macos-shortcuts.sh"
+grep -q 'ln -s "$local_script" "$installed_script"' "$REPO_ROOT/setup/apps/macos-shortcuts.sh"
 grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/60-macos"
 if grep -q 'KeyRepeat' "$REPO_ROOT/setup/commands/55-karabiner"; then
     printf 'karabiner command should not apply macOS keyboard defaults\n' >&2

@@ -49,6 +49,22 @@ export FIRECRAWL_API_KEY=your-api-key
 
 `./setup.sh bootstrap` preserves existing `~/.zprofile` content and maintains only the marked `dotfiles runtime environment` block used for login-shell Homebrew and mise activation.
 
+## macOS Shortcut Scripts
+
+Put machine-specific macOS shortcut behavior in ignored project-local files:
+
+```text
+local/macos-shortcuts/1.sh
+local/macos-shortcuts/2.sh
+local/macos-shortcuts/5.sh
+local/macos-shortcuts/6.sh
+local/macos-shortcuts/7.sh
+```
+
+Run `./setup.sh macos-shortcuts` once. Setup symlinks those paths into
+`~/.local/share/dotfiles/macos-shortcuts/`, so editing an ignored script changes
+the next matching shortcut run.
+
 ## Secrets and OAuth Files
 
 Do not track OAuth tokens or generated app secrets. In particular:
