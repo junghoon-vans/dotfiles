@@ -17,6 +17,7 @@ services_menu_cache="${preferences_dir}/com.apple.ServicesMenu.Services.plist"
 local_script_dir="${DOTFILES_DIR}/local/macos-shortcuts"
 install_dir="${HOME}/.local/share/dotfiles/macos-shortcuts"
 service_prefix="dotfiles-shortcut"
+pbs_bin="/System/Library/CoreServices/pbs"
 timestamp="$(date +%Y%m%d%H%M%S)"
 
 shortcut_slots() {
@@ -80,6 +81,12 @@ slot_command() {
     printf '/bin/sh %s' "$(shell_quote "$installed_script")"
 }
 
+slot_shortcut() {
+    local slot="$1"
+
+    printf '@^$%s\n' "$slot"
+}
+
 backup_path() {
     local path="$1"
     local basename
@@ -114,6 +121,7 @@ install_slot_symlink() {
 write_info_plist() {
     local path="$1"
     local service_name="$2"
+    local shortcut="$3"
 
     mkdir -p "$(dirname "$path")"
     cat > "$path" <<PLIST
@@ -128,6 +136,13 @@ write_info_plist() {
       <string>background</string>
       <key>NSIconName</key>
       <string>NSActionTemplate</string>
+      <key>NSKeyEquivalent</key>
+      <dict>
+        <key>default</key>
+        <string>${shortcut}</string>
+        <key>ko</key>
+        <string>${shortcut}</string>
+      </dict>
       <key>NSMenuItem</key>
       <dict>
         <key>default</key>
@@ -302,16 +317,29 @@ PLIST
 install_workflow() {
     local slot="$1"
     local service_name
+    local shortcut
     local workflow_dir
 
     service_name="$(slot_service_name "$slot")"
+    shortcut="$(slot_shortcut "$slot")"
     workflow_dir="${services_dir}/${service_name}.workflow"
 
     backup_path "$workflow_dir"
     mkdir -p "${workflow_dir}/Contents"
-    write_info_plist "${workflow_dir}/Contents/Info.plist" "$service_name"
+    write_info_plist "${workflow_dir}/Contents/Info.plist" "$service_name" "$shortcut"
     write_document_wflow "${workflow_dir}/Contents/document.wflow" "$(slot_command "$slot")"
     plutil -lint "${workflow_dir}/Contents/Info.plist" "${workflow_dir}/Contents/document.wflow" >/dev/null
+}
+
+refresh_services_cache() {
+    if [ -x "$pbs_bin" ]; then
+        "$pbs_bin" -flush ko en >/dev/null 2>&1 || true
+        "$pbs_bin" -update ko en >/dev/null 2>&1 || true
+    fi
+
+    killall com.apple.automator.runner >/dev/null 2>&1 || true
+    killall cfprefsd >/dev/null 2>&1 || true
+    killall pbs >/dev/null 2>&1 || true
 }
 
 ensure_pbs_plist() {
@@ -346,7 +374,7 @@ set_service_shortcut() {
     local key_path
 
     service_name="$(slot_service_name "$slot")"
-    shortcut="@^\$$slot"
+    shortcut="$(slot_shortcut "$slot")"
     key="(null) - ${service_name} - runWorkflowAsService"
     key_path="$(escape_plist_key "$key")"
 
@@ -386,9 +414,7 @@ install_shortcuts() {
         rm "$services_menu_cache"
     fi
 
-    killall com.apple.automator.runner >/dev/null 2>&1 || true
-    killall cfprefsd >/dev/null 2>&1 || true
-    killall pbs >/dev/null 2>&1 || true
+    refresh_services_cache
 
     while IFS= read -r slot; do
         print_success "Installed shortcut slot $slot (Ctrl+Cmd+Shift+$slot)"
@@ -427,6 +453,12 @@ check_workflow() {
     actual="$(plutil -extract NSServices.0.NSMenuItem.default raw -o - "$info_plist")"
     assert_equal "$service_name" "$actual" "$service_name menu name"
 
+    actual="$(plutil -extract NSServices.0.NSKeyEquivalent.default raw -o - "$info_plist")"
+    assert_equal "$(slot_shortcut "$slot")" "$actual" "$service_name default key equivalent"
+
+    actual="$(plutil -extract NSServices.0.NSKeyEquivalent.ko raw -o - "$info_plist")"
+    assert_equal "$(slot_shortcut "$slot")" "$actual" "$service_name ko key equivalent"
+
     actual="$(plutil -extract actions.0.action.ActionName raw -o - "$document_wflow")"
     assert_equal "Run Shell Script" "$actual" "$service_name action name"
 
@@ -446,11 +478,27 @@ check_shortcut() {
     local actual
 
     service_name="$(slot_service_name "$slot")"
-    shortcut="@^\$$slot"
+    shortcut="$(slot_shortcut "$slot")"
     key="(null) - ${service_name} - runWorkflowAsService"
     key_path="$(escape_plist_key "$key")"
     actual="$("$plist_buddy" -c "Print :NSServicesStatus:${key_path}:key_equivalent" "$pbs_plist")"
     assert_equal "$shortcut" "$actual" "$service_name keyboard shortcut"
+}
+
+check_services_cache() {
+    local slot="$1"
+    local service_name
+
+    service_name="$(slot_service_name "$slot")"
+
+    if [ ! -f "$services_menu_cache" ]; then
+        return 0
+    fi
+
+    if ! plutil -p "$services_menu_cache" | grep -Fq "${service_name}.workflow"; then
+        printf 'Services cache does not include %s. Try rerunning install or open Keyboard Shortcuts once.\n' "$service_name" >&2
+        exit 1
+    fi
 }
 
 check_slot_script() {
@@ -482,6 +530,7 @@ check_shortcuts() {
         check_slot_script "$slot"
         check_workflow "$slot"
         check_shortcut "$slot"
+        check_services_cache "$slot"
     done < <(shortcut_slots)
 
     print_success "macOS shortcut slots are installed"
