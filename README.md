@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal macOS development environment specification optimized for Go, Gno, Rust, Solana/Anchor, Sui, Java, Kotlin, Python, Node.js, OpenCode, and modern CLI tooling.
+Personal macOS development environment specification optimized for Go, Gno, Rust, Solana/Anchor, Sui, Java, Kotlin, Python, Node.js, Codex, and modern CLI tooling.
 
 ## Overview
 
@@ -49,13 +49,12 @@ Default commands run in filename order from `setup/commands/`:
 4. `blockchain` - install selected blockchain tooling, including Solana/Anchor, Gno, and Sui
 5. `links` - apply chezmoi-managed dotfiles and `.config/*`
 6. `apps` - install Oh My Zsh and Zed Gno extension support
-7. `opencode` - install OpenCode and bootstrap OpenAgent
-8. `codex` - install Codex CLI, bootstrap LazyCodex, and register Codex MCP servers including gnomcp
-9. `codex-agents` - install default global Codex custom agents
-10. `codex-skills` - install default global Codex skills through `npx skills`
-11. `karabiner` - install Karabiner-Elements for key remapping
-12. `macos-shortcuts` - install five generic macOS Quick Action shortcut slots
-13. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
+7. `codex` - install Codex CLI, bootstrap LazyCodex, and register Codex MCP servers including gnomcp
+8. `codex-agents` - install default global Codex custom agents
+9. `codex-skills` - install default global Codex skills through `npx skills`
+10. `karabiner` - install Karabiner-Elements for key remapping
+11. `macos-shortcuts` - install five generic macOS Quick Action shortcut slots
+12. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
 
 Utility commands are explicit only and are not part of full setup:
 
@@ -81,7 +80,7 @@ Utility commands are explicit only and are not part of full setup:
 ./setup.sh blockchain
 ./setup.sh solana
 ./setup.sh sui
-./setup.sh languages blockchain opencode
+./setup.sh languages blockchain codex
 ./setup.sh codex-agents
 ./setup.sh codex-skills
 ./setup.sh macos-shortcuts

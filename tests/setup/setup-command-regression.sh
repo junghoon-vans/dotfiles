@@ -133,8 +133,6 @@ export HOME="$FAKE_HOME"
 export PATH="$FAKE_BIN:$PATH"
 
 HELP_OUTPUT="$($SETUP_SH --help)"
-printf '%s' "$HELP_OUTPUT" | grep -q 'opencode'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install OpenCode, bootstrap oh-my-openagent, and configure status HUD'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install default global Codex skills through npx skills'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install macOS Quick Action shortcut slots'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Run selected blockchain tooling commands'
@@ -261,19 +259,15 @@ if grep -q '^gno.sh$\|^sui.sh$' "$BLOCKCHAIN_PROMPT_LOG"; then
     exit 1
 fi
 
-python3 - "$REPO_ROOT/home/dot_config/opencode/opencode.json" "$REPO_ROOT/home/dot_codex/lsp-client.json" <<'PY'
+python3 - "$REPO_ROOT/home/dot_codex/lsp-client.json" <<'PY'
 import json
 import sys
 
 with open(sys.argv[1], encoding="utf-8") as config_file:
-    config = json.load(config_file)
-with open(sys.argv[2], encoding="utf-8") as config_file:
     codex_config = json.load(config_file)
 
 if set(codex_config) != {"lsp"}:
     raise SystemExit("Codex LSP config should only define the top-level lsp map")
-if codex_config["lsp"] != config["lsp"]:
-    raise SystemExit("Codex LSP config should exactly mirror OpenCode lsp config")
 
 expected_commands = {
     "gopls": ["/bin/bash", "-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gopls'],
@@ -286,22 +280,22 @@ expected_commands = {
     "xml": ["/bin/bash", "-lc", 'exec mise exec java@temurin-21 -- java ${LEMMINX_JAVA_OPTS:-} -jar "$HOME/.local/share/lemminx/lemminx.jar"'],
 }
 for lsp_name, command in expected_commands.items():
-    actual = config["lsp"][lsp_name]["command"]
+    actual = codex_config["lsp"][lsp_name]["command"]
     if actual != command:
-        raise SystemExit(f"OpenCode {lsp_name} command should be {command}, got {actual}")
+        raise SystemExit(f"Codex {lsp_name} command should be {command}, got {actual}")
     if "~" in " ".join(actual):
-        raise SystemExit(f"OpenCode {lsp_name} command should not rely on tilde expansion")
+        raise SystemExit(f"Codex {lsp_name} command should not rely on tilde expansion")
 
     for forbidden_path in ("$HOME/workspace/dotfiles", "~/workspace/dotfiles"):
         if forbidden_path in " ".join(actual):
-            raise SystemExit(f"OpenCode {lsp_name} command should not depend on local checkout path {forbidden_path}")
+            raise SystemExit(f"Codex {lsp_name} command should not depend on local checkout path {forbidden_path}")
 
     for forbidden_exec in ('exec "$HOME/.local/bin/',):
         if forbidden_exec in " ".join(actual):
-            raise SystemExit(f"OpenCode {lsp_name} command should not directly exec local bin wrappers")
+            raise SystemExit(f"Codex {lsp_name} command should not directly exec local bin wrappers")
 
-if config["lsp"]["xml"]["extensions"] != [".xml", ".xsd", ".xsl", ".xslt", ".svg"]:
-    raise SystemExit("OpenCode XML LSP extensions changed")
+if codex_config["lsp"]["xml"]["extensions"] != [".xml", ".xsd", ".xsl", ".xslt", ".svg"]:
+    raise SystemExit("Codex XML LSP extensions changed")
 PY
 
 python3 - "$REPO_ROOT/home/dot_config/zed/settings.json" <<'PY'
@@ -994,11 +988,6 @@ cat >"$FAKE_HOME/.bun/bin/bunx" <<EOF
 printf 'bunx %s\n' "\$*" >> "$LOG_FILE"
 EOF
 
-cat >"$FAKE_HOME/.bun/bin/opencode-status-hud" <<EOF
-#!/bin/bash
-printf 'opencode-status-hud %s\n' "\$*" >> "$LOG_FILE"
-EOF
-
 cat >"$FAKE_BIN/codex" <<EOF
 #!/bin/bash
 printf 'codex %s\n' "\$*" >> "$LOG_FILE"
@@ -1012,7 +1001,7 @@ fi
 exit 0
 EOF
 
-chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_HOME/.bun/bin/opencode-status-hud" "$FAKE_BIN/brew" "$FAKE_BIN/codex"
+chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_BIN/brew" "$FAKE_BIN/codex"
 
 mkdir -p "$FAKE_HOME/.codex"
 mkdir -p "$FAKE_HOME/.local/bin"
@@ -1036,7 +1025,6 @@ EOF
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
-PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/codex.sh" >/dev/null
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
@@ -1044,10 +1032,6 @@ grep -q 'go install golang.org/x/tools/gopls@v0.21.1' "$LOG_FILE"
 grep -q "git -C $FAKE_HOME/gno pull --ff-only --autostash" "$LOG_FILE"
 grep -q 'make install' "$LOG_FILE"
 grep -q 'bun install -g typescript' "$LOG_FILE"
-grep -q 'bun install -g opencode-ai' "$LOG_FILE"
-grep -q 'bun install -g opencode-status-hud' "$LOG_FILE"
-grep -q 'bunx oh-my-openagent install --no-tui --claude=no --openai=yes --gemini=no --copilot=no' "$LOG_FILE"
-grep -q 'opencode-status-hud install' "$LOG_FILE"
 grep -q 'npm install -g @openai/codex' "$LOG_FILE"
 grep -q 'npx --yes lazycodex-ai install --no-tui --codex-autonomous' "$LOG_FILE"
 grep -q 'codex plugin marketplace add '"$FAKE_HOME"'/.codex/plugins/cache/gnoverse' "$LOG_FILE"
@@ -1211,9 +1195,6 @@ grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/35-blockchain"
 [ ! -e "$REPO_ROOT/.config/nvim/init.lua" ]
 [ ! -e "$REPO_ROOT/.config/nvim/lua/config/lazy.lua" ]
 [ ! -e "$REPO_ROOT/.config/nvim/lua/config/options.lua" ]
-[ ! -e "$REPO_ROOT/.config/opencode/oh-my-openagent.json" ]
-[ ! -e "$REPO_ROOT/.config/opencode/opencode.json" ]
-[ ! -e "$REPO_ROOT/.config/opencode/tui.json" ]
 [ ! -e "$REPO_ROOT/.config/zed/settings.json" ]
 [ -e "$REPO_ROOT/docs/gitconfig.override.example" ]
 grep -q 'karabiner-elements' "$REPO_ROOT/setup/commands/55-karabiner"
