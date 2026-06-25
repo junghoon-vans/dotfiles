@@ -4,7 +4,7 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 print_step "Setting up Codex CLI and LazyCodex..."
 
-GNOMCP_VERSION="${GNOMCP_VERSION:-v0.7.0}"
+GNOMCP_VERSION="${GNOMCP_VERSION:-v0.8.0}"
 GNOMCP_REPO="gnoverse/gno-mcp"
 GNOMCP_BINARY="$HOME/.local/bin/gnomcp"
 GNOMCP_PLUGIN_VERSION="${GNOMCP_VERSION#v}"

@@ -1019,7 +1019,7 @@ mkdir -p "$FAKE_HOME/.local/bin"
 cat >"$FAKE_HOME/.local/bin/gnomcp" <<'EOF'
 #!/bin/bash
 if [ "${1:-}" = "version" ]; then
-  printf '0.7.0\n'
+  printf '0.8.0\n'
 fi
 EOF
 chmod +x "$FAKE_HOME/.local/bin/gnomcp"
