@@ -12,7 +12,7 @@ The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json
 - Data and infrastructure: `sql-pro`, `postgres-pro`, `database-optimizer`, `kubernetes-specialist`, `terraform-engineer`, `deployment-engineer`.
 - Domain tooling: `blockchain-developer`, `mcp-developer`.
 
-`./setup.sh codex` installs pinned `gnomcp` into `~/.local/bin`, registers the `gnomcp@gnoverse` Codex plugin, and registers the `gnomcp` MCP server so Gno chain tools and bundled Gno audit/build/debug skills are available after restarting Codex.
+`./setup.sh codex` installs the configured `gnomcp` repo/ref into `~/.local/bin`, registers the `gnomcp@gnoverse` Codex plugin, and registers the `gnomcp` MCP server so Gno chain tools and bundled Gno audit/build/debug skills are available after restarting Codex. The default tracks `junghoon-vans/gno-mcp@align-gno-interrealm-skill`; set `GNOMCP_REPO=gnoverse/gno-mcp GNOMCP_REF=v0.8.0 GNOMCP_RELEASE_VERSION=v0.8.0` to return to the upstream release.
 
 `./setup.sh codex-skills` installs global Codex skills through `npx skills`. The default set is `ponytail`, `find-skills`, `vercel-react-best-practices`, and `golang-pro`.
 

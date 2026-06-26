@@ -4,12 +4,15 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 print_step "Setting up Codex CLI and LazyCodex..."
 
-GNOMCP_VERSION="${GNOMCP_VERSION:-v0.8.0}"
-GNOMCP_REPO="gnoverse/gno-mcp"
+GNOMCP_REF="${GNOMCP_REF:-align-gno-interrealm-skill}"
+GNOMCP_REPO="${GNOMCP_REPO:-junghoon-vans/gno-mcp}"
 GNOMCP_BINARY="$HOME/.local/bin/gnomcp"
-GNOMCP_PLUGIN_VERSION="${GNOMCP_VERSION#v}"
+GNOMCP_RELEASE_VERSION="${GNOMCP_RELEASE_VERSION:-v0.8.0}"
+GNOMCP_PLUGIN_VERSION="${GNOMCP_PLUGIN_VERSION:-${GNOMCP_REF#v}}"
+GNOMCP_PLUGIN_SLOT="${GNOMCP_PLUGIN_SLOT:-${GNOMCP_PLUGIN_VERSION//\//-}}"
 GNOMCP_MARKETPLACE_ROOT="$HOME/.codex/plugins/cache/gnoverse"
-GNOMCP_REPO_DIR="$GNOMCP_MARKETPLACE_ROOT/gno-mcp/$GNOMCP_PLUGIN_VERSION"
+GNOMCP_REPO_DIR="$GNOMCP_MARKETPLACE_ROOT/gno-mcp/$GNOMCP_PLUGIN_SLOT"
+GNOMCP_INSTALL_REF_FILE="$HOME/.local/share/gnomcp/install-ref"
 
 ensure_codex_mcp_oauth_credentials_store() {
     local config_dir="$HOME/.codex"
@@ -82,19 +85,39 @@ install_gnomcp_binary() {
     local checksums=""
     local expected=""
     local actual=""
+    local source_revision=""
 
-    if [ -x "$GNOMCP_BINARY" ] && [ "$("$GNOMCP_BINARY" version 2>/dev/null || true)" = "$GNOMCP_PLUGIN_VERSION" ]; then
-        print_success "gnomcp $GNOMCP_PLUGIN_VERSION already installed at $GNOMCP_BINARY"
+    if [ "$GNOMCP_REPO" != "gnoverse/gno-mcp" ] || [ "$GNOMCP_REF" != "$GNOMCP_RELEASE_VERSION" ]; then
+        ensure_gnomcp_source_checkout
+        source_revision="$(git -C "$GNOMCP_REPO_DIR" rev-parse HEAD)"
+
+        if [ -x "$GNOMCP_BINARY" ] &&
+            [ -f "$GNOMCP_INSTALL_REF_FILE" ] &&
+            [ "$(cat "$GNOMCP_INSTALL_REF_FILE")" = "$GNOMCP_REPO@$source_revision" ]; then
+            print_success "gnomcp $GNOMCP_REPO@$source_revision already installed at $GNOMCP_BINARY"
+            return
+        fi
+
+        print_info "Building gnomcp from $GNOMCP_REPO@$GNOMCP_REF..."
+        mkdir -p "$(dirname "$GNOMCP_BINARY")" "$(dirname "$GNOMCP_INSTALL_REF_FILE")"
+        (cd "$GNOMCP_REPO_DIR" && mise exec -- go build -o "$GNOMCP_BINARY" ./cmd/gnomcp)
+        printf '%s\n' "$GNOMCP_REPO@$source_revision" > "$GNOMCP_INSTALL_REF_FILE"
+        print_success "gnomcp built at $GNOMCP_BINARY"
         return
     fi
 
     asset="$(gnomcp_release_asset)"
-    base_url="https://github.com/$GNOMCP_REPO/releases/download/$GNOMCP_VERSION"
+    base_url="https://github.com/$GNOMCP_REPO/releases/download/$GNOMCP_RELEASE_VERSION"
     tmp_dir="$(mktemp -d "${TMPDIR:-/tmp}/gnomcp.XXXXXX")"
     archive="$tmp_dir/$asset"
     checksums="$tmp_dir/checksums.txt"
 
-    print_info "Installing gnomcp $GNOMCP_VERSION..."
+    if [ -x "$GNOMCP_BINARY" ] && [ "$("$GNOMCP_BINARY" version 2>/dev/null || true)" = "${GNOMCP_RELEASE_VERSION#v}" ]; then
+        print_success "gnomcp $GNOMCP_RELEASE_VERSION already installed at $GNOMCP_BINARY"
+        return
+    fi
+
+    print_info "Installing gnomcp $GNOMCP_RELEASE_VERSION..."
     curl --proto '=https' --tlsv1.2 -fsSL "$base_url/$asset" -o "$archive"
     curl --proto '=https' --tlsv1.2 -fsSL "$base_url/checksums.txt" -o "$checksums"
 
@@ -120,21 +143,34 @@ install_gnomcp_binary() {
     print_success "gnomcp installed at $GNOMCP_BINARY"
 }
 
-ensure_gnomcp_codex_plugin() {
-    local marketplace_file="$GNOMCP_MARKETPLACE_ROOT/.agents/plugins/marketplace.json"
+ensure_gnomcp_source_checkout() {
+    local repo_url="https://github.com/$GNOMCP_REPO.git"
 
-    print_info "Ensuring gnomcp Codex plugin marketplace..."
-    mkdir -p "$(dirname "$marketplace_file")" "$GNOMCP_MARKETPLACE_ROOT/gno-mcp"
+    mkdir -p "$(dirname "$GNOMCP_REPO_DIR")"
 
     if [ -d "$GNOMCP_REPO_DIR/.git" ]; then
+        git -C "$GNOMCP_REPO_DIR" remote set-url origin "$repo_url"
         git -C "$GNOMCP_REPO_DIR" fetch --tags --prune origin
-        git -C "$GNOMCP_REPO_DIR" checkout --force "$GNOMCP_VERSION"
     elif [ -e "$GNOMCP_REPO_DIR" ]; then
         print_error "$GNOMCP_REPO_DIR exists but is not a git checkout"
         exit 1
     else
-        git clone --depth 1 --branch "$GNOMCP_VERSION" "https://github.com/$GNOMCP_REPO.git" "$GNOMCP_REPO_DIR"
+        git clone "$repo_url" "$GNOMCP_REPO_DIR"
     fi
+
+    if git -C "$GNOMCP_REPO_DIR" rev-parse --verify --quiet "refs/remotes/origin/$GNOMCP_REF" >/dev/null; then
+        git -C "$GNOMCP_REPO_DIR" checkout -B "$GNOMCP_REF" "origin/$GNOMCP_REF"
+    else
+        git -C "$GNOMCP_REPO_DIR" checkout --force "$GNOMCP_REF"
+    fi
+}
+
+ensure_gnomcp_codex_plugin() {
+    local marketplace_file="$GNOMCP_MARKETPLACE_ROOT/.agents/plugins/marketplace.json"
+
+    print_info "Ensuring gnomcp Codex plugin marketplace..."
+    mkdir -p "$(dirname "$marketplace_file")"
+    ensure_gnomcp_source_checkout
 
     cat > "$marketplace_file" <<EOF
 {
