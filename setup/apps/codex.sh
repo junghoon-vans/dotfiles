@@ -13,6 +13,7 @@ GNOMCP_PLUGIN_SLOT="${GNOMCP_PLUGIN_SLOT:-${GNOMCP_PLUGIN_VERSION//\//-}}"
 GNOMCP_MARKETPLACE_ROOT="$HOME/.codex/plugins/cache/gnoverse"
 GNOMCP_REPO_DIR="$GNOMCP_MARKETPLACE_ROOT/gno-mcp/$GNOMCP_PLUGIN_SLOT"
 GNOMCP_INSTALL_REF_FILE="$HOME/.local/share/gnomcp/install-ref"
+ASIDE_BROWSER_EXECUTABLE="${ASIDE_BROWSER_EXECUTABLE:-/Applications/Aside.app/Contents/MacOS/Aside}"
 
 ensure_codex_mcp_oauth_credentials_store() {
     local config_dir="$HOME/.codex"
@@ -226,6 +227,22 @@ ensure_firecrawl_mcp() {
     fi
 }
 
+ensure_playwright_mcp() {
+    print_info "Ensuring Playwright MCP is configured for Aside..."
+    if [ ! -x "$ASIDE_BROWSER_EXECUTABLE" ]; then
+        print_info "Aside browser not found at $ASIDE_BROWSER_EXECUTABLE; install Aside before using Playwright MCP."
+    fi
+
+    if codex mcp get playwright 2>/dev/null |
+        grep -Fq "PLAYWRIGHT_MCP_EXECUTABLE_PATH=$ASIDE_BROWSER_EXECUTABLE"; then
+        print_success "Playwright MCP already configured for Aside"
+    else
+        codex mcp remove playwright >/dev/null 2>&1 || true
+        codex mcp add playwright --env "PLAYWRIGHT_MCP_EXECUTABLE_PATH=$ASIDE_BROWSER_EXECUTABLE" -- npx -y @playwright/mcp@latest
+        print_success "Playwright MCP configured for Aside"
+    fi
+}
+
 if ! command -v mise &> /dev/null; then
     print_error "mise is required for Codex setup. Run ./setup.sh brew-packages first."
     exit 1
@@ -253,3 +270,4 @@ ensure_gnomcp_codex_plugin
 ensure_gnomcp_mcp
 ensure_atlassian_mcp
 ensure_firecrawl_mcp
+ensure_playwright_mcp

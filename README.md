@@ -49,7 +49,7 @@ Default commands run in filename order from `setup/commands/`:
 4. `blockchain` - install selected blockchain tooling, including Solana/Anchor, Gno, and Sui
 5. `links` - apply chezmoi-managed dotfiles and `.config/*`
 6. `apps` - install Oh My Zsh and Zed Gno extension support
-7. `codex` - install Codex CLI, bootstrap LazyCodex, and register Codex MCP servers including gnomcp
+7. `codex` - install Codex CLI, bootstrap LazyCodex, and register Codex MCP servers including gnomcp and Aside-backed Playwright
 8. `codex-agents` - install default global Codex custom agents
 9. `codex-skills` - install default global Codex skills through `npx skills`
 10. `karabiner` - install Karabiner-Elements for key remapping

@@ -1039,6 +1039,7 @@ grep -q 'codex plugin add gnomcp@gnoverse' "$LOG_FILE"
 grep -q 'codex mcp add gnomcp -- '"$FAKE_HOME"'/.local/bin/gnomcp' "$LOG_FILE"
 grep -q 'codex mcp add atlassian --url https://mcp.atlassian.com/v1/mcp/authv2' "$LOG_FILE"
 grep -q 'codex mcp add firecrawl -- /bin/zsh -lc source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp' "$LOG_FILE"
+grep -q 'codex mcp add playwright --env PLAYWRIGHT_MCP_EXECUTABLE_PATH=/Applications/Aside.app/Contents/MacOS/Aside -- npx -y @playwright/mcp@latest' "$LOG_FILE"
 [ "$(grep -c '^mcp_oauth_credentials_store = ' "$FAKE_HOME/.codex/config.toml")" -eq 1 ]
 grep -q '^mcp_oauth_credentials_store = "file"$' "$FAKE_HOME/.codex/config.toml"
 
@@ -1299,8 +1300,6 @@ grep -q '\[ -z "${MISE_SHELL:-}" \]' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'Global defaults are tracked in ~/.config/mise/config.toml' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'unset NVM_DIR SDKMAN_DIR BUN_INSTALL GOROOT' "$REPO_ROOT/home/dot_zshrc"
 cmp -s "$REPO_ROOT/mise.toml" "$REPO_ROOT/home/dot_config/mise/config.toml"
-grep -q 'cask "brave-browser"' "$REPO_ROOT/Brewfile"
-grep -q 'PLAYWRIGHT_MCP_EXECUTABLE_PATH' "$REPO_ROOT/home/dot_zshrc"
 if grep -q 'kaku' "$REPO_ROOT/home/dot_zshrc"; then
     printf 'home/dot_zshrc should not reference kaku\n' >&2
     exit 1
