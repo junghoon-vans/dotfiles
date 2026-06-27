@@ -136,6 +136,7 @@ temp/
 # OMC runtime state
 **/.omc/
 **/.omo/
+.codegraph
 .codegraph/
 **/.codegraph/
 
