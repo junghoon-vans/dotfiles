@@ -1060,6 +1060,10 @@ grep -q 'codex mcp add firecrawl -- /bin/zsh -lc source "$HOME/.zshrc.local" 2>/
 grep -q 'codex mcp add playwright --env PLAYWRIGHT_MCP_EXECUTABLE_PATH=/Applications/Aside.app/Contents/MacOS/Aside -- npx -y @playwright/mcp@latest' "$LOG_FILE"
 [ "$(grep -c '^mcp_oauth_credentials_store = ' "$FAKE_HOME/.codex/config.toml")" -eq 1 ]
 grep -q '^mcp_oauth_credentials_store = "file"$' "$FAKE_HOME/.codex/config.toml"
+grep -q '^\[plugins\."github@openai-curated"\]$' "$FAKE_HOME/.codex/config.toml"
+grep -A1 '^\[plugins\."github@openai-curated"\]$' "$FAKE_HOME/.codex/config.toml" | grep -q '^enabled = false$'
+grep -q '^\[plugins\."github@openai-curated-remote"\]$' "$FAKE_HOME/.codex/config.toml"
+grep -A1 '^\[plugins\."github@openai-curated-remote"\]$' "$FAKE_HOME/.codex/config.toml" | grep -q '^enabled = false$'
 
 BOOTSTRAP_HOME="$TMP_DIR/bootstrap-home"
 BOOTSTRAP_BIN="$TMP_DIR/bootstrap-bin"

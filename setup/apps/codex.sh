@@ -54,6 +54,68 @@ ensure_codex_mcp_oauth_credentials_store() {
     chmod 600 "$config_file"
 }
 
+ensure_codex_plugin_disabled() {
+    local plugin_id="$1"
+    local config_dir="$HOME/.codex"
+    local config_file="$config_dir/config.toml"
+    local tmp_file=""
+    local plugin_header="[plugins.\"$plugin_id\"]"
+
+    mkdir -p "$config_dir"
+    touch "$config_file"
+
+    tmp_file="$(mktemp "${TMPDIR:-/tmp}/codex-config.XXXXXX")"
+    awk -v plugin_header="$plugin_header" '
+        BEGIN {
+            in_target = 0
+            saw_target = 0
+            wrote_enabled = 0
+        }
+        $0 == plugin_header {
+            print
+            in_target = 1
+            saw_target = 1
+            wrote_enabled = 0
+            next
+        }
+        /^\[/ {
+            if (in_target && wrote_enabled == 0) {
+                print "enabled = false"
+            }
+            in_target = 0
+            print
+            next
+        }
+        in_target && /^[[:space:]]*enabled[[:space:]]*=/ {
+            if (wrote_enabled == 0) {
+                print "enabled = false"
+                wrote_enabled = 1
+            }
+            next
+        }
+        { print }
+        END {
+            if (in_target && wrote_enabled == 0) {
+                print "enabled = false"
+            }
+            if (saw_target == 0) {
+                print ""
+                print plugin_header
+                print "enabled = false"
+            }
+        }
+    ' "$config_file" > "$tmp_file"
+    cat "$tmp_file" > "$config_file"
+    rm -f "$tmp_file"
+
+    chmod 600 "$config_file"
+}
+
+ensure_codex_github_plugins_disabled() {
+    ensure_codex_plugin_disabled "github@openai-curated"
+    ensure_codex_plugin_disabled "github@openai-curated-remote"
+}
+
 gnomcp_release_asset() {
     case "$(uname -s) $(uname -m)" in
     "Darwin arm64") printf '%s\n' "gno-mcp_darwin_arm64.tar.gz" ;;
@@ -283,6 +345,10 @@ install_codex_hud
 print_info "Configuring Codex MCP OAuth credential storage..."
 ensure_codex_mcp_oauth_credentials_store
 print_success "Codex MCP OAuth credentials configured for file storage"
+
+print_info "Disabling Codex GitHub plugins..."
+ensure_codex_github_plugins_disabled
+print_success "Codex GitHub plugins disabled"
 
 install_gnomcp_binary
 ensure_gnomcp_codex_plugin
