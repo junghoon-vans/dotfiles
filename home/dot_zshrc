@@ -172,6 +172,26 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 
 # ========================================
+# Codex HUD
+# ========================================
+# codex-hud alias
+codex() {
+  if [[ -x "$HOME/.local/bin/codex-hud" ]]; then
+    "$HOME/.local/bin/codex-hud" "$@"
+  else
+    command codex "$@"
+  fi
+}
+
+codex-resume() {
+  if [[ -x "$HOME/.local/bin/codex-hud" ]]; then
+    "$HOME/.local/bin/codex-hud" resume "$@"
+  else
+    command codex resume "$@"
+  fi
+}
+
+# ========================================
 # Environment Variables
 # ========================================
 

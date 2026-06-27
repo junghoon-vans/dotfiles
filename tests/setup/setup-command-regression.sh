@@ -53,6 +53,13 @@ cat >"$FAKE_BIN/git" <<EOF
 printf 'git %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "clone" ]; then
   mkdir -p "\${3:-}/.git"
+  if [ "\${3:-}" = "$FAKE_HOME/.local/share/codex-hud" ]; then
+    mkdir -p "\${3:-}/bin"
+    for command_name in codex-hud codex-hud-install codex-hud-sync codex-hud-upgrade codex-hud-uninstall codex-hud-resize; do
+      printf '#!/bin/bash\n' > "\${3:-}/bin/\$command_name"
+      chmod +x "\${3:-}/bin/\$command_name"
+    done
+  fi
 fi
 exit 0
 EOF
@@ -1004,7 +1011,15 @@ fi
 exit 0
 EOF
 
-chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_BIN/brew" "$FAKE_BIN/codex"
+cat >"$FAKE_BIN/tmux" <<EOF
+#!/bin/bash
+printf 'tmux %s\n' "\$*" >> "$LOG_FILE"
+if [ "\${1:-}" = "-V" ]; then
+  printf 'tmux 3.7\n'
+fi
+EOF
+
+chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_BIN/brew" "$FAKE_BIN/codex" "$FAKE_BIN/tmux"
 
 mkdir -p "$FAKE_HOME/.codex"
 mkdir -p "$FAKE_HOME/.local/bin"

@@ -21,6 +21,7 @@ brew "actionlint"      # GitHub Actions workflow linter
 brew "prek"            # pre-commit re-implemented in Rust
 brew "delve"           # Go debugger
 brew "go-task"         # Task runner
+brew "tmux"            # Terminal multiplexer used by Codex HUD
 brew "chezmoi"         # Dotfiles manager
 brew "mise"            # Declarative language runtime manager
 brew "cmake"           # Build system used by source-built tooling

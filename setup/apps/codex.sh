@@ -13,6 +13,9 @@ GNOMCP_PLUGIN_SLOT="${GNOMCP_PLUGIN_SLOT:-${GNOMCP_PLUGIN_VERSION//\//-}}"
 GNOMCP_MARKETPLACE_ROOT="$HOME/.codex/plugins/cache/gnoverse"
 GNOMCP_REPO_DIR="$GNOMCP_MARKETPLACE_ROOT/gno-mcp/$GNOMCP_PLUGIN_SLOT"
 GNOMCP_INSTALL_REF_FILE="$HOME/.local/share/gnomcp/install-ref"
+CODEX_HUD_REPO="${CODEX_HUD_REPO:-fwyc0573/codex-hud}"
+CODEX_HUD_REF="${CODEX_HUD_REF:-main}"
+CODEX_HUD_DIR="${CODEX_HUD_DIR:-$HOME/.local/share/codex-hud}"
 
 ensure_codex_mcp_oauth_credentials_store() {
     local config_dir="$HOME/.codex"
@@ -192,6 +195,71 @@ EOF
     print_success "gnomcp Codex plugin installed"
 }
 
+ensure_codex_hud_checkout() {
+    local repo_url="https://github.com/$CODEX_HUD_REPO.git"
+
+    mkdir -p "$(dirname "$CODEX_HUD_DIR")"
+
+    if [ -d "$CODEX_HUD_DIR/.git" ]; then
+        git -C "$CODEX_HUD_DIR" remote set-url origin "$repo_url"
+        git -C "$CODEX_HUD_DIR" fetch --tags --prune origin
+    elif [ -e "$CODEX_HUD_DIR" ]; then
+        print_error "$CODEX_HUD_DIR exists but is not a git checkout"
+        exit 1
+    else
+        git clone "$repo_url" "$CODEX_HUD_DIR"
+    fi
+
+    if git -C "$CODEX_HUD_DIR" rev-parse --verify --quiet "refs/remotes/origin/$CODEX_HUD_REF" >/dev/null; then
+        git -C "$CODEX_HUD_DIR" checkout -B "$CODEX_HUD_REF" "origin/$CODEX_HUD_REF"
+    else
+        git -C "$CODEX_HUD_DIR" checkout --force "$CODEX_HUD_REF"
+    fi
+}
+
+write_codex_hud_command() {
+    local command_name="$1"
+    local source_path="$2"
+    local target_path="$HOME/.local/bin/$command_name"
+
+    cat > "$target_path" <<EOF
+#!/bin/bash
+exec "$source_path" "\$@"
+EOF
+    chmod 0755 "$target_path"
+}
+
+install_codex_hud() {
+    print_info "Installing Codex HUD..."
+
+    if ! command -v tmux >/dev/null 2>&1; then
+        print_error "tmux is required for Codex HUD. Run ./setup.sh brew-packages first."
+        exit 1
+    fi
+
+    ensure_codex_hud_checkout
+    (cd "$CODEX_HUD_DIR" && mise exec -- npm install && mise exec -- npm run build)
+
+    chmod +x \
+        "$CODEX_HUD_DIR/bin/codex-hud" \
+        "$CODEX_HUD_DIR/bin/codex-hud-install" \
+        "$CODEX_HUD_DIR/bin/codex-hud-sync" \
+        "$CODEX_HUD_DIR/bin/codex-hud-upgrade" \
+        "$CODEX_HUD_DIR/bin/codex-hud-uninstall"
+
+    if [ -f "$CODEX_HUD_DIR/bin/codex-hud-resize" ]; then
+        chmod +x "$CODEX_HUD_DIR/bin/codex-hud-resize"
+    fi
+
+    mkdir -p "$HOME/.local/bin"
+    write_codex_hud_command "codex-hud" "$CODEX_HUD_DIR/bin/codex-hud"
+    write_codex_hud_command "codex-hud-install" "$CODEX_HUD_DIR/bin/codex-hud-install"
+    write_codex_hud_command "codex-hud-sync" "$CODEX_HUD_DIR/bin/codex-hud-sync"
+    write_codex_hud_command "codex-hud-upgrade" "$CODEX_HUD_DIR/bin/codex-hud-upgrade"
+    write_codex_hud_command "codex-hud-uninstall" "$CODEX_HUD_DIR/bin/codex-hud-uninstall"
+    print_success "Codex HUD installed"
+}
+
 if ! command -v mise &> /dev/null; then
     print_error "mise is required for Codex setup. Run ./setup.sh brew-packages first."
     exit 1
@@ -209,6 +277,8 @@ print_success "@openai/codex installed"
 print_info "Bootstrapping LazyCodex..."
 (cd "$DOTFILES_DIR" && mise exec -- npx --yes lazycodex-ai install --no-tui --codex-autonomous)
 print_success "LazyCodex configured"
+
+install_codex_hud
 
 print_info "Configuring Codex MCP OAuth credential storage..."
 ensure_codex_mcp_oauth_credentials_store
