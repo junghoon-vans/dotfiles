@@ -61,6 +61,7 @@ Utility commands are explicit only and are not part of full setup:
 ```bash
 ./setup.sh doctor    # Inspect host prerequisites and managed dotfile state
 ./setup.sh check     # Run repository validation checks
+./setup.sh codex-mcp # Reconfigure Codex MCP servers
 ./setup.sh clean-backups # Remove managed dotfile backups created by links
 ```
 
@@ -87,6 +88,7 @@ Utility commands are explicit only and are not part of full setup:
 ./setup.sh links apps
 ./setup.sh check
 ./setup.sh doctor
+./setup.sh codex-mcp
 ./setup.sh clean-backups
 brew bundle --file Brewfile
 mise install go # also run by ./setup.sh go

@@ -138,6 +138,7 @@ printf '%s' "$HELP_OUTPUT" | grep -q 'Install macOS Quick Action shortcut slots'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Run selected blockchain tooling commands'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Remove managed dotfile backup files created before chezmoi apply'
+printf '%s' "$HELP_OUTPUT" | grep -q 'Reconfigure Codex MCP servers without reinstalling Codex'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Language commands:'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Blockchain commands:'
 printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go via mise plus Go formatter/linter tools'
@@ -860,9 +861,11 @@ cat >"$DOCTOR_BIN/dirname" <<'EOF'
 exec /usr/bin/dirname "$@"
 EOF
 chmod +x "$DOCTOR_BIN/git" "$DOCTOR_BIN/bash" "$DOCTOR_BIN/uname" "$DOCTOR_BIN/dirname"
-DOCTOR_OUTPUT="$(HOME="$DOCTOR_HOME" PATH="$DOCTOR_BIN" /bin/bash "$REPO_ROOT/setup/doctor.sh")"
+DOCTOR_OUTPUT="$(HOME="$DOCTOR_HOME" PATH="$DOCTOR_BIN" ASIDE_BROWSER_EXECUTABLE="$TMP_DIR/missing-aside" /bin/bash "$REPO_ROOT/setup/doctor.sh")"
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'brew missing — run ./setup.sh bootstrap before brew-managed setup'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'mise missing — run ./setup.sh brew-packages before runtime setup'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q 'codex missing — run ./setup.sh codex before Codex MCP setup'
+printf '%s' "$DOCTOR_OUTPUT" | grep -q "Aside browser executable missing at $TMP_DIR/missing-aside"
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'cmake missing; run ./setup.sh brew-packages'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'pkg-config missing; run ./setup.sh brew-packages'
 printf '%s' "$DOCTOR_OUTPUT" | grep -q 'suiup missing; run ./setup.sh sui'
@@ -1026,6 +1029,7 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/go.sh" >/dev/nul
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/codex.sh" >/dev/null
+PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/codex-mcp.sh" >/dev/null
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'go install golang.org/x/tools/gopls@v0.21.1' "$LOG_FILE"
@@ -1295,6 +1299,7 @@ grep -q 'run ./setup.sh sui' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'cmake pkg-config' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise runtime config found' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise global runtime config found' "$REPO_ROOT/setup/doctor.sh"
+grep -q 'run ./setup.sh codex-mcp' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise activate zsh' "$REPO_ROOT/home/dot_zshrc"
 grep -q '\[ -z "${MISE_SHELL:-}" \]' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'Global defaults are tracked in ~/.config/mise/config.toml' "$REPO_ROOT/home/dot_zshrc"

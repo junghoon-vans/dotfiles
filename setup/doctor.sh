@@ -72,6 +72,14 @@ warn_command ruby "install Ruby before Brewfile syntax checks"
 warn_command brew "run ./setup.sh bootstrap before brew-managed setup"
 warn_command chezmoi "run ./setup.sh brew-packages before dotfiles apply"
 warn_command mise "run ./setup.sh brew-packages before runtime setup"
+warn_command codex "run ./setup.sh codex before Codex MCP setup"
+
+aside_browser_executable="${ASIDE_BROWSER_EXECUTABLE:-/Applications/Aside.app/Contents/MacOS/Aside}"
+if [ -x "$aside_browser_executable" ]; then
+    print_success "Aside browser executable found"
+else
+    print_info "Aside browser executable missing at $aside_browser_executable; install Aside from https://aside.com/download before using Playwright MCP"
+fi
 
 if command -v brew >/dev/null 2>&1; then
     print_info "Checking Brewfile package state..."
@@ -135,6 +143,14 @@ for artifact_name in gopls gnopls gnomcp; do
         esac
     fi
 done
+
+if command -v codex >/dev/null 2>&1; then
+    if codex mcp get playwright 2>/dev/null | grep -Fq "PLAYWRIGHT_MCP_EXECUTABLE_PATH="; then
+        print_success "Codex Playwright MCP is registered for a custom browser executable"
+    else
+        print_info "Codex Playwright MCP is not configured for Aside; run ./setup.sh codex-mcp"
+    fi
+fi
 
 if [ -s "$HOME/.local/share/lemminx/lemminx.jar" ]; then
     print_success "lemminx.jar artifact found"

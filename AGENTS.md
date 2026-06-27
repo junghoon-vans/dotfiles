@@ -14,8 +14,9 @@ dotfiles/
 ├── setup/
 │   ├── main.sh           # Command orchestrator with flags and utility commands
 │   ├── check.sh          # Repository validation utility command
-│   ├── clean-backups.sh  # Managed dotfile backup cleanup utility command
 │   ├── doctor.sh         # Host prerequisite inspection utility command
+│   ├── clean-backups.sh  # Managed dotfile backup cleanup utility command
+│   ├── codex-mcp.sh      # Codex MCP reconfiguration utility command
 │   ├── link.sh           # Chezmoi apply wrapper with backup compatibility
 │   ├── lib/common.sh     # Shared shell helpers, output, and prompts
 │   ├── commands/*        # Default setup commands with ordered filenames
@@ -57,7 +58,7 @@ dotfiles/
 - **Blockchain setup**: `./setup.sh blockchain` owns Solana/Anchor, Gno, and Sui tooling; they remain explicit commands but are not part of the language umbrella.
 - **Biome LSP**: Explicitly mapped to JSON/JSONC only, avoiding overlap with TypeScript LSP and leaving CSS to Biome formatter/linter coverage.
 - **Karabiner setup**: Separate from broader macOS defaults so `--skip karabiner` can exclude key remapping setup.
-- **Utility commands**: `check`, `doctor`, and `clean-backups` are explicit-only commands, not part of full setup.
+- **Utility commands**: `check`, `doctor`, `clean-backups`, and `codex-mcp` are explicit-only commands, not part of full setup.
 - **Secrets**: `gh/hosts.yml` and GitHub Copilot generated token files are never tracked.
 
 ## CONVENTIONS
@@ -86,6 +87,7 @@ dotfiles/
 ./setup.sh solana                  # Install Solana CLI and Anchor tooling
 ./setup.sh sui                     # Install Sui CLI and Move tooling
 ./setup.sh codex                   # Install Codex CLI and LazyCodex
+./setup.sh codex-mcp               # Reconfigure Codex MCP servers
 ./setup.sh codex-agents            # Install default global Codex custom agents
 ./setup.sh codex-skills            # Install default global Codex skills
 ./setup.sh check                   # Run repository checks
@@ -104,6 +106,6 @@ brew bundle --file Brewfile        # Install Brewfile packages
 - Sui CLI is not Homebrew-managed: `./setup.sh sui` installs Rust with mise, then uses the official `suiup` installer, with shell integration through `$HOME/.local/bin`.
 - **Codex CLI and LazyCodex**: `./setup.sh codex` installs `@openai/codex` globally via mise-managed npm, then runs `npx lazycodex-ai install --no-tui --codex-autonomous` to bootstrap LazyCodex. Requires Node.js runtime.
 - **Gno MCP for Codex**: `./setup.sh codex` installs the configured `gnomcp` repo/ref into `$HOME/.local/bin`, registers the `gnomcp@gnoverse` Codex plugin through a local marketplace wrapper, and registers the Codex `gnomcp` MCP server. Defaults track `junghoon-vans/gno-mcp@align-gno-interrealm-skill`; set `GNOMCP_REPO`, `GNOMCP_REF`, and `GNOMCP_RELEASE_VERSION` to use an upstream release.
-- **Playwright MCP for Codex**: `./setup.sh codex` registers the Codex `playwright` MCP server through `npx -y @playwright/mcp@latest` and points it at Aside with `PLAYWRIGHT_MCP_EXECUTABLE_PATH`. Aside is installed manually outside Homebrew; override `ASIDE_BROWSER_EXECUTABLE` if the app lives elsewhere.
+- **Playwright MCP for Codex**: `./setup.sh codex` and `./setup.sh codex-mcp` register the Codex `playwright` MCP server through `npx -y @playwright/mcp@latest` and point it at Aside with `PLAYWRIGHT_MCP_EXECUTABLE_PATH`. Aside is installed manually outside Homebrew; override `ASIDE_BROWSER_EXECUTABLE` if the app lives elsewhere.
 - **Codex agents**: `./setup.sh codex-agents` installs selected generic global Codex custom agents from `VoltAgent/awesome-codex-subagents` into `~/.codex/agents`; keep private project rules in repo-local `.agents/skills` or `AGENTS.md`, not in global agent files.
 - **Codex skills**: `./setup.sh codex-skills` installs default global Codex skills through `npx skills`; the current default set is Ponytail, Find Skills, Vercel React Best Practices, and Golang Pro.

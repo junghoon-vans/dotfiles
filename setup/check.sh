@@ -21,8 +21,7 @@ bash -n \
     "$SETUP_DIR"/languages/*.sh \
     "$SETUP_DIR"/blockchain/*.sh \
     "$SETUP_DIR"/apps/*.sh \
-    "$SETUP_DIR/check.sh" \
-    "$SETUP_DIR/doctor.sh" \
+    "$SETUP_DIR"/*.sh \
     "$DOTFILES_DIR"/tests/setup/*.sh
 
 if command -v shellcheck >/dev/null 2>&1; then
@@ -35,8 +34,7 @@ if command -v shellcheck >/dev/null 2>&1; then
         "$SETUP_DIR"/languages/*.sh \
         "$SETUP_DIR"/blockchain/*.sh \
         "$SETUP_DIR"/apps/*.sh \
-        "$SETUP_DIR/check.sh" \
-        "$SETUP_DIR/doctor.sh" \
+        "$SETUP_DIR"/*.sh \
         "$DOTFILES_DIR"/tests/setup/*.sh
 else
     print_info "shellcheck not found; skipping shellcheck"

@@ -19,7 +19,7 @@ command_entries() {
 }
 
 utility_commands() {
-  printf '%s\n' check doctor clean-backups
+  printf '%s\n' check doctor clean-backups codex-mcp
 }
 
 language_commands() {
@@ -73,7 +73,7 @@ command_script() {
   fi
 
   case "$command_name" in
-    check|doctor|clean-backups)
+    check|doctor|clean-backups|codex-mcp)
       printf '%s\n' "$SETUP_DIR/$command_name.sh"
       return 0
       ;;

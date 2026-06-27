@@ -47,6 +47,12 @@ export SOME_WORK_VAR=value
 export FIRECRAWL_API_KEY=your-api-key
 ```
 
+Codex Playwright MCP uses Aside by default at `/Applications/Aside.app/Contents/MacOS/Aside`. If Aside is installed somewhere else, override the executable path when configuring MCP:
+
+```bash
+ASIDE_BROWSER_EXECUTABLE="/Applications/Aside.app/Contents/MacOS/Aside" ./setup.sh codex-mcp
+```
+
 `./setup.sh bootstrap` preserves existing `~/.zprofile` content and maintains only the marked `dotfiles runtime environment` block used for login-shell Homebrew and mise activation.
 
 ## macOS Shortcut Scripts

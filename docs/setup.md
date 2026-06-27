@@ -41,6 +41,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | --- | --- |
 | `doctor` | Checks required host tools, Brewfile package state, harness tools, and core managed dotfiles. |
 | `check` | Runs repository validation: shell syntax, optional shellcheck and actionlint, JSON parsing, Brewfile syntax, whitespace checks, and setup smoke tests. |
+| `codex-mcp` | Reconfigures Codex MCP servers without reinstalling Codex CLI or rerunning LazyCodex bootstrap. |
 | `clean-backups` | Removes managed `*.backup.YYYYMMDD-HHMMSS` files created before chezmoi apply when the current target still matches the tracked source. |
 
 ## Language Commands
