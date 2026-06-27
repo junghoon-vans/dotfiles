@@ -74,24 +74,6 @@ make clean  # Remove managed dotfile backups created by links
 - [Local overrides](docs/local-overrides.md)
 - [Troubleshooting](docs/troubleshooting.md)
 
-## Useful Commands
-
-```bash
-make help
-make show-targets
-make setup-all
-make dry-run
-make doctor
-make clean
-make go
-make python
-make blockchain
-make solana
-make sui
-make codex
-mise install go # also run by make go
-```
-
 After setup, reload the shell:
 
 ```bash
