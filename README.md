@@ -19,24 +19,25 @@ The repository is intentionally broader than a dotfiles store: it is the source 
 ```bash
 git clone https://github.com/junghoon-vans/dotfiles.git ~/workspace/dotfiles
 cd ~/workspace/dotfiles
-./setup.sh
+make setup
 ```
 
 For non-interactive setup:
 
 ```bash
-./setup.sh --yes
-./setup.sh --skip karabiner --yes
-./setup.sh --skip macos-shortcuts --yes
-./setup.sh --skip macos --yes
+make setup-all
+make setup-all ARGS="--skip karabiner"
+make setup-all ARGS="--skip macos-shortcuts"
+make setup-all ARGS="--skip macos"
 ```
 
 Preview what would run without changing the machine:
 
 ```bash
-./setup.sh --help
-./setup.sh --dry-run
-./setup.sh --dry-run --skip karabiner
+make help
+make show-targets
+make dry-run
+make dry-run ARGS="--skip karabiner"
 ```
 
 ## Setup Commands
@@ -59,11 +60,11 @@ Default commands run in filename order from `setup/commands/`:
 Utility commands are explicit only and are not part of full setup:
 
 ```bash
-./setup.sh doctor    # Inspect host prerequisites and managed dotfile state
-./setup.sh check     # Run repository validation checks
-./setup.sh codex-mcp # Reconfigure Codex MCP servers
-./setup.sh clean-backups # Remove managed dotfile backups created by links
+make doctor # Inspect host prerequisites and managed dotfile state
+make clean  # Remove managed dotfile backups created by links
 ```
+
+`make` is the public command surface for routine use. Run `make show-targets` for the full target list. It delegates to `./setup.sh`, which remains available when you need lower-level setup harness behavior.
 
 ## Documentation
 
@@ -76,22 +77,19 @@ Utility commands are explicit only and are not part of full setup:
 ## Useful Commands
 
 ```bash
-./setup.sh --help
-./setup.sh go python
-./setup.sh blockchain
-./setup.sh solana
-./setup.sh sui
-./setup.sh languages blockchain codex
-./setup.sh codex-agents
-./setup.sh codex-skills
-./setup.sh macos-shortcuts
-./setup.sh links apps
-./setup.sh check
-./setup.sh doctor
-./setup.sh codex-mcp
-./setup.sh clean-backups
-brew bundle --file Brewfile
-mise install go # also run by ./setup.sh go
+make help
+make show-targets
+make setup-all
+make dry-run
+make doctor
+make clean
+make go
+make python
+make blockchain
+make solana
+make sui
+make codex
+mise install go # also run by make go
 ```
 
 After setup, reload the shell:
@@ -102,4 +100,4 @@ source ~/.zshrc
 
 The tracked global mise config is applied to `~/.config/mise/config.toml`, so mise-managed runtimes such as Go, Node, Bun, Java, Kotlin, Python, and Rust are available from any directory after shell activation.
 
-Sui setup uses `./setup.sh sui`, installs the testnet Sui CLI by default through `suiup`, and installs `move-analyzer` when the current `suiup` supports it. Sui Move work is done with `sui move`; local validator runs should use `sui start --with-faucet --force-regenesis`. The generated `sui-test-validator` command is a compatibility wrapper for older muscle memory.
+Sui setup uses `make sui`, installs the testnet Sui CLI by default through `suiup`, and installs `move-analyzer` when the current `suiup` supports it. Sui Move work is done with `sui move`; local validator runs should use `sui start --with-faucet --force-regenesis`. The generated `sui-test-validator` command is a compatibility wrapper for older muscle memory.
