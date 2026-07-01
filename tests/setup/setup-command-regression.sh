@@ -1002,11 +1002,17 @@ cat >"$FAKE_BIN/codex" <<EOF
 printf 'codex %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "mcp" ] && [ "\${2:-}" = "get" ]; then
   case "\${3:-}" in
-    atlassian|firecrawl)
+    aside|atlassian|firecrawl)
       exit 1
       ;;
   esac
 fi
+exit 0
+EOF
+
+cat >"$FAKE_BIN/aside" <<EOF
+#!/bin/bash
+printf 'aside %s\n' "\$*" >> "$LOG_FILE"
 exit 0
 EOF
 
@@ -1018,7 +1024,7 @@ if [ "\${1:-}" = "-V" ]; then
 fi
 EOF
 
-chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_BIN/brew" "$FAKE_BIN/codex" "$FAKE_BIN/tmux"
+chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_BIN/brew" "$FAKE_BIN/codex" "$FAKE_BIN/tmux" "$FAKE_BIN/aside"
 
 mkdir -p "$FAKE_HOME/.codex"
 mkdir -p "$FAKE_HOME/.local/bin"
@@ -1058,6 +1064,7 @@ grep -q 'codex mcp add gnomcp -- '"$FAKE_HOME"'/.local/bin/gnomcp' "$LOG_FILE"
 grep -q 'codex mcp add atlassian --url https://mcp.atlassian.com/v1/mcp/authv2' "$LOG_FILE"
 grep -q 'codex mcp add firecrawl -- /bin/zsh -lc source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp' "$LOG_FILE"
 grep -q 'codex mcp add playwright --env PLAYWRIGHT_MCP_EXECUTABLE_PATH=/Applications/Aside.app/Contents/MacOS/Aside -- npx -y @playwright/mcp@latest' "$LOG_FILE"
+grep -q 'codex mcp add aside -- aside mcp' "$LOG_FILE"
 [ "$(grep -c '^mcp_oauth_credentials_store = ' "$FAKE_HOME/.codex/config.toml")" -eq 1 ]
 grep -q '^mcp_oauth_credentials_store = "file"$' "$FAKE_HOME/.codex/config.toml"
 grep -q '^\[plugins\."github@openai-curated"\]$' "$FAKE_HOME/.codex/config.toml"

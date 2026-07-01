@@ -29,7 +29,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `blockchain` | Installs selected blockchain tooling by running `solana`, `gno`, and `sui`. |
 | `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
-| `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, configures file-backed MCP OAuth storage, and ensures gnomcp, Atlassian, Firecrawl, and Aside-backed Playwright MCP servers are registered. |
+| `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, configures file-backed MCP OAuth storage, and ensures gnomcp, Atlassian, Firecrawl, Aside-backed Playwright, and native Aside MCP servers are registered. |
 | `codex-agents` | Installs selected global Codex custom agents into `~/.codex/agents/`. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
 | `macos-shortcuts` | Installs five neutral macOS Quick Action shortcut slots backed by local ignored scripts. |

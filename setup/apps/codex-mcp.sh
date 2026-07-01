@@ -4,6 +4,15 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 ASIDE_BROWSER_EXECUTABLE="${ASIDE_BROWSER_EXECUTABLE:-/Applications/Aside.app/Contents/MacOS/Aside}"
 
+ensure_aside_cli() {
+    print_info "Checking Aside CLI..."
+    if command -v aside >/dev/null 2>&1; then
+        print_success "Aside CLI found"
+    else
+        print_info "Aside CLI missing; install it from Aside Developer settings or run: curl -fsSL https://releases.aside.com/install.sh | bash"
+    fi
+}
+
 ensure_gnomcp_mcp() {
     local gnomcp_binary="$HOME/.local/bin/gnomcp"
 
@@ -51,6 +60,22 @@ ensure_playwright_mcp() {
     print_success "Playwright MCP configured for Aside"
 }
 
+ensure_aside_mcp() {
+    print_info "Ensuring native Aside MCP is configured for Codex..."
+    if ! command -v aside >/dev/null 2>&1; then
+        print_info "Skipping native Aside MCP because the aside CLI is missing."
+        return
+    fi
+
+    if codex mcp get aside 2>/dev/null | grep -Fq "command: aside"; then
+        print_success "Native Aside MCP already configured"
+    else
+        codex mcp remove aside >/dev/null 2>&1 || true
+        codex mcp add aside -- aside mcp
+        print_success "Native Aside MCP configured"
+    fi
+}
+
 print_step "Configuring Codex MCP servers..."
 
 if ! command -v codex &> /dev/null; then
@@ -58,7 +83,9 @@ if ! command -v codex &> /dev/null; then
     exit 1
 fi
 
+ensure_aside_cli
 ensure_gnomcp_mcp
 ensure_atlassian_mcp
 ensure_firecrawl_mcp
 ensure_playwright_mcp
+ensure_aside_mcp

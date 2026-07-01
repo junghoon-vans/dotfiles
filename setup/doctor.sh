@@ -73,6 +73,7 @@ warn_command brew "run ./setup.sh bootstrap before brew-managed setup"
 warn_command chezmoi "run ./setup.sh brew-packages before dotfiles apply"
 warn_command mise "run ./setup.sh brew-packages before runtime setup"
 warn_command codex "run ./setup.sh codex before Codex MCP setup"
+warn_command aside "install the Aside CLI from Aside Developer settings before native Aside MCP setup"
 
 aside_browser_executable="${ASIDE_BROWSER_EXECUTABLE:-/Applications/Aside.app/Contents/MacOS/Aside}"
 if [ -x "$aside_browser_executable" ]; then
@@ -149,6 +150,11 @@ if command -v codex >/dev/null 2>&1; then
         print_success "Codex Playwright MCP is registered for a custom browser executable"
     else
         print_info "Codex Playwright MCP is not configured for Aside; run ./setup.sh codex-mcp"
+    fi
+    if codex mcp get aside 2>/dev/null | grep -Fq "command: aside"; then
+        print_success "Codex native Aside MCP is registered"
+    else
+        print_info "Codex native Aside MCP is not configured; run ./setup.sh codex-mcp after installing the Aside CLI"
     fi
 fi
 
