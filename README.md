@@ -45,7 +45,7 @@ make dry-run ARGS="--skip karabiner"
 Default commands run in filename order from `setup/commands/`:
 
 1. `bootstrap` - install Homebrew if needed
-2. `brew-packages` - install common `Brewfile` packages, including `mise` and `chezmoi`, and perform brew-owned post-install steps
+2. `brew-packages` - install common `Brewfile` packages, including `mise`, `chezmoi`, and Hermes Agent CLI bootstrap, and perform brew-owned post-install steps
 3. `languages` - install selected language runtimes from `mise.toml` and language-specific tools
 4. `blockchain` - install selected blockchain tooling, including Solana/Anchor, Gno, and Sui
 5. `links` - apply chezmoi-managed dotfiles and `.config/*`

@@ -24,6 +24,7 @@ brew "go-task"         # Task runner
 brew "tmux"            # Terminal multiplexer used by Codex HUD
 brew "chezmoi"         # Dotfiles manager
 brew "mise"            # Declarative language runtime manager
+brew "hermes-agent"    # Hermes Agent CLI bootstrap; existing ~/.local/bin/hermes may take precedence
 brew "cmake"           # Build system used by source-built tooling
 brew "pkgconf"         # pkg-config implementation for source builds
 

@@ -72,8 +72,24 @@ warn_command ruby "install Ruby before Brewfile syntax checks"
 warn_command brew "run ./setup.sh bootstrap before brew-managed setup"
 warn_command chezmoi "run ./setup.sh brew-packages before dotfiles apply"
 warn_command mise "run ./setup.sh brew-packages before runtime setup"
+warn_command hermes "run ./setup.sh brew-packages before Hermes CLI use"
 warn_command codex "run ./setup.sh codex before Codex MCP setup"
 warn_command aside "install the Aside CLI from Aside Developer settings before native Aside MCP setup"
+
+if command -v hermes >/dev/null 2>&1; then
+    hermes_path="$(command -v hermes)"
+    print_success "Hermes CLI found at $hermes_path"
+    hermes_version="$(hermes --version 2>/dev/null | head -n 1 || true)"
+    if [ -n "$hermes_version" ]; then
+        print_info "$hermes_version"
+    fi
+fi
+
+if [ -d "/Applications/Hermes.app" ]; then
+    print_success "Hermes Desktop app found"
+else
+    print_info "Hermes Desktop app not found; install it separately if you use the GUI"
+fi
 
 aside_browser_executable="${ASIDE_BROWSER_EXECUTABLE:-/Applications/Aside.app/Contents/MacOS/Aside}"
 if [ -x "$aside_browser_executable" ]; then

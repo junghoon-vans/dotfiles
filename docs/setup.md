@@ -24,7 +24,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | Command | Purpose |
 | --- | --- |
 | `bootstrap` | Installs Homebrew if it is missing. |
-| `brew-packages` | Installs common `Brewfile` dependencies, including Homebrew-managed `mise` and `chezmoi`, and performs brew-owned post-install steps. |
+| `brew-packages` | Installs common `Brewfile` dependencies, including Homebrew-managed `mise`, `chezmoi`, and `hermes-agent`, and performs brew-owned post-install steps. |
 | `languages` | Installs selected language runtimes from `mise.toml` and language-specific tools by running `go`, `node`, `bun`, `java`, `kotlin`, `xml`, `rust`, `python`, and `typescript`. |
 | `blockchain` | Installs selected blockchain tooling by running `solana`, `gno`, and `sui`. |
 | `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
