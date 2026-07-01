@@ -78,7 +78,7 @@ aside_browser_executable="${ASIDE_BROWSER_EXECUTABLE:-/Applications/Aside.app/Co
 if [ -x "$aside_browser_executable" ]; then
     print_success "Aside browser executable found"
 else
-    print_info "Aside browser executable missing at $aside_browser_executable; install Aside from https://aside.com/download before using Playwright MCP"
+    print_info "Aside browser executable missing at $aside_browser_executable; run ./setup.sh brew-packages before using Playwright MCP"
 fi
 
 if command -v brew >/dev/null 2>&1; then

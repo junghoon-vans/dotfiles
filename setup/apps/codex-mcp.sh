@@ -43,7 +43,7 @@ ensure_firecrawl_mcp() {
 ensure_playwright_mcp() {
     print_info "Configuring Playwright MCP for Aside..."
     if [ ! -x "$ASIDE_BROWSER_EXECUTABLE" ]; then
-        print_info "Aside browser not found at $ASIDE_BROWSER_EXECUTABLE; install Aside before using Playwright MCP."
+        print_info "Aside browser not found at $ASIDE_BROWSER_EXECUTABLE; run ./setup.sh brew-packages before using Playwright MCP."
     fi
 
     codex mcp remove playwright >/dev/null 2>&1 || true

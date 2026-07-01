@@ -46,6 +46,7 @@ brew "mysql-client"
 brew "libpq", link: true
 
 # GUI Apps
+cask "aside"           # Web browser with built-in AI assistant; used by Codex Playwright MCP
 cask "cmux"            # Ghostty-based terminal for AI coding agents
 cask "orbstack"        # Fast Docker Desktop alternative
 cask "tailscale-app"   # Mesh VPN desktop app
