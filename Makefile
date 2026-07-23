@@ -2,7 +2,7 @@
 
 SETUP := ./setup.sh
 
-.PHONY: help show-targets setup setup-all dry-run doctor check clean clean-backups codex-mcp bootstrap brew-packages brew-bundle languages blockchain links apps codex codex-agents codex-skills karabiner macos-shortcuts macos go node bun java kotlin xml rust python typescript solana gno sui
+.PHONY: help show-targets setup setup-all dry-run doctor check clean clean-backups codex-mcp bootstrap brew-packages brew-bundle languages blockchain links apps opencode codex codex-agents codex-skills karabiner macos-shortcuts maintenance macos go node bun java kotlin xml rust python typescript solana gno sui
 
 help:
 	@printf '%s\n' 'Usage: make <target> [ARGS="..."]'
@@ -25,7 +25,7 @@ show-targets:
 	@printf '%s\n' '  help setup setup-all dry-run doctor check clean'
 	@printf '%s\n' ''
 	@printf '%s\n' 'Setup phase targets:'
-	@printf '%s\n' '  bootstrap brew-packages languages blockchain links apps codex codex-agents codex-skills karabiner macos-shortcuts macos'
+	@printf '%s\n' '  bootstrap brew-packages languages blockchain links apps opencode codex codex-agents codex-skills karabiner macos-shortcuts maintenance macos'
 	@printf '%s\n' ''
 	@printf '%s\n' 'Language targets:'
 	@printf '%s\n' '  go node bun java kotlin xml rust python typescript'
@@ -80,6 +80,9 @@ links:
 apps:
 	$(SETUP) $(ARGS) apps
 
+opencode:
+	$(SETUP) $(ARGS) opencode
+
 codex:
 	$(SETUP) $(ARGS) codex
 
@@ -94,6 +97,9 @@ karabiner:
 
 macos-shortcuts:
 	$(SETUP) $(ARGS) macos-shortcuts
+
+maintenance:
+	$(SETUP) $(ARGS) maintenance
 
 macos:
 	$(SETUP) $(ARGS) macos

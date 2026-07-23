@@ -65,7 +65,7 @@ dotfiles/
 
 - All paths use `$HOME` instead of specific usernames.
 - `home/dot_config/` mirrors `~/.config/`; keep app config documentation in this root `AGENTS.md` or `docs/`, not in a root `.config/` tree.
-- `setup.sh` flow is `bootstrap → brew-packages → languages → blockchain → links → apps → codex → codex-agents → codex-skills → karabiner → macos-shortcuts → macos`.
+- `setup.sh` flow is `bootstrap → brew-packages → languages → blockchain → links → apps → opencode → codex → codex-agents → codex-skills → karabiner → macos-shortcuts → maintenance → macos`.
 - Global Codex custom agents are installed by `setup/apps/codex-agents.sh` into `~/.codex/agents/`.
 - Language commands (`go`, `node`, `bun`, `java`, `kotlin`, `xml`, `rust`, `python`, `typescript`) are explicit options; `languages` is the default language umbrella command.
 - Blockchain commands (`solana`, `gno`, `sui`) are explicit options; `blockchain` is the default blockchain umbrella command.
@@ -82,7 +82,7 @@ dotfiles/
 ./setup.sh --yes                   # Full non-interactive setup
 ./setup.sh --dry-run               # Preview selected commands
 ./setup.sh --skip karabiner --yes  # Full setup except Karabiner key remapping setup
-./setup.sh languages codex         # Run specific default commands
+./setup.sh languages opencode      # Run specific default commands
 ./setup.sh blockchain              # Install Solana/Anchor, Gno, and Sui tooling
 ./setup.sh solana                  # Install Solana CLI and Anchor tooling
 ./setup.sh sui                     # Install Sui CLI and Move tooling
@@ -90,6 +90,7 @@ dotfiles/
 ./setup.sh codex-mcp               # Reconfigure Codex MCP servers
 ./setup.sh codex-agents            # Install default global Codex custom agents
 ./setup.sh codex-skills            # Install default global Codex skills
+./setup.sh maintenance             # Load weekly workstation maintenance agents
 ./setup.sh check                   # Run repository checks
 ./setup.sh doctor                  # Inspect host setup state
 ./setup.sh clean-backups           # Remove managed dotfile backups
@@ -99,15 +100,17 @@ brew bundle --file Brewfile        # Install Brewfile packages
 ## NOTES
 
 - Requires Homebrew for package installation.
-- App config source lives under `home/dot_config/`: GitHub CLI preferences in `gh/config.yml`, Karabiner remapping in `karabiner/karabiner.json`, Neovim config in `nvim/`, and Zed settings in `zed/settings.json`.
+- App config source lives under `home/dot_config/`: GitHub CLI preferences in `gh/config.yml`, Karabiner remapping in `karabiner/karabiner.json`, Neovim config in `nvim/`, OpenCode/OpenAgent config in `opencode/`, and Zed settings in `zed/settings.json`.
 - `home/dot_config/nvim` is repo-owned and applied by chezmoi; setup no longer bootstraps LazyVim starter into `$HOME/.config/nvim`.
+- OpenCode config uses the public config schema and `oh-my-openagent` plugin config. Runtime-backed LSP commands launch through `mise exec <tool@version> -- ...` without hard-coded checkout paths.
 - Java runtime provisioning is mise-owned by `./setup.sh java`; Kotlin runtime and language server provisioning is owned by `./setup.sh kotlin`.
 - Solana CLI and Anchor are not mise-managed: `./setup.sh solana` installs Rust with mise, then uses the Anza Agave installer and AVM, with shell integration through `$HOME/.local/bin` wrappers.
 - Sui CLI is not Homebrew-managed: `./setup.sh sui` installs Rust with mise, then uses the official `suiup` installer, with shell integration through `$HOME/.local/bin`.
-- **Codex CLI and LazyCodex**: `./setup.sh codex` installs `@openai/codex` globally via mise-managed npm, then runs `npx lazycodex-ai install --no-tui --codex-autonomous` to bootstrap LazyCodex. Requires Node.js runtime.
+- **Codex CLI and LazyCodex**: `./setup.sh codex` installs `@openai/codex` globally via mise-managed npm, then runs `npx lazycodex-ai install --no-tui --codex-autonomous` to bootstrap LazyCodex (oh-my-openagent for Codex). Requires Node.js runtime.
 - **Codex HUD**: `./setup.sh codex` installs `fwyc0573/codex-hud` into `$HOME/.local/share/codex-hud`, exposes `codex-hud*` management commands from `$HOME/.local/bin`, and the managed `.zshrc` routes `codex`/`codex-resume` through the HUD wrapper when installed. Requires `tmux` from the Brewfile.
 - **Hermes Agent**: The Brewfile installs `hermes-agent` for CLI bootstrap on new machines. The Desktop app remains a separate `/Applications/Hermes.app` install, and an existing installer-managed `$HOME/.local/bin/hermes` can intentionally take PATH precedence over Homebrew's `/opt/homebrew/bin/hermes`. Do not track `~/.hermes/config.yaml`, `.env`, `auth.json`, sessions, profile state, memories, or gateway credentials.
 - **Gno MCP for Codex**: `./setup.sh codex` installs the configured `gnomcp` repo/ref into `$HOME/.local/bin`, registers the `gnomcp@gnoverse` Codex plugin through a local marketplace wrapper, and registers the Codex `gnomcp` MCP server. Defaults track `junghoon-vans/gno-mcp@align-gno-interrealm-skill`; set `GNOMCP_REPO`, `GNOMCP_REF`, and `GNOMCP_RELEASE_VERSION` to use an upstream release.
 - **Aside MCP for Codex**: `./setup.sh codex` and `./setup.sh codex-mcp` register both the Codex `playwright` MCP server pointed at Aside through `PLAYWRIGHT_MCP_EXECUTABLE_PATH` and the native `aside mcp` server when the Aside CLI is available. Aside is installed from the Brewfile cask; install the CLI from Aside Developer settings or `curl -fsSL https://releases.aside.com/install.sh | bash`. Override `ASIDE_BROWSER_EXECUTABLE` if the app lives elsewhere.
 - **Codex agents**: `./setup.sh codex-agents` installs selected generic global Codex custom agents from `VoltAgent/awesome-codex-subagents` into `~/.codex/agents`; keep private project rules in repo-local `.agents/skills` or `AGENTS.md`, not in global agent files.
 - **Codex skills**: `./setup.sh codex-skills` installs default global Codex skills through `npx skills`; the current default set is Find Skills, Vercel React Best Practices, and Golang Pro.
+- **OpenCode**: `./setup.sh opencode` installs `opencode-ai` and `oh-my-openagent` globally through Bun, bootstraps oh-my-openagent with OpenAI-only model routing, and installs `opencode-status-hud`. Requires Bun runtime.

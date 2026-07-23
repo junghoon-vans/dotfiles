@@ -29,10 +29,12 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `blockchain` | Installs selected blockchain tooling by running `solana`, `gno`, and `sui`. |
 | `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
+| `opencode` | Installs OpenCode, bootstraps oh-my-openagent, and configures the status HUD. |
 | `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, configures file-backed MCP OAuth storage, and ensures gnomcp, Atlassian, Firecrawl, Aside-backed Playwright, and native Aside MCP servers are registered. |
 | `codex-agents` | Installs selected global Codex custom agents into `~/.codex/agents/`. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
 | `macos-shortcuts` | Installs five neutral macOS Quick Action shortcut slots backed by local ignored scripts. |
+| `maintenance` | Loads periodic workstation maintenance LaunchAgents. |
 | `macos` | Applies keyboard, Finder, Dock, screenshot, appearance, and related defaults. |
 
 ## Utility Commands
@@ -88,6 +90,17 @@ Examples:
 ## Dotfile Apply Behavior
 
 `setup/link.sh` applies chezmoi source state from `home/`. Existing files are backed up only when their content differs from the tracked source before `chezmoi apply` runs.
+
+The linked home state includes a weekly LaunchAgent at
+`~/Library/LaunchAgents/com.junghoon.weekly-disk-maintenance.plist`. It runs
+`~/.local/bin/weekly-disk-maintenance` every Monday at 10:00. The script checks
+the `$HOME` filesystem and, when usage is at least 85%, runs `mole clean`, prunes
+unused Docker builders/images/containers without pruning Docker volumes, writes
+`~/.local/state/dotfiles/weekly-disk-maintenance.log`, and reports larger cleanup
+candidates such as caches, Xcode DerivedData, Docker storage, Docker volumes,
+local share state, and OpenStack data directories. Set `WEEKLY_DISK_OPENSTACK_PATHS`
+to a colon-separated path list to add machine-specific OpenStack data directories
+to the report.
 
 Use `./setup.sh clean-backups` to remove old managed backup files after confirming the applied dotfiles are working. The cleanup only removes backups for targets that still match the tracked chezmoi source.
 

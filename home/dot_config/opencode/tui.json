@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "keybinds": {
+    "sidebar_toggle": "ctrl+b",
+    "status_view": "ctrl+s",
+    "messages_first": "home,ctrl+g",
+    "messages_last": "end,ctrl+alt+g"
+  },
+  "diff_style": "stacked",
+  "scroll_acceleration": {
+    "enabled": true
+  }
+}

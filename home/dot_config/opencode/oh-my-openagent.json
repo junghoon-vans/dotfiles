@@ -1,0 +1,488 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/dev/assets/oh-my-opencode.schema.json",
+  "disabled_providers": [
+    "anthropic",
+    "google",
+    "github-copilot",
+    "opencode",
+    "openai",
+    "vercel",
+    "zai-coding-plan",
+    "kimi-for-coding",
+    "moonshotai",
+    "moonshotai-cn",
+    "firmware",
+    "ollama-cloud",
+    "aihubmix",
+    "openrouter",
+    "venice"
+  ],
+  "model_fallback": true,
+  "agents": {
+    "build": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "low",
+      "fallback_models": [
+        {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "low"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5",
+          "variant": "low"
+        },
+        {
+          "model": "opencode-go/qwen3.7-plus",
+          "variant": "low"
+        }
+      ]
+    },
+    "plan": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "high",
+      "fallback_models": [
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "high"
+        }
+      ]
+    },
+    "sisyphus": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "high",
+      "fallback_models": [
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "high"
+        }
+      ],
+      "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind."
+    },
+    "hephaestus": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "medium",
+      "fallback_models": [
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "medium"
+        }
+      ],
+      "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind."
+    },
+    "sisyphus-junior": {
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "medium",
+      "fallback_models": [
+        {
+          "model": "opencode-go/mimo-v2.5",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/qwen3.7-plus",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/hy3",
+          "variant": "medium"
+        }
+      ]
+    },
+    "OpenCode-Builder": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "medium",
+      "fallback_models": [
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "medium"
+        }
+      ]
+    },
+    "prometheus": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "high",
+      "fallback_models": [
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "high"
+        }
+      ]
+    },
+    "metis": {
+      "model": "opencode-go/glm-5.2",
+      "variant": "high",
+      "fallback_models": [
+        {
+          "model": "opencode-go/kimi-k3",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "high"
+        }
+      ]
+    },
+    "momus": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "xhigh",
+      "fallback_models": [
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "xhigh"
+        },
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "xhigh"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "xhigh"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "xhigh"
+        }
+      ]
+    },
+    "oracle": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "xhigh",
+      "fallback_models": [
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "xhigh"
+        },
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "xhigh"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "xhigh"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "xhigh"
+        }
+      ]
+    },
+    "librarian": {
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "low",
+      "fallback_models": [
+        {
+          "model": "opencode-go/mimo-v2.5",
+          "variant": "low"
+        },
+        {
+          "model": "opencode-go/qwen3.7-plus",
+          "variant": "low"
+        },
+        {
+          "model": "opencode-go/hy3",
+          "variant": "low"
+        }
+      ]
+    },
+    "explore": {
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "low",
+      "fallback_models": [
+        {
+          "model": "opencode-go/mimo-v2.5",
+          "variant": "low"
+        },
+        {
+          "model": "opencode-go/qwen3.7-plus",
+          "variant": "low"
+        },
+        {
+          "model": "opencode-go/hy3",
+          "variant": "low"
+        }
+      ]
+    },
+    "multimodal-looker": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "high",
+      "fallback_models": [
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "high"
+        }
+      ]
+    },
+    "atlas": {
+      "model": "opencode-go/qwen3.7-max",
+      "variant": "medium",
+      "fallback_models": [
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "medium"
+        }
+      ]
+    }
+  },
+  "categories": {
+    "visual-engineering": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "high",
+      "fallback_models": [
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "high"
+        }
+      ]
+    },
+    "ultrabrain": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "xhigh",
+      "fallback_models": [
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "xhigh"
+        },
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "xhigh"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "xhigh"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "xhigh"
+        }
+      ]
+    },
+    "deep": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "medium",
+      "fallback_models": [
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "medium"
+        }
+      ]
+    },
+    "quick": {
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "low",
+      "fallback_models": [
+        {
+          "model": "opencode-go/mimo-v2.5",
+          "variant": "low"
+        },
+        {
+          "model": "opencode-go/qwen3.7-plus",
+          "variant": "low"
+        },
+        {
+          "model": "opencode-go/hy3",
+          "variant": "low"
+        }
+      ]
+    },
+    "unspecified-low": {
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "medium",
+      "fallback_models": [
+        {
+          "model": "opencode-go/mimo-v2.5",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/qwen3.7-plus",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/hy3",
+          "variant": "medium"
+        }
+      ]
+    },
+    "unspecified-high": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "high",
+      "fallback_models": [
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/glm-5.2",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "high"
+        }
+      ]
+    },
+    "writing": {
+      "model": "opencode-go/deepseek-v4-flash",
+      "variant": "medium",
+      "fallback_models": [
+        {
+          "model": "opencode-go/mimo-v2.5",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/qwen3.7-plus",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/hy3",
+          "variant": "medium"
+        }
+      ]
+    },
+    "artistry": {
+      "model": "opencode-go/kimi-k3",
+      "variant": "high",
+      "fallback_models": [
+        {
+          "model": "opencode-go/qwen3.7-max",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/mimo-v2.5-pro",
+          "variant": "high"
+        }
+      ]
+    }
+  },
+  "runtime_fallback": {
+    "enabled": true,
+    "retry_on_errors": [
+      429,
+      500,
+      502,
+      503,
+      504
+    ],
+    "max_fallback_attempts": 4,
+    "cooldown_seconds": 30,
+    "timeout_seconds": 30,
+    "notify_on_fallback": true
+  },
+  "browser_automation_engine": {
+    "provider": "playwright"
+  },
+  "skills": {
+    "enable": [
+      "git-master",
+      "playwright",
+      "review-work",
+      "ai-slop-remover",
+      "frontend-ui-ux"
+    ]
+  },
+  "notification": {
+    "force_enable": true
+  }
+}

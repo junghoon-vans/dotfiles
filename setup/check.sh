@@ -15,6 +15,7 @@ print_step "Running repository checks..."
 print_info "Checking shell syntax..."
 bash -n \
     "$DOTFILES_DIR/setup.sh" \
+    "$DOTFILES_DIR/home/dot_local/bin/weekly-disk-maintenance" \
     "$SETUP_DIR/main.sh" \
     "$SETUP_DIR/lib/common.sh" \
     "$SETUP_DIR"/commands/* \
@@ -28,6 +29,7 @@ if command -v shellcheck >/dev/null 2>&1; then
     print_info "Running shellcheck..."
     shellcheck -x -S warning \
         "$DOTFILES_DIR/setup.sh" \
+        "$DOTFILES_DIR/home/dot_local/bin/weekly-disk-maintenance" \
         "$SETUP_DIR/main.sh" \
         "$SETUP_DIR/lib/common.sh" \
         "$SETUP_DIR"/commands/* \
@@ -48,7 +50,10 @@ else
 fi
 
 print_info "Validating JSON config..."
+python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/opencode.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_codex/lsp-client.json" >/dev/null
+python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/oh-my-openagent.json" >/dev/null
+python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/tui.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_config/karabiner/karabiner.json" >/dev/null
 
 print_info "Validating JSONC config..."
@@ -65,6 +70,13 @@ content = "".join(lines)
 content = re.sub(r",(\s*[}\]])", r"\1", content)
 json.loads(content)
 PY
+
+print_info "Validating LaunchAgent plists..."
+if command -v plutil >/dev/null 2>&1; then
+    plutil -lint "$DOTFILES_DIR/home/Library/LaunchAgents/com.junghoon.weekly-disk-maintenance.plist" >/dev/null
+else
+    print_info "plutil not found; skipping plist lint"
+fi
 
 print_info "Checking Brewfile syntax..."
 ruby -c "$DOTFILES_DIR/Brewfile" >/dev/null

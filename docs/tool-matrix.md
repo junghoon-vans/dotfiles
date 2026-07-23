@@ -1,6 +1,19 @@
 # Tool Matrix
 
-## Codex Agents and LSP
+## OpenCode / OpenAgent
+
+OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is applied to `~/.config/opencode/` by chezmoi. The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json` and is applied to `~/.codex/lsp-client.json`. Global Codex custom agents are installed into `~/.codex/agents/` by `./setup.sh codex-agents`.
+
+- `opencode.json` tracks OpenCode plugins, MCP endpoints, and native LSP mappings.
+- `lsp-client.json` mirrors the OpenCode LSP mappings for OpenAgent/lsp-tools-mcp fallback use.
+- `oh-my-openagent.json` tracks model routing, fallbacks, skills, and notification preferences.
+- `tui.json` tracks terminal UI preferences.
+- MCP endpoints include GitHub, Atlassian, Firecrawl, and Context7. API keys and OAuth host files are not tracked.
+- The `opencode` setup command installs `opencode-status-hud`; its installer-managed local shim lives at `~/.config/opencode/plugins/opencode-status-hud.js` and is not tracked by chezmoi.
+- Optional `OPENCODE_STATUS_HUD_*` display overrides are local runtime preferences and should stay out of tracked config unless they become part of the shared baseline.
+- OpenAgent uses Playwright MCP for browser automation. Brave is Brewfile-managed and selected through `PLAYWRIGHT_MCP_EXECUTABLE_PATH` in `.zshrc` when installed.
+
+## Codex Agents and Skills
 
 The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json` and is applied to `~/.codex/lsp-client.json`. Global Codex custom agents are installed into `~/.codex/agents/` by `./setup.sh codex-agents`.
 
@@ -20,7 +33,7 @@ The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json
 
 `mise.toml` records the repository runtime versions for languages that mise can manage, and `home/dot_config/mise/config.toml` mirrors those versions for the global `~/.config/mise/config.toml` baseline. `./setup.sh brew-packages` installs Homebrew-managed `mise`; setup language and blockchain commands sync the global mise config, run `mise install <tool>` for required runtimes, and then install runtime-adjacent tools, language servers, and chain-specific CLIs with those runtimes.
 
-| Language / File Type | Runtime / CLI | Agent LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
+| Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
 | --- | --- | --- | --- | --- | --- |
 | Bash / Zsh | macOS shell | `bash-language-server` | `shfmt` | `shellcheck` | `bash -n` |
 | Go | Global mise config (`go = "1.25"`) + `./setup.sh go` tools in `~/.local/bin` | `mise exec go@1.25 -- gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
@@ -52,4 +65,4 @@ Run the same local checks used by CI with:
 
 ## Biome LSP Scope
 
-Agent LSP config starts Biome with `biome lsp-proxy --stdio`. This repo maps Biome only to `.json` and `.jsonc` so it does not overlap with `typescript-language-server` for JS/TS files. CSS remains covered by Biome formatting/linting, but it is not mapped as an LSP extension because Biome CSS LSP coverage is less consistently documented across upstream docs.
+Agent LSP config starts Biome with `biome lsp-proxy --stdio`. This repo maps Biome only to `.json` and `.jsonc` so it does not overlap with `typescript-language-server` for JS/TS files. CSS remains covered by Biome formatting/linting, but it is not mapped as an OpenCode LSP extension because Biome CSS LSP coverage is less consistently documented across upstream docs.

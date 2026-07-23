@@ -1,0 +1,169 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "oh-my-openagent@latest"
+  ],
+  "mcp": {
+    "atlassian": {
+      "type": "remote",
+      "url": "https://mcp.atlassian.com/v1/mcp/authv2",
+      "enabled": true
+    },
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "enabled": true,
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer {env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    }
+  },
+  "lsp": {
+    "bash": {
+      "command": [
+        "bash-language-server",
+        "start"
+      ],
+      "extensions": [
+        ".sh",
+        ".bash",
+        ".zsh",
+        ".ksh"
+      ]
+    },
+    "biome": {
+      "command": [
+        "biome",
+        "lsp-proxy",
+        "--stdio"
+      ],
+      "extensions": [
+        ".json",
+        ".jsonc"
+      ]
+    },
+    "gopls": {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "PATH=\"$HOME/.local/bin:$PATH\" exec mise exec go@1.25 -- gopls"
+      ],
+      "extensions": [
+        ".go"
+      ]
+    },
+    "marksman": {
+      "command": [
+        "marksman",
+        "server"
+      ],
+      "extensions": [
+        ".md"
+      ]
+    },
+    "gnopls": {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "PATH=\"$HOME/.local/bin:$PATH\" exec mise exec go@1.25 -- gnopls -mode=stdio"
+      ],
+      "extensions": [
+        ".gno"
+      ]
+    },
+    "jdtls": {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "project_hash=$(printf \"%s\" \"$PWD\" | shasum | cut -d\" \" -f1); mkdir -p \"$HOME/Library/Caches/jdtls/workspaces\"; exec mise exec java@temurin-21 -- jdtls -data \"$HOME/Library/Caches/jdtls/workspaces/$project_hash\""
+      ],
+      "extensions": [
+        ".java"
+      ]
+    },
+    "kotlin-ls": {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "exec mise exec java@temurin-21 kotlin@latest -- kotlin-language-server"
+      ],
+      "extensions": [
+        ".kt",
+        ".kts"
+      ]
+    },
+    "pyright": {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "exec mise exec python@3.13 -- pyright-langserver --stdio"
+      ],
+      "extensions": [
+        ".py"
+      ]
+    },
+    "rust": {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "exec mise exec rust@latest -- \"$(brew --prefix rust-analyzer)/bin/rust-analyzer\""
+      ],
+      "extensions": [
+        ".rs"
+      ]
+    },
+    "terraform": {
+      "command": [
+        "terraform-ls",
+        "serve"
+      ],
+      "extensions": [
+        ".tf",
+        ".tfvars"
+      ]
+    },
+    "typescript-language-server": {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "PATH=\"$(mise exec bun@latest -- bun pm bin -g):$PATH\" exec mise exec node@24 bun@latest -- typescript-language-server --stdio"
+      ],
+      "extensions": [
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx"
+      ]
+    },
+    "xml": {
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "exec mise exec java@temurin-21 -- java ${LEMMINX_JAVA_OPTS:-} -jar \"$HOME/.local/share/lemminx/lemminx.jar\""
+      ],
+      "extensions": [
+        ".xml",
+        ".xsd",
+        ".xsl",
+        ".xslt",
+        ".svg"
+      ]
+    },
+    "yaml-ls": {
+      "command": [
+        "yaml-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ]
+    }
+  }
+}

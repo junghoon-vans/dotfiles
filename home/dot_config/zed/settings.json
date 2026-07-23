@@ -103,6 +103,11 @@
   },
   "disable_ai": false,
   "confirm_quit": true,
+  "agent_servers": {
+    "opencode": {
+      "type": "registry"
+    }
+  },
   "telemetry": {
     "diagnostics": true,
     "metrics": true,

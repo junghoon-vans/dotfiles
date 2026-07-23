@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal macOS development environment specification optimized for Go, Gno, Rust, Solana/Anchor, Sui, Java, Kotlin, Python, Node.js, Codex, and modern CLI tooling.
+Personal macOS development environment specification optimized for Go, Gno, Rust, Solana/Anchor, Sui, Java, Kotlin, Python, Node.js, OpenCode, and modern CLI tooling.
 
 ## Overview
 
@@ -10,6 +10,7 @@ This repository manages:
 - Homebrew packages through `Brewfile`
 - Language runtime provisioning through Homebrew-managed `mise`, repo `mise.toml`, and global `~/.config/mise/config.toml`
 - macOS defaults, shortcut slots, and app-specific bootstrap scripts under `setup/`
+- Weekly low-disk maintenance through a LaunchAgent-managed `mole clean` and Docker cleanup script
 - A command-based setup harness under `setup/`
 
 The repository is intentionally broader than a dotfiles store: it is the source of truth for recreating a personal macOS workstation. Dotfiles are managed through chezmoi source state in `home/`, while Homebrew, mise, and setup scripts cover packages, runtimes, app setup, and host verification.
@@ -50,12 +51,14 @@ Default commands run in filename order from `setup/commands/`:
 4. `blockchain` - install selected blockchain tooling, including Solana/Anchor, Gno, and Sui
 5. `links` - apply chezmoi-managed dotfiles and `.config/*`
 6. `apps` - install Oh My Zsh and Zed Gno extension support
-7. `codex` - install Codex CLI, bootstrap LazyCodex, and register Codex MCP servers including gnomcp and Aside-backed Playwright
-8. `codex-agents` - install default global Codex custom agents
-9. `codex-skills` - install default global Codex skills through `npx skills`
-10. `karabiner` - install Karabiner-Elements for key remapping
-11. `macos-shortcuts` - install five generic macOS Quick Action shortcut slots
-12. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
+7. `opencode` - install OpenCode and bootstrap OpenAgent
+8. `codex` - install Codex CLI, bootstrap LazyCodex, and register Codex MCP servers including gnomcp and Aside-backed Playwright
+9. `codex-agents` - install default global Codex custom agents
+10. `codex-skills` - install default global Codex skills through `npx skills`
+11. `karabiner` - install Karabiner-Elements for key remapping
+12. `macos-shortcuts` - install five generic macOS Quick Action shortcut slots
+13. `maintenance` - load weekly low-disk maintenance LaunchAgents
+14. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
 
 Utility commands are explicit only and are not part of full setup:
 
@@ -63,6 +66,15 @@ Utility commands are explicit only and are not part of full setup:
 make doctor # Inspect host prerequisites and managed dotfile state
 make clean  # Remove managed dotfile backups created by links
 ```
+
+The applied dotfiles also install `~/.local/bin/weekly-disk-maintenance` and
+`~/Library/LaunchAgents/com.junghoon.weekly-disk-maintenance.plist`. The agent
+checks disk usage every Monday at 10:00. When the checked filesystem is at least
+85% used, it runs `mole clean`, prunes unused Docker build cache/images/containers
+without pruning Docker volumes, logs additional cleanup candidates including
+OpenStack data, and sends a macOS notification. Docker volumes are only reported
+for manual cleanup. Set `WEEKLY_DISK_OPENSTACK_PATHS` to a colon-separated path
+list to add machine-specific OpenStack data directories to the report.
 
 `make` is the public command surface for routine use. Run `make show-targets` for the full target list. It delegates to `./setup.sh`, which remains available when you need lower-level setup harness behavior.
 
