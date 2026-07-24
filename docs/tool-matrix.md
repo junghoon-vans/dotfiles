@@ -8,7 +8,7 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 - `lsp-client.json` mirrors the OpenCode LSP mappings for OpenAgent/lsp-tools-mcp fallback use.
 - `oh-my-openagent.json` tracks model routing, fallbacks, skills, and notification preferences.
 - `tui.json` tracks terminal UI preferences.
-- MCP endpoints include GitHub, Atlassian, Firecrawl, and Context7. API keys and OAuth host files are not tracked.
+- MCP endpoints include GitHub, Atlassian, Context7, gnomcp, Firecrawl, Aside-backed Playwright, and native Aside — the same set Codex registers through `setup/apps/codex-mcp.sh`, kept in sync across both agents. API keys and OAuth host files are not tracked.
 - The `opencode` setup command installs `opencode-status-hud`; its installer-managed local shim lives at `~/.config/opencode/plugins/opencode-status-hud.js` and is not tracked by chezmoi.
 - Optional `OPENCODE_STATUS_HUD_*` display overrides are local runtime preferences and should stay out of tracked config unless they become part of the shared baseline.
 - OpenAgent uses Playwright MCP for browser automation. Brave is Brewfile-managed and selected through `PLAYWRIGHT_MCP_EXECUTABLE_PATH` in `.zshrc` when installed.
@@ -27,7 +27,9 @@ The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json
 
 `./setup.sh codex` installs Codex HUD from `fwyc0573/codex-hud` into `~/.local/share/codex-hud`, exposes its management commands from `~/.local/bin`, and the managed `.zshrc` routes `codex` and `codex-resume` through the HUD wrapper when it is installed. It also installs the configured `gnomcp` repo/ref into `~/.local/bin`, registers the `gnomcp@gnoverse` Codex plugin, and registers the `gnomcp` MCP server so Gno chain tools and bundled Gno audit/build/debug skills are available after restarting Codex. The default tracks the official `gnoverse/gno-mcp@v0.9.0` release; set `GNOMCP_REPO`, `GNOMCP_REF`, and `GNOMCP_RELEASE_VERSION` to pin a different release or fork.
 
-`./setup.sh codex-skills` installs global Codex skills through `npx skills`. The default set is `find-skills`, `vercel-react-best-practices`, and `golang-pro`.
+`./setup.sh codex` (via `codex-mcp.sh`) also registers Atlassian, GitHub Copilot (bearer token from `GITHUB_PERSONAL_ACCESS_TOKEN`), Context7, Firecrawl, Aside-backed Playwright, and native Aside MCP servers — the same set OpenCode declares in `opencode.json`.
+
+`./setup.sh codex-skills` installs global Codex skills through `npx skills`. The default set is `find-skills`, `vercel-react-best-practices`, and `golang-pro`. `./setup.sh opencode-skills` installs the same skill set for OpenCode through `npx skills --agent opencode`.
 
 ## Language and Harness Coverage
 

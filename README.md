@@ -52,13 +52,14 @@ Default commands run in filename order from `setup/commands/`:
 5. `links` - apply chezmoi-managed dotfiles and `.config/*`
 6. `apps` - install Oh My Zsh and Zed Gno extension support
 7. `opencode` - install OpenCode and bootstrap OpenAgent
-8. `codex` - install Codex CLI, bootstrap LazyCodex, and register Codex MCP servers including gnomcp and Aside-backed Playwright
-9. `codex-agents` - install default global Codex custom agents
-10. `codex-skills` - install default global Codex skills through `npx skills`
-11. `karabiner` - install Karabiner-Elements for key remapping
-12. `macos-shortcuts` - install five generic macOS Quick Action shortcut slots
-13. `maintenance` - load weekly low-disk maintenance LaunchAgents
-14. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
+8. `opencode-skills` - install default global OpenCode skills through `npx skills`
+9. `codex` - install Codex CLI, bootstrap LazyCodex, and register Codex MCP servers including gnomcp and Aside-backed Playwright
+10. `codex-agents` - install default global Codex custom agents
+11. `codex-skills` - install default global Codex skills through `npx skills`
+12. `karabiner` - install Karabiner-Elements for key remapping
+13. `macos-shortcuts` - install five generic macOS Quick Action shortcut slots
+14. `maintenance` - load weekly low-disk maintenance LaunchAgents
+15. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
 
 Utility commands are explicit only and are not part of full setup:
 

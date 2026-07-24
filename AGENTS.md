@@ -65,7 +65,7 @@ dotfiles/
 
 - All paths use `$HOME` instead of specific usernames.
 - `home/dot_config/` mirrors `~/.config/`; keep app config documentation in this root `AGENTS.md` or `docs/`, not in a root `.config/` tree.
-- `setup.sh` flow is `bootstrap → brew-packages → languages → blockchain → links → apps → opencode → codex → codex-agents → codex-skills → karabiner → macos-shortcuts → maintenance → macos`.
+- `setup.sh` flow is `bootstrap → brew-packages → languages → blockchain → links → apps → opencode → opencode-skills → codex → codex-agents → codex-skills → karabiner → macos-shortcuts → maintenance → macos`.
 - Global Codex custom agents are installed by `setup/apps/codex-agents.sh` into `~/.codex/agents/`.
 - Language commands (`go`, `node`, `bun`, `java`, `kotlin`, `xml`, `rust`, `python`, `typescript`) are explicit options; `languages` is the default language umbrella command.
 - Blockchain commands (`solana`, `gno`, `sui`) are explicit options; `blockchain` is the default blockchain umbrella command.
@@ -114,3 +114,5 @@ brew bundle --file Brewfile        # Install Brewfile packages
 - **Codex agents**: `./setup.sh codex-agents` installs selected generic global Codex custom agents from `VoltAgent/awesome-codex-subagents` into `~/.codex/agents`; keep private project rules in repo-local `.agents/skills` or `AGENTS.md`, not in global agent files.
 - **Codex skills**: `./setup.sh codex-skills` installs default global Codex skills through `npx skills`; the current default set is Find Skills, Vercel React Best Practices, and Golang Pro.
 - **OpenCode**: `./setup.sh opencode` installs `opencode-ai` and `oh-my-openagent` globally through Bun, bootstraps oh-my-openagent with OpenAI-only model routing, and installs `opencode-status-hud`. Requires Bun runtime.
+- **OpenCode skills**: `./setup.sh opencode-skills` installs the same default skill set as Codex (Find Skills, Vercel React Best Practices, Golang Pro) through `npx skills --agent opencode`, keeping marketplace-skill coverage in parity across both agents.
+- **MCP parity across Codex and OpenCode**: `home/dot_config/opencode/opencode.json` and `setup/apps/codex-mcp.sh` are kept in sync so both agents register the same MCP server set — `atlassian`, `github` (GitHub Copilot, bearer token from `GITHUB_PERSONAL_ACCESS_TOKEN`), `context7`, `gnomcp`, `firecrawl`, `playwright` (Aside-backed), and native `aside`. Codex registers these imperatively via `codex mcp add`; OpenCode declares them statically in `opencode.json`. When adding an MCP server to one agent, add the equivalent to the other.

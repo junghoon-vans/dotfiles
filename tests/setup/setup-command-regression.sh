@@ -414,6 +414,32 @@ grep -q 'npx --yes skills add vercel-labs/skills --skill find-skills --global --
 grep -q 'npx --yes skills add vercel-labs/agent-skills --skill vercel-react-best-practices --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
 grep -q 'npx --yes skills add jeffallan/claude-skills --skill golang-pro --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
 
+OPENCODE_SKILLS_OUTPUT="$($SETUP_SH --dry-run opencode-skills)"
+printf '%s' "$OPENCODE_SKILLS_OUTPUT" | grep -q '^  opencode-skills[[:space:]]\+Install default global OpenCode skills through npx skills'
+
+OPENCODE_SKILLS_HOME="$TMP_DIR/opencode-skills-home"
+OPENCODE_SKILLS_BIN="$TMP_DIR/opencode-skills-bin"
+OPENCODE_SKILLS_LOG="$TMP_DIR/opencode-skills.log"
+mkdir -p "$OPENCODE_SKILLS_HOME" "$OPENCODE_SKILLS_BIN"
+cat >"$OPENCODE_SKILLS_BIN/mise" <<'EOF'
+#!/bin/bash
+printf 'mise %s\n' "$*" >> "$OPENCODE_SKILLS_LOG"
+if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
+  shift 2
+  printf '%s\n' "$*" >> "$OPENCODE_SKILLS_LOG"
+  if [ "${1:-}" = "node" ] && [ "${2:-}" = "--version" ]; then
+    printf 'v24.0.0\n'
+    exit 0
+  fi
+fi
+exit 0
+EOF
+chmod +x "$OPENCODE_SKILLS_BIN/mise"
+env HOME="$OPENCODE_SKILLS_HOME" PATH="$OPENCODE_SKILLS_BIN:/usr/bin:/bin" OPENCODE_SKILLS_LOG="$OPENCODE_SKILLS_LOG" bash "$REPO_ROOT/setup/apps/opencode-skills.sh" >/dev/null
+grep -q 'npx --yes skills add vercel-labs/skills --skill find-skills --global --agent opencode --copy --yes' "$OPENCODE_SKILLS_LOG"
+grep -q 'npx --yes skills add vercel-labs/agent-skills --skill vercel-react-best-practices --global --agent opencode --copy --yes' "$OPENCODE_SKILLS_LOG"
+grep -q 'npx --yes skills add jeffallan/claude-skills --skill golang-pro --global --agent opencode --copy --yes' "$OPENCODE_SKILLS_LOG"
+
 LANGUAGE_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip gno go gno)"
 printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q 'Skipping command: gno'
 printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go via mise'
@@ -1061,7 +1087,7 @@ cat >"$FAKE_BIN/codex" <<EOF
 printf 'codex %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "mcp" ] && [ "\${2:-}" = "get" ]; then
   case "\${3:-}" in
-    aside|atlassian|firecrawl)
+    aside|atlassian|github|context7|firecrawl)
       exit 1
       ;;
   esac
@@ -1127,6 +1153,8 @@ grep -q 'codex plugin marketplace add '"$FAKE_HOME"'/.codex/plugins/cache/gnover
 grep -q 'codex plugin add gnomcp@gnoverse' "$LOG_FILE"
 grep -q 'codex mcp add gnomcp -- '"$FAKE_HOME"'/.local/bin/gnomcp' "$LOG_FILE"
 grep -q 'codex mcp add atlassian --url https://mcp.atlassian.com/v1/mcp/authv2' "$LOG_FILE"
+grep -q 'codex mcp add github --url https://api.githubcopilot.com/mcp/ --bearer-token-env-var GITHUB_PERSONAL_ACCESS_TOKEN' "$LOG_FILE"
+grep -q 'codex mcp add context7 --url https://mcp.context7.com/mcp' "$LOG_FILE"
 grep -q 'codex mcp add firecrawl -- /bin/zsh -lc source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp' "$LOG_FILE"
 grep -q 'codex mcp add playwright --env PLAYWRIGHT_MCP_EXECUTABLE_PATH=/Applications/Aside.app/Contents/MacOS/Aside -- npx -y @playwright/mcp@latest' "$LOG_FILE"
 grep -q 'codex mcp add aside -- aside mcp' "$LOG_FILE"

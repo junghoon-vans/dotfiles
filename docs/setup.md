@@ -30,8 +30,10 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
 | `opencode` | Installs OpenCode, bootstraps oh-my-openagent, and configures the status HUD. |
-| `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, configures file-backed MCP OAuth storage, and ensures gnomcp, Atlassian, Firecrawl, Aside-backed Playwright, and native Aside MCP servers are registered. |
+| `opencode-skills` | Installs the default global OpenCode skill set (Find Skills, Vercel React Best Practices, Golang Pro) through `npx skills --agent opencode`. |
+| `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, configures file-backed MCP OAuth storage, and ensures gnomcp, Atlassian, GitHub Copilot, Context7, Firecrawl, Aside-backed Playwright, and native Aside MCP servers are registered. |
 | `codex-agents` | Installs selected global Codex custom agents into `~/.codex/agents/`. |
+| `codex-skills` | Installs the default global Codex skill set (Find Skills, Vercel React Best Practices, Golang Pro) through `npx skills --agent codex`. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
 | `macos-shortcuts` | Installs five neutral macOS Quick Action shortcut slots backed by local ignored scripts. |
 | `maintenance` | Loads periodic workstation maintenance LaunchAgents. |

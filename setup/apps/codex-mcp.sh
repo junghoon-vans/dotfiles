@@ -36,6 +36,27 @@ ensure_atlassian_mcp() {
     fi
 }
 
+ensure_github_mcp() {
+    print_info "Ensuring GitHub Copilot MCP is configured..."
+    if codex mcp get github >/dev/null 2>&1; then
+        print_success "GitHub Copilot MCP already configured"
+    else
+        codex mcp add github --url https://api.githubcopilot.com/mcp/ --bearer-token-env-var GITHUB_PERSONAL_ACCESS_TOKEN
+        print_success "GitHub Copilot MCP configured"
+        print_info "Set GITHUB_PERSONAL_ACCESS_TOKEN in ~/.zshrc.local before using GitHub Copilot MCP."
+    fi
+}
+
+ensure_context7_mcp() {
+    print_info "Ensuring Context7 MCP is configured..."
+    if codex mcp get context7 >/dev/null 2>&1; then
+        print_success "Context7 MCP already configured"
+    else
+        codex mcp add context7 --url https://mcp.context7.com/mcp
+        print_success "Context7 MCP configured"
+    fi
+}
+
 ensure_firecrawl_mcp() {
     local launch_script='source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp'
 
@@ -86,6 +107,8 @@ fi
 ensure_aside_cli
 ensure_gnomcp_mcp
 ensure_atlassian_mcp
+ensure_github_mcp
+ensure_context7_mcp
 ensure_firecrawl_mcp
 ensure_playwright_mcp
 ensure_aside_mcp

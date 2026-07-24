@@ -22,6 +22,44 @@
       "type": "remote",
       "url": "https://mcp.context7.com/mcp",
       "enabled": true
+    },
+    "gnomcp": {
+      "type": "local",
+      "command": [
+        "/bin/bash",
+        "-lc",
+        "exec \"$HOME/.local/bin/gnomcp\""
+      ],
+      "enabled": true
+    },
+    "firecrawl": {
+      "type": "local",
+      "command": [
+        "/bin/zsh",
+        "-lc",
+        "source \"$HOME/.zshrc.local\" 2>/dev/null || true; exec npx -y firecrawl-mcp"
+      ],
+      "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@playwright/mcp@latest"
+      ],
+      "environment": {
+        "PLAYWRIGHT_MCP_EXECUTABLE_PATH": "/Applications/Aside.app/Contents/MacOS/Aside"
+      },
+      "enabled": true
+    },
+    "aside": {
+      "type": "local",
+      "command": [
+        "aside",
+        "mcp"
+      ],
+      "enabled": true
     }
   },
   "lsp": {
