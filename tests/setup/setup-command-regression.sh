@@ -1090,7 +1090,7 @@ mkdir -p "$FAKE_HOME/.local/bin"
 cat >"$FAKE_HOME/.local/bin/gnomcp" <<'EOF'
 #!/bin/bash
 if [ "${1:-}" = "version" ]; then
-  printf '0.8.0\n'
+  printf '0.9.0\n'
 fi
 EOF
 chmod +x "$FAKE_HOME/.local/bin/gnomcp"
@@ -1113,7 +1113,8 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/codex-mcp.sh" >/dev/null
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'go install golang.org/x/tools/gopls@v0.21.1' "$LOG_FILE"
-grep -q "git -C $FAKE_HOME/gno pull --ff-only --autostash" "$LOG_FILE"
+grep -q "git -C $FAKE_HOME/gno fetch --tags --prune origin" "$LOG_FILE"
+grep -q "git -C $FAKE_HOME/gno checkout --force --detach 959cefd916021d3a55e9b51f20d05ef618e7f357" "$LOG_FILE"
 grep -q 'make install' "$LOG_FILE"
 grep -q 'bun install -g typescript' "$LOG_FILE"
 grep -q 'bun install -g opencode-ai' "$LOG_FILE"

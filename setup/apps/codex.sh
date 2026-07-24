@@ -4,10 +4,10 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 print_step "Setting up Codex CLI and LazyCodex..."
 
-GNOMCP_REF="${GNOMCP_REF:-align-gno-interrealm-skill}"
-GNOMCP_REPO="${GNOMCP_REPO:-junghoon-vans/gno-mcp}"
+GNOMCP_REF="${GNOMCP_REF:-v0.9.0}"
+GNOMCP_REPO="${GNOMCP_REPO:-gnoverse/gno-mcp}"
 GNOMCP_BINARY="$HOME/.local/bin/gnomcp"
-GNOMCP_RELEASE_VERSION="${GNOMCP_RELEASE_VERSION:-v0.8.0}"
+GNOMCP_RELEASE_VERSION="${GNOMCP_RELEASE_VERSION:-v0.9.0}"
 GNOMCP_PLUGIN_VERSION="${GNOMCP_PLUGIN_VERSION:-${GNOMCP_REF#v}}"
 GNOMCP_PLUGIN_SLOT="${GNOMCP_PLUGIN_SLOT:-${GNOMCP_PLUGIN_VERSION//\//-}}"
 GNOMCP_MARKETPLACE_ROOT="$HOME/.codex/plugins/cache/gnoverse"
