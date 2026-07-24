@@ -31,6 +31,12 @@ The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json
 
 `./setup.sh codex-skills` installs global Codex skills through `npx skills`. The default set is `find-skills`, `vercel-react-best-practices`, and `golang-pro`. `./setup.sh opencode-skills` installs the same skill set for OpenCode through `npx skills --agent opencode`.
 
+## Claude Code
+
+`./setup.sh brew-packages` installs the `claude-code` cask for CLI bootstrap on new machines. An existing native-installer-managed `~/.local/bin/claude` (from `curl -fsSL https://claude.ai/install.sh | bash`) can intentionally take PATH precedence over Homebrew's cask binary, the same override pattern used for Hermes Agent.
+
+`home/dot_claude/settings.json` is chezmoi-managed and applied to `~/.claude/settings.json`. Account/session/machine state (`~/.claude.json`, `~/.claude/history.jsonl`, `~/.claude/projects/`, `~/.claude/sessions/`, `~/.claude/shell-snapshots/`, and similar) is never tracked.
+
 ## Language and Harness Coverage
 
 `mise.toml` records the repository runtime versions for languages that mise can manage, and `home/dot_config/mise/config.toml` mirrors those versions for the global `~/.config/mise/config.toml` baseline. `./setup.sh brew-packages` installs Homebrew-managed `mise`; setup language and blockchain commands sync the global mise config, run `mise install <tool>` for required runtimes, and then install runtime-adjacent tools, language servers, and chain-specific CLIs with those runtimes.

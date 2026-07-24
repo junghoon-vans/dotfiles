@@ -52,6 +52,7 @@ fi
 print_info "Validating JSON config..."
 python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/opencode.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_codex/lsp-client.json" >/dev/null
+python3 -m json.tool "$DOTFILES_DIR/home/dot_claude/settings.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/oh-my-openagent.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/tui.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_config/karabiner/karabiner.json" >/dev/null

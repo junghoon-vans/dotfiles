@@ -1322,6 +1322,8 @@ grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/35-blockchain"
 [ ! -e "$REPO_ROOT/.config/opencode/opencode.json" ]
 [ ! -e "$REPO_ROOT/.config/opencode/tui.json" ]
 [ ! -e "$REPO_ROOT/.config/zed/settings.json" ]
+[ ! -e "$REPO_ROOT/.codex/lsp-client.json" ]
+[ ! -e "$REPO_ROOT/.claude/settings.json" ]
 [ -e "$REPO_ROOT/docs/gitconfig.override.example" ]
 grep -q 'karabiner-elements' "$REPO_ROOT/setup/commands/55-karabiner"
 grep -q 'macos-shortcuts.sh' "$REPO_ROOT/setup/commands/56-macos-shortcuts"
