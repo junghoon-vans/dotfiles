@@ -1,0 +1,26 @@
+#!/bin/bash
+# Description: Load periodic workstation maintenance LaunchAgents.
+
+# shellcheck source=setup/lib/common.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
+
+print_step "Loading maintenance LaunchAgents..."
+
+PLIST_PATH="$HOME/Library/LaunchAgents/com.junghoon.weekly-disk-maintenance.plist"
+LABEL="com.junghoon.weekly-disk-maintenance"
+
+if [ ! -f "$PLIST_PATH" ]; then
+    print_error "LaunchAgent plist missing at $PLIST_PATH; run ./setup.sh links first"
+    exit 1
+fi
+
+if ! command -v launchctl >/dev/null 2>&1; then
+    print_info "launchctl not found; skipping maintenance LaunchAgent load"
+    exit 0
+fi
+
+launchctl bootout "gui/$(id -u)" "$PLIST_PATH" >/dev/null 2>&1 || true
+launchctl bootstrap "gui/$(id -u)" "$PLIST_PATH"
+launchctl enable "gui/$(id -u)/$LABEL"
+
+print_success "Maintenance LaunchAgent loaded"
