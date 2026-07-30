@@ -54,6 +54,7 @@ cask "orbstack"        # Fast Docker Desktop alternative
 cask "tailscale-app"   # Mesh VPN desktop app
 cask "jordanbaird-ice" # Menu bar management
 cask "hop"             # HWP document viewer/editor
+cask "stablyai/orca/orca" # Orca desktop app
 
 # ========================================
 # Modern CLI Tools (Unix replacements)
