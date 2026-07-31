@@ -26,7 +26,7 @@
           "variant": "low"
         },
         {
-          "model": "openai/gpt-5.5",
+          "model": "openai/gpt-5.6-luna",
           "variant": "low"
         },
         {
@@ -44,7 +44,7 @@
           "variant": "high"
         },
         {
-          "model": "openai/gpt-5.5",
+          "model": "openai/gpt-5.6-terra",
           "variant": "high"
         },
         {
@@ -54,15 +54,15 @@
       ]
     },
     "sisyphus": {
-      "model": "openai/gpt-5.5",
+      "model": "opencode-go/kimi-k2.7-code",
       "variant": "high",
       "fallback_models": [
         {
-          "model": "opencode-go/kimi-k2.7-code",
+          "model": "bailian-token-plan-personal/qwen3.7-max",
           "variant": "high"
         },
         {
-          "model": "bailian-token-plan-personal/qwen3.7-max",
+          "model": "openai/gpt-5.6-terra",
           "variant": "high"
         },
         {
@@ -73,11 +73,11 @@
       "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind."
     },
     "hephaestus": {
-      "model": "openai/gpt-5.6-sol",
+      "model": "openai/gpt-5.6-terra",
       "variant": "medium",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.6-terra",
+          "model": "openai/gpt-5.6-luna",
           "variant": "medium"
         },
         {
@@ -96,7 +96,7 @@
       "variant": "medium",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.5",
+          "model": "openai/gpt-5.6-luna",
           "variant": "medium"
         },
         {
@@ -114,7 +114,7 @@
       "variant": "medium",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.5",
+          "model": "openai/gpt-5.6-luna",
           "variant": "medium"
         },
         {
@@ -132,7 +132,7 @@
       "variant": "high",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.5",
+          "model": "openai/gpt-5.6-terra",
           "variant": "high"
         },
         {
@@ -150,7 +150,7 @@
       "variant": "high",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.5",
+          "model": "openai/gpt-5.6-terra",
           "variant": "high"
         },
         {
@@ -168,8 +168,8 @@
       "variant": "high",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.6-sol",
-          "variant": "xhigh"
+          "model": "openai/gpt-5.6-luna",
+          "variant": "high"
         },
         {
           "model": "opencode-go/deepseek-v4-pro",
@@ -182,11 +182,11 @@
       ]
     },
     "oracle": {
-      "model": "openai/gpt-5.6-sol",
-      "variant": "xhigh",
+      "model": "openai/gpt-5.6-terra",
+      "variant": "high",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.6-sol",
+          "model": "openai/gpt-5.6-luna",
           "variant": "high"
         },
         {
@@ -208,7 +208,7 @@
           "variant": "low"
         },
         {
-          "model": "openai/gpt-5.4-mini-fast",
+          "model": "openai/gpt-5.6-luna",
           "variant": "low"
         },
         {
@@ -226,7 +226,7 @@
           "variant": "low"
         },
         {
-          "model": "openai/gpt-5.4-mini-fast",
+          "model": "openai/gpt-5.6-luna",
           "variant": "low"
         },
         {
@@ -236,15 +236,11 @@
       ]
     },
     "multimodal-looker": {
-      "model": "bailian-token-plan-personal/qwen3.7-plus",
+      "model": "openai/gpt-5.6-luna",
       "variant": "low",
       "fallback_models": [
         {
           "model": "opencode-go/qwen3.7-plus",
-          "variant": "low"
-        },
-        {
-          "model": "openai/gpt-5.5",
           "variant": "low"
         },
         {
@@ -258,7 +254,7 @@
       "variant": "medium",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.5",
+          "model": "openai/gpt-5.6-luna",
           "variant": "medium"
         },
         {
@@ -282,7 +278,7 @@
           "variant": "high"
         },
         {
-          "model": "openai/gpt-5.5",
+          "model": "openai/gpt-5.6-terra",
           "variant": "high"
         },
         {
@@ -292,12 +288,12 @@
       ]
     },
     "ultrabrain": {
-      "model": "openai/gpt-5.6-sol",
-      "variant": "xhigh",
+      "model": "openai/gpt-5.6-terra",
+      "variant": "high",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.5-pro",
-          "variant": "xhigh"
+          "model": "openai/gpt-5.6-luna",
+          "variant": "high"
         },
         {
           "model": "opencode-go/deepseek-v4-pro",
@@ -310,16 +306,16 @@
       ]
     },
     "deep": {
-      "model": "bailian-token-plan-personal/qwen3.7-max",
-      "variant": "medium",
+      "model": "openai/gpt-5.6-terra",
+      "variant": "high",
       "fallback_models": [
         {
-          "model": "opencode-go/deepseek-v4-pro",
-          "variant": "medium"
+          "model": "openai/gpt-5.6-luna",
+          "variant": "high"
         },
         {
-          "model": "openai/gpt-5.5",
-          "variant": "medium"
+          "model": "opencode-go/deepseek-v4-pro",
+          "variant": "high"
         },
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -340,13 +336,13 @@
           "variant": "low"
         },
         {
-          "model": "openai/gpt-5.4-mini-fast",
+          "model": "openai/gpt-5.6-luna",
           "variant": "low"
         }
       ]
     },
     "unspecified-low": {
-      "model": "openrouter/nvidia/nemotron-3-nano-30b-a3b:free",
+      "model": "openai/gpt-5.6-luna",
       "variant": "medium",
       "fallback_models": [
         {
@@ -358,7 +354,7 @@
           "variant": "medium"
         },
         {
-          "model": "openai/gpt-5.6-luna",
+          "model": "openrouter/nvidia/nemotron-3-nano-30b-a3b:free",
           "variant": "medium"
         }
       ]
@@ -368,7 +364,7 @@
       "variant": "high",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.5",
+          "model": "openai/gpt-5.6-terra",
           "variant": "high"
         },
         {
@@ -390,7 +386,7 @@
           "variant": "medium"
         },
         {
-          "model": "openai/gpt-5.5",
+          "model": "openai/gpt-5.6-luna",
           "variant": "medium"
         },
         {
@@ -408,7 +404,7 @@
           "variant": "high"
         },
         {
-          "model": "openai/gpt-5.5",
+          "model": "openai/gpt-5.6-terra",
           "variant": "high"
         },
         {
