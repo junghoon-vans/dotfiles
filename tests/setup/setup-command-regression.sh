@@ -140,43 +140,43 @@ export HOME="$FAKE_HOME"
 export PATH="$FAKE_BIN:$PATH"
 
 HELP_OUTPUT="$($SETUP_SH --help)"
-printf '%s' "$HELP_OUTPUT" | grep -q 'opencode'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install OpenCode, bootstrap oh-my-openagent, and configure status HUD'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install default global Codex skills through npx skills'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install macOS Quick Action shortcut slots'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Run selected blockchain tooling commands'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Inspect host prerequisites'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Remove managed dotfile backup files created before chezmoi apply'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Reconfigure Codex MCP servers without reinstalling Codex'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Language commands:'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Blockchain commands:'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install Go via mise plus Go formatter/linter tools'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install Kotlin via mise plus Kotlin language server'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install TypeScript, TypeScript LSP, and Biome'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install Gno from ~/gno and gnopls using mise-managed Go'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install Solana CLI and Anchor tooling'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install Sui CLI, Move analyzer, and local validator wrapper through suiup'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Install Eclipse LemMinX XML language server'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Go runtime before Gno tooling'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Rust runtime before Solana and Anchor tooling'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Rust runtime before Sui tooling'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Java runtime before LemMinX'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Installs the configured Bun runtime before TypeScript tooling'
-printf '%s' "$HELP_OUTPUT" | grep -q 'Enables Corepack and installs pnpm with the configured Node runtime'
-printf '%s' "$HELP_OUTPUT" | grep -q -- '--yes'
-printf '%s' "$HELP_OUTPUT" | grep -q -- '--no-input'
-printf '%s' "$HELP_OUTPUT" | grep -q -- '--dry-run'
-printf '%s' "$HELP_OUTPUT" | grep -q -- '--skip COMMAND'
+grep -q 'opencode' <<<"$HELP_OUTPUT"
+grep -q 'Install OpenCode, bootstrap oh-my-openagent, and configure status HUD' <<<"$HELP_OUTPUT"
+grep -q 'Install default global Codex skills through npx skills' <<<"$HELP_OUTPUT"
+grep -q 'Install macOS Quick Action shortcut slots' <<<"$HELP_OUTPUT"
+grep -q 'Run selected blockchain tooling commands' <<<"$HELP_OUTPUT"
+grep -q 'Inspect host prerequisites' <<<"$HELP_OUTPUT"
+grep -q 'Remove managed dotfile backup files created before chezmoi apply' <<<"$HELP_OUTPUT"
+grep -q 'Reconfigure Codex MCP servers without reinstalling Codex' <<<"$HELP_OUTPUT"
+grep -q 'Language commands:' <<<"$HELP_OUTPUT"
+grep -q 'Blockchain commands:' <<<"$HELP_OUTPUT"
+grep -q 'Install Go via mise plus Go formatter/linter tools' <<<"$HELP_OUTPUT"
+grep -q 'Install Kotlin via mise plus Kotlin language server' <<<"$HELP_OUTPUT"
+grep -q 'Install TypeScript, TypeScript LSP, and Biome' <<<"$HELP_OUTPUT"
+grep -q 'Install Gno from ~/gno and gnopls using mise-managed Go' <<<"$HELP_OUTPUT"
+grep -q 'Install Solana CLI and Anchor tooling' <<<"$HELP_OUTPUT"
+grep -q 'Install Sui CLI, Move analyzer, and local validator wrapper through suiup' <<<"$HELP_OUTPUT"
+grep -q 'Install Eclipse LemMinX XML language server' <<<"$HELP_OUTPUT"
+grep -q 'Installs the configured Go runtime before Gno tooling' <<<"$HELP_OUTPUT"
+grep -q 'Installs the configured Rust runtime before Solana and Anchor tooling' <<<"$HELP_OUTPUT"
+grep -q 'Installs the configured Rust runtime before Sui tooling' <<<"$HELP_OUTPUT"
+grep -q 'Installs the configured Java runtime before LemMinX' <<<"$HELP_OUTPUT"
+grep -q 'Installs the configured Bun runtime before TypeScript tooling' <<<"$HELP_OUTPUT"
+grep -q 'Enables Corepack and installs pnpm with the configured Node runtime' <<<"$HELP_OUTPUT"
+grep -q -- '--yes' <<<"$HELP_OUTPUT"
+grep -q -- '--no-input' <<<"$HELP_OUTPUT"
+grep -q -- '--dry-run' <<<"$HELP_OUTPUT"
+grep -q -- '--skip COMMAND' <<<"$HELP_OUTPUT"
 
 while IFS= read -r language_name; do
     LANGUAGE_COMMAND_OUTPUT="$($SETUP_SH --dry-run "$language_name")"
-    printf '%s' "$LANGUAGE_COMMAND_OUTPUT" | grep -q "^  ${language_name}[[:space:]]"
+    grep -q "^  ${language_name}[[:space:]]" <<<"$LANGUAGE_COMMAND_OUTPUT"
     grep -Eq "(^|[[:space:]])${language_name}([[:space:];]|$)" "$REPO_ROOT/setup/commands/30-languages"
 done < <(for path in "$REPO_ROOT"/setup/languages/*.sh; do basename "${path%.sh}"; done | sort)
 
 while IFS= read -r blockchain_name; do
     BLOCKCHAIN_COMMAND_OUTPUT="$($SETUP_SH --dry-run "$blockchain_name")"
-    printf '%s' "$BLOCKCHAIN_COMMAND_OUTPUT" | grep -q "^  ${blockchain_name}[[:space:]]"
+    grep -q "^  ${blockchain_name}[[:space:]]" <<<"$BLOCKCHAIN_COMMAND_OUTPUT"
     grep -Eq "(^|[[:space:]])${blockchain_name}([[:space:];]|$)" "$REPO_ROOT/setup/commands/35-blockchain"
 done < <(for path in "$REPO_ROOT"/setup/blockchain/*.sh; do basename "${path%.sh}"; done | sort)
 
@@ -206,8 +206,8 @@ EOF
 done
 
 LANGUAGE_PROMPT_OUTPUT="$(SETUP_DIR="$LANGUAGE_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 LANGUAGE_PROMPT_LOG="$LANGUAGE_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/30-languages")"
-printf '%s' "$LANGUAGE_PROMPT_OUTPUT" | grep -q "Run language command 'go'? \[Y/n\] yes (--yes)"
-printf '%s' "$LANGUAGE_PROMPT_OUTPUT" | grep -q "Run language command 'xml'? \[Y/n\] yes (--yes)"
+grep -q "Run language command 'go'? \[Y/n\] yes (--yes)" <<<"$LANGUAGE_PROMPT_OUTPUT"
+grep -q "Run language command 'xml'? \[Y/n\] yes (--yes)" <<<"$LANGUAGE_PROMPT_OUTPUT"
 read -r -a expected_languages <<<"$EXPECTED_LANGUAGE_ORDER"
 EXPECTED_LANGUAGE_RUNS="$(printf '%s.sh\n' "${expected_languages[@]}")"
 ACTUAL_LANGUAGE_RUNS="$(cat "$LANGUAGE_PROMPT_LOG")"
@@ -218,9 +218,9 @@ fi
 
 : >"$LANGUAGE_PROMPT_LOG"
 LANGUAGE_SKIP_PROMPT_OUTPUT="$(SETUP_DIR="$LANGUAGE_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 SETUP_SKIP_COMMANDS=' rust typescript ' LANGUAGE_PROMPT_LOG="$LANGUAGE_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/30-languages")"
-printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping language command: rust'
-printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping language command: typescript'
-if printf '%s' "$LANGUAGE_SKIP_PROMPT_OUTPUT" | grep -q "Run language command 'rust'?"; then
+grep -q 'Skipping language command: rust' <<<"$LANGUAGE_SKIP_PROMPT_OUTPUT"
+grep -q 'Skipping language command: typescript' <<<"$LANGUAGE_SKIP_PROMPT_OUTPUT"
+if grep -q "Run language command 'rust'?" <<<"$LANGUAGE_SKIP_PROMPT_OUTPUT"; then
     printf 'skipped language command should not prompt: rust\n' >&2
     exit 1
 fi
@@ -241,9 +241,9 @@ EOF
 done
 
 BLOCKCHAIN_PROMPT_OUTPUT="$(SETUP_DIR="$BLOCKCHAIN_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 BLOCKCHAIN_PROMPT_LOG="$BLOCKCHAIN_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/35-blockchain")"
-printf '%s' "$BLOCKCHAIN_PROMPT_OUTPUT" | grep -q "Run blockchain command 'solana'? \[Y/n\] yes (--yes)"
-printf '%s' "$BLOCKCHAIN_PROMPT_OUTPUT" | grep -q "Run blockchain command 'gno'? \[Y/n\] yes (--yes)"
-printf '%s' "$BLOCKCHAIN_PROMPT_OUTPUT" | grep -q "Run blockchain command 'sui'? \[Y/n\] yes (--yes)"
+grep -q "Run blockchain command 'solana'? \[Y/n\] yes (--yes)" <<<"$BLOCKCHAIN_PROMPT_OUTPUT"
+grep -q "Run blockchain command 'gno'? \[Y/n\] yes (--yes)" <<<"$BLOCKCHAIN_PROMPT_OUTPUT"
+grep -q "Run blockchain command 'sui'? \[Y/n\] yes (--yes)" <<<"$BLOCKCHAIN_PROMPT_OUTPUT"
 read -r -a expected_blockchains <<<"$EXPECTED_BLOCKCHAIN_ORDER"
 EXPECTED_BLOCKCHAIN_RUNS="$(printf '%s.sh\n' "${expected_blockchains[@]}")"
 ACTUAL_BLOCKCHAIN_RUNS="$(cat "$BLOCKCHAIN_PROMPT_LOG")"
@@ -254,13 +254,13 @@ fi
 
 : >"$BLOCKCHAIN_PROMPT_LOG"
 BLOCKCHAIN_SKIP_PROMPT_OUTPUT="$(SETUP_DIR="$BLOCKCHAIN_PROMPT_SETUP_DIR" SETUP_YES=1 SETUP_NO_INPUT=1 SETUP_SKIP_COMMANDS=' gno sui ' BLOCKCHAIN_PROMPT_LOG="$BLOCKCHAIN_PROMPT_LOG" bash "$REPO_ROOT/setup/commands/35-blockchain")"
-printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping blockchain command: gno'
-printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q 'Skipping blockchain command: sui'
-if printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q "Run blockchain command 'gno'?"; then
+grep -q 'Skipping blockchain command: gno' <<<"$BLOCKCHAIN_SKIP_PROMPT_OUTPUT"
+grep -q 'Skipping blockchain command: sui' <<<"$BLOCKCHAIN_SKIP_PROMPT_OUTPUT"
+if grep -q "Run blockchain command 'gno'?" <<<"$BLOCKCHAIN_SKIP_PROMPT_OUTPUT"; then
     printf 'skipped blockchain command should not prompt: gno\n' >&2
     exit 1
 fi
-if printf '%s' "$BLOCKCHAIN_SKIP_PROMPT_OUTPUT" | grep -q "Run blockchain command 'sui'?"; then
+if grep -q "Run blockchain command 'sui'?" <<<"$BLOCKCHAIN_SKIP_PROMPT_OUTPUT"; then
     printf 'skipped blockchain command should not prompt: sui\n' >&2
     exit 1
 fi
@@ -344,52 +344,52 @@ for language_name in ("TypeScript", "TSX", "JavaScript", "JSX"):
 PY
 
 DRY_RUN_OUTPUT="$($SETUP_SH --dry-run --skip macos)"
-printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Selected setup commands'
-printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'languages'
-printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'blockchain'
-printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  karabiner[[:space:]]\+Install Karabiner-Elements'
-printf '%s' "$DRY_RUN_OUTPUT" | grep -q 'Skipping command: macos'
-if printf '%s' "$DRY_RUN_OUTPUT" | grep -q '^  macos[[:space:]]'; then
+grep -q 'Selected setup commands' <<<"$DRY_RUN_OUTPUT"
+grep -q 'languages' <<<"$DRY_RUN_OUTPUT"
+grep -q 'blockchain' <<<"$DRY_RUN_OUTPUT"
+grep -q '^  karabiner[[:space:]]\+Install Karabiner-Elements' <<<"$DRY_RUN_OUTPUT"
+grep -q 'Skipping command: macos' <<<"$DRY_RUN_OUTPUT"
+if grep -q '^  macos[[:space:]]' <<<"$DRY_RUN_OUTPUT"; then
     printf 'dry-run selected commands should not include skipped macos command\n' >&2
     exit 1
 fi
 
 BLOCKCHAIN_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip blockchain)"
-printf '%s' "$BLOCKCHAIN_SKIP_OUTPUT" | grep -q 'Skipping command: blockchain'
-if printf '%s' "$BLOCKCHAIN_SKIP_OUTPUT" | grep -q '^  blockchain[[:space:]]'; then
+grep -q 'Skipping command: blockchain' <<<"$BLOCKCHAIN_SKIP_OUTPUT"
+if grep -q '^  blockchain[[:space:]]' <<<"$BLOCKCHAIN_SKIP_OUTPUT"; then
     printf 'dry-run selected commands should not include skipped blockchain command\n' >&2
     exit 1
 fi
 
 KARABINER_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip karabiner)"
-printf '%s' "$KARABINER_SKIP_OUTPUT" | grep -q 'Skipping command: karabiner'
-if printf '%s' "$KARABINER_SKIP_OUTPUT" | grep -q '^  karabiner[[:space:]]'; then
+grep -q 'Skipping command: karabiner' <<<"$KARABINER_SKIP_OUTPUT"
+if grep -q '^  karabiner[[:space:]]' <<<"$KARABINER_SKIP_OUTPUT"; then
     printf 'dry-run selected commands should not include skipped karabiner command\n' >&2
     exit 1
 fi
 
 MACOS_SHORTCUTS_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip macos-shortcuts)"
-printf '%s' "$MACOS_SHORTCUTS_SKIP_OUTPUT" | grep -q 'Skipping command: macos-shortcuts'
-if printf '%s' "$MACOS_SHORTCUTS_SKIP_OUTPUT" | grep -q '^  macos-shortcuts[[:space:]]'; then
+grep -q 'Skipping command: macos-shortcuts' <<<"$MACOS_SHORTCUTS_SKIP_OUTPUT"
+if grep -q '^  macos-shortcuts[[:space:]]' <<<"$MACOS_SHORTCUTS_SKIP_OUTPUT"; then
     printf 'dry-run selected commands should not include skipped macos-shortcuts command\n' >&2
     exit 1
 fi
 
 NO_INPUT_OUTPUT="$($SETUP_SH --no-input --dry-run bootstrap)"
-printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'bootstrap'
-printf '%s' "$NO_INPUT_OUTPUT" | grep -q 'Install Homebrew if it is missing'
+grep -q 'bootstrap' <<<"$NO_INPUT_OUTPUT"
+grep -q 'Install Homebrew if it is missing' <<<"$NO_INPUT_OUTPUT"
 
 LANGUAGE_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run go gno xml solana sui typescript python)"
-printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go via mise'
-printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  gno[[:space:]]\+Install Gno from ~/gno and gnopls using mise-managed Go'
-printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  xml[[:space:]]\+Install Eclipse LemMinX XML language server'
-printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  solana[[:space:]]\+Install Solana CLI and Anchor tooling'
-printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  sui[[:space:]]\+Install Sui CLI, Move analyzer, and local validator wrapper through suiup'
-printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  typescript[[:space:]]\+Install TypeScript'
-printf '%s' "$LANGUAGE_DRY_RUN_OUTPUT" | grep -q '^  python[[:space:]]\+Install Python via mise'
+grep -q '^  go[[:space:]]\+Install Go via mise' <<<"$LANGUAGE_DRY_RUN_OUTPUT"
+grep -q '^  gno[[:space:]]\+Install Gno from ~/gno and gnopls using mise-managed Go' <<<"$LANGUAGE_DRY_RUN_OUTPUT"
+grep -q '^  xml[[:space:]]\+Install Eclipse LemMinX XML language server' <<<"$LANGUAGE_DRY_RUN_OUTPUT"
+grep -q '^  solana[[:space:]]\+Install Solana CLI and Anchor tooling' <<<"$LANGUAGE_DRY_RUN_OUTPUT"
+grep -q '^  sui[[:space:]]\+Install Sui CLI, Move analyzer, and local validator wrapper through suiup' <<<"$LANGUAGE_DRY_RUN_OUTPUT"
+grep -q '^  typescript[[:space:]]\+Install TypeScript' <<<"$LANGUAGE_DRY_RUN_OUTPUT"
+grep -q '^  python[[:space:]]\+Install Python via mise' <<<"$LANGUAGE_DRY_RUN_OUTPUT"
 
 CODEX_SKILLS_OUTPUT="$($SETUP_SH --dry-run codex-skills)"
-printf '%s' "$CODEX_SKILLS_OUTPUT" | grep -q '^  codex-skills[[:space:]]\+Install default global Codex skills through npx skills'
+grep -q '^  codex-skills[[:space:]]\+Install default global Codex skills through npx skills' <<<"$CODEX_SKILLS_OUTPUT"
 
 CODEX_SKILLS_HOME="$TMP_DIR/codex-skills-home"
 CODEX_SKILLS_BIN="$TMP_DIR/codex-skills-bin"
@@ -415,7 +415,7 @@ grep -q 'npx --yes skills add vercel-labs/agent-skills --skill vercel-react-best
 grep -q 'npx --yes skills add jeffallan/claude-skills --skill golang-pro --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
 
 OPENCODE_SKILLS_OUTPUT="$($SETUP_SH --dry-run opencode-skills)"
-printf '%s' "$OPENCODE_SKILLS_OUTPUT" | grep -q '^  opencode-skills[[:space:]]\+Install default global OpenCode skills through npx skills'
+grep -q '^  opencode-skills[[:space:]]\+Install default global OpenCode skills through npx skills' <<<"$OPENCODE_SKILLS_OUTPUT"
 
 OPENCODE_SKILLS_HOME="$TMP_DIR/opencode-skills-home"
 OPENCODE_SKILLS_BIN="$TMP_DIR/opencode-skills-bin"
@@ -441,9 +441,9 @@ grep -q 'npx --yes skills add vercel-labs/agent-skills --skill vercel-react-best
 grep -q 'npx --yes skills add jeffallan/claude-skills --skill golang-pro --global --agent opencode --copy --yes' "$OPENCODE_SKILLS_LOG"
 
 LANGUAGE_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip gno go gno)"
-printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q 'Skipping command: gno'
-printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q '^  go[[:space:]]\+Install Go via mise'
-if printf '%s' "$LANGUAGE_SKIP_OUTPUT" | grep -q '^  gno[[:space:]]'; then
+grep -q 'Skipping command: gno' <<<"$LANGUAGE_SKIP_OUTPUT"
+grep -q '^  go[[:space:]]\+Install Go via mise' <<<"$LANGUAGE_SKIP_OUTPUT"
+if grep -q '^  gno[[:space:]]' <<<"$LANGUAGE_SKIP_OUTPUT"; then
     printf 'dry-run selected commands should not include skipped gno command\n' >&2
     exit 1
 fi
@@ -483,7 +483,7 @@ if DOCTOR_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip doctor doctor 2>&1)"; then
     printf 'skipping the only selected utility command should fail\n' >&2
     exit 1
 fi
-printf '%s' "$DOCTOR_SKIP_OUTPUT" | grep -q 'All selected commands were skipped: doctor'
+grep -q 'All selected commands were skipped: doctor' <<<"$DOCTOR_SKIP_OUTPUT"
 
 NODE_FAIL_HOME="$TMP_DIR/node-fail-home"
 NODE_FAIL_BIN="$TMP_DIR/node-fail-bin"
@@ -900,23 +900,23 @@ exec /usr/bin/dirname "$@"
 EOF
 chmod +x "$DOCTOR_BIN/git" "$DOCTOR_BIN/bash" "$DOCTOR_BIN/uname" "$DOCTOR_BIN/dirname"
 DOCTOR_OUTPUT="$(HOME="$DOCTOR_HOME" PATH="$DOCTOR_BIN" ASIDE_BROWSER_EXECUTABLE="$TMP_DIR/missing-aside" /bin/bash "$REPO_ROOT/setup/doctor.sh")"
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'brew missing — run ./setup.sh bootstrap before brew-managed setup'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'mise missing — run ./setup.sh brew-packages before runtime setup'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'codex missing — run ./setup.sh codex before Codex MCP setup'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q "Aside browser executable missing at $TMP_DIR/missing-aside"
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'cmake missing; run ./setup.sh brew-packages'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'pkg-config missing; run ./setup.sh brew-packages'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'suiup missing; run ./setup.sh sui'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'sui missing; run ./setup.sh sui'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'move-analyzer missing; run ./setup.sh sui'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'sui-test-validator missing; run ./setup.sh sui'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'ruff missing; run ./setup.sh python'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'biome missing; run ./setup.sh typescript'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'jdtls missing; run ./setup.sh java'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'kotlin-language-server missing; run ./setup.sh kotlin'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'pyright-langserver missing; run ./setup.sh python'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'bash-language-server missing; run ./setup.sh brew-packages'
-printf '%s' "$DOCTOR_OUTPUT" | grep -q 'Doctor completed'
+grep -q 'brew missing — run ./setup.sh bootstrap before brew-managed setup' <<<"$DOCTOR_OUTPUT"
+grep -q 'mise missing — run ./setup.sh brew-packages before runtime setup' <<<"$DOCTOR_OUTPUT"
+grep -q 'codex missing — run ./setup.sh codex before Codex MCP setup' <<<"$DOCTOR_OUTPUT"
+grep -q "Aside browser executable missing at $TMP_DIR/missing-aside" <<<"$DOCTOR_OUTPUT"
+grep -q 'cmake missing; run ./setup.sh brew-packages' <<<"$DOCTOR_OUTPUT"
+grep -q 'pkg-config missing; run ./setup.sh brew-packages' <<<"$DOCTOR_OUTPUT"
+grep -q 'suiup missing; run ./setup.sh sui' <<<"$DOCTOR_OUTPUT"
+grep -q 'sui missing; run ./setup.sh sui' <<<"$DOCTOR_OUTPUT"
+grep -q 'move-analyzer missing; run ./setup.sh sui' <<<"$DOCTOR_OUTPUT"
+grep -q 'sui-test-validator missing; run ./setup.sh sui' <<<"$DOCTOR_OUTPUT"
+grep -q 'ruff missing; run ./setup.sh python' <<<"$DOCTOR_OUTPUT"
+grep -q 'biome missing; run ./setup.sh typescript' <<<"$DOCTOR_OUTPUT"
+grep -q 'jdtls missing; run ./setup.sh java' <<<"$DOCTOR_OUTPUT"
+grep -q 'kotlin-language-server missing; run ./setup.sh kotlin' <<<"$DOCTOR_OUTPUT"
+grep -q 'pyright-langserver missing; run ./setup.sh python' <<<"$DOCTOR_OUTPUT"
+grep -q 'bash-language-server missing; run ./setup.sh brew-packages' <<<"$DOCTOR_OUTPUT"
+grep -q 'Doctor completed' <<<"$DOCTOR_OUTPUT"
 
 CLEAN_HOME="$TMP_DIR/clean-home"
 mkdir -p "$CLEAN_HOME/.config/zed"
@@ -985,7 +985,7 @@ bash "$REPO_ROOT/setup/languages/bun.sh" >/dev/null
 cmp -s "$REPO_ROOT/home/dot_config/mise/config.toml" "$FAKE_HOME/.config/mise/config.toml"
 
 GO_SETUP_OUTPUT="$($SETUP_SH --yes go)"
-if printf '%s' "$GO_SETUP_OUTPUT" | grep -q 'Activate Gno support in Zed'; then
+if grep -q 'Activate Gno support in Zed' <<<"$GO_SETUP_OUTPUT"; then
     printf 'go command should not print Zed Gno activation next step\n' >&2
     exit 1
 fi
@@ -1001,7 +1001,7 @@ mkdir -p \
     "$APPS_HOME/.local/share/zed/dev-extensions/zed-gno"
 touch "$APPS_HOME/.local/share/zed/dev-extensions/zed-gno/extension.toml"
 APPS_SETUP_OUTPUT="$(HOME="$APPS_HOME" ZSH_CUSTOM="$APPS_ZSH_CUSTOM" PATH="$FAKE_BIN:/usr/bin:/bin" "$SETUP_SH" --yes apps)"
-printf '%s' "$APPS_SETUP_OUTPUT" | grep -q 'Activate Gno support in Zed'
+grep -q 'Activate Gno support in Zed' <<<"$APPS_SETUP_OUTPUT"
 
 grep -q 'go env -w GOBIN=' "$LOG_FILE"
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
@@ -1291,10 +1291,10 @@ EOF
 
     env -i HOME="$ZPROFILE_HOME" PATH="$ZPROFILE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/commands/10-bootstrap" >/dev/null
     ZPROFILE_GO_OUTPUT="$(env -i HOME="$ZPROFILE_HOME" ZDOTDIR="$ZPROFILE_HOME" PATH="$ZPROFILE_BIN:/usr/bin:/bin" GOROOT="$ZPROFILE_MISE_GO-stale" zsh -dfc 'source "$ZDOTDIR/.zprofile"; command -v go; go version; printf "GOROOT=%s\n" "${GOROOT-unset}"; go env GOROOT')"
-    printf '%s\n' "$ZPROFILE_GO_OUTPUT" | grep -q "^$ZPROFILE_MISE_GO/bin/go$"
-    printf '%s\n' "$ZPROFILE_GO_OUTPUT" | grep -q '^go version go1.25.11 darwin/arm64$'
-    printf '%s\n' "$ZPROFILE_GO_OUTPUT" | grep -q '^GOROOT=unset$'
-    printf '%s\n' "$ZPROFILE_GO_OUTPUT" | grep -q "^$ZPROFILE_MISE_GO$"
+    grep -q "^$ZPROFILE_MISE_GO/bin/go$" <<<"$ZPROFILE_GO_OUTPUT"
+    grep -q '^go version go1.25.11 darwin/arm64$' <<<"$ZPROFILE_GO_OUTPUT"
+    grep -q '^GOROOT=unset$' <<<"$ZPROFILE_GO_OUTPUT"
+    grep -q "^$ZPROFILE_MISE_GO$" <<<"$ZPROFILE_GO_OUTPUT"
 fi
 
 [ ! -e "$REPO_ROOT/link.sh" ]
