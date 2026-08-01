@@ -25,6 +25,10 @@
           "variant": "low"
         },
         {
+          "model": "opencode/mimo-v2.5-free",
+          "variant": "low"
+        },
+        {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
@@ -60,6 +64,10 @@
       "model": "opencode/deepseek-v4-flash-free",
       "variant": "high",
       "fallback_models": [
+        {
+          "model": "opencode/nemotron-3-ultra-free",
+          "variant": "high"
+        },
         {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "high"
@@ -219,6 +227,10 @@
           "variant": "low"
         },
         {
+          "model": "opencode/ling-3.0-flash-free",
+          "variant": "low"
+        },
+        {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
@@ -242,6 +254,10 @@
       "fallback_models": [
         {
           "model": "opencode/deepseek-v4-flash-free",
+          "variant": "low"
+        },
+        {
+          "model": "opencode/ling-3.0-flash-free",
           "variant": "low"
         },
         {
@@ -355,6 +371,14 @@
       "variant": "low",
       "fallback_models": [
         {
+          "model": "opencode/ling-3.0-flash-free",
+          "variant": "low"
+        },
+        {
+          "model": "opencode/north-mini-code-free",
+          "variant": "low"
+        },
+        {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
@@ -380,6 +404,10 @@
       "model": "opencode/deepseek-v4-flash-free",
       "variant": "medium",
       "fallback_models": [
+        {
+          "model": "opencode/mimo-v2.5-free",
+          "variant": "medium"
+        },
         {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "medium"
