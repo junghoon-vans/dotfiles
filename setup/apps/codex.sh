@@ -16,6 +16,52 @@ GNOMCP_INSTALL_REF_FILE="$HOME/.local/share/gnomcp/install-ref"
 CODEX_HUD_REPO="${CODEX_HUD_REPO:-fwyc0573/codex-hud}"
 CODEX_HUD_REF="${CODEX_HUD_REF:-main}"
 CODEX_HUD_DIR="${CODEX_HUD_DIR:-$HOME/.local/share/codex-hud}"
+CODEX_DEFAULT_MODEL="${CODEX_DEFAULT_MODEL:-gpt-5.6-luna}"
+CODEX_DEFAULT_MODEL_REASONING_EFFORT="${CODEX_DEFAULT_MODEL_REASONING_EFFORT:-high}"
+
+ensure_codex_config_key() {
+    local key="$1"
+    local value="$2"
+    local config_dir="$HOME/.codex"
+    local config_file="$config_dir/config.toml"
+    local tmp_file=""
+
+    mkdir -p "$config_dir"
+
+    if [ -f "$config_file" ] && grep -Eq "^[[:space:]]*${key}[[:space:]]*=" "$config_file"; then
+        tmp_file="$(mktemp "${TMPDIR:-/tmp}/codex-config.XXXXXX")"
+        awk -v key="$key" -v value="$value" '
+            BEGIN { updated = 0 }
+            $0 ~ "^[[:space:]]*" key "[[:space:]]*=" {
+                if (updated == 0) {
+                    print key " = \"" value "\""
+                    updated = 1
+                }
+                next
+            }
+            { print }
+            END {
+                if (updated == 0) {
+                    print key " = \"" value "\""
+                }
+            }
+        ' "$config_file" > "$tmp_file"
+        cat "$tmp_file" > "$config_file"
+        rm -f "$tmp_file"
+    else
+        if [ -s "$config_file" ]; then
+            printf '\n' >> "$config_file"
+        fi
+        printf '%s = "%s"\n' "$key" "$value" >> "$config_file"
+    fi
+
+    chmod 600 "$config_file"
+}
+
+ensure_codex_default_model() {
+    ensure_codex_config_key "model" "$CODEX_DEFAULT_MODEL"
+    ensure_codex_config_key "model_reasoning_effort" "$CODEX_DEFAULT_MODEL_REASONING_EFFORT"
+}
 
 ensure_codex_mcp_oauth_credentials_store() {
     local config_dir="$HOME/.codex"
@@ -341,6 +387,10 @@ print_info "Bootstrapping LazyCodex..."
 print_success "LazyCodex configured"
 
 install_codex_hud
+
+print_info "Configuring Codex default model..."
+ensure_codex_default_model
+print_success "Codex default model set to $CODEX_DEFAULT_MODEL (reasoning effort: $CODEX_DEFAULT_MODEL_REASONING_EFFORT)"
 
 print_info "Configuring Codex MCP OAuth credential storage..."
 ensure_codex_mcp_oauth_credentials_store
