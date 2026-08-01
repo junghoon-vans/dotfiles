@@ -25,6 +25,10 @@
           "variant": "low"
         },
         {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "low"
+        },
+        {
           "model": "openai/gpt-5.6-luna",
           "variant": "low"
         },
@@ -56,6 +60,10 @@
       "model": "opencode/deepseek-v4-flash-free",
       "variant": "high",
       "fallback_models": [
+        {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "high"
+        },
         {
           "model": "opencode-go/kimi-k2.7-code",
           "variant": "high"
@@ -211,6 +219,10 @@
           "variant": "low"
         },
         {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "low"
+        },
+        {
           "model": "opencode-go/minimax-m2.7",
           "variant": "low"
         },
@@ -230,6 +242,10 @@
       "fallback_models": [
         {
           "model": "opencode/deepseek-v4-flash-free",
+          "variant": "low"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
         {
@@ -339,6 +355,10 @@
       "variant": "low",
       "fallback_models": [
         {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "low"
+        },
+        {
           "model": "openrouter/nvidia/nemotron-3-nano-30b-a3b:free",
           "variant": "low"
         },
@@ -360,6 +380,10 @@
       "model": "opencode/deepseek-v4-flash-free",
       "variant": "medium",
       "fallback_models": [
+        {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "medium"
+        },
         {
           "model": "openai/gpt-5.6-luna",
           "variant": "medium"
