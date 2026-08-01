@@ -33,6 +33,10 @@
           "variant": "low"
         },
         {
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "variant": "low"
+        },
+        {
           "model": "openai/gpt-5.6-luna",
           "variant": "low"
         },
@@ -70,6 +74,10 @@
         },
         {
           "model": "opencode-go/deepseek-v4-flash",
+          "variant": "high"
+        },
+        {
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
           "variant": "high"
         },
         {
@@ -235,6 +243,10 @@
           "variant": "low"
         },
         {
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "variant": "low"
+        },
+        {
           "model": "opencode-go/minimax-m2.7",
           "variant": "low"
         },
@@ -262,6 +274,10 @@
         },
         {
           "model": "opencode-go/deepseek-v4-flash",
+          "variant": "low"
+        },
+        {
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
           "variant": "low"
         },
         {
@@ -383,6 +399,10 @@
           "variant": "low"
         },
         {
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "variant": "low"
+        },
+        {
           "model": "openrouter/nvidia/nemotron-3-nano-30b-a3b:free",
           "variant": "low"
         },
@@ -410,6 +430,10 @@
         },
         {
           "model": "opencode-go/deepseek-v4-flash",
+          "variant": "medium"
+        },
+        {
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
           "variant": "medium"
         },
         {
