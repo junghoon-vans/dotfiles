@@ -29,11 +29,11 @@
           "variant": "low"
         },
         {
-          "model": "opencode-go/deepseek-v4-flash",
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
           "variant": "low"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
         {
@@ -73,11 +73,11 @@
           "variant": "high"
         },
         {
-          "model": "opencode-go/deepseek-v4-flash",
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
           "variant": "high"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "opencode-go/deepseek-v4-flash",
           "variant": "high"
         },
         {
@@ -239,11 +239,11 @@
           "variant": "low"
         },
         {
-          "model": "opencode-go/deepseek-v4-flash",
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
           "variant": "low"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
         {
@@ -273,11 +273,11 @@
           "variant": "low"
         },
         {
-          "model": "opencode-go/deepseek-v4-flash",
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
           "variant": "low"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
         {
@@ -395,11 +395,11 @@
           "variant": "low"
         },
         {
-          "model": "opencode-go/deepseek-v4-flash",
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
           "variant": "low"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
         {
@@ -429,11 +429,11 @@
           "variant": "medium"
         },
         {
-          "model": "opencode-go/deepseek-v4-flash",
+          "model": "openrouter/deepseek/deepseek-v4-flash:free",
           "variant": "medium"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "opencode-go/deepseek-v4-flash",
           "variant": "medium"
         },
         {
