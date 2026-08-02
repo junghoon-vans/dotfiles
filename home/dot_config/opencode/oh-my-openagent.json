@@ -29,7 +29,7 @@
           "variant": "low"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "openrouter/inclusionai/ling-3.0-flash:free",
           "variant": "low"
         },
         {
@@ -73,7 +73,7 @@
           "variant": "high"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "openrouter/inclusionai/ling-3.0-flash:free",
           "variant": "high"
         },
         {
@@ -239,7 +239,7 @@
           "variant": "low"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "openrouter/inclusionai/ling-3.0-flash:free",
           "variant": "low"
         },
         {
@@ -273,7 +273,7 @@
           "variant": "low"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "openrouter/inclusionai/ling-3.0-flash:free",
           "variant": "low"
         },
         {
@@ -395,7 +395,7 @@
           "variant": "low"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "openrouter/inclusionai/ling-3.0-flash:free",
           "variant": "low"
         },
         {
@@ -429,7 +429,7 @@
           "variant": "medium"
         },
         {
-          "model": "openrouter/deepseek/deepseek-v4-flash:free",
+          "model": "openrouter/inclusionai/ling-3.0-flash:free",
           "variant": "medium"
         },
         {
