@@ -91,6 +91,9 @@
 [help]
 	autocorrect = 1
 
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+
 # Include overrides (not tracked in git)
 [include]
 	path = ~/.gitconfig.override
