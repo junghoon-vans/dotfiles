@@ -25,23 +25,11 @@
           "variant": "low"
         },
         {
-          "model": "opencode/mimo-v2.5-free",
-          "variant": "low"
-        },
-        {
-          "model": "openrouter/inclusionai/ling-3.0-flash:free",
-          "variant": "low"
-        },
-        {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
         {
           "model": "openai/gpt-5.6-luna",
-          "variant": "low"
-        },
-        {
-          "model": "openrouter/openai/gpt-oss-20b:free",
           "variant": "low"
         }
       ]
@@ -51,7 +39,11 @@
       "variant": "high",
       "fallback_models": [
         {
-          "model": "opencode-go/kimi-k2.7-code",
+          "model": "opencode/deepseek-v4-flash-free",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-flash",
           "variant": "high"
         },
         {
@@ -69,31 +61,11 @@
       "variant": "high",
       "fallback_models": [
         {
-          "model": "opencode/nemotron-3-ultra-free",
-          "variant": "high"
-        },
-        {
-          "model": "openrouter/inclusionai/ling-3.0-flash:free",
-          "variant": "high"
-        },
-        {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "high"
         },
         {
-          "model": "opencode-go/kimi-k2.7-code",
-          "variant": "high"
-        },
-        {
-          "model": "bailian-token-plan-personal/qwen3.7-max",
-          "variant": "high"
-        },
-        {
           "model": "openai/gpt-5.6-terra",
-          "variant": "high"
-        },
-        {
-          "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "high"
         }
       ],
@@ -119,9 +91,13 @@
       "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind."
     },
     "sisyphus-junior": {
-      "model": "opencode-go/kimi-k2.7-code",
+      "model": "opencode/deepseek-v4-flash-free",
       "variant": "medium",
       "fallback_models": [
+        {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "medium"
+        },
         {
           "model": "openai/gpt-5.6-luna",
           "variant": "medium"
@@ -137,9 +113,13 @@
       ]
     },
     "OpenCode-Builder": {
-      "model": "opencode-go/kimi-k2.7-code",
+      "model": "opencode/deepseek-v4-flash-free",
       "variant": "medium",
       "fallback_models": [
+        {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "medium"
+        },
         {
           "model": "openai/gpt-5.6-luna",
           "variant": "medium"
@@ -155,9 +135,13 @@
       ]
     },
     "prometheus": {
-      "model": "opencode-go/kimi-k2.7-code",
+      "model": "opencode/deepseek-v4-flash-free",
       "variant": "high",
       "fallback_models": [
+        {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "high"
+        },
         {
           "model": "openai/gpt-5.6-terra",
           "variant": "high"
@@ -173,9 +157,13 @@
       ]
     },
     "metis": {
-      "model": "opencode-go/kimi-k2.7-code",
+      "model": "opencode/deepseek-v4-flash-free",
       "variant": "high",
       "fallback_models": [
+        {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "high"
+        },
         {
           "model": "openai/gpt-5.6-terra",
           "variant": "high"
@@ -235,27 +223,11 @@
           "variant": "low"
         },
         {
-          "model": "opencode/ling-3.0-flash-free",
-          "variant": "low"
-        },
-        {
-          "model": "openrouter/inclusionai/ling-3.0-flash:free",
-          "variant": "low"
-        },
-        {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
         {
-          "model": "opencode-go/minimax-m2.7",
-          "variant": "low"
-        },
-        {
           "model": "openai/gpt-5.6-luna",
-          "variant": "low"
-        },
-        {
-          "model": "openrouter/nvidia/nemotron-3-nano-30b-a3b:free",
           "variant": "low"
         }
       ]
@@ -269,27 +241,11 @@
           "variant": "low"
         },
         {
-          "model": "opencode/ling-3.0-flash-free",
-          "variant": "low"
-        },
-        {
-          "model": "openrouter/inclusionai/ling-3.0-flash:free",
-          "variant": "low"
-        },
-        {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
         {
-          "model": "opencode-go/minimax-m2.7",
-          "variant": "low"
-        },
-        {
           "model": "openai/gpt-5.6-luna",
-          "variant": "low"
-        },
-        {
-          "model": "openrouter/nvidia/nemotron-3-nano-30b-a3b:free",
           "variant": "low"
         }
       ]
@@ -309,9 +265,13 @@
       ]
     },
     "atlas": {
-      "model": "opencode-go/kimi-k2.7-code",
+      "model": "opencode/deepseek-v4-flash-free",
       "variant": "medium",
       "fallback_models": [
+        {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "medium"
+        },
         {
           "model": "openai/gpt-5.6-luna",
           "variant": "medium"
@@ -387,31 +347,7 @@
       "variant": "low",
       "fallback_models": [
         {
-          "model": "opencode/ling-3.0-flash-free",
-          "variant": "low"
-        },
-        {
-          "model": "opencode/north-mini-code-free",
-          "variant": "low"
-        },
-        {
-          "model": "openrouter/inclusionai/ling-3.0-flash:free",
-          "variant": "low"
-        },
-        {
           "model": "opencode-go/deepseek-v4-flash",
-          "variant": "low"
-        },
-        {
-          "model": "openrouter/nvidia/nemotron-3-nano-30b-a3b:free",
-          "variant": "low"
-        },
-        {
-          "model": "bailian-token-plan-personal/qwen3.6-flash",
-          "variant": "low"
-        },
-        {
-          "model": "opencode-go/minimax-m2.7",
           "variant": "low"
         },
         {
@@ -425,39 +361,23 @@
       "variant": "medium",
       "fallback_models": [
         {
-          "model": "opencode/mimo-v2.5-free",
-          "variant": "medium"
-        },
-        {
-          "model": "openrouter/inclusionai/ling-3.0-flash:free",
-          "variant": "medium"
-        },
-        {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "medium"
         },
         {
           "model": "openai/gpt-5.6-luna",
           "variant": "medium"
-        },
-        {
-          "model": "bailian-token-plan-personal/qwen3.6-flash",
-          "variant": "medium"
-        },
-        {
-          "model": "opencode-go/minimax-m2.7",
-          "variant": "medium"
-        },
-        {
-          "model": "openrouter/nvidia/nemotron-3-nano-30b-a3b:free",
-          "variant": "medium"
         }
       ]
     },
     "unspecified-high": {
-      "model": "opencode-go/kimi-k2.7-code",
+      "model": "opencode/deepseek-v4-flash-free",
       "variant": "high",
       "fallback_models": [
+        {
+          "model": "opencode-go/deepseek-v4-flash",
+          "variant": "high"
+        },
         {
           "model": "openai/gpt-5.6-terra",
           "variant": "high"
@@ -477,7 +397,11 @@
       "variant": "medium",
       "fallback_models": [
         {
-          "model": "opencode-go/kimi-k2.7-code",
+          "model": "opencode/deepseek-v4-flash-free",
+          "variant": "medium"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-flash",
           "variant": "medium"
         },
         {
@@ -495,7 +419,11 @@
       "variant": "high",
       "fallback_models": [
         {
-          "model": "opencode-go/kimi-k2.7-code",
+          "model": "opencode/deepseek-v4-flash-free",
+          "variant": "high"
+        },
+        {
+          "model": "opencode-go/deepseek-v4-flash",
           "variant": "high"
         },
         {
