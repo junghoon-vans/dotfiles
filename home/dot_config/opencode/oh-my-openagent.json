@@ -90,10 +90,6 @@
         {
           "model": "openai/gpt-5.6-terra",
           "variant": "high"
-        },
-        {
-          "model": "openai/gpt-5.6-sol",
-          "variant": "medium"
         }
       ],
       "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind."
