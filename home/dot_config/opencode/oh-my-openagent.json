@@ -30,7 +30,7 @@
         },
         {
           "model": "openai/gpt-5.6-luna",
-          "variant": "low"
+          "variant": "max"
         }
       ]
     },
@@ -53,6 +53,10 @@
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "high"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -67,6 +71,10 @@
         {
           "model": "openai/gpt-5.6-terra",
           "variant": "high"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ],
       "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind."
@@ -99,16 +107,16 @@
           "variant": "medium"
         },
         {
-          "model": "openai/gpt-5.6-luna",
-          "variant": "medium"
-        },
-        {
           "model": "bailian-token-plan-personal/qwen3.7-plus",
           "variant": "medium"
         },
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "medium"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -121,16 +129,16 @@
           "variant": "medium"
         },
         {
-          "model": "openai/gpt-5.6-luna",
-          "variant": "medium"
-        },
-        {
           "model": "bailian-token-plan-personal/qwen3.7-max",
           "variant": "medium"
         },
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "medium"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -153,6 +161,10 @@
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "high"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -175,6 +187,10 @@
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "high"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -183,16 +199,16 @@
       "variant": "high",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.6-luna",
-          "variant": "high"
-        },
-        {
           "model": "opencode-go/deepseek-v4-pro",
           "variant": "high"
         },
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "high"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -201,16 +217,16 @@
       "variant": "high",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.6-luna",
-          "variant": "high"
-        },
-        {
           "model": "opencode-go/deepseek-v4-pro",
           "variant": "high"
         },
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "high"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -228,7 +244,7 @@
         },
         {
           "model": "openai/gpt-5.6-luna",
-          "variant": "low"
+          "variant": "max"
         }
       ]
     },
@@ -246,7 +262,7 @@
         },
         {
           "model": "openai/gpt-5.6-luna",
-          "variant": "low"
+          "variant": "max"
         }
       ]
     },
@@ -261,6 +277,10 @@
         {
           "model": "openrouter/nvidia/nemotron-nano-12b-v2-vl:free",
           "variant": "low"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -273,16 +293,16 @@
           "variant": "medium"
         },
         {
-          "model": "openai/gpt-5.6-luna",
-          "variant": "medium"
-        },
-        {
           "model": "bailian-token-plan-personal/qwen3.7-max",
           "variant": "medium"
         },
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "medium"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     }
@@ -303,6 +323,10 @@
         {
           "model": "openrouter/nvidia/nemotron-nano-12b-v2-vl:free",
           "variant": "high"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -311,16 +335,16 @@
       "variant": "high",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.6-luna",
-          "variant": "high"
-        },
-        {
           "model": "opencode-go/deepseek-v4-pro",
           "variant": "high"
         },
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "high"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -329,16 +353,16 @@
       "variant": "high",
       "fallback_models": [
         {
-          "model": "openai/gpt-5.6-luna",
-          "variant": "high"
-        },
-        {
           "model": "opencode-go/deepseek-v4-pro",
           "variant": "high"
         },
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "medium"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -352,7 +376,7 @@
         },
         {
           "model": "openai/gpt-5.6-luna",
-          "variant": "low"
+          "variant": "max"
         }
       ]
     },
@@ -366,7 +390,7 @@
         },
         {
           "model": "openai/gpt-5.6-luna",
-          "variant": "medium"
+          "variant": "max"
         }
       ]
     },
@@ -389,6 +413,10 @@
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "high"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -405,12 +433,12 @@
           "variant": "medium"
         },
         {
-          "model": "openai/gpt-5.6-luna",
+          "model": "openrouter/openai/gpt-oss-20b:free",
           "variant": "medium"
         },
         {
-          "model": "openrouter/openai/gpt-oss-20b:free",
-          "variant": "medium"
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     },
@@ -433,6 +461,10 @@
         {
           "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
           "variant": "high"
+        },
+        {
+          "model": "openai/gpt-5.6-luna",
+          "variant": "max"
         }
       ]
     }
@@ -446,7 +478,7 @@
       503,
       504
     ],
-    "max_fallback_attempts": 4,
+    "max_fallback_attempts": 5,
     "cooldown_seconds": 30,
     "timeout_seconds": 30,
     "notify_on_fallback": true
