@@ -20,6 +20,18 @@ print_info "Installing OmniRoute AI gateway..."
 bun install -g omniroute
 print_success "OmniRoute installed"
 
+OMNIROUTE_PLIST="$HOME/Library/LaunchAgents/com.dotfiles.omniroute.plist"
+OMNIROUTE_LABEL="com.dotfiles.omniroute"
+if [ -f "$OMNIROUTE_PLIST" ] && command -v launchctl &> /dev/null; then
+    print_info "Loading OmniRoute LaunchAgent..."
+    launchctl bootout "gui/$(id -u)" "$OMNIROUTE_PLIST" >/dev/null 2>&1 || true
+    launchctl bootstrap "gui/$(id -u)" "$OMNIROUTE_PLIST"
+    launchctl enable "gui/$(id -u)/$OMNIROUTE_LABEL"
+    print_success "OmniRoute LaunchAgent loaded"
+else
+    print_info "OmniRoute LaunchAgent plist not found or launchctl unavailable; skipping (run ./setup.sh links first)"
+fi
+
 print_info "Installing oh-my-openagent..."
 bun install -g oh-my-openagent
 print_success "oh-my-openagent installed"

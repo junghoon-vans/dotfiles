@@ -88,6 +88,10 @@ Examples:
 OpenCode and Zed use the tracked OmniRoute provider configuration at
 `http://localhost:20128/v1`. Put the gateway key in `~/.zshrc.local` as
 `OMNIROUTE_API_KEY`; see `docs/local-overrides.md` for the environment setup.
+`./setup.sh opencode` also loads a `com.dotfiles.omniroute` LaunchAgent from
+`~/Library/LaunchAgents/com.dotfiles.omniroute.plist` so `omniroute serve` runs
+persistently and restarts on login/crash; run `./setup.sh links` first if the
+plist is missing.
 
 `gno`, `solana`, `sui`, `xml`, and `typescript` install their required Go, Rust, Java, and Bun runtimes through mise before installing their tooling. Use `languages` and `blockchain` to install the full ordered sets, or run individual commands to install only selected environments.
 
@@ -98,7 +102,7 @@ OpenCode and Zed use the tracked OmniRoute provider configuration at
 `setup/link.sh` applies chezmoi source state from `home/`. Existing files are backed up only when their content differs from the tracked source before `chezmoi apply` runs.
 
 The linked home state includes a weekly LaunchAgent at
-`~/Library/LaunchAgents/com.junghoon.weekly-disk-maintenance.plist`. It runs
+`~/Library/LaunchAgents/com.dotfiles.weekly-disk-maintenance.plist`. It runs
 `~/.local/bin/weekly-disk-maintenance` every Monday at 10:00. The script checks
 the `$HOME` filesystem and, when usage is at least 85%, runs `mole clean`, prunes
 unused Docker builders/images/containers without pruning Docker volumes, writes

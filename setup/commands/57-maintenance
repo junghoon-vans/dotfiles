@@ -6,8 +6,8 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 print_step "Loading maintenance LaunchAgents..."
 
-PLIST_PATH="$HOME/Library/LaunchAgents/com.junghoon.weekly-disk-maintenance.plist"
-LABEL="com.junghoon.weekly-disk-maintenance"
+PLIST_PATH="$HOME/Library/LaunchAgents/com.dotfiles.weekly-disk-maintenance.plist"
+LABEL="com.dotfiles.weekly-disk-maintenance"
 
 if [ ! -f "$PLIST_PATH" ]; then
     print_error "LaunchAgent plist missing at $PLIST_PATH; run ./setup.sh links first"

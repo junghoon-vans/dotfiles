@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.junghoon.weekly-disk-maintenance</string>
+  <string>com.dotfiles.weekly-disk-maintenance</string>
   <key>ProgramArguments</key>
   <array>
     <string>/bin/zsh</string>
@@ -20,8 +20,8 @@
     <integer>0</integer>
   </dict>
   <key>StandardOutPath</key>
-  <string>/tmp/com.junghoon.weekly-disk-maintenance.out</string>
+  <string>/tmp/com.dotfiles.weekly-disk-maintenance.out</string>
   <key>StandardErrorPath</key>
-  <string>/tmp/com.junghoon.weekly-disk-maintenance.err</string>
+  <string>/tmp/com.dotfiles.weekly-disk-maintenance.err</string>
 </dict>
 </plist>

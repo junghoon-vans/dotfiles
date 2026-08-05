@@ -69,7 +69,7 @@ make clean  # Remove managed dotfile backups created by links
 ```
 
 The applied dotfiles also install `~/.local/bin/weekly-disk-maintenance` and
-`~/Library/LaunchAgents/com.junghoon.weekly-disk-maintenance.plist`. The agent
+`~/Library/LaunchAgents/com.dotfiles.weekly-disk-maintenance.plist`. The agent
 checks disk usage every Monday at 10:00. When the checked filesystem is at least
 85% used, it runs `mole clean`, prunes unused Docker build cache/images/containers
 without pruning Docker volumes, logs additional cleanup candidates including

@@ -74,7 +74,8 @@ PY
 
 print_info "Validating LaunchAgent plists..."
 if command -v plutil >/dev/null 2>&1; then
-    plutil -lint "$DOTFILES_DIR/home/Library/LaunchAgents/com.junghoon.weekly-disk-maintenance.plist" >/dev/null
+    plutil -lint "$DOTFILES_DIR/home/Library/LaunchAgents/com.dotfiles.weekly-disk-maintenance.plist" >/dev/null
+    plutil -lint "$DOTFILES_DIR/home/Library/LaunchAgents/com.dotfiles.omniroute.plist" >/dev/null
 else
     print_info "plutil not found; skipping plist lint"
 fi
