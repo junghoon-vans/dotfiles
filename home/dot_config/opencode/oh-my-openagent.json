@@ -25,6 +25,10 @@
           "variant": "low"
         },
         {
+          "model": "omniroute/auto/best-free",
+          "variant": "low"
+        },
+        {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
@@ -40,6 +44,10 @@
       "fallback_models": [
         {
           "model": "opencode/deepseek-v4-flash-free",
+          "variant": "high"
+        },
+        {
+          "model": "omniroute/auto/best-free",
           "variant": "high"
         },
         {
@@ -60,6 +68,10 @@
       "model": "opencode/deepseek-v4-flash-free",
       "variant": "high",
       "fallback_models": [
+        {
+          "model": "omniroute/auto/best-free",
+          "variant": "high"
+        },
         {
           "model": "bailian-token-plan-personal/qwen3.8-max-preview",
           "variant": "high"
@@ -95,6 +107,10 @@
       "variant": "medium",
       "fallback_models": [
         {
+          "model": "omniroute/auto/best-free",
+          "variant": "medium"
+        },
+        {
           "model": "bailian-token-plan-personal/qwen3.7-plus",
           "variant": "medium"
         },
@@ -117,6 +133,10 @@
       "variant": "medium",
       "fallback_models": [
         {
+          "model": "omniroute/auto/best-free",
+          "variant": "medium"
+        },
+        {
           "model": "bailian-token-plan-personal/qwen3.7-max",
           "variant": "medium"
         },
@@ -134,6 +154,10 @@
       "model": "opencode/deepseek-v4-flash-free",
       "variant": "high",
       "fallback_models": [
+        {
+          "model": "omniroute/auto/best-free",
+          "variant": "high"
+        },
         {
           "model": "bailian-token-plan-personal/qwen3.8-max-preview",
           "variant": "high"
@@ -156,6 +180,10 @@
       "model": "opencode/deepseek-v4-flash-free",
       "variant": "high",
       "fallback_models": [
+        {
+          "model": "omniroute/auto/best-free",
+          "variant": "high"
+        },
         {
           "model": "bailian-token-plan-personal/qwen3.8-max-preview",
           "variant": "high"
@@ -219,6 +247,10 @@
           "variant": "low"
         },
         {
+          "model": "omniroute/auto/best-free",
+          "variant": "low"
+        },
+        {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "low"
         },
@@ -234,6 +266,10 @@
       "fallback_models": [
         {
           "model": "opencode/deepseek-v4-flash-free",
+          "variant": "low"
+        },
+        {
+          "model": "omniroute/auto/best-free",
           "variant": "low"
         },
         {
@@ -264,6 +300,10 @@
       "model": "opencode/deepseek-v4-flash-free",
       "variant": "medium",
       "fallback_models": [
+        {
+          "model": "omniroute/auto/best-free",
+          "variant": "medium"
+        },
         {
           "model": "bailian-token-plan-personal/qwen3.7-max",
           "variant": "medium"
@@ -343,6 +383,10 @@
       "variant": "low",
       "fallback_models": [
         {
+          "model": "omniroute/auto/best-free",
+          "variant": "low"
+        },
+        {
           "model": "bailian-token-plan-personal/qwen3.6-flash",
           "variant": "low"
         },
@@ -360,6 +404,10 @@
       "model": "opencode/deepseek-v4-flash-free",
       "variant": "medium",
       "fallback_models": [
+        {
+          "model": "omniroute/auto/best-free",
+          "variant": "medium"
+        },
         {
           "model": "bailian-token-plan-personal/qwen3.7-plus",
           "variant": "medium"
@@ -382,6 +430,10 @@
       "model": "opencode/deepseek-v4-flash-free",
       "variant": "high",
       "fallback_models": [
+        {
+          "model": "omniroute/auto/best-free",
+          "variant": "high"
+        },
         {
           "model": "bailian-token-plan-personal/qwen3.7-max",
           "variant": "high"
@@ -409,6 +461,10 @@
           "variant": "medium"
         },
         {
+          "model": "omniroute/auto/best-free",
+          "variant": "medium"
+        },
+        {
           "model": "opencode-go/deepseek-v4-flash",
           "variant": "medium"
         },
@@ -424,6 +480,10 @@
       "fallback_models": [
         {
           "model": "opencode/deepseek-v4-flash-free",
+          "variant": "high"
+        },
+        {
+          "model": "omniroute/auto/best-free",
           "variant": "high"
         },
         {
