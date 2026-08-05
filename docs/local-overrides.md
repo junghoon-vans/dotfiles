@@ -41,6 +41,18 @@ export SOME_WORK_VAR=value
 
 `.zshrc` sources this file automatically when it exists.
 
+For the local OmniRoute gateway used by OpenCode and Zed, add its endpoint key
+to the same file:
+
+```bash
+export OMNIROUTE_API_KEY=your-omniroute-key
+```
+
+The tracked OpenCode and Zed configuration keeps the gateway URL at
+`http://localhost:20128/v1` and references this variable without storing the
+key in dotfiles. Restart Zed after changing the override so its GUI process
+receives the environment variable.
+
 `./setup.sh codex` also configures Firecrawl MCP to source `~/.zshrc.local` before launching, so keep the API key there instead of tracked Codex config:
 
 ```bash

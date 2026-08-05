@@ -74,6 +74,49 @@
           }
         }
       }
+    },
+    "omniroute": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OmniRoute",
+      "options": {
+        "baseURL": "http://localhost:20128/v1",
+        "apiKey": "{env:OMNIROUTE_API_KEY}"
+      },
+      "models": {
+        "auto/best-coding": {
+          "name": "Auto: Best Coding"
+        },
+        "auto/best-reasoning": {
+          "name": "Auto: Best Reasoning"
+        },
+        "auto/best-fast": {
+          "name": "Auto: Best Fast"
+        },
+        "auto/best-free": {
+          "name": "Auto: Best Free"
+        },
+        "auto/coding": {
+          "name": "Auto: Coding"
+        },
+        "auto/fast": {
+          "name": "Auto: Fast"
+        },
+        "auto/cheap": {
+          "name": "Auto: Cheap"
+        },
+        "auto/offline": {
+          "name": "Auto: Offline"
+        },
+        "auto/smart": {
+          "name": "Auto: Smart"
+        },
+        "oc/deepseek-v4-flash-free": {
+          "name": "OpenCode Free: DeepSeek V4 Flash"
+        },
+        "oc/mimo-v2.5-free": {
+          "name": "OpenCode Free: MiMo V2.5"
+        }
+      }
     }
   },
   "mcp": {
@@ -131,6 +174,14 @@
       "command": [
         "aside",
         "mcp"
+      ],
+      "enabled": true
+    },
+    "omniroute": {
+      "type": "local",
+      "command": [
+        "omniroute",
+        "--mcp"
       ],
       "enabled": true
     }

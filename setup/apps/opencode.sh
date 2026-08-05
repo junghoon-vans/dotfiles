@@ -16,6 +16,10 @@ print_info "Installing opencode-ai..."
 bun install -g opencode-ai
 print_success "opencode-ai installed"
 
+print_info "Installing OmniRoute AI gateway..."
+bun install -g omniroute
+print_success "OmniRoute installed"
+
 print_info "Installing oh-my-openagent..."
 bun install -g oh-my-openagent
 print_success "oh-my-openagent installed"

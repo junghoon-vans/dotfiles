@@ -1144,6 +1144,7 @@ grep -q "git -C $FAKE_HOME/gno checkout --force --detach 959cefd916021d3a55e9b51
 grep -q 'make install' "$LOG_FILE"
 grep -q 'bun install -g typescript' "$LOG_FILE"
 grep -q 'bun install -g opencode-ai' "$LOG_FILE"
+grep -q 'bun install -g omniroute' "$LOG_FILE"
 grep -q 'bun install -g opencode-status-hud' "$LOG_FILE"
 grep -q 'bunx oh-my-openagent install --no-tui --claude=no --openai=yes --gemini=no --copilot=no' "$LOG_FILE"
 grep -q 'opencode-status-hud install' "$LOG_FILE"
@@ -1322,6 +1323,9 @@ grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/35-blockchain"
 [ ! -e "$REPO_ROOT/.config/opencode/opencode.json" ]
 [ ! -e "$REPO_ROOT/.config/opencode/tui.json" ]
 [ ! -e "$REPO_ROOT/.config/zed/settings.json" ]
+[ -n "$(grep -F 'http://localhost:20128/v1' "$REPO_ROOT/home/dot_config/opencode/opencode.json")" ]
+[ -n "$(grep -F 'http://localhost:20128/v1' "$REPO_ROOT/home/dot_config/zed/settings.json")" ]
+[ -n "$(grep -F 'auto/best-coding' "$REPO_ROOT/home/dot_config/zed/settings.json")" ]
 [ ! -e "$REPO_ROOT/.codex/lsp-client.json" ]
 [ ! -e "$REPO_ROOT/.claude/settings.json" ]
 [ -e "$REPO_ROOT/docs/gitconfig.override.example" ]

@@ -29,7 +29,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `blockchain` | Installs selected blockchain tooling by running `solana`, `gno`, and `sui`. |
 | `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
-| `opencode` | Installs OpenCode, bootstraps oh-my-openagent, and configures the status HUD. |
+| `opencode` | Installs OpenCode and OmniRoute, bootstraps oh-my-openagent, and configures the status HUD. |
 | `opencode-skills` | Installs the default global OpenCode skill set (Find Skills, Vercel React Best Practices, Golang Pro) through `npx skills --agent opencode`. |
 | `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, configures file-backed MCP OAuth storage, and ensures gnomcp, Atlassian, GitHub Copilot, Context7, Firecrawl, Aside-backed Playwright, and native Aside MCP servers are registered. |
 | `codex-agents` | Installs selected global Codex custom agents into `~/.codex/agents/`. |
@@ -84,6 +84,10 @@ Examples:
 ./setup.sh sui
 ./setup.sh --skip rust --yes
 ```
+
+OpenCode and Zed use the tracked OmniRoute provider configuration at
+`http://localhost:20128/v1`. Put the gateway key in `~/.zshrc.local` as
+`OMNIROUTE_API_KEY`; see `docs/local-overrides.md` for the environment setup.
 
 `gno`, `solana`, `sui`, `xml`, and `typescript` install their required Go, Rust, Java, and Bun runtimes through mise before installing their tooling. Use `languages` and `blockchain` to install the full ordered sets, or run individual commands to install only selected environments.
 
