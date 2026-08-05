@@ -55,6 +55,7 @@ cask "tailscale-app"   # Mesh VPN desktop app
 cask "jordanbaird-ice" # Menu bar management
 cask "hop"             # HWP document viewer/editor
 cask "headlamp"        # Kubernetes web UI
+cask "paseo"           # Self-hosted AI coding-agent daemon and desktop app
 cask "stablyai/orca/orca" # Orca desktop app
 
 # ========================================

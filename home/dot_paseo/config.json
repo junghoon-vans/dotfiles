@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "daemon": {
+    "listen": "127.0.0.1:6767",
+    "cors": {
+      "allowedOrigins": [
+        "https://app.paseo.sh"
+      ]
+    },
+    "relay": {
+      "enabled": false
+    }
+  },
+  "app": {
+    "baseUrl": "https://app.paseo.sh"
+  },
+  "agents": {
+    "providers": {
+      "opencode": {
+        "command": [
+          "/bin/zsh",
+          "-lc",
+          "source \"$HOME/.zshrc.local\" 2>/dev/null || true; exec opencode \"$@\"",
+          "paseo-opencode"
+        ]
+      },
+      "codex": {
+        "enabled": false
+      },
+      "copilot": {
+        "enabled": false
+      },
+      "pi": {
+        "enabled": false
+      },
+      "omp": {
+        "enabled": false
+      }
+    }
+  }
+}

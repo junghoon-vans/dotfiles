@@ -14,6 +14,10 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 - Optional `OPENCODE_STATUS_HUD_*` display overrides are local runtime preferences and should stay out of tracked config unless they become part of the shared baseline.
 - OpenAgent uses Playwright MCP for browser automation. Brave is Brewfile-managed and selected through `PLAYWRIGHT_MCP_EXECUTABLE_PATH` in `.zshrc` when installed.
 
+## Paseo
+
+The official Homebrew `paseo` cask installs the Paseo desktop app and links its bundled CLI to `/opt/homebrew/bin/paseo`; no separate npm-global install is needed. Paseo provides a local daemon for supervising AI coding agents and can use the already-managed Claude Code, Codex, and OpenCode CLIs.
+
 ## Codex Agents and Skills
 
 The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json` and is applied to `~/.codex/lsp-client.json`. Global Codex custom agents are installed into `~/.codex/agents/` by `./setup.sh codex-agents`.
