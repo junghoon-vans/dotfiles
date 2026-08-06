@@ -6,7 +6,7 @@
     "agents": {
       "sisyphus": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "high",
+        "variant": "max",
         "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind.",
         "fallback_models": [
           {
