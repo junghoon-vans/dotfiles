@@ -284,8 +284,8 @@ if codex_config["lsp"] != config["lsp"]:
     raise SystemExit("Codex LSP config should exactly mirror OpenCode lsp config")
 
 expected_commands = {
-    "gopls": ["/bin/bash", "-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gopls'],
-    "gnopls": ["/bin/bash", "-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gnopls -mode=stdio'],
+    "gopls": ["/bin/bash", "-lc", 'exec mise exec go@1.25 -- gopls'],
+    "gnopls": ["/bin/bash", "-lc", 'exec mise exec go@1.25 -- gnopls -mode=stdio'],
     "jdtls": ["/bin/bash", "-lc", "project_hash=$(printf \"%s\" \"$PWD\" | shasum | cut -d\" \" -f1); mkdir -p \"$HOME/Library/Caches/jdtls/workspaces\"; exec mise exec java@temurin-21 -- jdtls -data \"$HOME/Library/Caches/jdtls/workspaces/$project_hash\""],
     "kotlin-ls": ["/bin/bash", "-lc", "exec mise exec java@temurin-21 kotlin@latest -- kotlin-language-server"],
     "pyright": ["/bin/bash", "-lc", "exec mise exec python@3.13 -- pyright-langserver --stdio"],
@@ -325,8 +325,8 @@ content = re.sub(r",(\s*[}\]])", r"\1", content)
 config = json.loads(content)
 
 expected_commands = {
-    "gopls": ["-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gopls'],
-    "gnopls": ["-lc", 'PATH="$HOME/.local/bin:$PATH" exec mise exec go@1.25 -- gnopls -mode=stdio'],
+    "gopls": ["-lc", 'exec mise exec go@1.25 -- gopls'],
+    "gnopls": ["-lc", 'exec mise exec go@1.25 -- gnopls -mode=stdio'],
     "typescript-language-server": ["-lc", 'PATH="$(mise exec bun@latest -- bun pm bin -g):$PATH" exec mise exec node@24 bun@latest -- typescript-language-server --stdio'],
 }
 for lsp_name, arguments in expected_commands.items():

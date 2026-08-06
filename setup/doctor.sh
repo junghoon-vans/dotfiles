@@ -150,7 +150,7 @@ done
 
 print_info "Checking local language server artifacts..."
 for artifact_name in gopls gnopls gnomcp; do
-    if [ -x "$HOME/.local/bin/$artifact_name" ]; then
+    if command -v "$artifact_name" >/dev/null 2>&1; then
         print_success "$artifact_name artifact found"
     else
         case "$artifact_name" in
@@ -186,6 +186,19 @@ if command -v mise >/dev/null 2>&1; then
         print_success "typescript-language-server artifact found"
     else
         print_info "typescript-language-server artifact missing; run ./setup.sh typescript"
+    fi
+fi
+
+if [ "$(uname -s)" = "Darwin" ] && [ -f "$HOME/Library/LaunchAgents/com.dotfiles.omniroute.plist" ]; then
+    if launchctl print "gui/$(id -u)/com.dotfiles.omniroute" >/dev/null 2>&1; then
+        print_success "OmniRoute LaunchAgent loaded"
+        if curl -s -m 2 http://127.0.0.1:20128/v1/models >/dev/null 2>&1; then
+            print_success "OmniRoute gateway responding on port 20128"
+        else
+            print_info "OmniRoute gateway not responding on port 20128; check /tmp/com.dotfiles.omniroute.err"
+        fi
+    else
+        print_info "OmniRoute LaunchAgent not loaded; run ./setup.sh opencode"
     fi
 fi
 

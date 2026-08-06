@@ -214,7 +214,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "PATH=\"$HOME/.local/bin:$PATH\" exec mise exec go@1.25 -- gopls"
+        "exec mise exec go@1.25 -- gopls"
       ],
       "extensions": [
         ".go"
@@ -233,7 +233,7 @@
       "command": [
         "/bin/bash",
         "-lc",
-        "PATH=\"$HOME/.local/bin:$PATH\" exec mise exec go@1.25 -- gnopls -mode=stdio"
+        "exec mise exec go@1.25 -- gnopls -mode=stdio"
       ],
       "extensions": [
         ".gno"
