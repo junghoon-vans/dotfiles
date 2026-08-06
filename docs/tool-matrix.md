@@ -50,8 +50,8 @@ The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json
 | Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
 | --- | --- | --- | --- | --- | --- |
 | Bash / Zsh | macOS shell | `bash-language-server` | `shfmt` | `shellcheck` | `bash -n` |
-| Go | Global mise config (`go = "1.25"`) + `./setup.sh go` tools in `~/.local/bin` | `mise exec go@1.25 -- gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
-| Gno | `./setup.sh gno` (`~/.local/bin/gno`) | `mise exec go@1.25 -- gnopls` | - | `gnopls` diagnostics | `gno test` |
+| Go | Global mise config (`go = "1.25"`) + `./setup.sh go` tools in the mise Go bin dir (`~/.local/share/mise/installs/go/<version>/bin`) | `mise exec go@1.25 -- gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
+| Gno | `./setup.sh gno` (binaries in the mise Go bin dir) | `mise exec go@1.25 -- gnopls` | - | `gnopls` diagnostics | `gno test` |
 | Java | Global mise config (`java = "temurin-21"`) + `./setup.sh java` tools | `mise exec java@temurin-21 -- jdtls` with per-project `-data` | - | `jdtls` diagnostics | project build tool |
 | Kotlin | Global mise config (`kotlin = "latest"`) + `./setup.sh kotlin` tools | `kotlin-language-server` | - | Kotlin LSP diagnostics | project build tool |
 | Markdown | - | `marksman` | - | `marksman` diagnostics | - |
