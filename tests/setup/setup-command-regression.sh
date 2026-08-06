@@ -1070,6 +1070,15 @@ printf 'bun %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "--version" ]; then
   printf '1.2.0\n'
 fi
+if [ "\${1:-}" = "install" ] && [ "\${2:-}" = "-g" ] && [ "\${3:-}" = "opencode-ai" ] && [ "\${FAKE_BUN_SKIP_OPENCODE_PACKAGE:-0}" != "1" ]; then
+  mkdir -p "$FAKE_HOME/.bun/install/global/node_modules/opencode-ai"
+  : >"$FAKE_HOME/.bun/install/global/node_modules/opencode-ai/postinstall.mjs"
+fi
+EOF
+
+cat >"$FAKE_HOME/.bun/bin/node" <<EOF
+#!/bin/bash
+printf 'node BUN_INSTALL=%s %s\n' "\$BUN_INSTALL" "\$*" >> "$LOG_FILE"
 EOF
 
 cat >"$FAKE_HOME/.bun/bin/bunx" <<EOF
@@ -1109,7 +1118,7 @@ if [ "\${1:-}" = "-V" ]; then
 fi
 EOF
 
-chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_HOME/.bun/bin/opencode-status-hud" "$FAKE_BIN/brew" "$FAKE_BIN/codex" "$FAKE_BIN/tmux" "$FAKE_BIN/aside"
+chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/node" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_HOME/.bun/bin/opencode-status-hud" "$FAKE_BIN/brew" "$FAKE_BIN/codex" "$FAKE_BIN/tmux" "$FAKE_BIN/aside"
 
 mkdir -p "$FAKE_HOME/.codex"
 mkdir -p "$FAKE_HOME/.local/bin"
@@ -1134,6 +1143,21 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/go.sh" >/dev/nul
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/null
+
+OPENCODE_INSTALL_LINE="$(grep -n '^bun install -g opencode-ai$' "$LOG_FILE" | cut -d: -f1)"
+OPENCODE_POSTINSTALL_LINE="$(grep -n "^node BUN_INSTALL=$FAKE_HOME/.bun $FAKE_HOME/.bun/install/global/node_modules/opencode-ai/postinstall.mjs$" "$LOG_FILE" | cut -d: -f1)"
+[ -n "$OPENCODE_INSTALL_LINE" ]
+[ -n "$OPENCODE_POSTINSTALL_LINE" ]
+[ "$OPENCODE_POSTINSTALL_LINE" -gt "$OPENCODE_INSTALL_LINE" ]
+
+rm -f "$FAKE_HOME/.bun/install/global/node_modules/opencode-ai/postinstall.mjs"
+if MISSING_POSTINSTALL_OUTPUT="$(FAKE_BUN_SKIP_OPENCODE_PACKAGE=1 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" 2>&1)"; then
+    MISSING_POSTINSTALL_STATUS=0
+else
+    MISSING_POSTINSTALL_STATUS=$?
+fi
+[ "$MISSING_POSTINSTALL_STATUS" -ne 0 ]
+grep -q 'opencode-ai postinstall.mjs not found' <<<"$MISSING_POSTINSTALL_OUTPUT"
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/codex.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/codex-mcp.sh" >/dev/null
 

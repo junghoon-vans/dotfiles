@@ -14,7 +14,25 @@ fi
 
 print_info "Installing opencode-ai..."
 bun install -g opencode-ai
-print_success "opencode-ai installed"
+
+OPENCODE_PACKAGE_DIR="$BUN_INSTALL/install/global/node_modules/opencode-ai"
+OPENCODE_POSTINSTALL="$OPENCODE_PACKAGE_DIR/postinstall.mjs"
+if [ ! -d "$OPENCODE_PACKAGE_DIR" ]; then
+    print_error "opencode-ai package directory not found at $OPENCODE_PACKAGE_DIR. Re-run 'bun install -g opencode-ai' or check BUN_INSTALL."
+    exit 1
+fi
+if [ ! -f "$OPENCODE_POSTINSTALL" ]; then
+    print_error "opencode-ai postinstall.mjs not found at $OPENCODE_POSTINSTALL. Reinstall opencode-ai before continuing."
+    exit 1
+fi
+if ! command -v node &> /dev/null; then
+    print_error "Node.js is required to run $OPENCODE_POSTINSTALL. Install the configured Node runtime before running OpenCode setup."
+    exit 1
+fi
+
+print_info "Running opencode-ai postinstall..."
+node "$OPENCODE_POSTINSTALL"
+print_success "opencode-ai installed and postinstall completed"
 
 print_info "Installing OmniRoute AI gateway..."
 bun install -g omniroute
