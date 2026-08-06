@@ -2,6 +2,15 @@
   "version": 1,
   "daemon": {
     "listen": "127.0.0.1:6767",
+    "mcp": {
+      "injectIntoAgents": false
+    },
+    "browserTools": {
+      "enabled": false
+    },
+    "autoArchiveAfterMerge": false,
+    "enableTerminalAgentHooks": false,
+    "appendSystemPrompt": "",
     "cors": {
       "allowedOrigins": [
         "https://app.paseo.sh"
@@ -25,7 +34,7 @@
         ]
       },
       "codex": {
-        "enabled": false
+        "enabled": true
       },
       "copilot": {
         "enabled": false
