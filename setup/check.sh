@@ -53,7 +53,19 @@ print_info "Validating JSON config..."
 python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/opencode.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_codex/lsp-client.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_claude/settings.json" >/dev/null
-python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/oh-my-openagent.json" >/dev/null
+python3 - "$DOTFILES_DIR/home/dot_omo/omo.jsonc" <<'PY'
+import json
+import re
+import sys
+
+path = sys.argv[1]
+with open(path, encoding="utf-8") as file:
+    lines = [line for line in file if not line.lstrip().startswith("//")]
+
+content = "".join(lines)
+content = re.sub(r",(\s*[}\]])", r"\1", content)
+json.loads(content)
+PY
 python3 -m json.tool "$DOTFILES_DIR/home/dot_paseo/config.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_paseo/orchestration-preferences.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/tui.json" >/dev/null

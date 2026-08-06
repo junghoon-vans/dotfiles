@@ -1,0 +1,508 @@
+// OMO configuration
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/omo.schema.json",
+  "[opencode]": {
+    "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/omo.schema.json",
+    "agents": {
+      "sisyphus": {
+        "model": "openai/gpt-5.6-sol",
+        "variant": "high",
+        "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind.",
+        "fallback_models": [
+          {
+            "model": "openai/gpt-5.6-terra",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+            "variant": "high"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "high"
+          }
+        ]
+      },
+      "hephaestus": {
+        "model": "openai/gpt-5.6-luna",
+        "variant": "max",
+        "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind.",
+        "fallback_models": [
+          {
+            "model": "bailian-token-plan-personal/qwen3.7-max",
+            "variant": "high"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "high"
+          }
+        ]
+      },
+      "build": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "medium",
+        "fallback_models": [
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "medium"
+          },
+          {
+            "model": "bailian-token-plan-personal/qwen3.7-max",
+            "variant": "medium"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          }
+        ]
+      },
+      "plan": {
+        "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+        "variant": "high",
+        "fallback_models": [
+          {
+            "model": "openai/gpt-5.6-terra",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "high"
+          }
+        ]
+      },
+      "sisyphus-junior": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "medium",
+        "fallback_models": [
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "medium"
+          },
+          {
+            "model": "bailian-token-plan-personal/qwen3.7-max",
+            "variant": "medium"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          }
+        ]
+      },
+      "OpenCode-Builder": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "medium",
+        "fallback_models": [
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "medium"
+          },
+          {
+            "model": "bailian-token-plan-personal/qwen3.7-max",
+            "variant": "medium"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          }
+        ]
+      },
+      "prometheus": {
+        "model": "bailian-token-plan-personal/qwen3.7-max",
+        "variant": "high",
+        "fallback_models": [
+          {
+            "model": "openai/gpt-5.6-terra",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "high"
+          }
+        ]
+      },
+      "metis": {
+        "model": "bailian-token-plan-personal/qwen3.7-max",
+        "variant": "high",
+        "fallback_models": [
+          {
+            "model": "openai/gpt-5.6-terra",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "high"
+          }
+        ]
+      },
+      "momus": {
+        "model": "openai/gpt-5.6-terra",
+        "variant": "high",
+        "fallback_models": [
+          {
+            "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "high"
+          }
+        ]
+      },
+      "oracle": {
+        "model": "openai/gpt-5.6-terra",
+        "variant": "high",
+        "fallback_models": [
+          {
+            "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "high"
+          }
+        ]
+      },
+      "librarian": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "low",
+        "fallback_models": [
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "low"
+          },
+          {
+            "model": "bailian-token-plan-personal/qwen3.6-flash",
+            "variant": "low"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "low"
+          }
+        ]
+      },
+      "explore": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "low",
+        "fallback_models": [
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "low"
+          },
+          {
+            "model": "bailian-token-plan-personal/qwen3.6-flash",
+            "variant": "low"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "low"
+          }
+        ]
+      },
+      "multimodal-looker": {
+        "model": "openai/gpt-5.6-luna",
+        "variant": "low",
+        "fallback_models": [
+          {
+            "model": "bailian-token-plan-personal/qwen3.7-plus",
+            "variant": "low"
+          }
+        ]
+      },
+      "atlas": {
+        "model": "bailian-token-plan-personal/qwen3.7-max",
+        "variant": "medium",
+        "fallback_models": [
+          {
+            "model": "openai/gpt-5.6-terra",
+            "variant": "medium"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "medium"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "medium"
+          }
+        ]
+      }
+    },
+    "categories": {
+      "visual-engineering": {
+        "model": "bailian-token-plan-personal/qwen3.7-plus",
+        "variant": "high",
+        "fallback_models": [
+          {
+            "model": "openai/gpt-5.6-terra",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "low"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "low"
+          }
+        ]
+      },
+      "ultrabrain": {
+        "model": "openai/gpt-5.6-terra",
+        "variant": "high",
+        "fallback_models": [
+          {
+            "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "low"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "low"
+          }
+        ]
+      },
+      "deep": {
+        "model": "openai/gpt-5.6-terra",
+        "variant": "high",
+        "fallback_models": [
+          {
+            "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "low"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "low"
+          }
+        ]
+      },
+      "quick": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "low",
+        "fallback_models": [
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "low"
+          },
+          {
+            "model": "bailian-token-plan-personal/qwen3.6-flash",
+            "variant": "low"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "low"
+          }
+        ]
+      },
+      "unspecified-low": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "low",
+        "fallback_models": [
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "low"
+          },
+          {
+            "model": "bailian-token-plan-personal/qwen3.7-plus",
+            "variant": "medium"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "low"
+          }
+        ]
+      },
+      "unspecified-high": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "high",
+        "fallback_models": [
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
+            "model": "bailian-token-plan-personal/qwen3.7-max",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-terra",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          }
+        ]
+      },
+      "writing": {
+        "model": "bailian-token-plan-personal/qwen3.7-plus",
+        "variant": "medium",
+        "fallback_models": [
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "low"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "low"
+          }
+        ]
+      },
+      "artistry": {
+        "model": "bailian-token-plan-personal/qwen3.7-max",
+        "variant": "high",
+        "fallback_models": [
+          {
+            "model": "openai/gpt-5.6-terra",
+            "variant": "high"
+          },
+          {
+            "model": "openai/gpt-5.6-luna",
+            "variant": "max"
+          },
+          {
+            "model": "opencode/deepseek-v4-flash-free",
+            "variant": "high"
+          },
+          {
+            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "variant": "high"
+          }
+        ]
+      }
+    },
+    "disabled_providers": [
+      "anthropic",
+      "google",
+      "github-copilot",
+      "vercel",
+      "zai-coding-plan",
+      "kimi-for-coding",
+      "moonshotai",
+      "moonshotai-cn",
+      "firmware",
+      "ollama-cloud",
+      "aihubmix",
+      "venice"
+    ],
+    "model_fallback": true,
+    "runtime_fallback": {
+      "enabled": true,
+      "retry_on_errors": [
+        429,
+        500,
+        502,
+        503,
+        504
+      ],
+      "max_fallback_attempts": 5,
+      "cooldown_seconds": 30,
+      "timeout_seconds": 30,
+      "notify_on_fallback": true,
+      "restore_primary_after_cooldown": true
+    },
+    "browser_automation_engine": {
+      "provider": "playwright"
+    },
+    "skills": {
+      "enable": [
+        "git-master",
+        "playwright",
+        "review-work",
+        "ai-slop-remover",
+        "frontend-ui-ux"
+      ]
+    },
+    "notification": {
+      "force_enable": true
+    },
+    "codegraph": {}
+  },
+  "_migrations": [
+    "2026-07-opencode-config-unification",
+    "2026-07-codex-config-jsonc",
+    "2026-08-reasoning-unification"
+  ],
+  "codegraph": {},
+  "[codex]": {
+    "codegraph": {}
+  }
+}

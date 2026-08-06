@@ -6,7 +6,7 @@ OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is app
 
 - `opencode.json` tracks OpenCode plugins, MCP endpoints, and native LSP mappings.
 - `lsp-client.json` mirrors the OpenCode LSP mappings for OpenAgent/lsp-tools-mcp fallback use.
-- `oh-my-openagent.json` tracks model routing, fallbacks, skills, and notification preferences.
+- `home/dot_omo/omo.jsonc` (applied to `~/.omo/omo.jsonc`) tracks oh-my-openagent model routing, fallbacks, skills, and notification preferences via the unified OMO config chain. The legacy `oh-my-openagent.json` path is no longer used.
 - `tui.json` tracks terminal UI preferences.
 - The OpenCode provider uses the local OmniRoute gateway at `http://localhost:20128/v1`; its API key comes from `OMNIROUTE_API_KEY`. The gateway itself runs persistently via the `com.dotfiles.omniroute` LaunchAgent loaded by `./setup.sh opencode`.
 - MCP endpoints include GitHub, Atlassian, Context7, gnomcp, Firecrawl, Aside-backed Playwright, and native Aside — the same set Codex registers through `setup/apps/codex-mcp.sh`, kept in sync across both agents. API keys and OAuth host files are not tracked.
