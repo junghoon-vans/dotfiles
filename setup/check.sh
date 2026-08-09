@@ -67,7 +67,6 @@ content = re.sub(r",(\s*[}\]])", r"\1", content)
 json.loads(content)
 PY
 python3 -m json.tool "$DOTFILES_DIR/home/private_dot_paseo/private_config.json" >/dev/null
-python3 -m json.tool "$DOTFILES_DIR/home/private_dot_paseo/private_orchestration-preferences.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_config/opencode/tui.json" >/dev/null
 python3 -m json.tool "$DOTFILES_DIR/home/dot_config/private_karabiner/private_karabiner.json" >/dev/null
 
