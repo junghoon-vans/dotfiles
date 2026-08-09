@@ -6,211 +6,211 @@
     "agents": {
       "sisyphus": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "max",
+        "reasoning": "max",
         "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind.",
         "fallback_models": [
           {
             "model": "openai/gpt-5.6-terra",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "bailian-token-plan-personal/qwen3.8-max-preview",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "hephaestus": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "high",
+        "reasoning": "high",
         "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind.",
         "fallback_models": [
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           },
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
-            "variant": "high"
+            "reasoning": "high"
           }
         ]
       },
       "build": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "medium",
+        "reasoning": "medium",
         "fallback_models": [
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
-            "variant": "medium"
+            "reasoning": "medium"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "plan": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "high",
+        "reasoning": "high",
         "fallback_models": [
           {
             "model": "bailian-token-plan-personal/qwen3.8-max-preview",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "sisyphus-junior": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "medium",
+        "reasoning": "medium",
         "fallback_models": [
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
-            "variant": "medium"
+            "reasoning": "medium"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "OpenCode-Builder": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "medium",
+        "reasoning": "medium",
         "fallback_models": [
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
-            "variant": "medium"
+            "reasoning": "medium"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "prometheus": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "high",
+        "reasoning": "high",
         "fallback_models": [
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "metis": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "high",
+        "reasoning": "high",
         "fallback_models": [
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "momus": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "high",
+        "reasoning": "high",
         "fallback_models": [
           {
             "model": "openai/gpt-5.6-terra",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "bailian-token-plan-personal/qwen3.8-max-preview",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "oracle": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "high",
+        "reasoning": "high",
         "fallback_models": [
           {
             "model": "openai/gpt-5.6-terra",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "bailian-token-plan-personal/qwen3.8-max-preview",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "librarian": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "low",
+        "reasoning": "low",
         "fallback_models": [
           {
             "model": "bailian-token-plan-personal/qwen3.6-flash",
-            "variant": "low"
+            "reasoning": "low"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "low"
+            "reasoning": "low"
           }
         ]
       },
       "explore": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "low",
+        "reasoning": "low",
         "fallback_models": [
           {
             "model": "bailian-token-plan-personal/qwen3.6-flash",
-            "variant": "low"
+            "reasoning": "low"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "low"
+            "reasoning": "low"
           }
         ]
       },
       "multimodal-looker": {
         "model": "omniroute/gemini/gemini-3-flash-preview",
-        "variant": "low",
+        "reasoning": "low",
         "fallback_models": [
           {
             "model": "omniroute/kiro/claude-sonnet-4.5",
-            "variant": "low"
+            "reasoning": "low"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "low"
+            "reasoning": "low"
           }
         ]
       },
       "atlas": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "medium",
+        "reasoning": "medium",
         "fallback_models": [
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
-            "variant": "medium"
+            "reasoning": "medium"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       }
@@ -218,133 +218,133 @@
     "categories": {
       "visual-engineering": {
         "model": "omniroute/kiro/claude-sonnet-4.5",
-        "variant": "high",
-        "fallback_models": [
+        "reasoning": "high",
+        "models": [
           {
             "model": "omniroute/gemini/gemini-3-flash-preview",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "omniroute/oc/deepseek-v4-flash-free",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "bailian-token-plan-personal/qwen3.7-plus",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "ultrabrain": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "high",
-        "fallback_models": [
+        "reasoning": "high",
+        "models": [
           {
             "model": "openai/gpt-5.6-terra",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "bailian-token-plan-personal/qwen3.8-max-preview",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "deep": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "high",
-        "fallback_models": [
+        "reasoning": "high",
+        "models": [
           {
             "model": "openai/gpt-5.6-terra",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "bailian-token-plan-personal/qwen3.8-max-preview",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "quick": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "low",
-        "fallback_models": [
+        "reasoning": "low",
+        "models": [
           {
             "model": "bailian-token-plan-personal/qwen3.6-flash",
-            "variant": "low"
+            "reasoning": "low"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "low"
+            "reasoning": "low"
           }
         ]
       },
       "unspecified-low": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "low",
-        "fallback_models": [
+        "reasoning": "low",
+        "models": [
           {
             "model": "bailian-token-plan-personal/qwen3.7-plus",
-            "variant": "medium"
+            "reasoning": "medium"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "low"
+            "reasoning": "low"
           }
         ]
       },
       "unspecified-high": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "high",
-        "fallback_models": [
+        "reasoning": "high",
+        "models": [
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-terra",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "writing": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "medium",
-        "fallback_models": [
+        "reasoning": "medium",
+        "models": [
           {
             "model": "bailian-token-plan-personal/qwen3.7-plus",
-            "variant": "medium"
+            "reasoning": "medium"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       },
       "artistry": {
         "model": "omniroute/oc/deepseek-v4-flash-free",
-        "variant": "high",
-        "fallback_models": [
+        "reasoning": "high",
+        "models": [
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
-            "variant": "high"
+            "reasoning": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
-            "variant": "max"
+            "reasoning": "max"
           }
         ]
       }
