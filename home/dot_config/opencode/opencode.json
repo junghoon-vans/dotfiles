@@ -115,6 +115,12 @@
         },
         "oc/mimo-v2.5-free": {
           "name": "OpenCode Free: MiMo V2.5"
+        },
+        "opencode-zen/deepseek-v4-flash-free": {
+          "name": "OpenCode Zen Free: DeepSeek V4 Flash"
+        },
+        "opencode-go/deepseek-v4-flash": {
+          "name": "OpenCode Go: DeepSeek V4 Flash"
         }
       }
     }
