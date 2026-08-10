@@ -14,7 +14,7 @@
             "reasoning": "high"
           },
           {
-            "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+            "model": "bailian-token-plan-personal/qwen3.8-max",
             "reasoning": "high"
           },
           {
@@ -57,7 +57,7 @@
         "reasoning": "high",
         "fallback_models": [
           {
-            "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+            "model": "bailian-token-plan-personal/qwen3.8-max",
             "reasoning": "high"
           },
           {
@@ -131,7 +131,7 @@
             "reasoning": "high"
           },
           {
-            "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+            "model": "bailian-token-plan-personal/qwen3.8-max",
             "reasoning": "high"
           },
           {
@@ -149,7 +149,7 @@
             "reasoning": "high"
           },
           {
-            "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+            "model": "bailian-token-plan-personal/qwen3.8-max",
             "reasoning": "high"
           },
           {
@@ -247,7 +247,7 @@
             "reasoning": "high"
           },
           {
-            "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+            "model": "bailian-token-plan-personal/qwen3.8-max",
             "reasoning": "high"
           },
           {
@@ -265,7 +265,7 @@
             "reasoning": "high"
           },
           {
-            "model": "bailian-token-plan-personal/qwen3.8-max-preview",
+            "model": "bailian-token-plan-personal/qwen3.8-max",
             "reasoning": "high"
           },
           {

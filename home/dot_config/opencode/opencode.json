@@ -12,8 +12,8 @@
         "apiKey": "{env:QWEN_API_KEY}"
       },
       "models": {
-        "qwen3.8-max-preview": {
-          "name": "Qwen3.8 Max Preview",
+        "qwen3.8-max": {
+          "name": "Qwen3.8 Max",
           "contextWindow": 983616,
           "maxOutputTokens": 131072,
           "options": {
