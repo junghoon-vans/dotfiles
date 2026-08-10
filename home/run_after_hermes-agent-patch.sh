@@ -48,9 +48,8 @@ if [ "$installed_formula" != "hermes-agent" ] || [ "$installed_version" != "$HER
     die "requires exactly hermes-agent $HERMES_VERSION; found: $installed_versions"
 fi
 
-[ -n "${CHEZMOI_SOURCE_FILE:-}" ] || die "CHEZMOI_SOURCE_FILE is required"
-source_directory="$(cd "$(dirname "$CHEZMOI_SOURCE_FILE")" && pwd)"
-repository_root="$(cd "$source_directory/.." && pwd)"
+[ -n "${CHEZMOI_SOURCE_DIR:-}" ] || die "CHEZMOI_SOURCE_DIR is required"
+repository_root="$(cd "$CHEZMOI_SOURCE_DIR/.." && pwd)"
 reference_directory="$repository_root/docs/hermes-agent/$HERMES_VERSION"
 original_reference="$reference_directory/daemon_pool.py.original.py"
 patched_reference="$reference_directory/daemon_pool.py.patched.py"

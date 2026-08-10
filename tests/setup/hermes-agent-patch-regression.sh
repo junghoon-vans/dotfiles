@@ -72,7 +72,7 @@ run_hook() {
     env \
         HOME="$FIXTURE_HOME" \
         PATH="$FAKE_BIN:/usr/bin:/bin" \
-        CHEZMOI_SOURCE_FILE="$HOOK" \
+        CHEZMOI_SOURCE_DIR="$REPO_ROOT/home" \
         FAKE_BREW_LOG="$FAKE_BREW_LOG" \
         FAKE_BREW_PREFIX="$FIXTURE_PREFIX" \
         FAKE_BREW_PINNED="$FIXTURE_PINNED" \
