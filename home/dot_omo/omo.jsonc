@@ -5,7 +5,7 @@
     "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/omo.schema.json",
     "agents": {
       "sisyphus": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "max",
         "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind.",
         "fallback_models": [
@@ -16,6 +16,14 @@
           {
             "model": "bailian-token-plan-personal/qwen3.8-max",
             "reasoning": "high"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "high"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "high"
           },
           {
             "model": "openai/gpt-5.6-luna",
@@ -35,11 +43,19 @@
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
             "reasoning": "high"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "high"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "high"
           }
         ]
       },
       "build": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "medium",
         "fallback_models": [
           {
@@ -49,11 +65,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "medium"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "medium"
           }
         ]
       },
       "plan": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "fallback_models": [
           {
@@ -63,11 +87,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "high"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "high"
           }
         ]
       },
       "sisyphus-junior": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "medium",
         "fallback_models": [
           {
@@ -77,11 +109,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "medium"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "medium"
           }
         ]
       },
       "OpenCode-Builder": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "medium",
         "fallback_models": [
           {
@@ -91,11 +131,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "medium"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "medium"
           }
         ]
       },
       "prometheus": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "fallback_models": [
           {
@@ -105,11 +153,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "high"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "high"
           }
         ]
       },
       "metis": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "fallback_models": [
           {
@@ -119,11 +175,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "high"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "high"
           }
         ]
       },
       "momus": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "fallback_models": [
           {
@@ -137,6 +201,14 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "high"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "high"
           }
         ]
       },
@@ -151,11 +223,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "high"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "high"
           }
         ]
       },
       "librarian": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "low",
         "fallback_models": [
           {
@@ -165,11 +245,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "low"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "low"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "low"
           }
         ]
       },
       "explore": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "low",
         "fallback_models": [
           {
@@ -179,6 +267,14 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "low"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "low"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "low"
           }
         ]
       },
@@ -197,7 +293,7 @@
         ]
       },
       "atlas": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "medium",
         "fallback_models": [
           {
@@ -207,6 +303,14 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "medium"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "medium"
           }
         ]
       }
@@ -221,7 +325,7 @@
             "reasoning": "high"
           },
           {
-            "model": "omniroute/oc/deepseek-v4-flash-free",
+            "model": "opencode-zen/deepseek-v4-flash-free",
             "reasoning": "high"
           },
           {
@@ -231,11 +335,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "low"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "low"
           }
         ]
       },
       "ultrabrain": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "models": [
           {
@@ -249,11 +361,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "low"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "low"
           }
         ]
       },
       "deep": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "models": [
           {
@@ -267,11 +387,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "low"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "low"
           }
         ]
       },
       "quick": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "low",
         "models": [
           {
@@ -281,11 +409,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "low"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "low"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "low"
           }
         ]
       },
       "unspecified-low": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "low",
         "models": [
           {
@@ -295,11 +431,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "low"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "low"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "low"
           }
         ]
       },
       "unspecified-high": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "models": [
           {
@@ -313,11 +457,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "high"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "high"
           }
         ]
       },
       "writing": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "medium",
         "models": [
           {
@@ -327,11 +479,19 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "medium"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "medium"
           }
         ]
       },
       "artistry": {
-        "model": "omniroute/oc/deepseek-v4-flash-free",
+        "model": "opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "models": [
           {
@@ -341,6 +501,14 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
+          },
+          {
+            "model": "opencode-go/deepseek-v4-flash",
+            "variant": "high"
+          },
+          {
+            "model": "opencode/mimo-v2.5-free",
+            "variant": "high"
           }
         ]
       }
@@ -363,6 +531,7 @@
     "runtime_fallback": {
       "enabled": true,
       "retry_on_errors": [
+        402,
         429,
         500,
         502,
