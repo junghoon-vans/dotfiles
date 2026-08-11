@@ -95,10 +95,6 @@
         "reasoning": "high",
         "fallback_models": [
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
-          },
-          {
             "model": "bailian-token-plan-personal/qwen3.7-max",
             "reasoning": "high"
           },
@@ -113,10 +109,6 @@
         "reasoning": "high",
         "fallback_models": [
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
-          },
-          {
             "model": "bailian-token-plan-personal/qwen3.7-max",
             "reasoning": "high"
           },
@@ -130,10 +122,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "fallback_models": [
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
-          },
           {
             "model": "openai/gpt-5.6-terra",
             "reasoning": "high"
@@ -167,10 +155,6 @@
         "reasoning": "low",
         "fallback_models": [
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
-          },
-          {
             "model": "bailian-token-plan-personal/qwen3.6-flash",
             "reasoning": "low"
           },
@@ -188,10 +172,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "low",
         "fallback_models": [
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
-          },
           {
             "model": "bailian-token-plan-personal/qwen3.6-flash",
             "reasoning": "low"
@@ -224,10 +204,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "medium",
         "fallback_models": [
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "medium"
-          },
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
             "reasoning": "medium"
@@ -267,10 +243,6 @@
         "reasoning": "high",
         "models": [
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
-          },
-          {
             "model": "openai/gpt-5.6-terra",
             "reasoning": "high"
           },
@@ -288,10 +260,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "models": [
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
-          },
           {
             "model": "openai/gpt-5.6-terra",
             "reasoning": "high"
@@ -311,10 +279,6 @@
         "reasoning": "low",
         "models": [
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
-          },
-          {
             "model": "bailian-token-plan-personal/qwen3.6-flash",
             "reasoning": "low"
           },
@@ -332,10 +296,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "low",
         "models": [
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
-          },
           {
             "model": "bailian-token-plan-personal/qwen3.7-plus",
             "reasoning": "medium"
@@ -355,10 +315,6 @@
         "reasoning": "high",
         "models": [
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
-          },
-          {
             "model": "bailian-token-plan-personal/qwen3.7-max",
             "reasoning": "high"
           },
@@ -377,10 +333,6 @@
         "reasoning": "medium",
         "models": [
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "medium"
-          },
-          {
             "model": "bailian-token-plan-personal/qwen3.7-plus",
             "reasoning": "medium"
           },
@@ -394,10 +346,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "models": [
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
-          },
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
             "reasoning": "high"
