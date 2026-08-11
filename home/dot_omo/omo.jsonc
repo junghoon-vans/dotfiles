@@ -14,10 +14,6 @@
             "reasoning": "high"
           },
           {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "high"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
           }
@@ -35,10 +31,6 @@
           {
             "model": "bailian-token-plan-personal/qwen3.7-max",
             "reasoning": "high"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "high"
           }
         ]
       },
@@ -53,10 +45,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "medium"
           }
         ]
       },
@@ -71,10 +59,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "high"
           }
         ]
       },
@@ -89,10 +73,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "medium"
           }
         ]
       },
@@ -107,10 +87,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "medium"
           }
         ]
       },
@@ -125,10 +101,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "high"
           }
         ]
       },
@@ -143,10 +115,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "high"
           }
         ]
       },
@@ -165,10 +133,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "high"
           }
         ]
       },
@@ -183,10 +147,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "high"
           }
         ]
       },
@@ -205,10 +165,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "low"
           }
         ]
       },
@@ -227,10 +183,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "low"
           }
         ]
       },
@@ -259,10 +211,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "medium"
           }
         ]
       }
@@ -287,10 +235,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "low"
           }
         ]
       },
@@ -309,10 +253,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "low"
           }
         ]
       },
@@ -331,10 +271,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "low"
           }
         ]
       },
@@ -353,10 +289,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "low"
           }
         ]
       },
@@ -375,10 +307,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "low"
           }
         ]
       },
@@ -397,10 +325,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "high"
           }
         ]
       },
@@ -415,10 +339,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "medium"
           }
         ]
       },
@@ -433,10 +353,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "opencode/mimo-v2.5-free",
-            "variant": "high"
           }
         ]
       }
