@@ -18,10 +18,6 @@
             "reasoning": "high"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
-          },
-          {
             "model": "opencode/mimo-v2.5-free",
             "variant": "high"
           },
@@ -45,10 +41,6 @@
             "reasoning": "high"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
-          },
-          {
             "model": "opencode/mimo-v2.5-free",
             "variant": "high"
           }
@@ -65,10 +57,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "medium"
           },
           {
             "model": "opencode/mimo-v2.5-free",
@@ -89,10 +77,6 @@
             "reasoning": "max"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
-          },
-          {
             "model": "opencode/mimo-v2.5-free",
             "variant": "high"
           }
@@ -109,10 +93,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "medium"
           },
           {
             "model": "opencode/mimo-v2.5-free",
@@ -133,10 +113,6 @@
             "reasoning": "max"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "medium"
-          },
-          {
             "model": "opencode/mimo-v2.5-free",
             "variant": "medium"
           }
@@ -155,10 +131,6 @@
             "reasoning": "max"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
-          },
-          {
             "model": "opencode/mimo-v2.5-free",
             "variant": "high"
           }
@@ -175,10 +147,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
           },
           {
             "model": "opencode/mimo-v2.5-free",
@@ -203,10 +171,6 @@
             "reasoning": "max"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
-          },
-          {
             "model": "opencode/mimo-v2.5-free",
             "variant": "high"
           }
@@ -223,10 +187,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
           },
           {
             "model": "opencode/mimo-v2.5-free",
@@ -247,8 +207,8 @@
             "reasoning": "low"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
+            "model": "openai/gpt-5.6-luna",
+            "reasoning": "max"
           },
           {
             "model": "opencode/mimo-v2.5-free",
@@ -269,8 +229,8 @@
             "reasoning": "low"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
+            "model": "openai/gpt-5.6-luna",
+            "reasoning": "max"
           },
           {
             "model": "opencode/mimo-v2.5-free",
@@ -305,10 +265,6 @@
             "reasoning": "max"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "medium"
-          },
-          {
             "model": "opencode/mimo-v2.5-free",
             "variant": "medium"
           }
@@ -337,10 +293,6 @@
             "reasoning": "max"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
-          },
-          {
             "model": "opencode/mimo-v2.5-free",
             "variant": "low"
           }
@@ -361,10 +313,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
           },
           {
             "model": "opencode/mimo-v2.5-free",
@@ -389,10 +337,6 @@
             "reasoning": "max"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
-          },
-          {
             "model": "opencode/mimo-v2.5-free",
             "variant": "low"
           }
@@ -411,8 +355,8 @@
             "reasoning": "low"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
+            "model": "openai/gpt-5.6-luna",
+            "reasoning": "max"
           },
           {
             "model": "opencode/mimo-v2.5-free",
@@ -433,8 +377,8 @@
             "reasoning": "low"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "low"
+            "model": "openai/gpt-5.6-luna",
+            "reasoning": "max"
           },
           {
             "model": "opencode/mimo-v2.5-free",
@@ -459,10 +403,6 @@
             "reasoning": "max"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
-          },
-          {
             "model": "opencode/mimo-v2.5-free",
             "variant": "high"
           }
@@ -481,10 +421,6 @@
             "reasoning": "max"
           },
           {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "medium"
-          },
-          {
             "model": "opencode/mimo-v2.5-free",
             "variant": "medium"
           }
@@ -501,10 +437,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "omniroute/opencode-go/deepseek-v4-flash",
-            "variant": "high"
           },
           {
             "model": "opencode/mimo-v2.5-free",
