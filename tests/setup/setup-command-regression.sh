@@ -1070,9 +1070,9 @@ printf 'bun %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "--version" ]; then
   printf '1.2.0\n'
 fi
-if [ "\${1:-}" = "install" ] && [ "\${2:-}" = "-g" ] && [ "\${3:-}" = "opencode-ai" ] && [ "\${FAKE_BUN_SKIP_OPENCODE_PACKAGE:-0}" != "1" ]; then
-  mkdir -p "$FAKE_HOME/.bun/install/global/node_modules/opencode-ai"
-  : >"$FAKE_HOME/.bun/install/global/node_modules/opencode-ai/postinstall.mjs"
+if [ "\${1:-}" = "install" ] && [ "\${2:-}" = "-g" ] && [ "\${3:-}" = "--trust" ] && [ "\${4:-}" = "opencode-ai" ] && [ "\${FAKE_BUN_SKIP_OPENCODE_PACKAGE:-0}" != "1" ]; then
+  printf '%s\n' '#!/bin/bash' 'exit 0' >"$FAKE_HOME/.bun/bin/opencode"
+  chmod +x "$FAKE_HOME/.bun/bin/opencode"
 fi
 EOF
 
@@ -1144,20 +1144,17 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/n
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/null
 
-OPENCODE_INSTALL_LINE="$(grep -n '^bun install -g opencode-ai$' "$LOG_FILE" | cut -d: -f1)"
-OPENCODE_POSTINSTALL_LINE="$(grep -n "^node BUN_INSTALL=$FAKE_HOME/.bun $FAKE_HOME/.bun/install/global/node_modules/opencode-ai/postinstall.mjs$" "$LOG_FILE" | cut -d: -f1)"
+OPENCODE_INSTALL_LINE="$(grep -n '^bun install -g --trust opencode-ai$' "$LOG_FILE" | cut -d: -f1)"
 [ -n "$OPENCODE_INSTALL_LINE" ]
-[ -n "$OPENCODE_POSTINSTALL_LINE" ]
-[ "$OPENCODE_POSTINSTALL_LINE" -gt "$OPENCODE_INSTALL_LINE" ]
 
-rm -f "$FAKE_HOME/.bun/install/global/node_modules/opencode-ai/postinstall.mjs"
+rm -f "$FAKE_HOME/.bun/bin/opencode"
 if MISSING_POSTINSTALL_OUTPUT="$(FAKE_BUN_SKIP_OPENCODE_PACKAGE=1 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" 2>&1)"; then
     MISSING_POSTINSTALL_STATUS=0
 else
     MISSING_POSTINSTALL_STATUS=$?
 fi
 [ "$MISSING_POSTINSTALL_STATUS" -ne 0 ]
-grep -q 'opencode-ai postinstall.mjs not found' <<<"$MISSING_POSTINSTALL_OUTPUT"
+grep -q 'opencode-ai installed but OpenCode did not start' <<<"$MISSING_POSTINSTALL_OUTPUT"
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/codex.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/codex-mcp.sh" >/dev/null
 
@@ -1167,7 +1164,7 @@ grep -q "git -C $FAKE_HOME/gno fetch --tags --prune origin" "$LOG_FILE"
 grep -q "git -C $FAKE_HOME/gno checkout --force --detach 959cefd916021d3a55e9b51f20d05ef618e7f357" "$LOG_FILE"
 grep -q 'make install' "$LOG_FILE"
 grep -q 'bun install -g typescript' "$LOG_FILE"
-grep -q 'bun install -g opencode-ai' "$LOG_FILE"
+grep -q 'bun install -g --trust opencode-ai' "$LOG_FILE"
 grep -q 'bun install -g omniroute' "$LOG_FILE"
 grep -q 'bun install -g opencode-status-hud' "$LOG_FILE"
 grep -q 'bunx oh-my-openagent install --no-tui --claude=no --openai=yes --gemini=no --copilot=no' "$LOG_FILE"
