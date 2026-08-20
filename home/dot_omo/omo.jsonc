@@ -10,10 +10,6 @@
         "prompt_append": "When making git commits, NEVER add Co-authored-by trailers or Ultraworked attribution footers. Commit messages should contain only the subject line (and body if needed). No AI attribution of any kind.",
         "fallback_models": [
           {
-            "model": "bailian-token-plan-personal/qwen3.8-max",
-            "reasoning": "high"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
           }
@@ -27,10 +23,6 @@
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
-          },
-          {
-            "model": "bailian-token-plan-personal/qwen3.7-max",
-            "reasoning": "high"
           }
         ]
       },
@@ -38,10 +30,6 @@
         "model": "openai/gpt-5.6-terra",
         "reasoning": "medium",
         "fallback_models": [
-          {
-            "model": "bailian-token-plan-personal/qwen3.7-max",
-            "reasoning": "medium"
-          },
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
@@ -53,10 +41,6 @@
         "reasoning": "high",
         "fallback_models": [
           {
-            "model": "bailian-token-plan-personal/qwen3.8-max",
-            "reasoning": "high"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
           }
@@ -66,10 +50,6 @@
         "model": "openai/gpt-5.6-terra",
         "reasoning": "medium",
         "fallback_models": [
-          {
-            "model": "bailian-token-plan-personal/qwen3.7-max",
-            "reasoning": "medium"
-          },
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
@@ -81,10 +61,6 @@
         "reasoning": "medium",
         "fallback_models": [
           {
-            "model": "bailian-token-plan-personal/qwen3.7-max",
-            "reasoning": "medium"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
           }
@@ -95,10 +71,6 @@
         "reasoning": "high",
         "fallback_models": [
           {
-            "model": "bailian-token-plan-personal/qwen3.7-max",
-            "reasoning": "high"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
           }
@@ -108,10 +80,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "fallback_models": [
-          {
-            "model": "bailian-token-plan-personal/qwen3.7-max",
-            "reasoning": "high"
-          },
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
@@ -127,10 +95,6 @@
             "reasoning": "high"
           },
           {
-            "model": "bailian-token-plan-personal/qwen3.8-max",
-            "reasoning": "high"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
           }
@@ -141,10 +105,6 @@
         "reasoning": "high",
         "fallback_models": [
           {
-            "model": "bailian-token-plan-personal/qwen3.8-max",
-            "reasoning": "high"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
           }
@@ -154,10 +114,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "low",
         "fallback_models": [
-          {
-            "model": "bailian-token-plan-personal/qwen3.6-flash",
-            "reasoning": "low"
-          },
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "low"
@@ -172,10 +128,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "low",
         "fallback_models": [
-          {
-            "model": "bailian-token-plan-personal/qwen3.6-flash",
-            "reasoning": "low"
-          },
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "low"
@@ -205,10 +157,6 @@
         "reasoning": "medium",
         "fallback_models": [
           {
-            "model": "bailian-token-plan-personal/qwen3.7-max",
-            "reasoning": "medium"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
           }
@@ -229,10 +177,6 @@
             "reasoning": "high"
           },
           {
-            "model": "bailian-token-plan-personal/qwen3.7-plus",
-            "reasoning": "high"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
           }
@@ -244,10 +188,6 @@
         "models": [
           {
             "model": "openai/gpt-5.6-terra",
-            "reasoning": "high"
-          },
-          {
-            "model": "bailian-token-plan-personal/qwen3.8-max",
             "reasoning": "high"
           },
           {
@@ -265,10 +205,6 @@
             "reasoning": "high"
           },
           {
-            "model": "bailian-token-plan-personal/qwen3.8-max",
-            "reasoning": "high"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
           }
@@ -278,10 +214,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "low",
         "models": [
-          {
-            "model": "bailian-token-plan-personal/qwen3.6-flash",
-            "reasoning": "low"
-          },
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "low"
@@ -297,10 +229,6 @@
         "reasoning": "low",
         "models": [
           {
-            "model": "bailian-token-plan-personal/qwen3.7-plus",
-            "reasoning": "medium"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "low"
           },
@@ -314,10 +242,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "models": [
-          {
-            "model": "bailian-token-plan-personal/qwen3.7-max",
-            "reasoning": "high"
-          },
           {
             "model": "openai/gpt-5.6-terra",
             "reasoning": "high"
@@ -333,10 +257,6 @@
         "reasoning": "medium",
         "models": [
           {
-            "model": "bailian-token-plan-personal/qwen3.7-plus",
-            "reasoning": "medium"
-          },
-          {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
           }
@@ -346,10 +266,6 @@
         "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
         "reasoning": "high",
         "models": [
-          {
-            "model": "bailian-token-plan-personal/qwen3.7-max",
-            "reasoning": "high"
-          },
           {
             "model": "openai/gpt-5.6-luna",
             "reasoning": "max"
