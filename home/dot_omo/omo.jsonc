@@ -67,7 +67,7 @@
         ]
       },
       "prometheus": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "high",
         "fallback_models": [
           {
@@ -77,7 +77,7 @@
         ]
       },
       "metis": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "high",
         "fallback_models": [
           {
@@ -87,7 +87,7 @@
         ]
       },
       "momus": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "high",
         "fallback_models": [
           {
@@ -111,7 +111,7 @@
         ]
       },
       "librarian": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "low",
         "fallback_models": [
           {
@@ -125,7 +125,7 @@
         ]
       },
       "explore": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "low",
         "fallback_models": [
           {
@@ -153,7 +153,7 @@
         ]
       },
       "atlas": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "medium",
         "fallback_models": [
           {
@@ -173,7 +173,7 @@
             "reasoning": "high"
           },
           {
-            "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+            "model": "omniroute/opencode-go/deepseek-v4-flash",
             "reasoning": "high"
           },
           {
@@ -183,7 +183,7 @@
         ]
       },
       "ultrabrain": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "high",
         "models": [
           {
@@ -197,7 +197,7 @@
         ]
       },
       "deep": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "high",
         "models": [
           {
@@ -211,7 +211,7 @@
         ]
       },
       "quick": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "low",
         "models": [
           {
@@ -225,7 +225,7 @@
         ]
       },
       "unspecified-low": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "low",
         "models": [
           {
@@ -239,7 +239,7 @@
         ]
       },
       "unspecified-high": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "high",
         "models": [
           {
@@ -253,7 +253,7 @@
         ]
       },
       "writing": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "medium",
         "models": [
           {
@@ -263,7 +263,7 @@
         ]
       },
       "artistry": {
-        "model": "omniroute/opencode-zen/deepseek-v4-flash-free",
+        "model": "omniroute/opencode-go/deepseek-v4-flash",
         "reasoning": "high",
         "models": [
           {

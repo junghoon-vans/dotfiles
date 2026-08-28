@@ -39,14 +39,14 @@
         "auto/smart": {
           "name": "Auto: Smart"
         },
-        "oc/deepseek-v4-flash-free": {
-          "name": "OpenCode Free: DeepSeek V4 Flash"
+        "opencode-go/deepseek-v4-flash": {
+          "name": "OpenCode Go: DeepSeek V4 Flash"
         },
-        "oc/mimo-v2.5-free": {
-          "name": "OpenCode Free: MiMo V2.5"
+        "gemini/gemini-3-flash-preview": {
+          "name": "Gemini: Gemini 3 Flash Preview"
         },
-        "opencode-zen/deepseek-v4-flash-free": {
-          "name": "OpenCode Zen Free: DeepSeek V4 Flash"
+        "kiro/claude-sonnet-4.5": {
+          "name": "Kiro: Claude Sonnet 4.5"
         }
       }
     }
