@@ -40,6 +40,7 @@ brew "yamlfmt"         # YAML formatter
 
 # Infrastructure & Data Tools
 brew "awscli"          # AWS CLI
+brew "kubernetes-cli"  # kubectl
 brew "helm"            # Kubernetes package manager
 brew "terraform"
 brew "grpcurl"         # gRPC command-line tool
@@ -49,8 +50,9 @@ brew "libpq", link: true
 
 # GUI Apps
 cask "aside"           # Web browser with built-in AI assistant; used by Codex Playwright MCP
+cask "session-manager-plugin"  # AWS SSM Session Manager client plugin
 cask "cmux"            # Ghostty-based terminal for AI coding agents
-cask "orbstack"        # Fast Docker Desktop alternative
+cask "orbstack"        # Fast Docker Desktop  alternative
 cask "tailscale-app"   # Mesh VPN desktop app
 cask "jordanbaird-ice" # Menu bar management
 cask "hop"             # HWP document viewer/editor
