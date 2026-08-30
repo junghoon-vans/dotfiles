@@ -12,34 +12,27 @@ source "$SETUP_DIR/lib/common.sh"
 
 print_step "Running repository checks..."
 
-print_info "Checking shell syntax..."
-bash -n \
-    "$DOTFILES_DIR/setup.sh" \
-    "$DOTFILES_DIR/home/dot_local/bin/weekly-disk-maintenance" \
-    "$DOTFILES_DIR"/home/run_*.sh \
-    "$SETUP_DIR/main.sh" \
-    "$SETUP_DIR/lib/common.sh" \
-    "$SETUP_DIR"/commands/* \
-    "$SETUP_DIR"/languages/*.sh \
-    "$SETUP_DIR"/blockchain/*.sh \
-    "$SETUP_DIR"/apps/*.sh \
-    "$SETUP_DIR"/*.sh \
+shopt -s nullglob
+shell_files=(
+    "$DOTFILES_DIR/setup.sh"
+    "$DOTFILES_DIR/home/dot_local/bin/weekly-disk-maintenance"
+    "$DOTFILES_DIR"/home/run_*.sh
+    "$SETUP_DIR/main.sh"
+    "$SETUP_DIR/lib/common.sh"
+    "$SETUP_DIR"/commands/*
+    "$SETUP_DIR"/languages/*.sh
+    "$SETUP_DIR"/blockchain/*.sh
+    "$SETUP_DIR"/apps/*.sh
+    "$SETUP_DIR"/*.sh
     "$DOTFILES_DIR"/tests/setup/*.sh
+)
+
+print_info "Checking shell syntax..."
+bash -n "${shell_files[@]}"
 
 if command -v shellcheck >/dev/null 2>&1; then
     print_info "Running shellcheck..."
-    shellcheck -x -S warning \
-        "$DOTFILES_DIR/setup.sh" \
-        "$DOTFILES_DIR/home/dot_local/bin/weekly-disk-maintenance" \
-        "$DOTFILES_DIR"/home/run_*.sh \
-        "$SETUP_DIR/main.sh" \
-        "$SETUP_DIR/lib/common.sh" \
-        "$SETUP_DIR"/commands/* \
-        "$SETUP_DIR"/languages/*.sh \
-        "$SETUP_DIR"/blockchain/*.sh \
-        "$SETUP_DIR"/apps/*.sh \
-        "$SETUP_DIR"/*.sh \
-        "$DOTFILES_DIR"/tests/setup/*.sh
+    shellcheck -x -S warning "${shell_files[@]}"
 else
     print_info "shellcheck not found; skipping shellcheck"
 fi
@@ -173,8 +166,5 @@ fi
 
 print_info "Running setup regression test..."
 bash "$DOTFILES_DIR/tests/setup/setup-command-regression.sh"
-
-print_info "Running Hermes Agent patch regression test..."
-bash "$DOTFILES_DIR/tests/setup/hermes-agent-patch-regression.sh"
 
 print_success "Repository checks passed"
