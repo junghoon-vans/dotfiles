@@ -65,7 +65,7 @@ dotfiles/
 
 - All paths use `$HOME` instead of specific usernames.
 - `home/dot_config/` mirrors `~/.config/`; keep app config documentation in this root `AGENTS.md` or `docs/`, not in a root `.config/` tree.
-- `setup.sh` flow is `bootstrap → brew-packages → languages → blockchain → links → apps → omp → codex → codex-agents → codex-skills → karabiner → macos-shortcuts → maintenance → macos`.
+- `setup.sh` flow is `bootstrap → brew-packages → languages → blockchain → links → apps → omp → codex → codex-agents → agent-skills → karabiner → macos-shortcuts → maintenance → macos`.
 - Global Codex custom agents are installed by `setup/apps/codex-agents.sh` into `~/.codex/agents/`.
 - Language commands (`go`, `node`, `bun`, `java`, `kotlin`, `xml`, `rust`, `python`, `typescript`) are explicit options; `languages` is the default language umbrella command.
 - Blockchain commands (`solana`, `gno`, `sui`) are explicit options; `blockchain` is the default blockchain umbrella command.
@@ -89,7 +89,7 @@ dotfiles/
 ./setup.sh codex                   # Install Codex CLI and LazyCodex
 ./setup.sh codex-mcp               # Reconfigure Codex MCP servers
 ./setup.sh codex-agents            # Install default global Codex custom agents
-./setup.sh codex-skills            # Install default global Codex skills
+./setup.sh agent-skills            # Synchronize shared global agent skills
 ./setup.sh maintenance             # Load weekly workstation maintenance agents
 ./setup.sh check                   # Run repository checks
 ./setup.sh doctor                  # Inspect host setup state
@@ -113,4 +113,4 @@ brew bundle --file Brewfile        # Install Brewfile packages
 - **Gno MCP for Codex and Oh My Pi**: `./setup.sh codex` installs the configured `gnomcp` repo/ref into `$HOME/.local/bin` and registers the `gnomcp@gnoverse` Codex plugin. APM declares the shared `gnomcp` MCP server, alongside Atlassian, GitHub Copilot, Context7, Firecrawl, Aside-backed Playwright, and native Aside; it writes these to `~/.codex/config.toml`, which both Codex and Oh My Pi discover. Defaults track `gnoverse/gno-mcp@v0.9.0`; set `GNOMCP_REPO`, `GNOMCP_REF`, and `GNOMCP_RELEASE_VERSION` to override.
 - **Codex default model**: `./setup.sh codex` idempotently sets `model` and `model_reasoning_effort` in `~/.codex/config.toml` via `ensure_codex_default_model` in `setup/apps/codex.sh`, defaulting to `gpt-5.6-luna` at `high` reasoning effort. Override with `CODEX_DEFAULT_MODEL` / `CODEX_DEFAULT_MODEL_REASONING_EFFORT` env vars. The rest of `config.toml` (project trust levels, hook trust hashes, plugin/marketplace state) stays untracked local/session state, same as `~/.claude.json`.
 - **Codex agents**: `./setup.sh codex-agents` installs selected generic global Codex custom agents from `VoltAgent/awesome-codex-subagents` into `~/.codex/agents`; keep private project rules in repo-local `.agents/skills` or `AGENTS.md`, not in global agent files.
-- **Shared agent packages**: `./setup.sh omp`, `./setup.sh codex`, `./setup.sh codex-skills`, and `./setup.sh codex-mcp` synchronize the APM manifest's global skills and MCP declarations. APM owns `~/.agents/skills` and its generated MCP entries; chezmoi must not manage those output paths.
+- **Shared agent packages**: `./setup.sh omp`, `./setup.sh codex`, `./setup.sh agent-skills`, and `./setup.sh codex-mcp` synchronize the APM manifest's global skills and MCP declarations. APM owns `~/.agents/skills` and its generated MCP entries; chezmoi must not manage those output paths.

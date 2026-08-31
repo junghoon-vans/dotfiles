@@ -32,7 +32,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `omp` | Installs Oh My Pi globally through Bun, then synchronizes shared skills and MCP servers through APM. |
 | `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, and synchronizes shared skills and MCP servers through APM. |
 | `codex-agents` | Installs selected global Codex custom agents into `~/.codex/agents/`. |
-| `codex-skills` | Synchronizes the shared Codex and Oh My Pi skill set through APM. |
+| `agent-skills` | Synchronizes shared global agent skills through APM. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
 | `macos-shortcuts` | Installs five neutral macOS Quick Action shortcut slots backed by local ignored scripts. |
 | `maintenance` | Loads periodic workstation maintenance LaunchAgents. |
@@ -95,7 +95,7 @@ Examples:
 `~/.omp/agent/config.yml` is also managed: `smol`, `slow`, and `task` subagent roles (plus `security-reviewer`) use `openai-codex/gpt-5.6-luna:max`; the `designer` role uses `anthropic/claude-sonnet-4-6:high`.
 
 `apm.yml` declares shared skills and MCP servers. `./setup.sh omp`,
-`./setup.sh codex`, `./setup.sh codex-skills`, and `./setup.sh codex-mcp`
+`./setup.sh codex`, `./setup.sh agent-skills`, and `./setup.sh codex-mcp`
 install that package globally through APM: skills deploy to `~/.agents/skills`,
 and APM writes MCP declarations to `~/.codex/config.toml`, which both Codex and
 Oh My Pi discover. APM-managed output and its credentials are local state, not

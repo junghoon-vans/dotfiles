@@ -150,7 +150,7 @@ export PATH="$FAKE_BIN:$PATH"
 
 HELP_OUTPUT="$($SETUP_SH --help)"
 ! grep -q 'opencode' <<<"$HELP_OUTPUT"
-grep -q 'Synchronize shared Codex and Oh My Pi skills' <<<"$HELP_OUTPUT"
+grep -q 'Synchronize shared agent skills through APM' <<<"$HELP_OUTPUT"
 grep -q 'Install macOS Quick Action shortcut slots' <<<"$HELP_OUTPUT"
 grep -q 'Run selected blockchain tooling commands' <<<"$HELP_OUTPUT"
 grep -q 'Inspect host prerequisites' <<<"$HELP_OUTPUT"
