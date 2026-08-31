@@ -83,8 +83,6 @@ apps:
 omp:
 	$(SETUP) $(ARGS) omp
 
-opencode:
-	$(SETUP) $(ARGS) opencode
 
 codex:
 	$(SETUP) $(ARGS) codex

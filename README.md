@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal macOS development environment specification optimized for Go, Gno, Rust, Solana/Anchor, Sui, Java, Kotlin, Python, Node.js, OpenCode, and modern CLI tooling.
+Personal macOS development environment specification optimized for Go, Gno, Rust, Solana/Anchor, Sui, Java, Kotlin, Python, Node.js, Oh My Pi, Codex, and modern CLI tooling.
 
 ## Overview
 
