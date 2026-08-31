@@ -31,7 +31,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
 | `omp` | Installs Oh My Pi globally through Bun, then synchronizes shared skills and MCP servers through APM. |
 | `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, and synchronizes shared skills and MCP servers through APM. |
-| `agent-skills` | Synchronizes shared global agent skills through APM. |
+| `sync-apm` | Synchronizes shared global skills and MCP servers through APM. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
 | `macos-shortcuts` | Installs five neutral macOS Quick Action shortcut slots backed by local ignored scripts. |
 | `maintenance` | Loads periodic workstation maintenance LaunchAgents. |
@@ -43,7 +43,6 @@ Interactive runs print each command description before asking for Y/n confirmati
 | --- | --- |
 | `doctor` | Checks required host tools, Brewfile package state, harness tools, and core managed dotfiles. |
 | `check` | Runs repository validation: shell syntax, optional shellcheck and actionlint, JSON parsing, Brewfile syntax, whitespace checks, and setup smoke tests. |
-| `codex-mcp` | Synchronizes shared Codex and Oh My Pi skills and MCP servers through APM. |
 | `clean-backups` | Removes managed `*.backup.YYYYMMDD-HHMMSS` files created before chezmoi apply when the current target still matches the tracked source. |
 
 ## Language Commands
@@ -94,10 +93,10 @@ Examples:
 `~/.omp/agent/config.yml` is also managed: `smol`, `slow`, and `task` subagent roles (plus `security-reviewer`) use `openai-codex/gpt-5.6-luna:max`; the `designer` role uses `anthropic/claude-sonnet-4-6:high`.
 
 `apm.yml` pins the shared skills and declares shared MCP servers, including the
-OAuth-backed Notion server. `./setup.sh omp`, `./setup.sh codex`,
-`./setup.sh agent-skills`, and `./setup.sh codex-mcp` install that package
-globally through APM: skills deploy to `~/.agents/skills`, and APM writes MCP
-declarations to `~/.codex/config.toml`, which both Codex and Oh My Pi discover.
+OAuth-backed Notion server. `./setup.sh omp`, `./setup.sh codex`, and
+`./setup.sh sync-apm` install that package globally through APM: skills deploy
+to `~/.agents/skills`, and APM writes MCP declarations to
+`~/.codex/config.toml`, which both Codex and Oh My Pi discover.
 APM-managed output and its credentials are local state, not chezmoi source.
 
 

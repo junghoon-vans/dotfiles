@@ -53,7 +53,7 @@ Default commands run in filename order from `setup/commands/`:
 6. `apps` - install Oh My Zsh and Zed Gno extension support
 7. `omp` - install Oh My Pi globally through Bun and synchronize shared agent packages through APM
 8. `codex` - install Codex CLI, bootstrap LazyCodex, install Codex HUD, and synchronize shared agent packages through APM
-9. `agent-skills` - synchronize shared global agent skills through APM
+9. `sync-apm` - synchronize shared global skills and MCP servers through APM
 10. `karabiner` - install Karabiner-Elements for key remapping
 11. `macos-shortcuts` - install five generic macOS Quick Action shortcut slots
 12. `maintenance` - load weekly low-disk maintenance LaunchAgents

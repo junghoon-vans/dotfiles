@@ -150,12 +150,11 @@ export PATH="$FAKE_BIN:$PATH"
 
 HELP_OUTPUT="$($SETUP_SH --help)"
 ! grep -q 'opencode' <<<"$HELP_OUTPUT"
-grep -q 'Synchronize shared agent skills through APM' <<<"$HELP_OUTPUT"
+grep -q 'Synchronize shared skills and MCP servers through APM' <<<"$HELP_OUTPUT"
 grep -q 'Install macOS Quick Action shortcut slots' <<<"$HELP_OUTPUT"
 grep -q 'Run selected blockchain tooling commands' <<<"$HELP_OUTPUT"
 grep -q 'Inspect host prerequisites' <<<"$HELP_OUTPUT"
 grep -q 'Remove managed dotfile backup files created before chezmoi apply' <<<"$HELP_OUTPUT"
-grep -q 'Synchronize shared Codex and Oh My Pi agent packages through APM' <<<"$HELP_OUTPUT"
 grep -q 'Language commands:' <<<"$HELP_OUTPUT"
 grep -q 'Blockchain commands:' <<<"$HELP_OUTPUT"
 grep -q 'Install Go via mise plus Go formatter/linter tools' <<<"$HELP_OUTPUT"
@@ -1075,7 +1074,7 @@ grep -q 'bun install -g @oh-my-pi/pi-coding-agent' "$LOG_FILE"
 grep -q '^omp --version$' "$LOG_FILE"
 
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/codex.sh" >/dev/null
-PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/codex-mcp.sh" >/dev/null
+PATH="$FAKE_BIN:/usr/bin:/bin" "$SETUP_SH" --yes sync-apm >/dev/null
 
 grep -q 'go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.8.0' "$LOG_FILE"
 grep -q 'go install golang.org/x/tools/gopls@v0.21.1' "$LOG_FILE"
@@ -1361,7 +1360,7 @@ grep -q 'run ./setup.sh sui' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'cmake pkg-config' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise runtime config found' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise global runtime config found' "$REPO_ROOT/setup/doctor.sh"
-grep -q 'run ./setup.sh codex-mcp' "$REPO_ROOT/setup/doctor.sh"
+grep -q 'run ./setup.sh sync-apm' "$REPO_ROOT/setup/doctor.sh"
 grep -q 'mise activate zsh' "$REPO_ROOT/home/dot_zshrc"
 grep -q '\[ -z "${MISE_SHELL:-}" \]' "$REPO_ROOT/home/dot_zshrc"
 grep -q 'Global defaults are tracked in ~/.config/mise/config.toml' "$REPO_ROOT/home/dot_zshrc"

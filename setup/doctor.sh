@@ -166,7 +166,7 @@ done
 if [ -f "$HOME/.codex/config.toml" ] && grep -Fq "[mcp_servers." "$HOME/.codex/config.toml"; then
     print_success "APM-managed shared MCP servers found in Codex config"
 else
-    print_info "Shared MCP servers missing; run ./setup.sh codex-mcp"
+    print_info "Shared MCP servers missing; run ./setup.sh sync-apm"
 fi
 
 if [ -s "$HOME/.local/share/lemminx/lemminx.jar" ]; then

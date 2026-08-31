@@ -402,4 +402,4 @@ print_success "Codex GitHub plugins disabled"
 
 install_gnomcp_binary
 ensure_gnomcp_codex_plugin
-bash "$SETUP_DIR/apps/codex-mcp.sh"
+bash "$SETUP_DIR/apps/sync-apm.sh"
