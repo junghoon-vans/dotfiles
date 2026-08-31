@@ -34,6 +34,10 @@ dependencies:
       registry: false
       transport: http
       url: https://mcp.context7.com/mcp
+    - name: notion
+      registry: false
+      transport: http
+      url: https://mcp.notion.com/mcp
     - name: gnomcp
       registry: false
       transport: stdio

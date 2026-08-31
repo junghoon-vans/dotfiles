@@ -16,11 +16,13 @@ APM records each global installation in untracked `~/.apm/apm.lock.yaml`:
   `~/.codex/config.toml`; Codex reads that native configuration and Oh My Pi
   imports Codex MCP servers during discovery.
 - API keys and OAuth credentials remain local. The manifest contains only
-  environment references and server definitions.
+  environment references and server definitions. Notion uses OAuth against
+  `https://mcp.notion.com/mcp`; authorize it with `codex mcp login notion`
+  after synchronization.
 
 Versioned local MCP runtimes are pinned to `firecrawl-mcp@3.24.0`,
-`@playwright/mcp@0.0.79`, and `gnomcp@v0.11.0`. Remote HTTP MCP servers are
-provider-operated and cannot be client-version-pinned.
+`@playwright/mcp@0.0.79`, and `gnomcp@v0.11.0`. Remote HTTP MCP servers,
+including Notion, are provider-operated and cannot be client-version-pinned.
 
 
 LSP server binaries remain language-owned setup artifacts. Oh My Pi's built-in

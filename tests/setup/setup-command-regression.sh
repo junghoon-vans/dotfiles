@@ -1007,7 +1007,7 @@ cat >"$FAKE_BIN/codex" <<EOF
 printf 'codex %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "mcp" ] && [ "\${2:-}" = "get" ]; then
   case "\${3:-}" in
-    aside|atlassian|github|context7|firecrawl)
+    aside|atlassian|github|context7|notion|firecrawl)
       exit 1
       ;;
   esac
@@ -1038,7 +1038,7 @@ if [ "\${1:-}" = "--version" ]; then
 fi
 if [[ " \$* " == *" --only mcp "* ]]; then
   mkdir -p "\${CODEX_HOME:?}"
-  printf '%s\n' '[mcp_servers.atlassian]' 'url = "https://mcp.atlassian.com/v1/mcp/authv2"' >"\$CODEX_HOME/config.toml"
+  printf '%s\n' '[mcp_servers.atlassian]' 'url = "https://mcp.atlassian.com/v1/mcp/authv2"' '[mcp_servers.notion]' 'url = "https://mcp.notion.com/mcp"' >"\$CODEX_HOME/config.toml"
 fi
 EOF
 chmod +x "$FAKE_BIN/apm"
@@ -1060,6 +1060,9 @@ mcp_oauth_credentials_store = "keyring"
 
 [mcp_servers.atlassian]
 url = "https://mcp.atlassian.com/v1/mcp/authv2"
+
+[mcp_servers.notion]
+url = "https://stale-notion.example/mcp"
 EOF
 
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
@@ -1090,12 +1093,16 @@ grep -q 'GNOMCP_REF="${GNOMCP_REF:-v0.11.0}"' "$REPO_ROOT/setup/apps/codex.sh"
 grep -q 'GNOMCP_RELEASE_VERSION="${GNOMCP_RELEASE_VERSION:-v0.11.0}"' "$REPO_ROOT/setup/apps/codex.sh"
 grep -q 'firecrawl-mcp@3.24.0' "$REPO_ROOT/apm.yml"
 grep -q '@playwright/mcp@0.0.79' "$REPO_ROOT/apm.yml"
+grep -q 'https://mcp.notion.com/mcp' "$REPO_ROOT/apm.yml"
 [ "$(grep -c '^mcp_oauth_credentials_store = ' "$FAKE_HOME/.codex/config.toml")" -eq 1 ]
 grep -q '^mcp_oauth_credentials_store = "file"$' "$FAKE_HOME/.codex/config.toml"
 grep -q '^\[plugins\."github@openai-curated"\]$' "$FAKE_HOME/.codex/config.toml"
 grep -A1 '^\[plugins\."github@openai-curated"\]$' "$FAKE_HOME/.codex/config.toml" | grep -q '^enabled = false$'
 grep -q '^\[plugins\."github@openai-curated-remote"\]$' "$FAKE_HOME/.codex/config.toml"
 grep -A1 '^\[plugins\."github@openai-curated-remote"\]$' "$FAKE_HOME/.codex/config.toml" | grep -q '^enabled = false$'
+grep -q '^\[mcp_servers.notion\]$' "$FAKE_HOME/.codex/config.toml"
+grep -A1 '^\[mcp_servers.notion\]$' "$FAKE_HOME/.codex/config.toml" | grep -q '^url = "https://mcp.notion.com/mcp"$'
+! grep -q 'stale-notion.example' "$FAKE_HOME/.codex/config.toml"
 
 BOOTSTRAP_HOME="$TMP_DIR/bootstrap-home"
 BOOTSTRAP_BIN="$TMP_DIR/bootstrap-bin"

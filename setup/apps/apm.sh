@@ -4,7 +4,7 @@
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 APM_INSTALL_DIR="${APM_INSTALL_DIR:-$HOME/.local/bin}"
-APM_MCP_SERVERS="atlassian github context7 gnomcp firecrawl playwright aside"
+APM_MCP_SERVERS="atlassian github context7 notion gnomcp firecrawl playwright aside"
 
 install_apm() {
     if command -v apm >/dev/null 2>&1; then
