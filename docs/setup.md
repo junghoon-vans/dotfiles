@@ -31,7 +31,6 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
 | `omp` | Installs Oh My Pi globally through Bun, then synchronizes shared skills and MCP servers through APM. |
 | `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, and synchronizes shared skills and MCP servers through APM. |
-| `codex-agents` | Installs selected global Codex custom agents into `~/.codex/agents/`. |
 | `agent-skills` | Synchronizes shared global agent skills through APM. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
 | `macos-shortcuts` | Installs five neutral macOS Quick Action shortcut slots backed by local ignored scripts. |

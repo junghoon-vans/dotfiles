@@ -2,7 +2,7 @@
 
 SETUP := ./setup.sh
 
-.PHONY: help show-targets setup setup-all dry-run doctor check clean clean-backups codex-mcp bootstrap brew-packages brew-bundle languages blockchain links apps omp codex codex-agents agent-skills karabiner macos-shortcuts maintenance macos go node bun java kotlin xml rust python typescript solana gno sui
+.PHONY: help show-targets setup setup-all dry-run doctor check clean clean-backups codex-mcp bootstrap brew-packages brew-bundle languages blockchain links apps omp codex agent-skills karabiner macos-shortcuts maintenance macos go node bun java kotlin xml rust python typescript solana gno sui
 
 help:
 	@printf '%s\n' 'Usage: make <target> [ARGS="..."]'
@@ -25,7 +25,7 @@ show-targets:
 	@printf '%s\n' '  help setup setup-all dry-run doctor check clean'
 	@printf '%s\n' ''
 	@printf '%s\n' 'Setup phase targets:'
-	@printf '%s\n' '  bootstrap brew-packages languages blockchain links apps omp codex codex-agents agent-skills karabiner macos-shortcuts maintenance macos'
+	@printf '%s\n' '  bootstrap brew-packages languages blockchain links apps omp codex agent-skills karabiner macos-shortcuts maintenance macos'
 	@printf '%s\n' ''
 	@printf '%s\n' 'Language targets:'
 	@printf '%s\n' '  go node bun java kotlin xml rust python typescript'
@@ -89,8 +89,6 @@ opencode:
 codex:
 	$(SETUP) $(ARGS) codex
 
-codex-agents:
-	$(SETUP) $(ARGS) codex-agents
 
 agent-skills:
 	$(SETUP) $(ARGS) agent-skills
