@@ -101,6 +101,8 @@ plist is missing.
 ## Dotfile Apply Behavior
 
 `setup/link.sh` applies chezmoi source state from `home/`. Existing files are backed up only when their content differs from the tracked source before `chezmoi apply` runs.
+`~/.omp/agent/config.yml` is also managed: `smol`, `slow`, and `task` subagent roles (plus `security-reviewer`) use `openai-codex/gpt-5.6-luna:max`; the `designer` role uses `anthropic/claude-sonnet-4-6:high`.
+
 
 The linked home state includes a weekly LaunchAgent at
 `~/Library/LaunchAgents/com.dotfiles.weekly-disk-maintenance.plist`. It runs
