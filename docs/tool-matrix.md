@@ -18,6 +18,11 @@ APM records each global installation in untracked `~/.apm/apm.lock.yaml`:
 - API keys and OAuth credentials remain local. The manifest contains only
   environment references and server definitions.
 
+Versioned local MCP runtimes are pinned to `firecrawl-mcp@3.24.0`,
+`@playwright/mcp@0.0.79`, and `gnomcp@v0.11.0`. Remote HTTP MCP servers are
+provider-operated and cannot be client-version-pinned.
+
+
 LSP server binaries remain language-owned setup artifacts. Oh My Pi's built-in
 LSP discovery uses those binaries directly; no agent-specific LSP client
 fallback is maintained.

@@ -47,14 +47,14 @@ dependencies:
       command: /bin/zsh
       args:
         - -lc
-        - source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp
+        - source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp@3.24.0
     - name: playwright
       registry: false
       transport: stdio
       command: npx
       args:
         - -y
-        - '@playwright/mcp@latest'
+        - '@playwright/mcp@0.0.79'
       env:
         PLAYWRIGHT_MCP_EXECUTABLE_PATH: /Applications/Aside.app/Contents/MacOS/Aside
     - name: aside

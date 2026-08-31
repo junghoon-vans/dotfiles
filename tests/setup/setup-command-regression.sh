@@ -1048,7 +1048,7 @@ mkdir -p "$FAKE_HOME/.local/bin"
 cat >"$FAKE_HOME/.local/bin/gnomcp" <<'EOF'
 #!/bin/bash
 if [ "${1:-}" = "version" ]; then
-  printf '0.9.0\n'
+  printf '0.11.0\n'
 fi
 EOF
 chmod +x "$FAKE_HOME/.local/bin/gnomcp"
@@ -1086,6 +1086,10 @@ grep -q 'codex plugin marketplace add '"$FAKE_HOME"'/.codex/plugins/cache/gnover
 grep -q 'codex plugin add gnomcp@gnoverse' "$LOG_FILE"
 grep -q 'apm install --global --target agent-skills --only apm '"$REPO_ROOT" "$LOG_FILE"
 grep -q 'apm install --global --target codex --only mcp' "$LOG_FILE"
+grep -q 'GNOMCP_REF="${GNOMCP_REF:-v0.11.0}"' "$REPO_ROOT/setup/apps/codex.sh"
+grep -q 'GNOMCP_RELEASE_VERSION="${GNOMCP_RELEASE_VERSION:-v0.11.0}"' "$REPO_ROOT/setup/apps/codex.sh"
+grep -q 'firecrawl-mcp@3.24.0' "$REPO_ROOT/apm.yml"
+grep -q '@playwright/mcp@0.0.79' "$REPO_ROOT/apm.yml"
 [ "$(grep -c '^mcp_oauth_credentials_store = ' "$FAKE_HOME/.codex/config.toml")" -eq 1 ]
 grep -q '^mcp_oauth_credentials_store = "file"$' "$FAKE_HOME/.codex/config.toml"
 grep -q '^\[plugins\."github@openai-curated"\]$' "$FAKE_HOME/.codex/config.toml"
