@@ -29,6 +29,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `blockchain` | Installs selected blockchain tooling by running `solana`, `gno`, and `sui`. |
 | `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
+| `omp` | Installs the Oh My Pi coding agent globally through Bun. |
 | `opencode` | Installs OpenCode and OmniRoute, bootstraps oh-my-openagent, and configures the status HUD. |
 | `opencode-skills` | Installs the default global OpenCode skill set (Find Skills, Vercel React Best Practices, Golang Pro) through `npx skills --agent opencode`. |
 | `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, configures file-backed MCP OAuth storage, and ensures gnomcp, Atlassian, GitHub Copilot, Context7, Firecrawl, Aside-backed Playwright, and native Aside MCP servers are registered. |

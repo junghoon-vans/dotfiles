@@ -51,15 +51,16 @@ Default commands run in filename order from `setup/commands/`:
 4. `blockchain` - install selected blockchain tooling, including Solana/Anchor, Gno, and Sui
 5. `links` - apply chezmoi-managed dotfiles and `.config/*`
 6. `apps` - install Oh My Zsh and Zed Gno extension support
-7. `opencode` - install OpenCode and bootstrap OpenAgent
-8. `opencode-skills` - install default global OpenCode skills through `npx skills`
-9. `codex` - install Codex CLI, bootstrap LazyCodex, and register Codex MCP servers including gnomcp and Aside-backed Playwright
-10. `codex-agents` - install default global Codex custom agents
-11. `codex-skills` - install default global Codex skills through `npx skills`
-12. `karabiner` - install Karabiner-Elements for key remapping
-13. `macos-shortcuts` - install five generic macOS Quick Action shortcut slots
-14. `maintenance` - load weekly low-disk maintenance LaunchAgents
-15. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
+7. `omp` - install the Oh My Pi coding agent through Bun
+8. `opencode` - install OpenCode and bootstrap OpenAgent
+9. `opencode-skills` - install default global OpenCode skills through `npx skills`
+10. `codex` - install Codex CLI, bootstrap LazyCodex, and register Codex MCP servers including gnomcp and Aside-backed Playwright
+11. `codex-agents` - install default global Codex custom agents
+12. `codex-skills` - install default global Codex skills through `npx skills`
+13. `karabiner` - install Karabiner-Elements for key remapping
+14. `macos-shortcuts` - install five generic macOS Quick Action shortcut slots
+15. `maintenance` - load weekly low-disk maintenance LaunchAgents
+16. `macos` - apply keyboard, Finder, Dock, screenshot, and appearance defaults
 
 Utility commands are explicit only and are not part of full setup:
 

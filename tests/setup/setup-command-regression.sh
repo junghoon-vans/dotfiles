@@ -115,6 +115,15 @@ if [ "\${1:-}" = "exec" ] && [ "\${2:-}" = "--" ]; then
       if [ "\${2:-}" = "--version" ]; then
         printf '1.2.0\n'
       fi
+      if [ "\${2:-}" = "install" ] && [ "\${3:-}" = "-g" ] && [ "\${4:-}" = "@oh-my-pi/pi-coding-agent" ]; then
+        printf '%s\n' '#!/bin/bash' 'printf "omp %s\\n" "\$*" >> "$LOG_FILE"' 'printf "18.0.11\\n"' >"$FAKE_HOME/.bun/bin/omp"
+        chmod +x "$FAKE_HOME/.bun/bin/omp"
+      fi
+      ;;
+    omp)
+      if [ "\${2:-}" = "--version" ]; then
+        printf 'omp/18.0.11\n'
+      fi
       ;;
     node)
       if [ "\${2:-}" = "--version" ]; then
@@ -1070,6 +1079,10 @@ printf 'bun %s\n' "\$*" >> "$LOG_FILE"
 if [ "\${1:-}" = "--version" ]; then
   printf '1.2.0\n'
 fi
+if [ "\${1:-}" = "install" ] && [ "\${2:-}" = "-g" ] && [ "\${3:-}" = "@oh-my-pi/pi-coding-agent" ]; then
+  printf '%s\n' '#!/bin/bash' 'printf "omp %s\\n" "\$*" >> "$LOG_FILE"' 'printf "18.0.11\\n"' >"$FAKE_HOME/.bun/bin/omp"
+  chmod +x "$FAKE_HOME/.bun/bin/omp"
+fi
 if [ "\${1:-}" = "install" ] && [ "\${2:-}" = "-g" ] && [ "\${3:-}" = "--trust" ] && [ "\${4:-}" = "opencode-ai" ] && [ "\${FAKE_BUN_SKIP_OPENCODE_PACKAGE:-0}" != "1" ]; then
   printf '%s\n' '#!/bin/bash' 'exit 0' >"$FAKE_HOME/.bun/bin/opencode"
   chmod +x "$FAKE_HOME/.bun/bin/opencode"
@@ -1146,6 +1159,12 @@ PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/nu
 
 OPENCODE_INSTALL_LINE="$(grep -n '^bun install -g --trust opencode-ai$' "$LOG_FILE" | cut -d: -f1)"
 [ -n "$OPENCODE_INSTALL_LINE" ]
+
+OMP_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run omp)"
+grep -q '^  omp[[:space:]]\+Install Oh My Pi coding agent through Bun' <<<"$OMP_DRY_RUN_OUTPUT"
+PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/omp.sh" >/dev/null
+grep -q 'bun install -g @oh-my-pi/pi-coding-agent' "$LOG_FILE"
+grep -q '^omp --version$' "$LOG_FILE"
 
 rm -f "$FAKE_HOME/.bun/bin/opencode"
 if MISSING_POSTINSTALL_OUTPUT="$(FAKE_BUN_SKIP_OPENCODE_PACKAGE=1 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" 2>&1)"; then

@@ -237,7 +237,7 @@ export VISUAL=nvim
 path=(${path:#$HOME/.local/bin})
 path+=("$HOME/.local/bin")
 
-# Bun global CLI tools, such as opencode, are installed here by setup/apps/opencode.sh.
+# Bun global CLI tools, such as omp and opencode, are installed here by setup/apps/*.sh.
 # Keep this after mise so mise-managed Bun remains the runtime provider.
 if [[ -d "$HOME/.bun/bin" ]]; then
   path=(${path:#$HOME/.bun/bin})
