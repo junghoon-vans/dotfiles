@@ -87,52 +87,10 @@
   "agent": {
     "sidebar_side": "right",
     "dock": "right",
-    "default_model": {
-      "provider": "omniroute",
-      "model": "opencode-go/deepseek-v4-flash"
-    },
     "model_parameters": []
-  },
-  "language_models": {
-    "openai_compatible": {
-      "omniroute": {
-        "api_url": "http://localhost:20128/v1",
-        "available_models": [
-          {
-            "name": "auto/best-coding",
-            "display_name": "OmniRoute Auto: Best Coding",
-            "max_tokens": 1048576,
-            "max_output_tokens": 384000
-          },
-          {
-            "name": "auto/fast",
-            "display_name": "OmniRoute Auto: Fast",
-            "max_tokens": 1048576,
-            "max_output_tokens": 384000
-          },
-          {
-            "name": "auto/best-free",
-            "display_name": "OmniRoute Auto: Best Free",
-            "max_tokens": 1048576,
-            "max_output_tokens": 384000
-          },
-          {
-            "name": "opencode-go/deepseek-v4-flash",
-            "display_name": "OmniRoute OpenCode Go: DeepSeek V4 Flash",
-            "max_tokens": 1048576,
-            "max_output_tokens": 384000
-          }
-        ]
-      }
-    }
   },
   "disable_ai": false,
   "confirm_quit": true,
-  "agent_servers": {
-    "opencode": {
-      "type": "registry"
-    }
-  },
   "telemetry": {
     "diagnostics": true,
     "metrics": true

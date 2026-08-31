@@ -37,4 +37,7 @@ if ! run_with_bun omp --version >/dev/null 2>&1; then
     exit 1
 fi
 
+source "$SETUP_DIR/apps/apm.sh"
+sync_apm_agent_packages
+
 print_success "Oh My Pi installed via Bun"

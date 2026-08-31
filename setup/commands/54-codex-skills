@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Install default global Codex skills through npx skills.
+# Description: Synchronize shared Codex and Oh My Pi skills through APM.
 
 # shellcheck source=setup/lib/common.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"

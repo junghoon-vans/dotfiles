@@ -191,23 +191,6 @@ codex-resume() {
   fi
 }
 
-# ========================================
-# OpenCode
-# ========================================
-opencode() {
-  mkdir -p "$HOME/.cache/opencode"
-
-  local github_token="${GITHUB_PERSONAL_ACCESS_TOKEN:-}"
-  if [[ -z "$github_token" ]] && command -v gh >/dev/null 2>&1; then
-    github_token="$(gh auth token 2>/dev/null || true)"
-  fi
-
-  if [[ -n "$github_token" ]]; then
-    GITHUB_PERSONAL_ACCESS_TOKEN="$github_token" command opencode "$@" 2>>"$HOME/.cache/opencode/stderr.log"
-  else
-    command opencode "$@" 2>>"$HOME/.cache/opencode/stderr.log"
-  fi
-}
 
 # ========================================
 # Environment Variables
@@ -237,7 +220,7 @@ export VISUAL=nvim
 path=(${path:#$HOME/.local/bin})
 path+=("$HOME/.local/bin")
 
-# Bun global CLI tools, such as omp and opencode, are installed here by setup/apps/*.sh.
+# Bun global CLI tools, including omp, are installed here by setup/apps/*.sh.
 # Keep this after mise so mise-managed Bun remains the runtime provider.
 if [[ -d "$HOME/.bun/bin" ]]; then
   path=(${path:#$HOME/.bun/bin})

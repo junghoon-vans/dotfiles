@@ -1,41 +1,26 @@
 # Tool Matrix
 
-## OpenCode / OpenAgent
+## Oh My Pi and Codex
 
-OpenCode and OpenAgent config lives under `home/dot_config/opencode/` and is applied to `~/.config/opencode/` by chezmoi. The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json` and is applied to `~/.codex/lsp-client.json`. Global Codex custom agents are installed into `~/.codex/agents/` by `./setup.sh codex-agents`.
+Oh My Pi is the primary coding agent. Its tracked configuration is
+`home/dot_omp/agent/config.yml`, applied to `~/.omp/agent/config.yml`.
+Codex remains available, including its HUD and custom agents.
 
-- `opencode.json` tracks OpenCode plugins, MCP endpoints, and native LSP mappings.
-- `lsp-client.json` mirrors the OpenCode LSP mappings for OpenAgent/lsp-tools-mcp fallback use.
-- `home/dot_omo/omo.jsonc` (applied to `~/.omo/omo.jsonc`) tracks oh-my-openagent model routing, fallbacks, skills, and notification preferences via the unified OMO config chain. The legacy `oh-my-openagent.json` path is no longer used.
-- `tui.json` tracks terminal UI preferences.
-- The OpenCode provider uses the local OmniRoute gateway at `http://localhost:20128/v1`; its API key comes from `OMNIROUTE_API_KEY`. The gateway itself runs persistently via the `com.dotfiles.omniroute` LaunchAgent loaded by `./setup.sh opencode`.
-- MCP endpoints include GitHub, Atlassian, Context7, gnomcp, Firecrawl, Aside-backed Playwright, and native Aside — the same set Codex registers through `setup/apps/codex-mcp.sh`, kept in sync across both agents. API keys and OAuth host files are not tracked.
-- The `opencode` setup command installs `opencode-status-hud`; its installer-managed local shim lives at `~/.config/opencode/plugins/opencode-status-hud.js` and is not tracked by chezmoi.
-- `./setup.sh opencode` installs `opencode-ai` with `bun install -g --trust`, allowing the package's postinstall script to select and link the platform-native OpenCode binary. It then verifies `opencode --version` before continuing.
-- Optional `OPENCODE_STATUS_HUD_*` display overrides are local runtime preferences and should stay out of tracked config unless they become part of the shared baseline.
-- OpenAgent uses Playwright MCP for browser automation. Brave is Brewfile-managed and selected through `PLAYWRIGHT_MCP_EXECUTABLE_PATH` in `.zshrc` when installed.
+`apm.yml` is the shared source of truth for agent capabilities; APM records
+the resolved global installation in untracked `~/.apm/apm.lock.yaml`:
 
-## Paseo
+- `apm install --global --target agent-skills --target codex` installs shared
+  skills into `~/.agents/skills/`, which Oh My Pi discovers through its Agents
+  skill provider.
+- The same command writes the shared MCP declarations into
+  `~/.codex/config.toml`; Codex reads that native configuration and Oh My Pi
+  imports Codex MCP servers during discovery.
+- API keys and OAuth credentials remain local. The manifest contains only
+  environment references and server definitions.
 
-The official Homebrew `paseo` cask installs the Paseo desktop app and links its bundled CLI to `/opt/homebrew/bin/paseo`; no separate npm-global install is needed. Paseo provides a local daemon for supervising AI coding agents and can use the already-managed Claude Code, Codex, and OpenCode CLIs.
-
-## Codex Agents and Skills
-
-The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json` and is applied to `~/.codex/lsp-client.json`. Global Codex custom agents are installed into `~/.codex/agents/` by `./setup.sh codex-agents`.
-
-`./setup.sh codex-agents` installs generic global custom agents from `VoltAgent/awesome-codex-subagents`. Keep private project workflow rules in repo-local `.agents/skills` or `AGENTS.md`, not in global agent files.
-
-- Core workflow: `codebase-orchestrator`, `git-workflow-manager`, `documentation-engineer`.
-- Review and QA: `code-reviewer`, `debugger`, `test-automator`, `security-auditor`.
-- App development: `frontend-developer`, `golang-pro`, `typescript-pro`, `react-specialist`, `spring-boot-engineer`.
-- Data and infrastructure: `sql-pro`, `postgres-pro`, `database-optimizer`, `kubernetes-specialist`, `terraform-engineer`, `deployment-engineer`.
-- Domain tooling: `blockchain-developer`, `mcp-developer`.
-
-`./setup.sh codex` installs Codex HUD from `fwyc0573/codex-hud` into `~/.local/share/codex-hud`, exposes its management commands from `~/.local/bin`, and the managed `.zshrc` routes `codex` and `codex-resume` through the HUD wrapper when it is installed. It also installs the configured `gnomcp` repo/ref into `~/.local/bin`, registers the `gnomcp@gnoverse` Codex plugin, and registers the `gnomcp` MCP server so Gno chain tools and bundled Gno audit/build/debug skills are available after restarting Codex. The default tracks the official `gnoverse/gno-mcp@v0.9.0` release; set `GNOMCP_REPO`, `GNOMCP_REF`, and `GNOMCP_RELEASE_VERSION` to pin a different release or fork.
-
-`./setup.sh codex` (via `codex-mcp.sh`) also registers Atlassian, GitHub Copilot (bearer token from `GITHUB_PERSONAL_ACCESS_TOKEN`), Context7, Firecrawl, Aside-backed Playwright, and native Aside MCP servers — the same set OpenCode declares in `opencode.json`.
-
-`./setup.sh codex-skills` installs global Codex skills through `npx skills`. The default set is `find-skills`, `vercel-react-best-practices`, and `golang-pro`. `./setup.sh opencode-skills` installs the same skill set for OpenCode through `npx skills --agent opencode`.
+LSP server binaries remain language-owned setup artifacts. Oh My Pi's built-in
+LSP discovery uses those binaries directly; no agent-specific LSP client
+fallback is maintained.
 
 ## Claude Code
 
@@ -47,7 +32,7 @@ The global Codex-style LSP MCP fallback lives at `home/dot_codex/lsp-client.json
 
 `mise.toml` records the repository runtime versions for languages that mise can manage, and `home/dot_config/mise/config.toml` mirrors those versions for the global `~/.config/mise/config.toml` baseline. `./setup.sh brew-packages` installs Homebrew-managed `mise`; setup language and blockchain commands sync the global mise config, run `mise install <tool>` for required runtimes, and then install runtime-adjacent tools, language servers, and chain-specific CLIs with those runtimes.
 
-| Language / File Type | Runtime / CLI | OpenCode LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
+| Language / File Type | Runtime / CLI | Oh My Pi LSP | Formatter | Linter / Diagnostics | Test / Debug Harness |
 | --- | --- | --- | --- | --- | --- |
 | Bash / Zsh | macOS shell | `bash-language-server` | `shfmt` | `shellcheck` | `bash -n` |
 | Go | Global mise config (`go = "1.25"`) + `./setup.sh go` tools in the mise Go bin dir (`~/.local/share/mise/installs/go/<version>/bin`) | `mise exec go@1.25 -- gopls` | `gofumpt` | `golangci-lint` | `delve`, `go test` |
@@ -79,4 +64,4 @@ Run the same local checks used by CI with:
 
 ## Biome LSP Scope
 
-Agent LSP config starts Biome with `biome lsp-proxy --stdio`. This repo maps Biome only to `.json` and `.jsonc` so it does not overlap with `typescript-language-server` for JS/TS files. CSS remains covered by Biome formatting/linting, but it is not mapped as an OpenCode LSP extension because Biome CSS LSP coverage is less consistently documented across upstream docs.
+Oh My Pi starts Biome with `biome lsp-proxy --stdio` when the server is available. This repo uses Biome only for `.json` and `.jsonc` so it does not overlap with `typescript-language-server` for JS/TS files. CSS remains covered by Biome formatting/linting; it has no dedicated LSP mapping because Biome CSS LSP coverage is less consistently documented across upstream docs.

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Reconfigure Codex MCP servers without reinstalling Codex.
+# Description: Synchronize shared Codex and Oh My Pi agent packages through APM.
 
 set -euo pipefail
 

@@ -29,12 +29,10 @@ Interactive runs print each command description before asking for Y/n confirmati
 | `blockchain` | Installs selected blockchain tooling by running `solana`, `gno`, and `sui`. |
 | `links` | Applies chezmoi-managed dotfiles from `home/` into `$HOME`. |
 | `apps` | Installs Oh My Zsh and Zed Gno extension support. |
-| `omp` | Installs the Oh My Pi coding agent globally through Bun. |
-| `opencode` | Installs OpenCode and OmniRoute, bootstraps oh-my-openagent, and configures the status HUD. |
-| `opencode-skills` | Installs the default global OpenCode skill set (Find Skills, Vercel React Best Practices, Golang Pro) through `npx skills --agent opencode`. |
-| `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, configures file-backed MCP OAuth storage, and ensures gnomcp, Atlassian, GitHub Copilot, Context7, Firecrawl, Aside-backed Playwright, and native Aside MCP servers are registered. |
+| `omp` | Installs Oh My Pi globally through Bun, then synchronizes shared skills and MCP servers through APM. |
+| `codex` | Installs Codex CLI, bootstraps LazyCodex configuration, installs Codex HUD, installs the configured gnomcp repo/ref, registers the `gnomcp@gnoverse` Codex plugin, and synchronizes shared skills and MCP servers through APM. |
 | `codex-agents` | Installs selected global Codex custom agents into `~/.codex/agents/`. |
-| `codex-skills` | Installs the default global Codex skill set (Find Skills, Vercel React Best Practices, Golang Pro) through `npx skills --agent codex`. |
+| `codex-skills` | Synchronizes the shared Codex and Oh My Pi skill set through APM. |
 | `karabiner` | Installs Karabiner-Elements for key remapping and confirms the linked config path. |
 | `macos-shortcuts` | Installs five neutral macOS Quick Action shortcut slots backed by local ignored scripts. |
 | `maintenance` | Loads periodic workstation maintenance LaunchAgents. |
@@ -46,7 +44,7 @@ Interactive runs print each command description before asking for Y/n confirmati
 | --- | --- |
 | `doctor` | Checks required host tools, Brewfile package state, harness tools, and core managed dotfiles. |
 | `check` | Runs repository validation: shell syntax, optional shellcheck and actionlint, JSON parsing, Brewfile syntax, whitespace checks, and setup smoke tests. |
-| `codex-mcp` | Reconfigures Codex MCP servers without reinstalling Codex CLI or rerunning LazyCodex bootstrap. |
+| `codex-mcp` | Synchronizes shared Codex and Oh My Pi skills and MCP servers through APM. |
 | `clean-backups` | Removes managed `*.backup.YYYYMMDD-HHMMSS` files created before chezmoi apply when the current target still matches the tracked source. |
 
 ## Language Commands
@@ -86,13 +84,6 @@ Examples:
 ./setup.sh --skip rust --yes
 ```
 
-OpenCode and Zed use the tracked OmniRoute provider configuration at
-`http://localhost:20128/v1`. Put the gateway key in `~/.zshrc.local` as
-`OMNIROUTE_API_KEY`; see `docs/local-overrides.md` for the environment setup.
-`./setup.sh opencode` also loads a `com.dotfiles.omniroute` LaunchAgent from
-`~/Library/LaunchAgents/com.dotfiles.omniroute.plist` so `omniroute serve` runs
-persistently and restarts on login/crash; run `./setup.sh links` first if the
-plist is missing.
 
 `gno`, `solana`, `sui`, `xml`, and `typescript` install their required Go, Rust, Java, and Bun runtimes through mise before installing their tooling. Use `languages` and `blockchain` to install the full ordered sets, or run individual commands to install only selected environments.
 
@@ -102,6 +93,13 @@ plist is missing.
 
 `setup/link.sh` applies chezmoi source state from `home/`. Existing files are backed up only when their content differs from the tracked source before `chezmoi apply` runs.
 `~/.omp/agent/config.yml` is also managed: `smol`, `slow`, and `task` subagent roles (plus `security-reviewer`) use `openai-codex/gpt-5.6-luna:max`; the `designer` role uses `anthropic/claude-sonnet-4-6:high`.
+
+`apm.yml` declares shared skills and MCP servers. `./setup.sh omp`,
+`./setup.sh codex`, `./setup.sh codex-skills`, and `./setup.sh codex-mcp`
+install that package globally through APM: skills deploy to `~/.agents/skills`,
+and APM writes MCP declarations to `~/.codex/config.toml`, which both Codex and
+Oh My Pi discover. APM-managed output and its credentials are local state, not
+chezmoi source.
 
 
 The linked home state includes a weekly LaunchAgent at

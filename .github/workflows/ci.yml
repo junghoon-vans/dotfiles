@@ -63,20 +63,10 @@ jobs:
       - name: Validate config files
         shell: bash
         run: |
-          python3 -m json.tool home/dot_config/opencode/opencode.json >/dev/null
-          python3 -m json.tool home/dot_codex/lsp-client.json >/dev/null
           python3 -m json.tool home/dot_claude/settings.json >/dev/null
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-
-          path = Path('home/dot_omo/omo.jsonc')
-          lines = [line for line in path.read_text().splitlines() if not line.lstrip().startswith('//')]
-          json.loads('\n'.join(lines))
-          PY
           python3 -m json.tool home/private_dot_paseo/private_config.json >/dev/null
-          python3 -m json.tool home/dot_config/opencode/tui.json >/dev/null
           python3 -m json.tool home/dot_config/private_karabiner/private_karabiner.json >/dev/null
+          ruby -e 'require "yaml"; YAML.safe_load(File.read(ARGV.fetch(0)), aliases: false)' apm.yml
           ruby -c Brewfile >/dev/null
 
       - name: Check setup help

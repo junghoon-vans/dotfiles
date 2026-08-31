@@ -73,8 +73,10 @@ warn_command brew "run ./setup.sh bootstrap before brew-managed setup"
 warn_command chezmoi "run ./setup.sh brew-packages before dotfiles apply"
 warn_command mise "run ./setup.sh brew-packages before runtime setup"
 warn_command hermes "run ./setup.sh brew-packages before Hermes CLI use"
-warn_command codex "run ./setup.sh codex before Codex MCP setup"
-warn_command aside "install the Aside CLI from Aside Developer settings before native Aside MCP setup"
+warn_command omp "run ./setup.sh omp before Oh My Pi use"
+warn_command apm "run ./setup.sh omp before shared agent package setup"
+warn_command codex "run ./setup.sh codex before Codex CLI use"
+warn_command aside "install the Aside CLI from Aside Developer settings before using its MCP server"
 
 if command -v hermes >/dev/null 2>&1; then
     hermes_path="$(command -v hermes)"
@@ -95,7 +97,7 @@ aside_browser_executable="${ASIDE_BROWSER_EXECUTABLE:-/Applications/Aside.app/Co
 if [ -x "$aside_browser_executable" ]; then
     print_success "Aside browser executable found"
 else
-    print_info "Aside browser executable missing at $aside_browser_executable; run ./setup.sh brew-packages before using Playwright MCP"
+    print_info "Aside browser executable missing at $aside_browser_executable; install Aside before using Playwright MCP"
 fi
 
 if command -v brew >/dev/null 2>&1; then
@@ -156,22 +158,15 @@ for artifact_name in gopls gnopls gnomcp; do
         case "$artifact_name" in
         gopls) print_info "$artifact_name artifact missing; run ./setup.sh go" ;;
         gnopls) print_info "$artifact_name artifact missing; run ./setup.sh gno" ;;
-        gnomcp) print_info "$artifact_name artifact missing; run ./setup.sh codex" ;;
+        gnomcp) print_info "$artifact_name artifact missing; run ./setup.sh codex or ./setup.sh omp" ;;
         esac
     fi
 done
 
-if command -v codex >/dev/null 2>&1; then
-    if codex mcp get playwright 2>/dev/null | grep -Fq "PLAYWRIGHT_MCP_EXECUTABLE_PATH="; then
-        print_success "Codex Playwright MCP is registered for a custom browser executable"
-    else
-        print_info "Codex Playwright MCP is not configured for Aside; run ./setup.sh codex-mcp"
-    fi
-    if codex mcp get aside 2>/dev/null | grep -Fq "command: aside"; then
-        print_success "Codex native Aside MCP is registered"
-    else
-        print_info "Codex native Aside MCP is not configured; run ./setup.sh codex-mcp after installing the Aside CLI"
-    fi
+if [ -f "$HOME/.codex/config.toml" ] && grep -Fq "[mcp_servers." "$HOME/.codex/config.toml"; then
+    print_success "APM-managed shared MCP servers found in Codex config"
+else
+    print_info "Shared MCP servers missing; run ./setup.sh codex-mcp"
 fi
 
 if [ -s "$HOME/.local/share/lemminx/lemminx.jar" ]; then
@@ -189,18 +184,7 @@ if command -v mise >/dev/null 2>&1; then
     fi
 fi
 
-if [ "$(uname -s)" = "Darwin" ] && [ -f "$HOME/Library/LaunchAgents/com.dotfiles.omniroute.plist" ]; then
-    if launchctl print "gui/$(id -u)/com.dotfiles.omniroute" >/dev/null 2>&1; then
-        print_success "OmniRoute LaunchAgent loaded"
-        if curl -s -m 2 http://127.0.0.1:20128/v1/models >/dev/null 2>&1; then
-            print_success "OmniRoute gateway responding on port 20128"
-        else
-            print_info "OmniRoute gateway not responding on port 20128; check /tmp/com.dotfiles.omniroute.err"
-        fi
-    else
-        print_info "OmniRoute LaunchAgent not loaded; run ./setup.sh opencode"
-    fi
-fi
+
 
 print_info "Checking executable LSP servers..."
 for command_name in bash-language-server jdtls kotlin-language-server marksman pyright-langserver rust-analyzer terraform-ls yaml-language-server; do

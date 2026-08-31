@@ -149,14 +149,13 @@ export HOME="$FAKE_HOME"
 export PATH="$FAKE_BIN:$PATH"
 
 HELP_OUTPUT="$($SETUP_SH --help)"
-grep -q 'opencode' <<<"$HELP_OUTPUT"
-grep -q 'Install OpenCode, bootstrap oh-my-openagent, and configure status HUD' <<<"$HELP_OUTPUT"
-grep -q 'Install default global Codex skills through npx skills' <<<"$HELP_OUTPUT"
+! grep -q 'opencode' <<<"$HELP_OUTPUT"
+grep -q 'Synchronize shared Codex and Oh My Pi skills' <<<"$HELP_OUTPUT"
 grep -q 'Install macOS Quick Action shortcut slots' <<<"$HELP_OUTPUT"
 grep -q 'Run selected blockchain tooling commands' <<<"$HELP_OUTPUT"
 grep -q 'Inspect host prerequisites' <<<"$HELP_OUTPUT"
 grep -q 'Remove managed dotfile backup files created before chezmoi apply' <<<"$HELP_OUTPUT"
-grep -q 'Reconfigure Codex MCP servers without reinstalling Codex' <<<"$HELP_OUTPUT"
+grep -q 'Synchronize shared Codex and Oh My Pi agent packages through APM' <<<"$HELP_OUTPUT"
 grep -q 'Language commands:' <<<"$HELP_OUTPUT"
 grep -q 'Blockchain commands:' <<<"$HELP_OUTPUT"
 grep -q 'Install Go via mise plus Go formatter/linter tools' <<<"$HELP_OUTPUT"
@@ -278,48 +277,6 @@ if grep -q '^gno.sh$\|^sui.sh$' "$BLOCKCHAIN_PROMPT_LOG"; then
     exit 1
 fi
 
-python3 - "$REPO_ROOT/home/dot_config/opencode/opencode.json" "$REPO_ROOT/home/dot_codex/lsp-client.json" <<'PY'
-import json
-import sys
-
-with open(sys.argv[1], encoding="utf-8") as config_file:
-    config = json.load(config_file)
-with open(sys.argv[2], encoding="utf-8") as config_file:
-    codex_config = json.load(config_file)
-
-if set(codex_config) != {"lsp"}:
-    raise SystemExit("Codex LSP config should only define the top-level lsp map")
-if codex_config["lsp"] != config["lsp"]:
-    raise SystemExit("Codex LSP config should exactly mirror OpenCode lsp config")
-
-expected_commands = {
-    "gopls": ["/bin/bash", "-lc", 'exec mise exec go@1.25 -- gopls'],
-    "gnopls": ["/bin/bash", "-lc", 'exec mise exec go@1.25 -- gnopls -mode=stdio'],
-    "jdtls": ["/bin/bash", "-lc", "project_hash=$(printf \"%s\" \"$PWD\" | shasum | cut -d\" \" -f1); mkdir -p \"$HOME/Library/Caches/jdtls/workspaces\"; exec mise exec java@temurin-21 -- jdtls -data \"$HOME/Library/Caches/jdtls/workspaces/$project_hash\""],
-    "kotlin-ls": ["/bin/bash", "-lc", "exec mise exec java@temurin-21 kotlin@latest -- kotlin-language-server"],
-    "pyright": ["/bin/bash", "-lc", "exec mise exec python@3.13 -- pyright-langserver --stdio"],
-    "rust": ["/bin/bash", "-lc", 'exec mise exec rust@latest -- "$(brew --prefix rust-analyzer)/bin/rust-analyzer"'],
-    "typescript-language-server": ["/bin/bash", "-lc", 'PATH="$(mise exec bun@latest -- bun pm bin -g):$PATH" exec mise exec node@24 bun@latest -- typescript-language-server --stdio'],
-    "xml": ["/bin/bash", "-lc", 'exec mise exec java@temurin-21 -- java ${LEMMINX_JAVA_OPTS:-} -jar "$HOME/.local/share/lemminx/lemminx.jar"'],
-}
-for lsp_name, command in expected_commands.items():
-    actual = config["lsp"][lsp_name]["command"]
-    if actual != command:
-        raise SystemExit(f"OpenCode {lsp_name} command should be {command}, got {actual}")
-    if "~" in " ".join(actual):
-        raise SystemExit(f"OpenCode {lsp_name} command should not rely on tilde expansion")
-
-    for forbidden_path in ("$HOME/workspace/dotfiles", "~/workspace/dotfiles"):
-        if forbidden_path in " ".join(actual):
-            raise SystemExit(f"OpenCode {lsp_name} command should not depend on local checkout path {forbidden_path}")
-
-    for forbidden_exec in ('exec "$HOME/.local/bin/',):
-        if forbidden_exec in " ".join(actual):
-            raise SystemExit(f"OpenCode {lsp_name} command should not directly exec local bin wrappers")
-
-if config["lsp"]["xml"]["extensions"] != [".xml", ".xsd", ".xsl", ".xslt", ".svg"]:
-    raise SystemExit("OpenCode XML LSP extensions changed")
-PY
 
 python3 - "$REPO_ROOT/home/dot_config/zed/settings.json" <<'PY'
 import json
@@ -397,57 +354,6 @@ grep -q '^  sui[[:space:]]\+Install Sui CLI, Move analyzer, and local validator 
 grep -q '^  typescript[[:space:]]\+Install TypeScript' <<<"$LANGUAGE_DRY_RUN_OUTPUT"
 grep -q '^  python[[:space:]]\+Install Python via mise' <<<"$LANGUAGE_DRY_RUN_OUTPUT"
 
-CODEX_SKILLS_OUTPUT="$($SETUP_SH --dry-run codex-skills)"
-grep -q '^  codex-skills[[:space:]]\+Install default global Codex skills through npx skills' <<<"$CODEX_SKILLS_OUTPUT"
-
-CODEX_SKILLS_HOME="$TMP_DIR/codex-skills-home"
-CODEX_SKILLS_BIN="$TMP_DIR/codex-skills-bin"
-CODEX_SKILLS_LOG="$TMP_DIR/codex-skills.log"
-mkdir -p "$CODEX_SKILLS_HOME" "$CODEX_SKILLS_BIN"
-cat >"$CODEX_SKILLS_BIN/mise" <<'EOF'
-#!/bin/bash
-printf 'mise %s\n' "$*" >> "$CODEX_SKILLS_LOG"
-if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
-  shift 2
-  printf '%s\n' "$*" >> "$CODEX_SKILLS_LOG"
-  if [ "${1:-}" = "node" ] && [ "${2:-}" = "--version" ]; then
-    printf 'v24.0.0\n'
-    exit 0
-  fi
-fi
-exit 0
-EOF
-chmod +x "$CODEX_SKILLS_BIN/mise"
-env HOME="$CODEX_SKILLS_HOME" PATH="$CODEX_SKILLS_BIN:/usr/bin:/bin" CODEX_SKILLS_LOG="$CODEX_SKILLS_LOG" bash "$REPO_ROOT/setup/apps/codex-skills.sh" >/dev/null
-grep -q 'npx --yes skills add vercel-labs/skills --skill find-skills --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
-grep -q 'npx --yes skills add vercel-labs/agent-skills --skill vercel-react-best-practices --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
-grep -q 'npx --yes skills add jeffallan/claude-skills --skill golang-pro --global --agent codex --copy --yes' "$CODEX_SKILLS_LOG"
-
-OPENCODE_SKILLS_OUTPUT="$($SETUP_SH --dry-run opencode-skills)"
-grep -q '^  opencode-skills[[:space:]]\+Install default global OpenCode skills through npx skills' <<<"$OPENCODE_SKILLS_OUTPUT"
-
-OPENCODE_SKILLS_HOME="$TMP_DIR/opencode-skills-home"
-OPENCODE_SKILLS_BIN="$TMP_DIR/opencode-skills-bin"
-OPENCODE_SKILLS_LOG="$TMP_DIR/opencode-skills.log"
-mkdir -p "$OPENCODE_SKILLS_HOME" "$OPENCODE_SKILLS_BIN"
-cat >"$OPENCODE_SKILLS_BIN/mise" <<'EOF'
-#!/bin/bash
-printf 'mise %s\n' "$*" >> "$OPENCODE_SKILLS_LOG"
-if [ "${1:-}" = "exec" ] && [ "${2:-}" = "--" ]; then
-  shift 2
-  printf '%s\n' "$*" >> "$OPENCODE_SKILLS_LOG"
-  if [ "${1:-}" = "node" ] && [ "${2:-}" = "--version" ]; then
-    printf 'v24.0.0\n'
-    exit 0
-  fi
-fi
-exit 0
-EOF
-chmod +x "$OPENCODE_SKILLS_BIN/mise"
-env HOME="$OPENCODE_SKILLS_HOME" PATH="$OPENCODE_SKILLS_BIN:/usr/bin:/bin" OPENCODE_SKILLS_LOG="$OPENCODE_SKILLS_LOG" bash "$REPO_ROOT/setup/apps/opencode-skills.sh" >/dev/null
-grep -q 'npx --yes skills add vercel-labs/skills --skill find-skills --global --agent opencode --copy --yes' "$OPENCODE_SKILLS_LOG"
-grep -q 'npx --yes skills add vercel-labs/agent-skills --skill vercel-react-best-practices --global --agent opencode --copy --yes' "$OPENCODE_SKILLS_LOG"
-grep -q 'npx --yes skills add jeffallan/claude-skills --skill golang-pro --global --agent opencode --copy --yes' "$OPENCODE_SKILLS_LOG"
 
 LANGUAGE_SKIP_OUTPUT="$($SETUP_SH --dry-run --skip gno go gno)"
 grep -q 'Skipping command: gno' <<<"$LANGUAGE_SKIP_OUTPUT"
@@ -911,7 +817,7 @@ chmod +x "$DOCTOR_BIN/git" "$DOCTOR_BIN/bash" "$DOCTOR_BIN/uname" "$DOCTOR_BIN/d
 DOCTOR_OUTPUT="$(HOME="$DOCTOR_HOME" PATH="$DOCTOR_BIN" ASIDE_BROWSER_EXECUTABLE="$TMP_DIR/missing-aside" /bin/bash "$REPO_ROOT/setup/doctor.sh")"
 grep -q 'brew missing — run ./setup.sh bootstrap before brew-managed setup' <<<"$DOCTOR_OUTPUT"
 grep -q 'mise missing — run ./setup.sh brew-packages before runtime setup' <<<"$DOCTOR_OUTPUT"
-grep -q 'codex missing — run ./setup.sh codex before Codex MCP setup' <<<"$DOCTOR_OUTPUT"
+grep -q 'codex missing — run ./setup.sh codex before Codex CLI use' <<<"$DOCTOR_OUTPUT"
 grep -q "Aside browser executable missing at $TMP_DIR/missing-aside" <<<"$DOCTOR_OUTPUT"
 grep -q 'cmake missing; run ./setup.sh brew-packages' <<<"$DOCTOR_OUTPUT"
 grep -q 'pkg-config missing; run ./setup.sh brew-packages' <<<"$DOCTOR_OUTPUT"
@@ -1083,10 +989,6 @@ if [ "\${1:-}" = "install" ] && [ "\${2:-}" = "-g" ] && [ "\${3:-}" = "@oh-my-pi
   printf '%s\n' '#!/bin/bash' 'printf "omp %s\\n" "\$*" >> "$LOG_FILE"' 'printf "18.0.11\\n"' >"$FAKE_HOME/.bun/bin/omp"
   chmod +x "$FAKE_HOME/.bun/bin/omp"
 fi
-if [ "\${1:-}" = "install" ] && [ "\${2:-}" = "-g" ] && [ "\${3:-}" = "--trust" ] && [ "\${4:-}" = "opencode-ai" ] && [ "\${FAKE_BUN_SKIP_OPENCODE_PACKAGE:-0}" != "1" ]; then
-  printf '%s\n' '#!/bin/bash' 'exit 0' >"$FAKE_HOME/.bun/bin/opencode"
-  chmod +x "$FAKE_HOME/.bun/bin/opencode"
-fi
 EOF
 
 cat >"$FAKE_HOME/.bun/bin/node" <<EOF
@@ -1099,10 +1001,6 @@ cat >"$FAKE_HOME/.bun/bin/bunx" <<EOF
 printf 'bunx %s\n' "\$*" >> "$LOG_FILE"
 EOF
 
-cat >"$FAKE_HOME/.bun/bin/opencode-status-hud" <<EOF
-#!/bin/bash
-printf 'opencode-status-hud %s\n' "\$*" >> "$LOG_FILE"
-EOF
 
 cat >"$FAKE_BIN/codex" <<EOF
 #!/bin/bash
@@ -1131,7 +1029,19 @@ if [ "\${1:-}" = "-V" ]; then
 fi
 EOF
 
-chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/node" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_HOME/.bun/bin/opencode-status-hud" "$FAKE_BIN/brew" "$FAKE_BIN/codex" "$FAKE_BIN/tmux" "$FAKE_BIN/aside"
+chmod +x "$TMP_DIR/fake-go-prefix/bin/go" "$FAKE_HOME/.bun/bin/bun" "$FAKE_HOME/.bun/bin/node" "$FAKE_HOME/.bun/bin/bunx" "$FAKE_BIN/brew" "$FAKE_BIN/codex" "$FAKE_BIN/tmux" "$FAKE_BIN/aside"
+cat >"$FAKE_BIN/apm" <<EOF
+#!/bin/bash
+printf 'apm %s\n' "\$*" >> "$LOG_FILE"
+if [ "\${1:-}" = "--version" ]; then
+  printf 'APM test\n'
+fi
+if [[ " \$* " == *" --only mcp "* ]]; then
+  mkdir -p "\${CODEX_HOME:?}"
+  printf '%s\n' '[mcp_servers.atlassian]' 'url = "https://mcp.atlassian.com/v1/mcp/authv2"' >"\$CODEX_HOME/config.toml"
+fi
+EOF
+chmod +x "$FAKE_BIN/apm"
 
 mkdir -p "$FAKE_HOME/.codex"
 mkdir -p "$FAKE_HOME/.local/bin"
@@ -1155,25 +1065,12 @@ EOF
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/go.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/blockchain/gno.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/languages/typescript.sh" >/dev/null
-PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" >/dev/null
-
-OPENCODE_INSTALL_LINE="$(grep -n '^bun install -g --trust opencode-ai$' "$LOG_FILE" | cut -d: -f1)"
-[ -n "$OPENCODE_INSTALL_LINE" ]
-
 OMP_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run omp)"
 grep -q '^  omp[[:space:]]\+Install Oh My Pi coding agent through Bun' <<<"$OMP_DRY_RUN_OUTPUT"
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/omp.sh" >/dev/null
 grep -q 'bun install -g @oh-my-pi/pi-coding-agent' "$LOG_FILE"
 grep -q '^omp --version$' "$LOG_FILE"
 
-rm -f "$FAKE_HOME/.bun/bin/opencode"
-if MISSING_POSTINSTALL_OUTPUT="$(FAKE_BUN_SKIP_OPENCODE_PACKAGE=1 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/opencode.sh" 2>&1)"; then
-    MISSING_POSTINSTALL_STATUS=0
-else
-    MISSING_POSTINSTALL_STATUS=$?
-fi
-[ "$MISSING_POSTINSTALL_STATUS" -ne 0 ]
-grep -q 'opencode-ai installed but OpenCode did not start' <<<"$MISSING_POSTINSTALL_OUTPUT"
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/codex.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/codex-mcp.sh" >/dev/null
 
@@ -1183,22 +1080,12 @@ grep -q "git -C $FAKE_HOME/gno fetch --tags --prune origin" "$LOG_FILE"
 grep -q "git -C $FAKE_HOME/gno checkout --force --detach 959cefd916021d3a55e9b51f20d05ef618e7f357" "$LOG_FILE"
 grep -q 'make install' "$LOG_FILE"
 grep -q 'bun install -g typescript' "$LOG_FILE"
-grep -q 'bun install -g --trust opencode-ai' "$LOG_FILE"
-grep -q 'bun install -g omniroute' "$LOG_FILE"
-grep -q 'bun install -g opencode-status-hud' "$LOG_FILE"
-grep -q 'bunx oh-my-openagent install --no-tui --claude=no --openai=yes --gemini=no --copilot=no' "$LOG_FILE"
-grep -q 'opencode-status-hud install' "$LOG_FILE"
 grep -q 'npm install -g @openai/codex' "$LOG_FILE"
 grep -q 'npx --yes lazycodex-ai install --no-tui --codex-autonomous' "$LOG_FILE"
 grep -q 'codex plugin marketplace add '"$FAKE_HOME"'/.codex/plugins/cache/gnoverse' "$LOG_FILE"
 grep -q 'codex plugin add gnomcp@gnoverse' "$LOG_FILE"
-grep -q 'codex mcp add gnomcp -- '"$FAKE_HOME"'/.local/bin/gnomcp' "$LOG_FILE"
-grep -q 'codex mcp add atlassian --url https://mcp.atlassian.com/v1/mcp/authv2' "$LOG_FILE"
-grep -q 'codex mcp add github --url https://api.githubcopilot.com/mcp/ --bearer-token-env-var GITHUB_PERSONAL_ACCESS_TOKEN' "$LOG_FILE"
-grep -q 'codex mcp add context7 --url https://mcp.context7.com/mcp' "$LOG_FILE"
-grep -q 'codex mcp add firecrawl -- /bin/zsh -lc source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp' "$LOG_FILE"
-grep -q 'codex mcp add playwright --env PLAYWRIGHT_MCP_EXECUTABLE_PATH=/Applications/Aside.app/Contents/MacOS/Aside -- npx -y @playwright/mcp@latest' "$LOG_FILE"
-grep -q 'codex mcp add aside -- aside mcp' "$LOG_FILE"
+grep -q 'apm install --global --target agent-skills --only apm '"$REPO_ROOT" "$LOG_FILE"
+grep -q 'apm install --global --target codex --only mcp' "$LOG_FILE"
 [ "$(grep -c '^mcp_oauth_credentials_store = ' "$FAKE_HOME/.codex/config.toml")" -eq 1 ]
 grep -q '^mcp_oauth_credentials_store = "file"$' "$FAKE_HOME/.codex/config.toml"
 grep -q '^\[plugins\."github@openai-curated"\]$' "$FAKE_HOME/.codex/config.toml"
@@ -1359,15 +1246,11 @@ grep -q 'SETUP_SKIP_COMMANDS' "$REPO_ROOT/setup/commands/35-blockchain"
 [ ! -e "$REPO_ROOT/.config/nvim/init.lua" ]
 [ ! -e "$REPO_ROOT/.config/nvim/lua/config/lazy.lua" ]
 [ ! -e "$REPO_ROOT/.config/nvim/lua/config/options.lua" ]
-[ ! -e "$REPO_ROOT/.config/opencode/oh-my-openagent.json" ]
-[ -e "$REPO_ROOT/home/dot_omo/omo.jsonc" ]
-[ ! -e "$REPO_ROOT/.config/opencode/opencode.json" ]
-[ ! -e "$REPO_ROOT/.config/opencode/tui.json" ]
-[ ! -e "$REPO_ROOT/.config/zed/settings.json" ]
-[ -n "$(grep -F 'http://localhost:20128/v1' "$REPO_ROOT/home/dot_config/opencode/opencode.json")" ]
-[ -n "$(grep -F 'http://localhost:20128/v1' "$REPO_ROOT/home/dot_config/zed/settings.json")" ]
-[ -n "$(grep -F 'auto/best-coding' "$REPO_ROOT/home/dot_config/zed/settings.json")" ]
-[ ! -e "$REPO_ROOT/.codex/lsp-client.json" ]
+[ ! -e "$REPO_ROOT/home/dot_omo" ]
+[ ! -e "$REPO_ROOT/home/dot_config/opencode" ]
+[ ! -e "$REPO_ROOT/home/dot_codex/lsp-client.json" ]
+[ -e "$REPO_ROOT/apm.yml" ]
+[ -e "$REPO_ROOT/setup/apps/apm.sh" ]
 [ ! -e "$REPO_ROOT/.claude/settings.json" ]
 [ -e "$REPO_ROOT/docs/gitconfig.override.example" ]
 grep -q 'karabiner-elements' "$REPO_ROOT/setup/commands/55-karabiner"
