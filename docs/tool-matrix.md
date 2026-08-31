@@ -4,10 +4,10 @@
 
 Oh My Pi is the primary coding agent. Its tracked configuration is
 `home/dot_omp/agent/config.yml`, applied to `~/.omp/agent/config.yml`.
-Codex remains available, including its HUD and custom agents.
+Codex remains available, including its HUD.
 
-`apm.yml` is the shared source of truth for agent capabilities; APM records
-the resolved global installation in untracked `~/.apm/apm.lock.yaml`:
+`apm.yml` pins the shared agent capabilities to reviewed upstream revisions.
+APM records each global installation in untracked `~/.apm/apm.lock.yaml`:
 
 - `apm install --global --target agent-skills --target codex` installs shared
   skills into `~/.agents/skills/`, which Oh My Pi discovers through its Agents

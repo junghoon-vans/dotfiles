@@ -93,7 +93,7 @@ Examples:
 `setup/link.sh` applies chezmoi source state from `home/`. Existing files are backed up only when their content differs from the tracked source before `chezmoi apply` runs.
 `~/.omp/agent/config.yml` is also managed: `smol`, `slow`, and `task` subagent roles (plus `security-reviewer`) use `openai-codex/gpt-5.6-luna:max`; the `designer` role uses `anthropic/claude-sonnet-4-6:high`.
 
-`apm.yml` declares shared skills and MCP servers. `./setup.sh omp`,
+`apm.yml` pins the shared skills and declares shared MCP servers. `./setup.sh omp`,
 `./setup.sh codex`, `./setup.sh agent-skills`, and `./setup.sh codex-mcp`
 install that package globally through APM: skills deploy to `~/.agents/skills`,
 and APM writes MCP declarations to `~/.codex/config.toml`, which both Codex and
