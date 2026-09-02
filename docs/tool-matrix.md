@@ -9,10 +9,10 @@ Codex remains available, including its HUD.
 `apm.yml` pins the shared agent capabilities to reviewed upstream revisions.
 APM records each global installation in untracked `~/.apm/apm.lock.yaml`:
 
-- `apm install --global --target agent-skills --target codex` installs shared
-  skills into `~/.agents/skills/`, which Oh My Pi discovers through its Agents
-  skill provider.
-- The same command writes the shared MCP declarations into
+- Global APM installation deploys shared skills into `~/.agents/skills/`,
+  which Oh My Pi discovers through its Agents skill provider.
+- A project-scope APM render then writes the shared MCP declarations into an
+  isolated temporary Codex config before setup merges them into
   `~/.codex/config.toml`; Codex reads that native configuration and Oh My Pi
   imports Codex MCP servers during discovery.
 - API keys and OAuth credentials remain local. The manifest contains only

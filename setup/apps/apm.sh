@@ -33,11 +33,14 @@ merge_apm_codex_mcp() {
     local merged_file=""
 
     temp_dir="$(mktemp -d "${TMPDIR:-/tmp}/apm-codex.XXXXXX")"
-    generated_config="$temp_dir/config.toml"
+    generated_config="$temp_dir/.codex/config.toml"
     merged_file="$temp_dir/merged.toml"
 
     print_info "Rendering shared MCP servers through APM..."
-    CODEX_HOME="$temp_dir" apm install --global --target codex --only mcp
+    (
+        cd "$DOTFILES_DIR" || exit
+        apm install --target codex --only mcp --root "$temp_dir"
+    )
 
     if [ ! -s "$generated_config" ]; then
         print_error "APM did not render a Codex MCP configuration."

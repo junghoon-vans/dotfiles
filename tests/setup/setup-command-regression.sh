@@ -988,6 +988,9 @@ if [ "\${1:-}" = "install" ] && [ "\${2:-}" = "-g" ] && [ "\${3:-}" = "@oh-my-pi
   printf '%s\n' '#!/bin/bash' 'printf "omp %s\\n" "\$*" >> "$LOG_FILE"' 'printf "18.0.11\\n"' >"$FAKE_HOME/.bun/bin/omp"
   chmod +x "$FAKE_HOME/.bun/bin/omp"
 fi
+if [ "\${1:-}" = "$FAKE_HOME/.bun/bin/omp" ] && [ "\${2:-}" = "--version" ]; then
+  printf 'omp/18.0.11\n'
+fi
 EOF
 
 cat >"$FAKE_HOME/.bun/bin/node" <<EOF
@@ -1036,8 +1039,16 @@ if [ "\${1:-}" = "--version" ]; then
   printf 'APM test\n'
 fi
 if [[ " \$* " == *" --only mcp "* ]]; then
-  mkdir -p "\${CODEX_HOME:?}"
-  printf '%s\n' '[mcp_servers.atlassian]' 'url = "https://mcp.atlassian.com/v1/mcp/authv2"' '[mcp_servers.notion]' 'url = "https://mcp.notion.com/mcp"' >"\$CODEX_HOME/config.toml"
+  apm_root=""
+  while [ "\$#" -gt 0 ]; do
+    if [ "\$1" = "--root" ]; then
+      apm_root="\$2"
+      break
+    fi
+    shift
+  done
+  mkdir -p "\${apm_root:?}/.codex"
+  printf '%s\n' '[mcp_servers.atlassian]' 'url = "https://mcp.atlassian.com/v1/mcp/authv2"' '[mcp_servers.notion]' 'url = "https://mcp.notion.com/mcp"' >"\$apm_root/.codex/config.toml"
 fi
 EOF
 chmod +x "$FAKE_BIN/apm"
@@ -1071,7 +1082,7 @@ OMP_DRY_RUN_OUTPUT="$($SETUP_SH --dry-run omp)"
 grep -q '^  omp[[:space:]]\+Install Oh My Pi coding agent through Bun' <<<"$OMP_DRY_RUN_OUTPUT"
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/omp.sh" >/dev/null
 grep -q 'bun install -g @oh-my-pi/pi-coding-agent' "$LOG_FILE"
-grep -q '^omp --version$' "$LOG_FILE"
+grep -q "^bun $FAKE_HOME/.bun/bin/omp --version$" "$LOG_FILE"
 
 PATH="$FAKE_BIN:/usr/bin:/bin" bash "$REPO_ROOT/setup/apps/codex.sh" >/dev/null
 PATH="$FAKE_BIN:/usr/bin:/bin" "$SETUP_SH" --yes sync-apm >/dev/null
@@ -1087,7 +1098,7 @@ grep -q 'npx --yes lazycodex-ai install --no-tui --codex-autonomous' "$LOG_FILE"
 grep -q 'codex plugin marketplace add '"$FAKE_HOME"'/.codex/plugins/cache/gnoverse' "$LOG_FILE"
 grep -q 'codex plugin add gnomcp@gnoverse' "$LOG_FILE"
 grep -q 'apm install --global --target agent-skills --only apm '"$REPO_ROOT" "$LOG_FILE"
-grep -q 'apm install --global --target codex --only mcp' "$LOG_FILE"
+grep -q 'apm install --target codex --only mcp --root ' "$LOG_FILE"
 grep -q 'GNOMCP_REF="${GNOMCP_REF:-v0.11.0}"' "$REPO_ROOT/setup/apps/codex.sh"
 grep -q 'GNOMCP_RELEASE_VERSION="${GNOMCP_RELEASE_VERSION:-v0.11.0}"' "$REPO_ROOT/setup/apps/codex.sh"
 grep -q 'firecrawl-mcp@3.24.0' "$REPO_ROOT/apm.yml"

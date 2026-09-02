@@ -32,7 +32,7 @@ if ! command -v omp >/dev/null 2>&1; then
     exit 1
 fi
 
-if ! run_with_bun omp --version >/dev/null 2>&1; then
+if ! run_with_bun bun "$BUN_INSTALL/bin/omp" --version >/dev/null 2>&1; then
     print_error "omp was installed but did not start."
     exit 1
 fi
