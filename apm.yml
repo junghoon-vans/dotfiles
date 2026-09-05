@@ -1,69 +1,56 @@
-name: dotfiles-agent-packages
+name: dotfiles-mcp-servers
 version: 1.0.0
-description: Shared skills and MCP servers for Codex and Oh My Pi.
+description: Shared MCP server declarations rendered into the local Codex configuration.
 targets:
-  - agent-skills
-  - codex
-
+- codex
 includes: []
-
 dependencies:
-  apm:
-    - git: https://github.com/vercel-labs/skills.git
-      path: skills/find-skills
-      ref: 435076e78988e1e6ec40d00b0b1d76bdbbc5419a
-    - git: https://github.com/vercel-labs/agent-skills.git
-      path: skills/react-best-practices
-      ref: 063bee94c3f4df8453406c830b0a7df0f2860278
-      alias: vercel-react-best-practices
-    - git: https://github.com/Jeffallan/claude-skills.git
-      path: skills/golang-pro
-      ref: 882ef55e377dbf9a4dbe496bb41ac6ccd0e555cf
+  apm: []
   mcp:
-    - name: atlassian
-      registry: false
-      transport: http
-      url: https://mcp.atlassian.com/v1/mcp/authv2
-    - name: github
-      registry: false
-      transport: http
-      url: https://api.githubcopilot.com/mcp/
-      headers:
-        Authorization: Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}
-    - name: context7
-      registry: false
-      transport: http
-      url: https://mcp.context7.com/mcp
-    - name: notion
-      registry: false
-      transport: http
-      url: https://mcp.notion.com/mcp
-    - name: gnomcp
-      registry: false
-      transport: stdio
-      command: /bin/bash
-      args:
-        - -lc
-        - exec "$HOME/.local/bin/gnomcp"
-    - name: firecrawl
-      registry: false
-      transport: stdio
-      command: /bin/zsh
-      args:
-        - -lc
-        - source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp@3.24.0
-    - name: playwright
-      registry: false
-      transport: stdio
-      command: npx
-      args:
-        - -y
-        - '@playwright/mcp@0.0.79'
-      env:
-        PLAYWRIGHT_MCP_EXECUTABLE_PATH: /Applications/Aside.app/Contents/MacOS/Aside
-    - name: aside
-      registry: false
-      transport: stdio
-      command: aside
-      args:
-        - mcp
+  - name: atlassian
+    registry: false
+    transport: http
+    url: https://mcp.atlassian.com/v1/mcp/authv2
+  - name: github
+    registry: false
+    transport: http
+    url: https://api.githubcopilot.com/mcp/
+    headers:
+      Authorization: Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}
+  - name: context7
+    registry: false
+    transport: http
+    url: https://mcp.context7.com/mcp
+  - name: notion
+    registry: false
+    transport: http
+    url: https://mcp.notion.com/mcp
+  - name: gnomcp
+    registry: false
+    transport: stdio
+    command: /bin/bash
+    args:
+    - -lc
+    - exec "$HOME/.local/bin/gnomcp"
+  - name: firecrawl
+    registry: false
+    transport: stdio
+    command: /bin/zsh
+    args:
+    - -lc
+    - source "$HOME/.zshrc.local" 2>/dev/null || true; exec npx -y firecrawl-mcp@3.24.0
+  - name: playwright
+    registry: false
+    transport: stdio
+    command: npx
+    args:
+    - -y
+    - '@playwright/mcp@0.0.79'
+    env:
+      PLAYWRIGHT_MCP_EXECUTABLE_PATH: /Applications/Aside.app/Contents/MacOS/Aside
+  - name: aside
+    registry: false
+    transport: stdio
+    command: aside
+    args:
+    - mcp

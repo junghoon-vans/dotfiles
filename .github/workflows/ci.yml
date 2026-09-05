@@ -67,6 +67,8 @@ jobs:
           python3 -m json.tool home/private_dot_paseo/private_config.json >/dev/null
           python3 -m json.tool home/dot_config/private_karabiner/private_karabiner.json >/dev/null
           ruby -e 'require "yaml"; YAML.safe_load(File.read(ARGV.fetch(0)), aliases: false)' apm.yml
+          ruby -e 'require "yaml"; YAML.safe_load(File.read(ARGV.fetch(0)), aliases: false)' apm-skills.yml
+          ruby -e 'require "yaml"; YAML.safe_load(File.read(ARGV.fetch(0)), aliases: false)' apm-skills.lock.yaml
           ruby -c Brewfile >/dev/null
 
       - name: Check setup help
@@ -84,3 +86,17 @@ jobs:
           ./setup.sh --dry-run --skip karabiner
           ./setup.sh --dry-run --skip macos
           ./setup.sh --dry-run check doctor
+
+  apm-isolation:
+    name: Verify isolated APM restore and MCP render
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install pinned APM CLI
+        uses: microsoft/apm-action@d723bb64ed70c135bbaf87d126b721dd2dae0439 # v1.10.0
+        with:
+          setup-only: "true"
+          apm-version: "0.28.0"
+      - name: Restore skills and render MCP config in isolated homes
+        run: bash scripts/verify-apm-isolated.sh

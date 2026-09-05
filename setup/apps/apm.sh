@@ -82,11 +82,12 @@ merge_apm_codex_mcp() {
 sync_apm_agent_packages() {
     install_apm
 
-    print_info "Syncing shared agent skills with APM..."
-    (
-        cd "$DOTFILES_DIR" || exit
-        apm install --global --target agent-skills --only apm "$DOTFILES_DIR"
-    )
+    print_info "Syncing locked shared agent skills with APM..."
+    mkdir -p "$HOME/.apm"
+    cp "$DOTFILES_DIR/apm-skills.yml" "$HOME/.apm/apm.yml"
+    cp "$DOTFILES_DIR/apm-skills.lock.yaml" "$HOME/.apm/apm.lock.yaml"
+    apm install --global --target agent-skills --only apm --frozen
+
     merge_apm_codex_mcp
     print_success "Shared agent packages synchronized"
 }
